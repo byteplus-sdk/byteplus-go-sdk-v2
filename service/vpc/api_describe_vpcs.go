@@ -3,10 +3,10 @@
 package vpc
 
 import (
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/request"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/response"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/byteplusutil"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/byteplusutil"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/request"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/response"
 )
 
 const opDescribeVpcsCommon = "DescribeVpcs"

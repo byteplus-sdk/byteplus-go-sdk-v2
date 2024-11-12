@@ -4,7 +4,7 @@ package defaults
 // May have been modified by Byteplus.
 
 import (
-	"github.com/byteplus-sdk/byteplus-go-sdk/internal/shareddefaults"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/internal/shareddefaults"
 )
 
 // SharedCredentialsFilename returns the SDK's default file path

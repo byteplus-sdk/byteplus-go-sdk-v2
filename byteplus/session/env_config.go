@@ -7,9 +7,9 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/credentials"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/defaults"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/defaults"
 )
 
 // EnvProviderName provides a name of the provider when config is loaded from environment.

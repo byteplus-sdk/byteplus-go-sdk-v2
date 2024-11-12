@@ -7,9 +7,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/bytepluserr"
-	"github.com/byteplus-sdk/byteplus-go-sdk/internal/ini"
-	"github.com/byteplus-sdk/byteplus-go-sdk/internal/shareddefaults"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/bytepluserr"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/internal/ini"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/internal/shareddefaults"
 )
 
 // SharedCredsProviderName provides a name of SharedCreds provider

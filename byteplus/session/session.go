@@ -13,15 +13,15 @@ import (
 	"os"
 	"time"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/bytepluserr"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/byteplusutil"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/client"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/corehandlers"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/credentials"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/defaults"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/endpoints"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/request"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/bytepluserr"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/byteplusutil"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/client"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/corehandlers"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/defaults"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/endpoints"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/request"
 )
 
 const (
@@ -384,7 +384,7 @@ func newSession(opts Options, envCfg envConfig, cfgs ...*byteplus.Config) (*Sess
 			// or session.Options.profile, shared config is not enabled, and the
 			// environment has credentials, allow the shared config file to fail to
 			// load since the user has already provided credentials, and nothing else
-			// is required to be read file. Github(byteplus/byteplus-go-sdk#2455)
+			// is required to be read file. Github(byteplus/byteplus-go-sdk-v2#2455)
 		} else if _, ok := err.(SharedConfigProfileNotExistsError); !ok {
 			return nil, err
 		}

@@ -17,10 +17,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/bytepluserr"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/request"
-	"github.com/byteplus-sdk/byteplus-go-sdk/private/protocol"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/bytepluserr"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/request"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/private/protocol"
 )
 
 // Whether the byte value can be sent without escaping in BYTEPLUS URLs

@@ -3,7 +3,7 @@ package special
 import (
 	"reflect"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/response"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/response"
 )
 
 func iotResponse(response response.ByteplusResponse, i interface{}) interface{} {

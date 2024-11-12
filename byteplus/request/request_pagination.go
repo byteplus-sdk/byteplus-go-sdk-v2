@@ -7,8 +7,8 @@ import (
 	"reflect"
 	"sync/atomic"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/byteplusutil"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/byteplusutil"
 )
 
 // A Pagination provides paginating of SDK API operations which are paginatable.

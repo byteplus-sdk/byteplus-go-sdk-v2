@@ -9,10 +9,10 @@ import (
 	"io/ioutil"
 	"reflect"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/bytepluserr"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/custom"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/request"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/response"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/bytepluserr"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/custom"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/request"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/response"
 )
 
 // UnmarshalErrorHandler is a name request handler to unmarshal request errors

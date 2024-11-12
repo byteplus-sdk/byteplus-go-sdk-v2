@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/internal/sdkmath"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/internal/sdkmath"
 )
 
 // Names of time formats supported by the SDK

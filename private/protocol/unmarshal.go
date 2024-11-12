@@ -7,7 +7,7 @@ import (
 	"io"
 	"io/ioutil"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/request"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/request"
 )
 
 // UnmarshalDiscardBodyHandler is a named request handler to empty and close a response's byteplusbody

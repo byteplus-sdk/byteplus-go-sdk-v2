@@ -13,7 +13,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/private/protocol"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/private/protocol"
 )
 
 // BuildXML will serialize params into an xml.Encoder. Error will be returned

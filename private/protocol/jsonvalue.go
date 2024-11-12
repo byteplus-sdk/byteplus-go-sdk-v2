@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
 )
 
 // EscapeMode is the mode that should be use for escaping a value

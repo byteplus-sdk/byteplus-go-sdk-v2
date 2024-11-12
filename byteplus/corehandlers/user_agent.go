@@ -7,8 +7,8 @@ import (
 	"os"
 	"runtime"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/request"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/request"
 )
 
 // SDKVersionUserAgentHandler is a request handler for adding the SDK Version

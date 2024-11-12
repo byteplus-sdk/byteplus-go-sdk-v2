@@ -7,9 +7,9 @@ import (
 	"encoding/xml"
 	"fmt"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/bytepluserr"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/request"
-	"github.com/byteplus-sdk/byteplus-go-sdk/private/protocol/xml/xmlutil"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/bytepluserr"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/request"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/private/protocol/xml/xmlutil"
 )
 
 // UnmarshalErrorHandler is a name request handler to unmarshal request errors

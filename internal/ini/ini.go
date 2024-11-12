@@ -7,7 +7,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/bytepluserr"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/bytepluserr"
 )
 
 // OpenFile takes a path to a given file, and will open  and parse

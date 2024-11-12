@@ -8,9 +8,9 @@ package byteplusquery
 import (
 	"encoding/xml"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/bytepluserr"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/request"
-	"github.com/byteplus-sdk/byteplus-go-sdk/private/protocol/xml/xmlutil"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/bytepluserr"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/request"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/private/protocol/xml/xmlutil"
 )
 
 // UnmarshalHandler is a named request handler for unmarshaling ec2query protocol requests

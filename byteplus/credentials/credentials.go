@@ -54,7 +54,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/bytepluserr"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/bytepluserr"
 	"github.com/byteplus-sdk/byteplus-sdk-golang/base"
 )
 

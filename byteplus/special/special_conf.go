@@ -1,6 +1,6 @@
 package special
 
-import "github.com/byteplus-sdk/byteplus-go-sdk/byteplus/response"
+import "github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/response"
 
 type ResponseSpecial func(response.ByteplusResponse, interface{}) interface{}
 

@@ -7,8 +7,8 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/byteplusbody"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/request"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/byteplusbody"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/request"
 )
 
 // BuildHandler is a named request handler for building byteplusquery protocol requests

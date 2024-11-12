@@ -6,7 +6,7 @@ package protocol
 import (
 	"strings"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/request"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/request"
 )
 
 // ValidateEndpointHostHandler is a request handler that will validate the

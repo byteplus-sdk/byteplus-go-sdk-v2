@@ -9,8 +9,8 @@
 package vpc
 
 import (
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/request"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/request"
 )
 
 // VPCAPI provides an interface to enable mocking the
@@ -29,11 +29,9 @@ import (
 //	    myFunc(svc)
 //	}
 type VPCAPI interface {
-	
 	DescribeVpcs(*DescribeVpcsInput) (*DescribeVpcsOutput, error)
 	DescribeVpcsWithContext(byteplus.Context, *DescribeVpcsInput, ...request.Option) (*DescribeVpcsOutput, error)
 	DescribeVpcsRequest(*DescribeVpcsInput) (*request.Request, *DescribeVpcsOutput)
-	
 }
 
 var _ VPCAPI = (*VPC)(nil)

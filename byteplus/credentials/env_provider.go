@@ -6,7 +6,7 @@ package credentials
 import (
 	"os"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/bytepluserr"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/bytepluserr"
 )
 
 // EnvProviderName provides a name of Env provider

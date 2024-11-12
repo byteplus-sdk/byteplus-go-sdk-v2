@@ -4,8 +4,8 @@ package request
 // May have been modified by Byteplus.
 
 import (
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/custom"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/custom"
 )
 
 // setContext updates the Request to use the passed in context for cancellation.

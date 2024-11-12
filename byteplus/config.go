@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/credentials"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/custom"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/endpoints"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/custom"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/endpoints"
 )
 
 // UseServiceDefaultRetries instructs the config to use the service's own

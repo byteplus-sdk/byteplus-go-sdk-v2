@@ -7,7 +7,7 @@ import (
 	"io"
 	"sync"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/internal/sdkio"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/internal/sdkio"
 )
 
 // ReadSeekCloser wraps a io.Reader returning a ReaderSeekerCloser. Allows the

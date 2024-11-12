@@ -6,7 +6,7 @@ package client
 import (
 	"time"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/request"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/request"
 )
 
 // NoOpRetryer provides a retryer that performs no retries.

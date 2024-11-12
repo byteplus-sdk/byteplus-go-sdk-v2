@@ -6,11 +6,11 @@ package session
 import (
 	"fmt"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/bytepluserr"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/credentials"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/credentials/processcreds"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/request"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/bytepluserr"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials/processcreds"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/request"
 )
 
 func resolveCredentials(cfg *byteplus.Config,
@@ -23,7 +23,7 @@ func resolveCredentials(cfg *byteplus.Config,
 	case len(sessOpts.Profile) != 0:
 		// User explicitly provided an Profile in the session's configuration
 		// so load that profile from shared config first.
-		// Github(byteplus/byteplus-go-sdk#2727)
+		// Github(byteplus/byteplus-go-sdk-v2#2727)
 		return resolveCredsFromProfile(cfg, envCfg, sharedCfg, handlers, sessOpts)
 
 	case envCfg.Creds.HasKeys():

@@ -1,8 +1,8 @@
 package corehandlers
 
 import (
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/custom"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/request"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/custom"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/request"
 )
 
 var CustomerRequestHandler = request.NamedHandler{

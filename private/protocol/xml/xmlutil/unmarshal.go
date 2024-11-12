@@ -14,8 +14,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/bytepluserr"
-	"github.com/byteplus-sdk/byteplus-go-sdk/private/protocol"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/bytepluserr"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/private/protocol"
 )
 
 // UnmarshalXMLError unmarshals the XML error from the stream into the value

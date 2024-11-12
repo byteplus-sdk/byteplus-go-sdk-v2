@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/byteplusquery"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/client"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/client/metadata"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/corehandlers"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/request"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/session"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/signer/byteplussign"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/byteplusquery"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/client"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/client/metadata"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/corehandlers"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/request"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/session"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/signer/byteplussign"
 )
 
 func New(session *session.Session) *Universal {

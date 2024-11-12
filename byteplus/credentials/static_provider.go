@@ -4,7 +4,7 @@ package credentials
 // May have been modified by Byteplus.
 
 import (
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/bytepluserr"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/bytepluserr"
 )
 
 // StaticProviderName provides a name of Static provider

@@ -10,13 +10,13 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/bytepluserr"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/byteplusutil"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/custom"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/request"
-	"github.com/byteplus-sdk/byteplus-go-sdk/private/protocol"
-	"github.com/byteplus-sdk/byteplus-go-sdk/private/protocol/query/queryutil"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/bytepluserr"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/byteplusutil"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/custom"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/request"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/private/protocol"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/private/protocol/query/queryutil"
 )
 
 func BodyParam(body *url.Values, r *request.Request) {

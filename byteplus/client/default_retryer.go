@@ -8,8 +8,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/request"
-	"github.com/byteplus-sdk/byteplus-go-sdk/internal/sdkrand"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/request"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/internal/sdkrand"
 )
 
 // DefaultRetryer implements basic retry logic using exponential backoff for

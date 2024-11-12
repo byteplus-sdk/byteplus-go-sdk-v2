@@ -18,13 +18,13 @@ import (
 	"os"
 	"time"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/bytepluserr"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/bytepluserr"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/corehandlers"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/credentials"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/credentials/endpointcreds"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/request"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/corehandlers"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials/endpointcreds"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/request"
 )
 
 // A Defaults provides a collection of default values for SDK clients.

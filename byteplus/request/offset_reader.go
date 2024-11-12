@@ -7,7 +7,7 @@ import (
 	"io"
 	"sync"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/internal/sdkio"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/internal/sdkio"
 )
 
 // offsetReader is a thread-safe io.ReadCloser to prevent racing

@@ -12,13 +12,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/bytepluserr"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/custom"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/response"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/bytepluserr"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/custom"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/response"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/client/metadata"
-	"github.com/byteplus-sdk/byteplus-go-sdk/internal/sdkio"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/client/metadata"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/internal/sdkio"
 )
 
 const (

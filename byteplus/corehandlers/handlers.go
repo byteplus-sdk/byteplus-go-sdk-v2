@@ -13,10 +13,10 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/bytepluserr"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/credentials"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/request"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/bytepluserr"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/request"
 )
 
 // Interface for matching types which also have a Len method.
@@ -76,7 +76,7 @@ var ValidateReqSigHandler = request.NamedHandler{
 		}
 
 		// 5 minutes to allow for some clock skew/delays in transmission.
-		// Would be improved with byteplus/byteplus-go-sdk#423
+		// Would be improved with byteplus/byteplus-go-sdk-v2#423
 		if signedTime.Add(5 * time.Minute).After(time.Now()) {
 			return
 		}

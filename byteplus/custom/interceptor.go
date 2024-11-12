@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/client/metadata"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/response"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/client/metadata"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/response"
 )
 
 type SdkInterceptor struct {

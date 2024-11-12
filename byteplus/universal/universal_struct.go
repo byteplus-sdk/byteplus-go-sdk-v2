@@ -1,6 +1,6 @@
 package universal
 
-import "github.com/byteplus-sdk/byteplus-go-sdk/byteplus/session"
+import "github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/session"
 
 type Universal struct {
 	Session *session.Session

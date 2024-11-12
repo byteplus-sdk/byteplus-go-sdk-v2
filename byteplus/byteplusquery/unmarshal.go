@@ -11,11 +11,11 @@ import (
 	"net/http"
 	"reflect"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/bytepluserr"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/byteplusutil"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/request"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/response"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/special"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/bytepluserr"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/byteplusutil"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/request"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/response"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/special"
 )
 
 // UnmarshalHandler is a named request handler for unmarshaling byteplusquery protocol requests

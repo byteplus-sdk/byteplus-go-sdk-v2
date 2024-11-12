@@ -3,7 +3,7 @@ package byteplus
 // Copy from https://github.com/aws/aws-sdk-go
 // May have been modified by Byteplus.
 
-import "github.com/byteplus-sdk/byteplus-go-sdk/byteplus/bytepluserr"
+import "github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/bytepluserr"
 
 var (
 	// ErrMissingRegion is an error that is returned if region configuration is

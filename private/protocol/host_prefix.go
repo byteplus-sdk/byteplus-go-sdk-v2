@@ -6,7 +6,7 @@ package protocol
 import (
 	"strings"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/request"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/request"
 )
 
 // HostPrefixHandlerName is the handler name for the host prefix request

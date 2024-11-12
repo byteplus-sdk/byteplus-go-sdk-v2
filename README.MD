@@ -12,10 +12,10 @@
     import (
     "fmt"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/service/vpc"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/credentials"
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus/session"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/service/vpc"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/session"
     )
 
     func main() {

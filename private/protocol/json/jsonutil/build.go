@@ -15,8 +15,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk/byteplus"
-	"github.com/byteplus-sdk/byteplus-go-sdk/private/protocol"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/private/protocol"
 )
 
 var timeType = reflect.ValueOf(time.Time{}).Type()

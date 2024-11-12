@@ -5,7 +5,7 @@ package byteplus
 // May have been modified by Byteplus.
 
 // SDKName is the name of this byteplus SDK
-const SDKName = "byteplus-go-sdk"
+const SDKName = "byteplus-go-sdk-v2"
 
 // SDKVersion is the version of this SDK
 const SDKVersion = "1.0.0"
