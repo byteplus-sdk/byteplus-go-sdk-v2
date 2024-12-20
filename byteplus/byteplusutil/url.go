@@ -77,26 +77,30 @@ var defaultEndpoint = map[string]*ServiceEndpointInfo{
 // Note: Ensure the `defaultEndpoint` map is properly populated with service and region endpoint
 // information before calling this function.
 func GetDefaultEndpointByServiceInfo(service string, regionCode string) *string {
+	resultEndpoint := endpoint
 	defaultEndpointInfo, sExist := defaultEndpoint[service]
 	if !sExist {
-		return &endpoint
+		return &resultEndpoint
 	}
 
 	isGlobal := defaultEndpointInfo.IsGlobal
 	if isGlobal {
 		if len(defaultEndpointInfo.GlobalEndpoint) > 0 {
-			return &defaultEndpointInfo.GlobalEndpoint
+			resultEndpoint = defaultEndpointInfo.GlobalEndpoint
+			return &resultEndpoint
 		}
 	} else {
 		regionEndpointMp := defaultEndpointInfo.RegionEndpointMap
 		regionEndpointStr, rExist := regionEndpointMp[regionCode]
 		if rExist {
-			return &regionEndpointStr
+			resultEndpoint = regionEndpointStr
+			return &resultEndpoint
 		}
 	}
 
 	if len(defaultEndpointInfo.DefaultEndpoint) > 0 {
-		return &defaultEndpointInfo.DefaultEndpoint
+		resultEndpoint = defaultEndpointInfo.DefaultEndpoint
+		return &resultEndpoint
 	}
-	return &endpoint
+	return &resultEndpoint
 }
