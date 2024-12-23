@@ -130,10 +130,6 @@ func NewSession(cfgs ...*byteplus.Config) (*Session, error) {
 	opts := Options{}
 	opts.Config.MergeIn(cfgs...)
 
-	if opts.Config.Endpoint == nil {
-		opts.Config.Endpoint = byteplus.String(byteplusutil.NewEndpoint().GetEndpoint())
-	}
-
 	//merge config region and endpoint info to sts
 	if opts.Config.Credentials == nil {
 		return NewSessionWithOptions(opts)
@@ -554,7 +550,10 @@ func (s *Session) clientConfigWithErr(serviceName string, cfgs ...*byteplus.Conf
 	var err error
 
 	region := byteplus.StringValue(s.Config.Region)
-
+	if s.Config.Endpoint == nil {
+		endpoint := byteplusutil.GetDefaultEndpointByServiceInfo(serviceName, region)
+		s.Config.Endpoint = endpoint
+	}
 	if endpoint := byteplus.StringValue(s.Config.Endpoint); len(endpoint) != 0 {
 		resolved.URL = endpoints.AddScheme(endpoint, byteplus.BoolValue(s.Config.DisableSSL))
 		resolved.SigningRegion = region
