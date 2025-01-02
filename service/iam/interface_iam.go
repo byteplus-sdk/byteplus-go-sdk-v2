@@ -484,6 +484,38 @@ type IAMAPI interface {
 	UpdateUser(*UpdateUserInput) (*UpdateUserOutput, error)
 	UpdateUserWithContext(byteplus.Context, *UpdateUserInput, ...request.Option) (*UpdateUserOutput, error)
 	UpdateUserRequest(*UpdateUserInput) (*request.Request, *UpdateUserOutput)
+
+	AddSAMLProviderCertificateCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	AddSAMLProviderCertificateCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	AddSAMLProviderCertificateCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	AddSAMLProviderCertificate(*AddSAMLProviderCertificateInput) (*AddSAMLProviderCertificateOutput, error)
+	AddSAMLProviderCertificateWithContext(byteplus.Context, *AddSAMLProviderCertificateInput, ...request.Option) (*AddSAMLProviderCertificateOutput, error)
+	AddSAMLProviderCertificateRequest(*AddSAMLProviderCertificateInput) (*request.Request, *AddSAMLProviderCertificateOutput)
+
+	CreateSAMLProviderCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateSAMLProviderCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateSAMLProviderCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateSAMLProvider(*CreateSAMLProviderInput) (*CreateSAMLProviderOutput, error)
+	CreateSAMLProviderWithContext(byteplus.Context, *CreateSAMLProviderInput, ...request.Option) (*CreateSAMLProviderOutput, error)
+	CreateSAMLProviderRequest(*CreateSAMLProviderInput) (*request.Request, *CreateSAMLProviderOutput)
+
+	UpdateOAuthProviderCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	UpdateOAuthProviderCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	UpdateOAuthProviderCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	UpdateOAuthProvider(*UpdateOAuthProviderInput) (*UpdateOAuthProviderOutput, error)
+	UpdateOAuthProviderWithContext(byteplus.Context, *UpdateOAuthProviderInput, ...request.Option) (*UpdateOAuthProviderOutput, error)
+	UpdateOAuthProviderRequest(*UpdateOAuthProviderInput) (*request.Request, *UpdateOAuthProviderOutput)
+
+	UpdateSAMLProviderCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	UpdateSAMLProviderCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	UpdateSAMLProviderCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	UpdateSAMLProvider(*UpdateSAMLProviderInput) (*UpdateSAMLProviderOutput, error)
+	UpdateSAMLProviderWithContext(byteplus.Context, *UpdateSAMLProviderInput, ...request.Option) (*UpdateSAMLProviderOutput, error)
+	UpdateSAMLProviderRequest(*UpdateSAMLProviderInput) (*request.Request, *UpdateSAMLProviderOutput)
 }
 
 var _ IAMAPI = (*IAM)(nil)
