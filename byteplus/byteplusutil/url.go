@@ -54,6 +54,13 @@ var defaultEndpoint = map[string]*ServiceEndpointInfo{
 		DefaultEndpoint:   "open.byteplusapi.com",
 		RegionEndpointMap: nil,
 	},
+	"iam": {
+		Service:           "iam",
+		IsGlobal:          true,
+		GlobalEndpoint:    "",
+		DefaultEndpoint:   "open.byteplusapi.com",
+		RegionEndpointMap: nil,
+	},
 }
 
 // GetDefaultEndpointByServiceInfo retrieves the default endpoint for a given service and region.
