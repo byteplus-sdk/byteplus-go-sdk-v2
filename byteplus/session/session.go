@@ -390,6 +390,16 @@ func newSession(opts Options, envCfg envConfig, cfgs ...*byteplus.Config) (*Sess
 		return nil, err
 	}
 
+	if byteplus.BoolValue(cfg.EndpointConfigState) && cfg.EndpointResolver == nil {
+		resolver := &endpoints.FileEndpointConfigResolver{
+			Path: byteplus.StringValue(cfg.EndpointConfigPath),
+		}
+		if err := resolver.Load(); err != nil {
+			return nil, err
+		}
+		cfg.EndpointResolver = resolver
+	}
+
 	s := &Session{
 		Config:   cfg,
 		Handlers: handlers,
@@ -503,6 +513,24 @@ func mergeConfigSrcs(cfg, userCfg *byteplus.Config,
 		cfg.Credentials = creds
 	}
 
+	if cfg.EndpointConfigState == nil {
+		if envCfg.EndpointConfigState != nil {
+			cfg.WithEndpointConfigState(*envCfg.EndpointConfigState)
+		} else if envCfg.EnableSharedConfig && sharedCfg.EndpointConfigState != nil {
+			cfg.WithEndpointConfigState(*sharedCfg.EndpointConfigState)
+		}
+	}
+
+	if cfg.EndpointConfigPath == nil {
+		if len(envCfg.EndpointConfigPath) > 0 {
+			cfg.WithEndpointConfigPath(envCfg.EndpointConfigPath)
+		} else if envCfg.EnableSharedConfig && len(sharedCfg.EndpointConfigPath) > 0 {
+			cfg.WithEndpointConfigPath(sharedCfg.EndpointConfigPath)
+		} else {
+			cfg.WithEndpointConfigPath(defaults.SharedEndpointConfigFilename())
+		}
+	}
+
 	return nil
 }
 
@@ -551,7 +579,16 @@ func (s *Session) clientConfigWithErr(serviceName string, cfgs ...*byteplus.Conf
 
 	region := byteplus.StringValue(s.Config.Region)
 	if s.Config.Endpoint == nil {
-		endpoint := byteplusutil.GetDefaultEndpointByServiceInfo(serviceName, region)
+		var endpoint *string
+		if byteplus.BoolValue(s.Config.EndpointConfigState) && s.Config.EndpointResolver != nil {
+			endpointFor, err := s.Config.EndpointResolver.EndpointFor(serviceName, region)
+			if err != nil {
+				return client.Config{}, err
+			}
+			endpoint = &endpointFor.URL
+		} else {
+			endpoint = byteplusutil.GetDefaultEndpointByServiceInfo(serviceName, region)
+		}
 		s.Config.Endpoint = endpoint
 	}
 	if endpoint := byteplus.StringValue(s.Config.Endpoint); len(endpoint) != 0 {
