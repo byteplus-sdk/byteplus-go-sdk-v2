@@ -12,8 +12,8 @@ import (
 //
 // Builds the shared config file path based on the OS's platform.
 //
-//   - Linux/Unix: $HOME/.aws/credentials
-//   - Windows: %USERPROFILE%\.aws\credentials
+//   - Linux/Unix: $HOME/.byteplus/credentials
+//   - Windows: %USERPROFILE%\.byteplus\credentials
 func SharedCredentialsFilename() string {
 	return shareddefaults.SharedCredentialsFilename()
 }
@@ -23,8 +23,19 @@ func SharedCredentialsFilename() string {
 //
 // Builds the shared config file path based on the OS's platform.
 //
-//   - Linux/Unix: $HOME/.aws/config
-//   - Windows: %USERPROFILE%\.aws\config
+//   - Linux/Unix: $HOME/.byteplus/config
+//   - Windows: %USERPROFILE%\.byteplus\config
 func SharedConfigFilename() string {
 	return shareddefaults.SharedConfigFilename()
+}
+
+// SharedEndpointConfigFilename returns the SDK's default file path for
+// the endpoint config file.
+//
+// Builds the shared config file path based on the OS's platform.
+//
+//   - Linux/Unix: $HOME/.byteplus/endpoint
+//   - Windows: %USERPROFILE%\.byteplus\endpoint
+func SharedEndpointConfigFilename() string {
+	return shareddefaults.SharedEndpointConfigFilename()
 }

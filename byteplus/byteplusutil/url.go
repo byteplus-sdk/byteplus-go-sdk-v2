@@ -26,8 +26,6 @@ type ServiceInfo struct {
 	Region  string
 }
 
-var endpoint = "open.ap-southeast-1.byteplusapi.com"
-
 func (c *Endpoint) GetEndpoint() string {
 	if c.CustomerEndpoint != "" {
 		return c.CustomerEndpoint
@@ -35,6 +33,14 @@ func (c *Endpoint) GetEndpoint() string {
 		return endpoint
 	}
 }
+
+const (
+	separator      = "."
+	openPrefix     = "open"
+	endpointSuffix = separator + "ap-southeast-1.byteplusapi.com"
+)
+
+var endpoint = openPrefix + endpointSuffix
 
 type RegionEndpointMap map[string]string
 
