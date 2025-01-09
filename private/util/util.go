@@ -12,6 +12,8 @@ import (
 	"reflect"
 	"regexp"
 	"strings"
+
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/private/protocol/xml/xmlutil"
 )
 
 // GoFmt returns the Go formated string of the input.
