@@ -31,7 +31,7 @@
      )
      ak = "your ak"
      sk = "your sk"
-     region = "cn-beijing"
+     region = "ap-southeast-1"
      config = byteplus.NewConfig().
              WithCredentials(credentials.NewStaticCredentials(ak, sk, "")).
              WithRegion(region)
