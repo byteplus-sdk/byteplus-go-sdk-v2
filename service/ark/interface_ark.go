@@ -19,7 +19,7 @@ import (
 //    // byteplus sdk func uses an SDK service client to make a request to
 //    // ARK.
 //    func myFunc(svc ARKAPI) bool {
-//        // Make svc.CreateBatchInferenceJob request
+//        // Make svc.BatchChatCompletions request
 //    }
 //
 //    func main() {
@@ -30,6 +30,54 @@ import (
 //    }
 //
 type ARKAPI interface {
+	BatchChatCompletionsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	BatchChatCompletionsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	BatchChatCompletionsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	BatchChatCompletions(*BatchChatCompletionsInput) (*BatchChatCompletionsOutput, error)
+	BatchChatCompletionsWithContext(byteplus.Context, *BatchChatCompletionsInput, ...request.Option) (*BatchChatCompletionsOutput, error)
+	BatchChatCompletionsRequest(*BatchChatCompletionsInput) (*request.Request, *BatchChatCompletionsOutput)
+
+	BotsChatCompletionsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	BotsChatCompletionsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	BotsChatCompletionsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	BotsChatCompletions(*BotsChatCompletionsInput) (*BotsChatCompletionsOutput, error)
+	BotsChatCompletionsWithContext(byteplus.Context, *BotsChatCompletionsInput, ...request.Option) (*BotsChatCompletionsOutput, error)
+	BotsChatCompletionsRequest(*BotsChatCompletionsInput) (*request.Request, *BotsChatCompletionsOutput)
+
+	ChatCompletionsTextCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ChatCompletionsTextCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ChatCompletionsTextCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ChatCompletionsText(*ChatCompletionsTextInput) (*ChatCompletionsTextOutput, error)
+	ChatCompletionsTextWithContext(byteplus.Context, *ChatCompletionsTextInput, ...request.Option) (*ChatCompletionsTextOutput, error)
+	ChatCompletionsTextRequest(*ChatCompletionsTextInput) (*request.Request, *ChatCompletionsTextOutput)
+
+	ChatCompletionsVisionCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ChatCompletionsVisionCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ChatCompletionsVisionCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ChatCompletionsVision(*ChatCompletionsVisionInput) (*ChatCompletionsVisionOutput, error)
+	ChatCompletionsVisionWithContext(byteplus.Context, *ChatCompletionsVisionInput, ...request.Option) (*ChatCompletionsVisionOutput, error)
+	ChatCompletionsVisionRequest(*ChatCompletionsVisionInput) (*request.Request, *ChatCompletionsVisionOutput)
+
+	ContextChatCompletionsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ContextChatCompletionsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ContextChatCompletionsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ContextChatCompletions(*ContextChatCompletionsInput) (*ContextChatCompletionsOutput, error)
+	ContextChatCompletionsWithContext(byteplus.Context, *ContextChatCompletionsInput, ...request.Option) (*ContextChatCompletionsOutput, error)
+	ContextChatCompletionsRequest(*ContextChatCompletionsInput) (*request.Request, *ContextChatCompletionsOutput)
+
+	ContextCreateCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ContextCreateCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ContextCreateCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ContextCreate(*ContextCreateInput) (*ContextCreateOutput, error)
+	ContextCreateWithContext(byteplus.Context, *ContextCreateInput, ...request.Option) (*ContextCreateOutput, error)
+	ContextCreateRequest(*ContextCreateInput) (*request.Request, *ContextCreateOutput)
+
 	CreateBatchInferenceJobCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	CreateBatchInferenceJobCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	CreateBatchInferenceJobCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -37,6 +85,14 @@ type ARKAPI interface {
 	CreateBatchInferenceJob(*CreateBatchInferenceJobInput) (*CreateBatchInferenceJobOutput, error)
 	CreateBatchInferenceJobWithContext(byteplus.Context, *CreateBatchInferenceJobInput, ...request.Option) (*CreateBatchInferenceJobOutput, error)
 	CreateBatchInferenceJobRequest(*CreateBatchInferenceJobInput) (*request.Request, *CreateBatchInferenceJobOutput)
+
+	CreateContentsGenerationsTasksCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateContentsGenerationsTasksCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateContentsGenerationsTasksCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateContentsGenerationsTasks(*CreateContentsGenerationsTasksInput) (*CreateContentsGenerationsTasksOutput, error)
+	CreateContentsGenerationsTasksWithContext(byteplus.Context, *CreateContentsGenerationsTasksInput, ...request.Option) (*CreateContentsGenerationsTasksOutput, error)
+	CreateContentsGenerationsTasksRequest(*CreateContentsGenerationsTasksInput) (*request.Request, *CreateContentsGenerationsTasksOutput)
 
 	CreateEndpointCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	CreateEndpointCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -62,6 +118,22 @@ type ARKAPI interface {
 	DeleteEndpointWithContext(byteplus.Context, *DeleteEndpointInput, ...request.Option) (*DeleteEndpointOutput, error)
 	DeleteEndpointRequest(*DeleteEndpointInput) (*request.Request, *DeleteEndpointOutput)
 
+	EmbeddingsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	EmbeddingsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	EmbeddingsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	Embeddings(*EmbeddingsInput) (*EmbeddingsOutput, error)
+	EmbeddingsWithContext(byteplus.Context, *EmbeddingsInput, ...request.Option) (*EmbeddingsOutput, error)
+	EmbeddingsRequest(*EmbeddingsInput) (*request.Request, *EmbeddingsOutput)
+
+	EmbeddingsMultimodalCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	EmbeddingsMultimodalCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	EmbeddingsMultimodalCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	EmbeddingsMultimodal(*EmbeddingsMultimodalInput) (*EmbeddingsMultimodalOutput, error)
+	EmbeddingsMultimodalWithContext(byteplus.Context, *EmbeddingsMultimodalInput, ...request.Option) (*EmbeddingsMultimodalOutput, error)
+	EmbeddingsMultimodalRequest(*EmbeddingsMultimodalInput) (*request.Request, *EmbeddingsMultimodalOutput)
+
 	GetApiKeyCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	GetApiKeyCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	GetApiKeyCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -77,6 +149,14 @@ type ARKAPI interface {
 	GetEndpoint(*GetEndpointInput) (*GetEndpointOutput, error)
 	GetEndpointWithContext(byteplus.Context, *GetEndpointInput, ...request.Option) (*GetEndpointOutput, error)
 	GetEndpointRequest(*GetEndpointInput) (*request.Request, *GetEndpointOutput)
+
+	GetEndpointCertificateCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	GetEndpointCertificateCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	GetEndpointCertificateCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	GetEndpointCertificate(*GetEndpointCertificateInput) (*GetEndpointCertificateOutput, error)
+	GetEndpointCertificateWithContext(byteplus.Context, *GetEndpointCertificateInput, ...request.Option) (*GetEndpointCertificateOutput, error)
+	GetEndpointCertificateRequest(*GetEndpointCertificateInput) (*request.Request, *GetEndpointCertificateOutput)
 
 	GetModelCustomizationJobCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	GetModelCustomizationJobCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -109,6 +189,14 @@ type ARKAPI interface {
 	ListModelCustomizationJobs(*ListModelCustomizationJobsInput) (*ListModelCustomizationJobsOutput, error)
 	ListModelCustomizationJobsWithContext(byteplus.Context, *ListModelCustomizationJobsInput, ...request.Option) (*ListModelCustomizationJobsOutput, error)
 	ListModelCustomizationJobsRequest(*ListModelCustomizationJobsInput) (*request.Request, *ListModelCustomizationJobsOutput)
+
+	TokenizationCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	TokenizationCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	TokenizationCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	Tokenization(*TokenizationInput) (*TokenizationOutput, error)
+	TokenizationWithContext(byteplus.Context, *TokenizationInput, ...request.Option) (*TokenizationOutput, error)
+	TokenizationRequest(*TokenizationInput) (*request.Request, *TokenizationOutput)
 }
 
 var _ ARKAPI = (*ARK)(nil)
