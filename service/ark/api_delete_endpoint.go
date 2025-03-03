@@ -22,13 +22,13 @@ const opDeleteEndpointCommon = "DeleteEndpoint"
 // See DeleteEndpointCommon for more information on using the DeleteEndpointCommon
 // API call, and error handling.
 //
-//    // Example sending a request using the DeleteEndpointCommonRequest method.
-//    req, resp := client.DeleteEndpointCommonRequest(params)
+//	// Example sending a request using the DeleteEndpointCommonRequest method.
+//	req, resp := client.DeleteEndpointCommonRequest(params)
 //
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *ARK) DeleteEndpointCommonRequest(input *map[string]interface{}) (req *request.Request, output *map[string]interface{}) {
 	op := &request.Operation{
 		Name:       opDeleteEndpointCommon,
@@ -89,13 +89,13 @@ const opDeleteEndpoint = "DeleteEndpoint"
 // See DeleteEndpoint for more information on using the DeleteEndpoint
 // API call, and error handling.
 //
-//    // Example sending a request using the DeleteEndpointRequest method.
-//    req, resp := client.DeleteEndpointRequest(params)
+//	// Example sending a request using the DeleteEndpointRequest method.
+//	req, resp := client.DeleteEndpointRequest(params)
 //
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *ARK) DeleteEndpointRequest(input *DeleteEndpointInput) (req *request.Request, output *DeleteEndpointOutput) {
 	op := &request.Operation{
 		Name:       opDeleteEndpoint,

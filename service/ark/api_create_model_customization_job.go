@@ -22,13 +22,13 @@ const opCreateModelCustomizationJobCommon = "CreateModelCustomizationJob"
 // See CreateModelCustomizationJobCommon for more information on using the CreateModelCustomizationJobCommon
 // API call, and error handling.
 //
-//    // Example sending a request using the CreateModelCustomizationJobCommonRequest method.
-//    req, resp := client.CreateModelCustomizationJobCommonRequest(params)
+//	// Example sending a request using the CreateModelCustomizationJobCommonRequest method.
+//	req, resp := client.CreateModelCustomizationJobCommonRequest(params)
 //
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *ARK) CreateModelCustomizationJobCommonRequest(input *map[string]interface{}) (req *request.Request, output *map[string]interface{}) {
 	op := &request.Operation{
 		Name:       opCreateModelCustomizationJobCommon,
@@ -89,13 +89,13 @@ const opCreateModelCustomizationJob = "CreateModelCustomizationJob"
 // See CreateModelCustomizationJob for more information on using the CreateModelCustomizationJob
 // API call, and error handling.
 //
-//    // Example sending a request using the CreateModelCustomizationJobRequest method.
-//    req, resp := client.CreateModelCustomizationJobRequest(params)
+//	// Example sending a request using the CreateModelCustomizationJobRequest method.
+//	req, resp := client.CreateModelCustomizationJobRequest(params)
 //
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *ARK) CreateModelCustomizationJobRequest(input *CreateModelCustomizationJobInput) (req *request.Request, output *CreateModelCustomizationJobOutput) {
 	op := &request.Operation{
 		Name:       opCreateModelCustomizationJob,

@@ -22,13 +22,13 @@ const opCreateBatchInferenceJobCommon = "CreateBatchInferenceJob"
 // See CreateBatchInferenceJobCommon for more information on using the CreateBatchInferenceJobCommon
 // API call, and error handling.
 //
-//    // Example sending a request using the CreateBatchInferenceJobCommonRequest method.
-//    req, resp := client.CreateBatchInferenceJobCommonRequest(params)
+//	// Example sending a request using the CreateBatchInferenceJobCommonRequest method.
+//	req, resp := client.CreateBatchInferenceJobCommonRequest(params)
 //
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *ARK) CreateBatchInferenceJobCommonRequest(input *map[string]interface{}) (req *request.Request, output *map[string]interface{}) {
 	op := &request.Operation{
 		Name:       opCreateBatchInferenceJobCommon,
@@ -89,13 +89,13 @@ const opCreateBatchInferenceJob = "CreateBatchInferenceJob"
 // See CreateBatchInferenceJob for more information on using the CreateBatchInferenceJob
 // API call, and error handling.
 //
-//    // Example sending a request using the CreateBatchInferenceJobRequest method.
-//    req, resp := client.CreateBatchInferenceJobRequest(params)
+//	// Example sending a request using the CreateBatchInferenceJobRequest method.
+//	req, resp := client.CreateBatchInferenceJobRequest(params)
 //
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *ARK) CreateBatchInferenceJobRequest(input *CreateBatchInferenceJobInput) (req *request.Request, output *CreateBatchInferenceJobOutput) {
 	op := &request.Operation{
 		Name:       opCreateBatchInferenceJob,

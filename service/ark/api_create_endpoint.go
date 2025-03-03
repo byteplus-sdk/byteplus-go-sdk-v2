@@ -22,13 +22,13 @@ const opCreateEndpointCommon = "CreateEndpoint"
 // See CreateEndpointCommon for more information on using the CreateEndpointCommon
 // API call, and error handling.
 //
-//    // Example sending a request using the CreateEndpointCommonRequest method.
-//    req, resp := client.CreateEndpointCommonRequest(params)
+//	// Example sending a request using the CreateEndpointCommonRequest method.
+//	req, resp := client.CreateEndpointCommonRequest(params)
 //
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *ARK) CreateEndpointCommonRequest(input *map[string]interface{}) (req *request.Request, output *map[string]interface{}) {
 	op := &request.Operation{
 		Name:       opCreateEndpointCommon,
@@ -89,13 +89,13 @@ const opCreateEndpoint = "CreateEndpoint"
 // See CreateEndpoint for more information on using the CreateEndpoint
 // API call, and error handling.
 //
-//    // Example sending a request using the CreateEndpointRequest method.
-//    req, resp := client.CreateEndpointRequest(params)
+//	// Example sending a request using the CreateEndpointRequest method.
+//	req, resp := client.CreateEndpointRequest(params)
 //
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *ARK) CreateEndpointRequest(input *CreateEndpointInput) (req *request.Request, output *CreateEndpointOutput) {
 	op := &request.Operation{
 		Name:       opCreateEndpoint,
