@@ -22,13 +22,13 @@ const opGetApiKeyCommon = "GetApiKey"
 // See GetApiKeyCommon for more information on using the GetApiKeyCommon
 // API call, and error handling.
 //
-//    // Example sending a request using the GetApiKeyCommonRequest method.
-//    req, resp := client.GetApiKeyCommonRequest(params)
+//	// Example sending a request using the GetApiKeyCommonRequest method.
+//	req, resp := client.GetApiKeyCommonRequest(params)
 //
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *ARK) GetApiKeyCommonRequest(input *map[string]interface{}) (req *request.Request, output *map[string]interface{}) {
 	op := &request.Operation{
 		Name:       opGetApiKeyCommon,
@@ -89,13 +89,13 @@ const opGetApiKey = "GetApiKey"
 // See GetApiKey for more information on using the GetApiKey
 // API call, and error handling.
 //
-//    // Example sending a request using the GetApiKeyRequest method.
-//    req, resp := client.GetApiKeyRequest(params)
+//	// Example sending a request using the GetApiKeyRequest method.
+//	req, resp := client.GetApiKeyRequest(params)
 //
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *ARK) GetApiKeyRequest(input *GetApiKeyInput) (req *request.Request, output *GetApiKeyOutput) {
 	op := &request.Operation{
 		Name:       opGetApiKey,

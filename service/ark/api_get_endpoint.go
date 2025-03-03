@@ -22,13 +22,13 @@ const opGetEndpointCommon = "GetEndpoint"
 // See GetEndpointCommon for more information on using the GetEndpointCommon
 // API call, and error handling.
 //
-//    // Example sending a request using the GetEndpointCommonRequest method.
-//    req, resp := client.GetEndpointCommonRequest(params)
+//	// Example sending a request using the GetEndpointCommonRequest method.
+//	req, resp := client.GetEndpointCommonRequest(params)
 //
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *ARK) GetEndpointCommonRequest(input *map[string]interface{}) (req *request.Request, output *map[string]interface{}) {
 	op := &request.Operation{
 		Name:       opGetEndpointCommon,
@@ -89,13 +89,13 @@ const opGetEndpoint = "GetEndpoint"
 // See GetEndpoint for more information on using the GetEndpoint
 // API call, and error handling.
 //
-//    // Example sending a request using the GetEndpointRequest method.
-//    req, resp := client.GetEndpointRequest(params)
+//	// Example sending a request using the GetEndpointRequest method.
+//	req, resp := client.GetEndpointRequest(params)
 //
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *ARK) GetEndpointRequest(input *GetEndpointInput) (req *request.Request, output *GetEndpointOutput) {
 	op := &request.Operation{
 		Name:       opGetEndpoint,

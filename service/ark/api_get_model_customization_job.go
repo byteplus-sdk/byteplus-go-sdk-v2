@@ -22,13 +22,13 @@ const opGetModelCustomizationJobCommon = "GetModelCustomizationJob"
 // See GetModelCustomizationJobCommon for more information on using the GetModelCustomizationJobCommon
 // API call, and error handling.
 //
-//    // Example sending a request using the GetModelCustomizationJobCommonRequest method.
-//    req, resp := client.GetModelCustomizationJobCommonRequest(params)
+//	// Example sending a request using the GetModelCustomizationJobCommonRequest method.
+//	req, resp := client.GetModelCustomizationJobCommonRequest(params)
 //
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *ARK) GetModelCustomizationJobCommonRequest(input *map[string]interface{}) (req *request.Request, output *map[string]interface{}) {
 	op := &request.Operation{
 		Name:       opGetModelCustomizationJobCommon,
@@ -89,13 +89,13 @@ const opGetModelCustomizationJob = "GetModelCustomizationJob"
 // See GetModelCustomizationJob for more information on using the GetModelCustomizationJob
 // API call, and error handling.
 //
-//    // Example sending a request using the GetModelCustomizationJobRequest method.
-//    req, resp := client.GetModelCustomizationJobRequest(params)
+//	// Example sending a request using the GetModelCustomizationJobRequest method.
+//	req, resp := client.GetModelCustomizationJobRequest(params)
 //
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *ARK) GetModelCustomizationJobRequest(input *GetModelCustomizationJobInput) (req *request.Request, output *GetModelCustomizationJobOutput) {
 	op := &request.Operation{
 		Name:       opGetModelCustomizationJob,

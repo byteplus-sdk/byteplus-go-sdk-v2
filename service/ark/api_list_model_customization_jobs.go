@@ -22,13 +22,13 @@ const opListModelCustomizationJobsCommon = "ListModelCustomizationJobs"
 // See ListModelCustomizationJobsCommon for more information on using the ListModelCustomizationJobsCommon
 // API call, and error handling.
 //
-//    // Example sending a request using the ListModelCustomizationJobsCommonRequest method.
-//    req, resp := client.ListModelCustomizationJobsCommonRequest(params)
+//	// Example sending a request using the ListModelCustomizationJobsCommonRequest method.
+//	req, resp := client.ListModelCustomizationJobsCommonRequest(params)
 //
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *ARK) ListModelCustomizationJobsCommonRequest(input *map[string]interface{}) (req *request.Request, output *map[string]interface{}) {
 	op := &request.Operation{
 		Name:       opListModelCustomizationJobsCommon,
@@ -89,13 +89,13 @@ const opListModelCustomizationJobs = "ListModelCustomizationJobs"
 // See ListModelCustomizationJobs for more information on using the ListModelCustomizationJobs
 // API call, and error handling.
 //
-//    // Example sending a request using the ListModelCustomizationJobsRequest method.
-//    req, resp := client.ListModelCustomizationJobsRequest(params)
+//	// Example sending a request using the ListModelCustomizationJobsRequest method.
+//	req, resp := client.ListModelCustomizationJobsRequest(params)
 //
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *ARK) ListModelCustomizationJobsRequest(input *ListModelCustomizationJobsInput) (req *request.Request, output *ListModelCustomizationJobsOutput) {
 	op := &request.Operation{
 		Name:       opListModelCustomizationJobs,

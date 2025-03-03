@@ -22,13 +22,13 @@ const opGetEndpointCertificateCommon = "GetEndpointCertificate"
 // See GetEndpointCertificateCommon for more information on using the GetEndpointCertificateCommon
 // API call, and error handling.
 //
-//    // Example sending a request using the GetEndpointCertificateCommonRequest method.
-//    req, resp := client.GetEndpointCertificateCommonRequest(params)
+//	// Example sending a request using the GetEndpointCertificateCommonRequest method.
+//	req, resp := client.GetEndpointCertificateCommonRequest(params)
 //
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *ARK) GetEndpointCertificateCommonRequest(input *map[string]interface{}) (req *request.Request, output *map[string]interface{}) {
 	op := &request.Operation{
 		Name:       opGetEndpointCertificateCommon,
@@ -89,13 +89,13 @@ const opGetEndpointCertificate = "GetEndpointCertificate"
 // See GetEndpointCertificate for more information on using the GetEndpointCertificate
 // API call, and error handling.
 //
-//    // Example sending a request using the GetEndpointCertificateRequest method.
-//    req, resp := client.GetEndpointCertificateRequest(params)
+//	// Example sending a request using the GetEndpointCertificateRequest method.
+//	req, resp := client.GetEndpointCertificateRequest(params)
 //
-//    err := req.Send()
-//    if err == nil { // resp is now filled
-//        fmt.Println(resp)
-//    }
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
 func (c *ARK) GetEndpointCertificateRequest(input *GetEndpointCertificateInput) (req *request.Request, output *GetEndpointCertificateOutput) {
 	op := &request.Operation{
 		Name:       opGetEndpointCertificate,
