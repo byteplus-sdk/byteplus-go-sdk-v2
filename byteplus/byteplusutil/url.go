@@ -35,12 +35,17 @@ func (c *Endpoint) GetEndpoint() string {
 }
 
 const (
-	separator      = "."
-	openPrefix     = "open"
-	endpointSuffix = separator + "ap-southeast-1.byteplusapi.com"
+	separator              = "."
+	openPrefix             = "open"
+	byteplusEndpointSuffix = separator + "byteplusapi.com"
+	endpointSuffix         = separator + "ap-southeast-1.byteplusapi.com"
 )
 
 var endpoint = openPrefix + endpointSuffix
+
+const (
+	regionCodeAPSouthEast3 = "ap-southeast-3"
+)
 
 type RegionEndpointMap map[string]string
 
@@ -66,6 +71,24 @@ var defaultEndpoint = map[string]*ServiceEndpointInfo{
 		GlobalEndpoint:    "",
 		DefaultEndpoint:   "open.byteplusapi.com",
 		RegionEndpointMap: nil,
+	},
+	"vpc": {
+		Service:         "vpc",
+		IsGlobal:        false,
+		GlobalEndpoint:  "",
+		DefaultEndpoint: endpoint,
+		RegionEndpointMap: RegionEndpointMap{
+			regionCodeAPSouthEast3: "vpc" + separator + regionCodeAPSouthEast3 + byteplusEndpointSuffix,
+		},
+	},
+	"ecs": {
+		Service:         "ecs",
+		IsGlobal:        false,
+		GlobalEndpoint:  "",
+		DefaultEndpoint: endpoint,
+		RegionEndpointMap: RegionEndpointMap{
+			regionCodeAPSouthEast3: "ecs" + separator + regionCodeAPSouthEast3 + byteplusEndpointSuffix,
+		},
 	},
 }
 
