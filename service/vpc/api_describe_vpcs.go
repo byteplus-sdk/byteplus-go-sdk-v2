@@ -22,13 +22,13 @@ const opDescribeVpcsCommon = "DescribeVpcs"
 // See DescribeVpcsCommon for more information on using the DescribeVpcsCommon
 // API call, and error handling.
 //
-//	// Example sending a request using the DescribeVpcsCommonRequest method.
-//	req, resp := client.DescribeVpcsCommonRequest(params)
+//    // Example sending a request using the DescribeVpcsCommonRequest method.
+//    req, resp := client.DescribeVpcsCommonRequest(params)
 //
-//	err := req.Send()
-//	if err == nil { // resp is now filled
-//	    fmt.Println(resp)
-//	}
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
 func (c *VPC) DescribeVpcsCommonRequest(input *map[string]interface{}) (req *request.Request, output *map[string]interface{}) {
 	op := &request.Operation{
 		Name:       opDescribeVpcsCommon,
@@ -52,7 +52,7 @@ func (c *VPC) DescribeVpcsCommonRequest(input *map[string]interface{}) (req *req
 // with bytepluserr.Error's Code and Message methods to get detailed information about
 // the error.
 //
-// See the byteplus API reference guide for VPC's
+// See the BYTEPLUS API reference guide for VPC's
 // API operation DescribeVpcsCommon for usage and error information.
 func (c *VPC) DescribeVpcsCommon(input *map[string]interface{}) (*map[string]interface{}, error) {
 	req, out := c.DescribeVpcsCommonRequest(input)
@@ -87,13 +87,13 @@ const opDescribeVpcs = "DescribeVpcs"
 // See DescribeVpcs for more information on using the DescribeVpcs
 // API call, and error handling.
 //
-//	// Example sending a request using the DescribeVpcsRequest method.
-//	req, resp := client.DescribeVpcsRequest(params)
+//    // Example sending a request using the DescribeVpcsRequest method.
+//    req, resp := client.DescribeVpcsRequest(params)
 //
-//	err := req.Send()
-//	if err == nil { // resp is now filled
-//	    fmt.Println(resp)
-//	}
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
 func (c *VPC) DescribeVpcsRequest(input *DescribeVpcsInput) (req *request.Request, output *DescribeVpcsOutput) {
 	op := &request.Operation{
 		Name:       opDescribeVpcs,
@@ -117,7 +117,7 @@ func (c *VPC) DescribeVpcsRequest(input *DescribeVpcsInput) (req *request.Reques
 // with bytepluserr.Error's Code and Message methods to get detailed information about
 // the error.
 //
-// See the byteplus API reference guide for VPC's
+// See the BYTEPLUS API reference guide for VPC's
 // API operation DescribeVpcs for usage and error information.
 func (c *VPC) DescribeVpcs(input *DescribeVpcsInput) (*DescribeVpcsOutput, error) {
 	req, out := c.DescribeVpcsRequest(input)
@@ -182,6 +182,10 @@ type DescribeVpcsInput struct {
 
 	IsDefault *bool `type:"boolean"`
 
+	MaxResults *int64 `min:"1" max:"100" type:"integer"`
+
+	NextToken *string `type:"string"`
+
 	PageNumber *int64 `type:"integer"`
 
 	PageSize *int64 `max:"100" type:"integer"`
@@ -193,6 +197,8 @@ type DescribeVpcsInput struct {
 	VpcIds []*string `type:"list"`
 
 	VpcName *string `type:"string"`
+
+	VpcOwnerId *int64 `type:"integer"`
 }
 
 // String returns the string representation
@@ -208,6 +214,12 @@ func (s DescribeVpcsInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *DescribeVpcsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DescribeVpcsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults > 100 {
+		invalidParams.Add(request.NewErrParamMaxValue("MaxResults", 100))
+	}
 	if s.PageSize != nil && *s.PageSize > 100 {
 		invalidParams.Add(request.NewErrParamMaxValue("PageSize", 100))
 	}
@@ -221,6 +233,18 @@ func (s *DescribeVpcsInput) Validate() error {
 // SetIsDefault sets the IsDefault field's value.
 func (s *DescribeVpcsInput) SetIsDefault(v bool) *DescribeVpcsInput {
 	s.IsDefault = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *DescribeVpcsInput) SetMaxResults(v int64) *DescribeVpcsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeVpcsInput) SetNextToken(v string) *DescribeVpcsInput {
+	s.NextToken = &v
 	return s
 }
 
@@ -260,10 +284,18 @@ func (s *DescribeVpcsInput) SetVpcName(v string) *DescribeVpcsInput {
 	return s
 }
 
+// SetVpcOwnerId sets the VpcOwnerId field's value.
+func (s *DescribeVpcsInput) SetVpcOwnerId(v int64) *DescribeVpcsInput {
+	s.VpcOwnerId = &v
+	return s
+}
+
 type DescribeVpcsOutput struct {
 	_ struct{} `type:"structure"`
 
 	Metadata *response.ResponseMetadata
+
+	NextToken *string `type:"string"`
 
 	PageNumber *int64 `type:"integer"`
 
@@ -284,6 +316,12 @@ func (s DescribeVpcsOutput) String() string {
 // GoString returns the string representation
 func (s DescribeVpcsOutput) GoString() string {
 	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeVpcsOutput) SetNextToken(v string) *DescribeVpcsOutput {
+	s.NextToken = &v
+	return s
 }
 
 // SetPageNumber sets the PageNumber field's value.
@@ -391,6 +429,8 @@ type VpcForDescribeVpcsOutput struct {
 
 	DnsServers []*string `type:"list"`
 
+	Ipv4GatewayId *string `type:"string"`
+
 	IsDefault *bool `type:"boolean"`
 
 	NatGatewayIds []*string `type:"list"`
@@ -401,11 +441,15 @@ type VpcForDescribeVpcsOutput struct {
 
 	RouteTableIds []*string `type:"list"`
 
+	SecondaryCidrBlocks []*string `type:"list"`
+
 	SecurityGroupIds []*string `type:"list"`
 
 	Status *string `type:"string"`
 
 	SubnetIds []*string `type:"list"`
+
+	SupportIpv4Gateway *bool `type:"boolean"`
 
 	Tags []*TagForDescribeVpcsOutput `type:"list"`
 
@@ -464,6 +508,12 @@ func (s *VpcForDescribeVpcsOutput) SetDnsServers(v []*string) *VpcForDescribeVpc
 	return s
 }
 
+// SetIpv4GatewayId sets the Ipv4GatewayId field's value.
+func (s *VpcForDescribeVpcsOutput) SetIpv4GatewayId(v string) *VpcForDescribeVpcsOutput {
+	s.Ipv4GatewayId = &v
+	return s
+}
+
 // SetIsDefault sets the IsDefault field's value.
 func (s *VpcForDescribeVpcsOutput) SetIsDefault(v bool) *VpcForDescribeVpcsOutput {
 	s.IsDefault = &v
@@ -494,6 +544,12 @@ func (s *VpcForDescribeVpcsOutput) SetRouteTableIds(v []*string) *VpcForDescribe
 	return s
 }
 
+// SetSecondaryCidrBlocks sets the SecondaryCidrBlocks field's value.
+func (s *VpcForDescribeVpcsOutput) SetSecondaryCidrBlocks(v []*string) *VpcForDescribeVpcsOutput {
+	s.SecondaryCidrBlocks = v
+	return s
+}
+
 // SetSecurityGroupIds sets the SecurityGroupIds field's value.
 func (s *VpcForDescribeVpcsOutput) SetSecurityGroupIds(v []*string) *VpcForDescribeVpcsOutput {
 	s.SecurityGroupIds = v
@@ -509,6 +565,12 @@ func (s *VpcForDescribeVpcsOutput) SetStatus(v string) *VpcForDescribeVpcsOutput
 // SetSubnetIds sets the SubnetIds field's value.
 func (s *VpcForDescribeVpcsOutput) SetSubnetIds(v []*string) *VpcForDescribeVpcsOutput {
 	s.SubnetIds = v
+	return s
+}
+
+// SetSupportIpv4Gateway sets the SupportIpv4Gateway field's value.
+func (s *VpcForDescribeVpcsOutput) SetSupportIpv4Gateway(v bool) *VpcForDescribeVpcsOutput {
+	s.SupportIpv4Gateway = &v
 	return s
 }
 
