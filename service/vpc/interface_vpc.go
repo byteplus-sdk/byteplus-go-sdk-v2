@@ -16,22 +16,1083 @@ import (
 // VPCAPI provides an interface to enable mocking the
 // vpc.VPC service client's API operation,
 //
-//	// byteplus sdk func uses an SDK service client to make a request to
-//	// VPC.
-//	func myFunc(svc VPCAPI) bool {
-//	    // Make svc.AddBandwidthPackageIp request
-//	}
+//    // byteplus sdk func uses an SDK service client to make a request to
+//    // VPC.
+//    func myFunc(svc VPCAPI) bool {
+//        // Make svc.ActiveFlowLog request
+//    }
 //
-//	func main() {
-//	    sess := session.New()
-//	    svc := vpc.New(sess)
+//    func main() {
+//        sess := session.New()
+//        svc := vpc.New(sess)
 //
-//	    myFunc(svc)
-//	}
+//        myFunc(svc)
+//    }
+//
 type VPCAPI interface {
+	ActiveFlowLogCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ActiveFlowLogCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ActiveFlowLogCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ActiveFlowLog(*ActiveFlowLogInput) (*ActiveFlowLogOutput, error)
+	ActiveFlowLogWithContext(byteplus.Context, *ActiveFlowLogInput, ...request.Option) (*ActiveFlowLogOutput, error)
+	ActiveFlowLogRequest(*ActiveFlowLogInput) (*request.Request, *ActiveFlowLogOutput)
+
+	AddBandwidthPackageIpCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	AddBandwidthPackageIpCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	AddBandwidthPackageIpCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	AddBandwidthPackageIp(*AddBandwidthPackageIpInput) (*AddBandwidthPackageIpOutput, error)
+	AddBandwidthPackageIpWithContext(byteplus.Context, *AddBandwidthPackageIpInput, ...request.Option) (*AddBandwidthPackageIpOutput, error)
+	AddBandwidthPackageIpRequest(*AddBandwidthPackageIpInput) (*request.Request, *AddBandwidthPackageIpOutput)
+
+	AddIpAddressPoolCidrBlockCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	AddIpAddressPoolCidrBlockCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	AddIpAddressPoolCidrBlockCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	AddIpAddressPoolCidrBlock(*AddIpAddressPoolCidrBlockInput) (*AddIpAddressPoolCidrBlockOutput, error)
+	AddIpAddressPoolCidrBlockWithContext(byteplus.Context, *AddIpAddressPoolCidrBlockInput, ...request.Option) (*AddIpAddressPoolCidrBlockOutput, error)
+	AddIpAddressPoolCidrBlockRequest(*AddIpAddressPoolCidrBlockInput) (*request.Request, *AddIpAddressPoolCidrBlockOutput)
+
+	AllocateEipAddressCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	AllocateEipAddressCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	AllocateEipAddressCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	AllocateEipAddress(*AllocateEipAddressInput) (*AllocateEipAddressOutput, error)
+	AllocateEipAddressWithContext(byteplus.Context, *AllocateEipAddressInput, ...request.Option) (*AllocateEipAddressOutput, error)
+	AllocateEipAddressRequest(*AllocateEipAddressInput) (*request.Request, *AllocateEipAddressOutput)
+
+	AllocateIpv6AddressBandwidthCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	AllocateIpv6AddressBandwidthCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	AllocateIpv6AddressBandwidthCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	AllocateIpv6AddressBandwidth(*AllocateIpv6AddressBandwidthInput) (*AllocateIpv6AddressBandwidthOutput, error)
+	AllocateIpv6AddressBandwidthWithContext(byteplus.Context, *AllocateIpv6AddressBandwidthInput, ...request.Option) (*AllocateIpv6AddressBandwidthOutput, error)
+	AllocateIpv6AddressBandwidthRequest(*AllocateIpv6AddressBandwidthInput) (*request.Request, *AllocateIpv6AddressBandwidthOutput)
+
+	AssignIpv6AddressesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	AssignIpv6AddressesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	AssignIpv6AddressesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	AssignIpv6Addresses(*AssignIpv6AddressesInput) (*AssignIpv6AddressesOutput, error)
+	AssignIpv6AddressesWithContext(byteplus.Context, *AssignIpv6AddressesInput, ...request.Option) (*AssignIpv6AddressesOutput, error)
+	AssignIpv6AddressesRequest(*AssignIpv6AddressesInput) (*request.Request, *AssignIpv6AddressesOutput)
+
+	AssignPrivateIpAddressesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	AssignPrivateIpAddressesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	AssignPrivateIpAddressesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	AssignPrivateIpAddresses(*AssignPrivateIpAddressesInput) (*AssignPrivateIpAddressesOutput, error)
+	AssignPrivateIpAddressesWithContext(byteplus.Context, *AssignPrivateIpAddressesInput, ...request.Option) (*AssignPrivateIpAddressesOutput, error)
+	AssignPrivateIpAddressesRequest(*AssignPrivateIpAddressesInput) (*request.Request, *AssignPrivateIpAddressesOutput)
+
+	AssociateEipAddressCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	AssociateEipAddressCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	AssociateEipAddressCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	AssociateEipAddress(*AssociateEipAddressInput) (*AssociateEipAddressOutput, error)
+	AssociateEipAddressWithContext(byteplus.Context, *AssociateEipAddressInput, ...request.Option) (*AssociateEipAddressOutput, error)
+	AssociateEipAddressRequest(*AssociateEipAddressInput) (*request.Request, *AssociateEipAddressOutput)
+
+	AssociateHaVipCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	AssociateHaVipCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	AssociateHaVipCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	AssociateHaVip(*AssociateHaVipInput) (*AssociateHaVipOutput, error)
+	AssociateHaVipWithContext(byteplus.Context, *AssociateHaVipInput, ...request.Option) (*AssociateHaVipOutput, error)
+	AssociateHaVipRequest(*AssociateHaVipInput) (*request.Request, *AssociateHaVipOutput)
+
+	AssociateNetworkAclCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	AssociateNetworkAclCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	AssociateNetworkAclCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	AssociateNetworkAcl(*AssociateNetworkAclInput) (*AssociateNetworkAclOutput, error)
+	AssociateNetworkAclWithContext(byteplus.Context, *AssociateNetworkAclInput, ...request.Option) (*AssociateNetworkAclOutput, error)
+	AssociateNetworkAclRequest(*AssociateNetworkAclInput) (*request.Request, *AssociateNetworkAclOutput)
+
+	AssociateRouteTableCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	AssociateRouteTableCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	AssociateRouteTableCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	AssociateRouteTable(*AssociateRouteTableInput) (*AssociateRouteTableOutput, error)
+	AssociateRouteTableWithContext(byteplus.Context, *AssociateRouteTableInput, ...request.Option) (*AssociateRouteTableOutput, error)
+	AssociateRouteTableRequest(*AssociateRouteTableInput) (*request.Request, *AssociateRouteTableOutput)
+
+	AssociateVpcCidrBlockCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	AssociateVpcCidrBlockCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	AssociateVpcCidrBlockCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	AssociateVpcCidrBlock(*AssociateVpcCidrBlockInput) (*AssociateVpcCidrBlockOutput, error)
+	AssociateVpcCidrBlockWithContext(byteplus.Context, *AssociateVpcCidrBlockInput, ...request.Option) (*AssociateVpcCidrBlockOutput, error)
+	AssociateVpcCidrBlockRequest(*AssociateVpcCidrBlockInput) (*request.Request, *AssociateVpcCidrBlockOutput)
+
+	AttachNetworkInterfaceCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	AttachNetworkInterfaceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	AttachNetworkInterfaceCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	AttachNetworkInterface(*AttachNetworkInterfaceInput) (*AttachNetworkInterfaceOutput, error)
+	AttachNetworkInterfaceWithContext(byteplus.Context, *AttachNetworkInterfaceInput, ...request.Option) (*AttachNetworkInterfaceOutput, error)
+	AttachNetworkInterfaceRequest(*AttachNetworkInterfaceInput) (*request.Request, *AttachNetworkInterfaceOutput)
+
+	AuthorizeSecurityGroupEgressCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	AuthorizeSecurityGroupEgressCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	AuthorizeSecurityGroupEgressCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	AuthorizeSecurityGroupEgress(*AuthorizeSecurityGroupEgressInput) (*AuthorizeSecurityGroupEgressOutput, error)
+	AuthorizeSecurityGroupEgressWithContext(byteplus.Context, *AuthorizeSecurityGroupEgressInput, ...request.Option) (*AuthorizeSecurityGroupEgressOutput, error)
+	AuthorizeSecurityGroupEgressRequest(*AuthorizeSecurityGroupEgressInput) (*request.Request, *AuthorizeSecurityGroupEgressOutput)
+
+	AuthorizeSecurityGroupIngressCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	AuthorizeSecurityGroupIngressCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	AuthorizeSecurityGroupIngressCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	AuthorizeSecurityGroupIngress(*AuthorizeSecurityGroupIngressInput) (*AuthorizeSecurityGroupIngressOutput, error)
+	AuthorizeSecurityGroupIngressWithContext(byteplus.Context, *AuthorizeSecurityGroupIngressInput, ...request.Option) (*AuthorizeSecurityGroupIngressOutput, error)
+	AuthorizeSecurityGroupIngressRequest(*AuthorizeSecurityGroupIngressInput) (*request.Request, *AuthorizeSecurityGroupIngressOutput)
+
+	CancelBandwidthPackageEipBandwidthCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CancelBandwidthPackageEipBandwidthCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CancelBandwidthPackageEipBandwidthCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CancelBandwidthPackageEipBandwidth(*CancelBandwidthPackageEipBandwidthInput) (*CancelBandwidthPackageEipBandwidthOutput, error)
+	CancelBandwidthPackageEipBandwidthWithContext(byteplus.Context, *CancelBandwidthPackageEipBandwidthInput, ...request.Option) (*CancelBandwidthPackageEipBandwidthOutput, error)
+	CancelBandwidthPackageEipBandwidthRequest(*CancelBandwidthPackageEipBandwidthInput) (*request.Request, *CancelBandwidthPackageEipBandwidthOutput)
+
+	ConvertEipAddressBillingTypeCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ConvertEipAddressBillingTypeCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ConvertEipAddressBillingTypeCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ConvertEipAddressBillingType(*ConvertEipAddressBillingTypeInput) (*ConvertEipAddressBillingTypeOutput, error)
+	ConvertEipAddressBillingTypeWithContext(byteplus.Context, *ConvertEipAddressBillingTypeInput, ...request.Option) (*ConvertEipAddressBillingTypeOutput, error)
+	ConvertEipAddressBillingTypeRequest(*ConvertEipAddressBillingTypeInput) (*request.Request, *ConvertEipAddressBillingTypeOutput)
+
+	CreateBandwidthPackageCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateBandwidthPackageCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateBandwidthPackageCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateBandwidthPackage(*CreateBandwidthPackageInput) (*CreateBandwidthPackageOutput, error)
+	CreateBandwidthPackageWithContext(byteplus.Context, *CreateBandwidthPackageInput, ...request.Option) (*CreateBandwidthPackageOutput, error)
+	CreateBandwidthPackageRequest(*CreateBandwidthPackageInput) (*request.Request, *CreateBandwidthPackageOutput)
+
+	CreateFlowLogCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateFlowLogCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateFlowLogCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateFlowLog(*CreateFlowLogInput) (*CreateFlowLogOutput, error)
+	CreateFlowLogWithContext(byteplus.Context, *CreateFlowLogInput, ...request.Option) (*CreateFlowLogOutput, error)
+	CreateFlowLogRequest(*CreateFlowLogInput) (*request.Request, *CreateFlowLogOutput)
+
+	CreateHaVipCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateHaVipCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateHaVipCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateHaVip(*CreateHaVipInput) (*CreateHaVipOutput, error)
+	CreateHaVipWithContext(byteplus.Context, *CreateHaVipInput, ...request.Option) (*CreateHaVipOutput, error)
+	CreateHaVipRequest(*CreateHaVipInput) (*request.Request, *CreateHaVipOutput)
+
+	CreateInstanceGroupCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateInstanceGroupCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateInstanceGroupCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateInstanceGroup(*CreateInstanceGroupInput) (*CreateInstanceGroupOutput, error)
+	CreateInstanceGroupWithContext(byteplus.Context, *CreateInstanceGroupInput, ...request.Option) (*CreateInstanceGroupOutput, error)
+	CreateInstanceGroupRequest(*CreateInstanceGroupInput) (*request.Request, *CreateInstanceGroupOutput)
+
+	CreateIpAddressPoolCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateIpAddressPoolCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateIpAddressPoolCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateIpAddressPool(*CreateIpAddressPoolInput) (*CreateIpAddressPoolOutput, error)
+	CreateIpAddressPoolWithContext(byteplus.Context, *CreateIpAddressPoolInput, ...request.Option) (*CreateIpAddressPoolOutput, error)
+	CreateIpAddressPoolRequest(*CreateIpAddressPoolInput) (*request.Request, *CreateIpAddressPoolOutput)
+
+	CreateIpv6EgressOnlyRuleCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateIpv6EgressOnlyRuleCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateIpv6EgressOnlyRuleCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateIpv6EgressOnlyRule(*CreateIpv6EgressOnlyRuleInput) (*CreateIpv6EgressOnlyRuleOutput, error)
+	CreateIpv6EgressOnlyRuleWithContext(byteplus.Context, *CreateIpv6EgressOnlyRuleInput, ...request.Option) (*CreateIpv6EgressOnlyRuleOutput, error)
+	CreateIpv6EgressOnlyRuleRequest(*CreateIpv6EgressOnlyRuleInput) (*request.Request, *CreateIpv6EgressOnlyRuleOutput)
+
+	CreateIpv6GatewayCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateIpv6GatewayCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateIpv6GatewayCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateIpv6Gateway(*CreateIpv6GatewayInput) (*CreateIpv6GatewayOutput, error)
+	CreateIpv6GatewayWithContext(byteplus.Context, *CreateIpv6GatewayInput, ...request.Option) (*CreateIpv6GatewayOutput, error)
+	CreateIpv6GatewayRequest(*CreateIpv6GatewayInput) (*request.Request, *CreateIpv6GatewayOutput)
+
+	CreateNetworkAclCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateNetworkAclCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateNetworkAclCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateNetworkAcl(*CreateNetworkAclInput) (*CreateNetworkAclOutput, error)
+	CreateNetworkAclWithContext(byteplus.Context, *CreateNetworkAclInput, ...request.Option) (*CreateNetworkAclOutput, error)
+	CreateNetworkAclRequest(*CreateNetworkAclInput) (*request.Request, *CreateNetworkAclOutput)
+
+	CreateNetworkInterfaceCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateNetworkInterfaceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateNetworkInterfaceCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateNetworkInterface(*CreateNetworkInterfaceInput) (*CreateNetworkInterfaceOutput, error)
+	CreateNetworkInterfaceWithContext(byteplus.Context, *CreateNetworkInterfaceInput, ...request.Option) (*CreateNetworkInterfaceOutput, error)
+	CreateNetworkInterfaceRequest(*CreateNetworkInterfaceInput) (*request.Request, *CreateNetworkInterfaceOutput)
+
+	CreatePrefixListCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreatePrefixListCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreatePrefixListCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreatePrefixList(*CreatePrefixListInput) (*CreatePrefixListOutput, error)
+	CreatePrefixListWithContext(byteplus.Context, *CreatePrefixListInput, ...request.Option) (*CreatePrefixListOutput, error)
+	CreatePrefixListRequest(*CreatePrefixListInput) (*request.Request, *CreatePrefixListOutput)
+
+	CreateRouteEntryCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateRouteEntryCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateRouteEntryCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateRouteEntry(*CreateRouteEntryInput) (*CreateRouteEntryOutput, error)
+	CreateRouteEntryWithContext(byteplus.Context, *CreateRouteEntryInput, ...request.Option) (*CreateRouteEntryOutput, error)
+	CreateRouteEntryRequest(*CreateRouteEntryInput) (*request.Request, *CreateRouteEntryOutput)
+
+	CreateRouteTableCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateRouteTableCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateRouteTableCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateRouteTable(*CreateRouteTableInput) (*CreateRouteTableOutput, error)
+	CreateRouteTableWithContext(byteplus.Context, *CreateRouteTableInput, ...request.Option) (*CreateRouteTableOutput, error)
+	CreateRouteTableRequest(*CreateRouteTableInput) (*request.Request, *CreateRouteTableOutput)
+
+	CreateSecurityGroupCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateSecurityGroupCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateSecurityGroupCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateSecurityGroup(*CreateSecurityGroupInput) (*CreateSecurityGroupOutput, error)
+	CreateSecurityGroupWithContext(byteplus.Context, *CreateSecurityGroupInput, ...request.Option) (*CreateSecurityGroupOutput, error)
+	CreateSecurityGroupRequest(*CreateSecurityGroupInput) (*request.Request, *CreateSecurityGroupOutput)
+
+	CreateSubnetCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateSubnetCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateSubnetCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateSubnet(*CreateSubnetInput) (*CreateSubnetOutput, error)
+	CreateSubnetWithContext(byteplus.Context, *CreateSubnetInput, ...request.Option) (*CreateSubnetOutput, error)
+	CreateSubnetRequest(*CreateSubnetInput) (*request.Request, *CreateSubnetOutput)
+
+	CreateTrafficMirrorFilterCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateTrafficMirrorFilterCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateTrafficMirrorFilterCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateTrafficMirrorFilter(*CreateTrafficMirrorFilterInput) (*CreateTrafficMirrorFilterOutput, error)
+	CreateTrafficMirrorFilterWithContext(byteplus.Context, *CreateTrafficMirrorFilterInput, ...request.Option) (*CreateTrafficMirrorFilterOutput, error)
+	CreateTrafficMirrorFilterRequest(*CreateTrafficMirrorFilterInput) (*request.Request, *CreateTrafficMirrorFilterOutput)
+
+	CreateTrafficMirrorFilterRuleCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateTrafficMirrorFilterRuleCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateTrafficMirrorFilterRuleCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateTrafficMirrorFilterRule(*CreateTrafficMirrorFilterRuleInput) (*CreateTrafficMirrorFilterRuleOutput, error)
+	CreateTrafficMirrorFilterRuleWithContext(byteplus.Context, *CreateTrafficMirrorFilterRuleInput, ...request.Option) (*CreateTrafficMirrorFilterRuleOutput, error)
+	CreateTrafficMirrorFilterRuleRequest(*CreateTrafficMirrorFilterRuleInput) (*request.Request, *CreateTrafficMirrorFilterRuleOutput)
+
+	CreateTrafficMirrorSessionCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateTrafficMirrorSessionCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateTrafficMirrorSessionCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateTrafficMirrorSession(*CreateTrafficMirrorSessionInput) (*CreateTrafficMirrorSessionOutput, error)
+	CreateTrafficMirrorSessionWithContext(byteplus.Context, *CreateTrafficMirrorSessionInput, ...request.Option) (*CreateTrafficMirrorSessionOutput, error)
+	CreateTrafficMirrorSessionRequest(*CreateTrafficMirrorSessionInput) (*request.Request, *CreateTrafficMirrorSessionOutput)
+
+	CreateTrafficMirrorTargetCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateTrafficMirrorTargetCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateTrafficMirrorTargetCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateTrafficMirrorTarget(*CreateTrafficMirrorTargetInput) (*CreateTrafficMirrorTargetOutput, error)
+	CreateTrafficMirrorTargetWithContext(byteplus.Context, *CreateTrafficMirrorTargetInput, ...request.Option) (*CreateTrafficMirrorTargetOutput, error)
+	CreateTrafficMirrorTargetRequest(*CreateTrafficMirrorTargetInput) (*request.Request, *CreateTrafficMirrorTargetOutput)
+
+	CreateVpcCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateVpcCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateVpcCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateVpc(*CreateVpcInput) (*CreateVpcOutput, error)
+	CreateVpcWithContext(byteplus.Context, *CreateVpcInput, ...request.Option) (*CreateVpcOutput, error)
+	CreateVpcRequest(*CreateVpcInput) (*request.Request, *CreateVpcOutput)
+
+	DeactiveFlowLogCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeactiveFlowLogCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeactiveFlowLogCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeactiveFlowLog(*DeactiveFlowLogInput) (*DeactiveFlowLogOutput, error)
+	DeactiveFlowLogWithContext(byteplus.Context, *DeactiveFlowLogInput, ...request.Option) (*DeactiveFlowLogOutput, error)
+	DeactiveFlowLogRequest(*DeactiveFlowLogInput) (*request.Request, *DeactiveFlowLogOutput)
+
+	DeleteBandwidthPackageCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteBandwidthPackageCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteBandwidthPackageCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteBandwidthPackage(*DeleteBandwidthPackageInput) (*DeleteBandwidthPackageOutput, error)
+	DeleteBandwidthPackageWithContext(byteplus.Context, *DeleteBandwidthPackageInput, ...request.Option) (*DeleteBandwidthPackageOutput, error)
+	DeleteBandwidthPackageRequest(*DeleteBandwidthPackageInput) (*request.Request, *DeleteBandwidthPackageOutput)
+
+	DeleteFlowLogCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteFlowLogCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteFlowLogCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteFlowLog(*DeleteFlowLogInput) (*DeleteFlowLogOutput, error)
+	DeleteFlowLogWithContext(byteplus.Context, *DeleteFlowLogInput, ...request.Option) (*DeleteFlowLogOutput, error)
+	DeleteFlowLogRequest(*DeleteFlowLogInput) (*request.Request, *DeleteFlowLogOutput)
+
+	DeleteHaVipCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteHaVipCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteHaVipCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteHaVip(*DeleteHaVipInput) (*DeleteHaVipOutput, error)
+	DeleteHaVipWithContext(byteplus.Context, *DeleteHaVipInput, ...request.Option) (*DeleteHaVipOutput, error)
+	DeleteHaVipRequest(*DeleteHaVipInput) (*request.Request, *DeleteHaVipOutput)
+
+	DeleteInstanceGroupCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteInstanceGroupCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteInstanceGroupCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteInstanceGroup(*DeleteInstanceGroupInput) (*DeleteInstanceGroupOutput, error)
+	DeleteInstanceGroupWithContext(byteplus.Context, *DeleteInstanceGroupInput, ...request.Option) (*DeleteInstanceGroupOutput, error)
+	DeleteInstanceGroupRequest(*DeleteInstanceGroupInput) (*request.Request, *DeleteInstanceGroupOutput)
+
+	DeleteIpAddressPoolCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteIpAddressPoolCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteIpAddressPoolCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteIpAddressPool(*DeleteIpAddressPoolInput) (*DeleteIpAddressPoolOutput, error)
+	DeleteIpAddressPoolWithContext(byteplus.Context, *DeleteIpAddressPoolInput, ...request.Option) (*DeleteIpAddressPoolOutput, error)
+	DeleteIpAddressPoolRequest(*DeleteIpAddressPoolInput) (*request.Request, *DeleteIpAddressPoolOutput)
+
+	DeleteIpAddressPoolCidrBlockCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteIpAddressPoolCidrBlockCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteIpAddressPoolCidrBlockCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteIpAddressPoolCidrBlock(*DeleteIpAddressPoolCidrBlockInput) (*DeleteIpAddressPoolCidrBlockOutput, error)
+	DeleteIpAddressPoolCidrBlockWithContext(byteplus.Context, *DeleteIpAddressPoolCidrBlockInput, ...request.Option) (*DeleteIpAddressPoolCidrBlockOutput, error)
+	DeleteIpAddressPoolCidrBlockRequest(*DeleteIpAddressPoolCidrBlockInput) (*request.Request, *DeleteIpAddressPoolCidrBlockOutput)
+
+	DeleteIpv6EgressOnlyRuleCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteIpv6EgressOnlyRuleCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteIpv6EgressOnlyRuleCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteIpv6EgressOnlyRule(*DeleteIpv6EgressOnlyRuleInput) (*DeleteIpv6EgressOnlyRuleOutput, error)
+	DeleteIpv6EgressOnlyRuleWithContext(byteplus.Context, *DeleteIpv6EgressOnlyRuleInput, ...request.Option) (*DeleteIpv6EgressOnlyRuleOutput, error)
+	DeleteIpv6EgressOnlyRuleRequest(*DeleteIpv6EgressOnlyRuleInput) (*request.Request, *DeleteIpv6EgressOnlyRuleOutput)
+
+	DeleteIpv6GatewayCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteIpv6GatewayCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteIpv6GatewayCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteIpv6Gateway(*DeleteIpv6GatewayInput) (*DeleteIpv6GatewayOutput, error)
+	DeleteIpv6GatewayWithContext(byteplus.Context, *DeleteIpv6GatewayInput, ...request.Option) (*DeleteIpv6GatewayOutput, error)
+	DeleteIpv6GatewayRequest(*DeleteIpv6GatewayInput) (*request.Request, *DeleteIpv6GatewayOutput)
+
+	DeleteNetworkAclCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteNetworkAclCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteNetworkAclCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteNetworkAcl(*DeleteNetworkAclInput) (*DeleteNetworkAclOutput, error)
+	DeleteNetworkAclWithContext(byteplus.Context, *DeleteNetworkAclInput, ...request.Option) (*DeleteNetworkAclOutput, error)
+	DeleteNetworkAclRequest(*DeleteNetworkAclInput) (*request.Request, *DeleteNetworkAclOutput)
+
+	DeleteNetworkInterfaceCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteNetworkInterfaceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteNetworkInterfaceCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteNetworkInterface(*DeleteNetworkInterfaceInput) (*DeleteNetworkInterfaceOutput, error)
+	DeleteNetworkInterfaceWithContext(byteplus.Context, *DeleteNetworkInterfaceInput, ...request.Option) (*DeleteNetworkInterfaceOutput, error)
+	DeleteNetworkInterfaceRequest(*DeleteNetworkInterfaceInput) (*request.Request, *DeleteNetworkInterfaceOutput)
+
+	DeletePrefixListCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeletePrefixListCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeletePrefixListCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeletePrefixList(*DeletePrefixListInput) (*DeletePrefixListOutput, error)
+	DeletePrefixListWithContext(byteplus.Context, *DeletePrefixListInput, ...request.Option) (*DeletePrefixListOutput, error)
+	DeletePrefixListRequest(*DeletePrefixListInput) (*request.Request, *DeletePrefixListOutput)
+
+	DeleteRouteEntryCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteRouteEntryCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteRouteEntryCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteRouteEntry(*DeleteRouteEntryInput) (*DeleteRouteEntryOutput, error)
+	DeleteRouteEntryWithContext(byteplus.Context, *DeleteRouteEntryInput, ...request.Option) (*DeleteRouteEntryOutput, error)
+	DeleteRouteEntryRequest(*DeleteRouteEntryInput) (*request.Request, *DeleteRouteEntryOutput)
+
+	DeleteRouteTableCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteRouteTableCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteRouteTableCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteRouteTable(*DeleteRouteTableInput) (*DeleteRouteTableOutput, error)
+	DeleteRouteTableWithContext(byteplus.Context, *DeleteRouteTableInput, ...request.Option) (*DeleteRouteTableOutput, error)
+	DeleteRouteTableRequest(*DeleteRouteTableInput) (*request.Request, *DeleteRouteTableOutput)
+
+	DeleteSecurityGroupCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteSecurityGroupCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteSecurityGroupCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteSecurityGroup(*DeleteSecurityGroupInput) (*DeleteSecurityGroupOutput, error)
+	DeleteSecurityGroupWithContext(byteplus.Context, *DeleteSecurityGroupInput, ...request.Option) (*DeleteSecurityGroupOutput, error)
+	DeleteSecurityGroupRequest(*DeleteSecurityGroupInput) (*request.Request, *DeleteSecurityGroupOutput)
+
+	DeleteSubnetCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteSubnetCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteSubnetCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteSubnet(*DeleteSubnetInput) (*DeleteSubnetOutput, error)
+	DeleteSubnetWithContext(byteplus.Context, *DeleteSubnetInput, ...request.Option) (*DeleteSubnetOutput, error)
+	DeleteSubnetRequest(*DeleteSubnetInput) (*request.Request, *DeleteSubnetOutput)
+
+	DeleteTrafficMirrorFilterCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteTrafficMirrorFilterCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteTrafficMirrorFilterCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteTrafficMirrorFilter(*DeleteTrafficMirrorFilterInput) (*DeleteTrafficMirrorFilterOutput, error)
+	DeleteTrafficMirrorFilterWithContext(byteplus.Context, *DeleteTrafficMirrorFilterInput, ...request.Option) (*DeleteTrafficMirrorFilterOutput, error)
+	DeleteTrafficMirrorFilterRequest(*DeleteTrafficMirrorFilterInput) (*request.Request, *DeleteTrafficMirrorFilterOutput)
+
+	DeleteTrafficMirrorFilterRuleCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteTrafficMirrorFilterRuleCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteTrafficMirrorFilterRuleCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteTrafficMirrorFilterRule(*DeleteTrafficMirrorFilterRuleInput) (*DeleteTrafficMirrorFilterRuleOutput, error)
+	DeleteTrafficMirrorFilterRuleWithContext(byteplus.Context, *DeleteTrafficMirrorFilterRuleInput, ...request.Option) (*DeleteTrafficMirrorFilterRuleOutput, error)
+	DeleteTrafficMirrorFilterRuleRequest(*DeleteTrafficMirrorFilterRuleInput) (*request.Request, *DeleteTrafficMirrorFilterRuleOutput)
+
+	DeleteTrafficMirrorSessionCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteTrafficMirrorSessionCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteTrafficMirrorSessionCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteTrafficMirrorSession(*DeleteTrafficMirrorSessionInput) (*DeleteTrafficMirrorSessionOutput, error)
+	DeleteTrafficMirrorSessionWithContext(byteplus.Context, *DeleteTrafficMirrorSessionInput, ...request.Option) (*DeleteTrafficMirrorSessionOutput, error)
+	DeleteTrafficMirrorSessionRequest(*DeleteTrafficMirrorSessionInput) (*request.Request, *DeleteTrafficMirrorSessionOutput)
+
+	DeleteTrafficMirrorTargetCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteTrafficMirrorTargetCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteTrafficMirrorTargetCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteTrafficMirrorTarget(*DeleteTrafficMirrorTargetInput) (*DeleteTrafficMirrorTargetOutput, error)
+	DeleteTrafficMirrorTargetWithContext(byteplus.Context, *DeleteTrafficMirrorTargetInput, ...request.Option) (*DeleteTrafficMirrorTargetOutput, error)
+	DeleteTrafficMirrorTargetRequest(*DeleteTrafficMirrorTargetInput) (*request.Request, *DeleteTrafficMirrorTargetOutput)
+
+	DeleteVpcCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteVpcCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteVpcCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteVpc(*DeleteVpcInput) (*DeleteVpcOutput, error)
+	DeleteVpcWithContext(byteplus.Context, *DeleteVpcInput, ...request.Option) (*DeleteVpcOutput, error)
+	DeleteVpcRequest(*DeleteVpcInput) (*request.Request, *DeleteVpcOutput)
+
+	DescribeBandwidthPackagesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeBandwidthPackagesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeBandwidthPackagesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeBandwidthPackages(*DescribeBandwidthPackagesInput) (*DescribeBandwidthPackagesOutput, error)
+	DescribeBandwidthPackagesWithContext(byteplus.Context, *DescribeBandwidthPackagesInput, ...request.Option) (*DescribeBandwidthPackagesOutput, error)
+	DescribeBandwidthPackagesRequest(*DescribeBandwidthPackagesInput) (*request.Request, *DescribeBandwidthPackagesOutput)
+
+	DescribeEipAddressAttributesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeEipAddressAttributesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeEipAddressAttributesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeEipAddressAttributes(*DescribeEipAddressAttributesInput) (*DescribeEipAddressAttributesOutput, error)
+	DescribeEipAddressAttributesWithContext(byteplus.Context, *DescribeEipAddressAttributesInput, ...request.Option) (*DescribeEipAddressAttributesOutput, error)
+	DescribeEipAddressAttributesRequest(*DescribeEipAddressAttributesInput) (*request.Request, *DescribeEipAddressAttributesOutput)
+
+	DescribeEipAddressesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeEipAddressesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeEipAddressesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeEipAddresses(*DescribeEipAddressesInput) (*DescribeEipAddressesOutput, error)
+	DescribeEipAddressesWithContext(byteplus.Context, *DescribeEipAddressesInput, ...request.Option) (*DescribeEipAddressesOutput, error)
+	DescribeEipAddressesRequest(*DescribeEipAddressesInput) (*request.Request, *DescribeEipAddressesOutput)
+
+	DescribeFlowLogsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeFlowLogsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeFlowLogsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeFlowLogs(*DescribeFlowLogsInput) (*DescribeFlowLogsOutput, error)
+	DescribeFlowLogsWithContext(byteplus.Context, *DescribeFlowLogsInput, ...request.Option) (*DescribeFlowLogsOutput, error)
+	DescribeFlowLogsRequest(*DescribeFlowLogsInput) (*request.Request, *DescribeFlowLogsOutput)
+
+	DescribeHaVipsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeHaVipsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeHaVipsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeHaVips(*DescribeHaVipsInput) (*DescribeHaVipsOutput, error)
+	DescribeHaVipsWithContext(byteplus.Context, *DescribeHaVipsInput, ...request.Option) (*DescribeHaVipsOutput, error)
+	DescribeHaVipsRequest(*DescribeHaVipsInput) (*request.Request, *DescribeHaVipsOutput)
+
+	DescribeInstanceGroupsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeInstanceGroupsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeInstanceGroupsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeInstanceGroups(*DescribeInstanceGroupsInput) (*DescribeInstanceGroupsOutput, error)
+	DescribeInstanceGroupsWithContext(byteplus.Context, *DescribeInstanceGroupsInput, ...request.Option) (*DescribeInstanceGroupsOutput, error)
+	DescribeInstanceGroupsRequest(*DescribeInstanceGroupsInput) (*request.Request, *DescribeInstanceGroupsOutput)
+
+	DescribeIpAddressPoolAttributesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeIpAddressPoolAttributesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeIpAddressPoolAttributesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeIpAddressPoolAttributes(*DescribeIpAddressPoolAttributesInput) (*DescribeIpAddressPoolAttributesOutput, error)
+	DescribeIpAddressPoolAttributesWithContext(byteplus.Context, *DescribeIpAddressPoolAttributesInput, ...request.Option) (*DescribeIpAddressPoolAttributesOutput, error)
+	DescribeIpAddressPoolAttributesRequest(*DescribeIpAddressPoolAttributesInput) (*request.Request, *DescribeIpAddressPoolAttributesOutput)
+
+	DescribeIpAddressPoolCidrBlocksCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeIpAddressPoolCidrBlocksCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeIpAddressPoolCidrBlocksCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeIpAddressPoolCidrBlocks(*DescribeIpAddressPoolCidrBlocksInput) (*DescribeIpAddressPoolCidrBlocksOutput, error)
+	DescribeIpAddressPoolCidrBlocksWithContext(byteplus.Context, *DescribeIpAddressPoolCidrBlocksInput, ...request.Option) (*DescribeIpAddressPoolCidrBlocksOutput, error)
+	DescribeIpAddressPoolCidrBlocksRequest(*DescribeIpAddressPoolCidrBlocksInput) (*request.Request, *DescribeIpAddressPoolCidrBlocksOutput)
+
+	DescribeIpAddressPoolsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeIpAddressPoolsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeIpAddressPoolsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeIpAddressPools(*DescribeIpAddressPoolsInput) (*DescribeIpAddressPoolsOutput, error)
+	DescribeIpAddressPoolsWithContext(byteplus.Context, *DescribeIpAddressPoolsInput, ...request.Option) (*DescribeIpAddressPoolsOutput, error)
+	DescribeIpAddressPoolsRequest(*DescribeIpAddressPoolsInput) (*request.Request, *DescribeIpAddressPoolsOutput)
+
+	DescribeIpv6AddressBandwidthAttributesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeIpv6AddressBandwidthAttributesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeIpv6AddressBandwidthAttributesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeIpv6AddressBandwidthAttributes(*DescribeIpv6AddressBandwidthAttributesInput) (*DescribeIpv6AddressBandwidthAttributesOutput, error)
+	DescribeIpv6AddressBandwidthAttributesWithContext(byteplus.Context, *DescribeIpv6AddressBandwidthAttributesInput, ...request.Option) (*DescribeIpv6AddressBandwidthAttributesOutput, error)
+	DescribeIpv6AddressBandwidthAttributesRequest(*DescribeIpv6AddressBandwidthAttributesInput) (*request.Request, *DescribeIpv6AddressBandwidthAttributesOutput)
+
+	DescribeIpv6AddressBandwidthsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeIpv6AddressBandwidthsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeIpv6AddressBandwidthsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeIpv6AddressBandwidths(*DescribeIpv6AddressBandwidthsInput) (*DescribeIpv6AddressBandwidthsOutput, error)
+	DescribeIpv6AddressBandwidthsWithContext(byteplus.Context, *DescribeIpv6AddressBandwidthsInput, ...request.Option) (*DescribeIpv6AddressBandwidthsOutput, error)
+	DescribeIpv6AddressBandwidthsRequest(*DescribeIpv6AddressBandwidthsInput) (*request.Request, *DescribeIpv6AddressBandwidthsOutput)
+
+	DescribeIpv6EgressOnlyRulesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeIpv6EgressOnlyRulesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeIpv6EgressOnlyRulesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeIpv6EgressOnlyRules(*DescribeIpv6EgressOnlyRulesInput) (*DescribeIpv6EgressOnlyRulesOutput, error)
+	DescribeIpv6EgressOnlyRulesWithContext(byteplus.Context, *DescribeIpv6EgressOnlyRulesInput, ...request.Option) (*DescribeIpv6EgressOnlyRulesOutput, error)
+	DescribeIpv6EgressOnlyRulesRequest(*DescribeIpv6EgressOnlyRulesInput) (*request.Request, *DescribeIpv6EgressOnlyRulesOutput)
+
+	DescribeIpv6GatewayAttributeCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeIpv6GatewayAttributeCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeIpv6GatewayAttributeCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeIpv6GatewayAttribute(*DescribeIpv6GatewayAttributeInput) (*DescribeIpv6GatewayAttributeOutput, error)
+	DescribeIpv6GatewayAttributeWithContext(byteplus.Context, *DescribeIpv6GatewayAttributeInput, ...request.Option) (*DescribeIpv6GatewayAttributeOutput, error)
+	DescribeIpv6GatewayAttributeRequest(*DescribeIpv6GatewayAttributeInput) (*request.Request, *DescribeIpv6GatewayAttributeOutput)
+
+	DescribeIpv6GatewaysCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeIpv6GatewaysCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeIpv6GatewaysCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeIpv6Gateways(*DescribeIpv6GatewaysInput) (*DescribeIpv6GatewaysOutput, error)
+	DescribeIpv6GatewaysWithContext(byteplus.Context, *DescribeIpv6GatewaysInput, ...request.Option) (*DescribeIpv6GatewaysOutput, error)
+	DescribeIpv6GatewaysRequest(*DescribeIpv6GatewaysInput) (*request.Request, *DescribeIpv6GatewaysOutput)
+
+	DescribeNetworkAclAttributesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeNetworkAclAttributesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeNetworkAclAttributesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeNetworkAclAttributes(*DescribeNetworkAclAttributesInput) (*DescribeNetworkAclAttributesOutput, error)
+	DescribeNetworkAclAttributesWithContext(byteplus.Context, *DescribeNetworkAclAttributesInput, ...request.Option) (*DescribeNetworkAclAttributesOutput, error)
+	DescribeNetworkAclAttributesRequest(*DescribeNetworkAclAttributesInput) (*request.Request, *DescribeNetworkAclAttributesOutput)
+
+	DescribeNetworkAclsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeNetworkAclsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeNetworkAclsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeNetworkAcls(*DescribeNetworkAclsInput) (*DescribeNetworkAclsOutput, error)
+	DescribeNetworkAclsWithContext(byteplus.Context, *DescribeNetworkAclsInput, ...request.Option) (*DescribeNetworkAclsOutput, error)
+	DescribeNetworkAclsRequest(*DescribeNetworkAclsInput) (*request.Request, *DescribeNetworkAclsOutput)
+
+	DescribeNetworkInterfaceAttributesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeNetworkInterfaceAttributesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeNetworkInterfaceAttributesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeNetworkInterfaceAttributes(*DescribeNetworkInterfaceAttributesInput) (*DescribeNetworkInterfaceAttributesOutput, error)
+	DescribeNetworkInterfaceAttributesWithContext(byteplus.Context, *DescribeNetworkInterfaceAttributesInput, ...request.Option) (*DescribeNetworkInterfaceAttributesOutput, error)
+	DescribeNetworkInterfaceAttributesRequest(*DescribeNetworkInterfaceAttributesInput) (*request.Request, *DescribeNetworkInterfaceAttributesOutput)
+
+	DescribeNetworkInterfacesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeNetworkInterfacesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeNetworkInterfacesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeNetworkInterfaces(*DescribeNetworkInterfacesInput) (*DescribeNetworkInterfacesOutput, error)
+	DescribeNetworkInterfacesWithContext(byteplus.Context, *DescribeNetworkInterfacesInput, ...request.Option) (*DescribeNetworkInterfacesOutput, error)
+	DescribeNetworkInterfacesRequest(*DescribeNetworkInterfacesInput) (*request.Request, *DescribeNetworkInterfacesOutput)
+
+	DescribePrefixListAssociationsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribePrefixListAssociationsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribePrefixListAssociationsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribePrefixListAssociations(*DescribePrefixListAssociationsInput) (*DescribePrefixListAssociationsOutput, error)
+	DescribePrefixListAssociationsWithContext(byteplus.Context, *DescribePrefixListAssociationsInput, ...request.Option) (*DescribePrefixListAssociationsOutput, error)
+	DescribePrefixListAssociationsRequest(*DescribePrefixListAssociationsInput) (*request.Request, *DescribePrefixListAssociationsOutput)
+
+	DescribePrefixListEntriesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribePrefixListEntriesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribePrefixListEntriesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribePrefixListEntries(*DescribePrefixListEntriesInput) (*DescribePrefixListEntriesOutput, error)
+	DescribePrefixListEntriesWithContext(byteplus.Context, *DescribePrefixListEntriesInput, ...request.Option) (*DescribePrefixListEntriesOutput, error)
+	DescribePrefixListEntriesRequest(*DescribePrefixListEntriesInput) (*request.Request, *DescribePrefixListEntriesOutput)
+
+	DescribePrefixListsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribePrefixListsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribePrefixListsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribePrefixLists(*DescribePrefixListsInput) (*DescribePrefixListsOutput, error)
+	DescribePrefixListsWithContext(byteplus.Context, *DescribePrefixListsInput, ...request.Option) (*DescribePrefixListsOutput, error)
+	DescribePrefixListsRequest(*DescribePrefixListsInput) (*request.Request, *DescribePrefixListsOutput)
+
+	DescribeRouteEntryListCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeRouteEntryListCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeRouteEntryListCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeRouteEntryList(*DescribeRouteEntryListInput) (*DescribeRouteEntryListOutput, error)
+	DescribeRouteEntryListWithContext(byteplus.Context, *DescribeRouteEntryListInput, ...request.Option) (*DescribeRouteEntryListOutput, error)
+	DescribeRouteEntryListRequest(*DescribeRouteEntryListInput) (*request.Request, *DescribeRouteEntryListOutput)
+
+	DescribeRouteTableListCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeRouteTableListCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeRouteTableListCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeRouteTableList(*DescribeRouteTableListInput) (*DescribeRouteTableListOutput, error)
+	DescribeRouteTableListWithContext(byteplus.Context, *DescribeRouteTableListInput, ...request.Option) (*DescribeRouteTableListOutput, error)
+	DescribeRouteTableListRequest(*DescribeRouteTableListInput) (*request.Request, *DescribeRouteTableListOutput)
+
+	DescribeSecurityGroupAttributesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeSecurityGroupAttributesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeSecurityGroupAttributesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeSecurityGroupAttributes(*DescribeSecurityGroupAttributesInput) (*DescribeSecurityGroupAttributesOutput, error)
+	DescribeSecurityGroupAttributesWithContext(byteplus.Context, *DescribeSecurityGroupAttributesInput, ...request.Option) (*DescribeSecurityGroupAttributesOutput, error)
+	DescribeSecurityGroupAttributesRequest(*DescribeSecurityGroupAttributesInput) (*request.Request, *DescribeSecurityGroupAttributesOutput)
+
+	DescribeSecurityGroupsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeSecurityGroupsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeSecurityGroupsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeSecurityGroups(*DescribeSecurityGroupsInput) (*DescribeSecurityGroupsOutput, error)
+	DescribeSecurityGroupsWithContext(byteplus.Context, *DescribeSecurityGroupsInput, ...request.Option) (*DescribeSecurityGroupsOutput, error)
+	DescribeSecurityGroupsRequest(*DescribeSecurityGroupsInput) (*request.Request, *DescribeSecurityGroupsOutput)
+
+	DescribeSubnetAttributesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeSubnetAttributesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeSubnetAttributesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeSubnetAttributes(*DescribeSubnetAttributesInput) (*DescribeSubnetAttributesOutput, error)
+	DescribeSubnetAttributesWithContext(byteplus.Context, *DescribeSubnetAttributesInput, ...request.Option) (*DescribeSubnetAttributesOutput, error)
+	DescribeSubnetAttributesRequest(*DescribeSubnetAttributesInput) (*request.Request, *DescribeSubnetAttributesOutput)
+
+	DescribeSubnetsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeSubnetsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeSubnetsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeSubnets(*DescribeSubnetsInput) (*DescribeSubnetsOutput, error)
+	DescribeSubnetsWithContext(byteplus.Context, *DescribeSubnetsInput, ...request.Option) (*DescribeSubnetsOutput, error)
+	DescribeSubnetsRequest(*DescribeSubnetsInput) (*request.Request, *DescribeSubnetsOutput)
+
+	DescribeTrafficMirrorFiltersCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeTrafficMirrorFiltersCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeTrafficMirrorFiltersCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeTrafficMirrorFilters(*DescribeTrafficMirrorFiltersInput) (*DescribeTrafficMirrorFiltersOutput, error)
+	DescribeTrafficMirrorFiltersWithContext(byteplus.Context, *DescribeTrafficMirrorFiltersInput, ...request.Option) (*DescribeTrafficMirrorFiltersOutput, error)
+	DescribeTrafficMirrorFiltersRequest(*DescribeTrafficMirrorFiltersInput) (*request.Request, *DescribeTrafficMirrorFiltersOutput)
+
+	DescribeTrafficMirrorSessionsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeTrafficMirrorSessionsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeTrafficMirrorSessionsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeTrafficMirrorSessions(*DescribeTrafficMirrorSessionsInput) (*DescribeTrafficMirrorSessionsOutput, error)
+	DescribeTrafficMirrorSessionsWithContext(byteplus.Context, *DescribeTrafficMirrorSessionsInput, ...request.Option) (*DescribeTrafficMirrorSessionsOutput, error)
+	DescribeTrafficMirrorSessionsRequest(*DescribeTrafficMirrorSessionsInput) (*request.Request, *DescribeTrafficMirrorSessionsOutput)
+
+	DescribeTrafficMirrorTargetsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeTrafficMirrorTargetsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeTrafficMirrorTargetsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeTrafficMirrorTargets(*DescribeTrafficMirrorTargetsInput) (*DescribeTrafficMirrorTargetsOutput, error)
+	DescribeTrafficMirrorTargetsWithContext(byteplus.Context, *DescribeTrafficMirrorTargetsInput, ...request.Option) (*DescribeTrafficMirrorTargetsOutput, error)
+	DescribeTrafficMirrorTargetsRequest(*DescribeTrafficMirrorTargetsInput) (*request.Request, *DescribeTrafficMirrorTargetsOutput)
+
+	DescribeVpcAttributesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeVpcAttributesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeVpcAttributesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeVpcAttributes(*DescribeVpcAttributesInput) (*DescribeVpcAttributesOutput, error)
+	DescribeVpcAttributesWithContext(byteplus.Context, *DescribeVpcAttributesInput, ...request.Option) (*DescribeVpcAttributesOutput, error)
+	DescribeVpcAttributesRequest(*DescribeVpcAttributesInput) (*request.Request, *DescribeVpcAttributesOutput)
+
+	DescribeVpcsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeVpcsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeVpcsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
 	DescribeVpcs(*DescribeVpcsInput) (*DescribeVpcsOutput, error)
 	DescribeVpcsWithContext(byteplus.Context, *DescribeVpcsInput, ...request.Option) (*DescribeVpcsOutput, error)
 	DescribeVpcsRequest(*DescribeVpcsInput) (*request.Request, *DescribeVpcsOutput)
+
+	DetachNetworkInterfaceCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DetachNetworkInterfaceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DetachNetworkInterfaceCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DetachNetworkInterface(*DetachNetworkInterfaceInput) (*DetachNetworkInterfaceOutput, error)
+	DetachNetworkInterfaceWithContext(byteplus.Context, *DetachNetworkInterfaceInput, ...request.Option) (*DetachNetworkInterfaceOutput, error)
+	DetachNetworkInterfaceRequest(*DetachNetworkInterfaceInput) (*request.Request, *DetachNetworkInterfaceOutput)
+
+	DisassociateEipAddressCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DisassociateEipAddressCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DisassociateEipAddressCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DisassociateEipAddress(*DisassociateEipAddressInput) (*DisassociateEipAddressOutput, error)
+	DisassociateEipAddressWithContext(byteplus.Context, *DisassociateEipAddressInput, ...request.Option) (*DisassociateEipAddressOutput, error)
+	DisassociateEipAddressRequest(*DisassociateEipAddressInput) (*request.Request, *DisassociateEipAddressOutput)
+
+	DisassociateHaVipCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DisassociateHaVipCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DisassociateHaVipCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DisassociateHaVip(*DisassociateHaVipInput) (*DisassociateHaVipOutput, error)
+	DisassociateHaVipWithContext(byteplus.Context, *DisassociateHaVipInput, ...request.Option) (*DisassociateHaVipOutput, error)
+	DisassociateHaVipRequest(*DisassociateHaVipInput) (*request.Request, *DisassociateHaVipOutput)
+
+	DisassociateNetworkAclCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DisassociateNetworkAclCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DisassociateNetworkAclCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DisassociateNetworkAcl(*DisassociateNetworkAclInput) (*DisassociateNetworkAclOutput, error)
+	DisassociateNetworkAclWithContext(byteplus.Context, *DisassociateNetworkAclInput, ...request.Option) (*DisassociateNetworkAclOutput, error)
+	DisassociateNetworkAclRequest(*DisassociateNetworkAclInput) (*request.Request, *DisassociateNetworkAclOutput)
+
+	DisassociateRouteTableCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DisassociateRouteTableCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DisassociateRouteTableCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DisassociateRouteTable(*DisassociateRouteTableInput) (*DisassociateRouteTableOutput, error)
+	DisassociateRouteTableWithContext(byteplus.Context, *DisassociateRouteTableInput, ...request.Option) (*DisassociateRouteTableOutput, error)
+	DisassociateRouteTableRequest(*DisassociateRouteTableInput) (*request.Request, *DisassociateRouteTableOutput)
+
+	DisassociateVpcCidrBlockCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DisassociateVpcCidrBlockCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DisassociateVpcCidrBlockCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DisassociateVpcCidrBlock(*DisassociateVpcCidrBlockInput) (*DisassociateVpcCidrBlockOutput, error)
+	DisassociateVpcCidrBlockWithContext(byteplus.Context, *DisassociateVpcCidrBlockInput, ...request.Option) (*DisassociateVpcCidrBlockOutput, error)
+	DisassociateVpcCidrBlockRequest(*DisassociateVpcCidrBlockInput) (*request.Request, *DisassociateVpcCidrBlockOutput)
+
+	ListTagsForResourcesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListTagsForResourcesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListTagsForResourcesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListTagsForResources(*ListTagsForResourcesInput) (*ListTagsForResourcesOutput, error)
+	ListTagsForResourcesWithContext(byteplus.Context, *ListTagsForResourcesInput, ...request.Option) (*ListTagsForResourcesOutput, error)
+	ListTagsForResourcesRequest(*ListTagsForResourcesInput) (*request.Request, *ListTagsForResourcesOutput)
+
+	ModifyBandwidthPackageAttributesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyBandwidthPackageAttributesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyBandwidthPackageAttributesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyBandwidthPackageAttributes(*ModifyBandwidthPackageAttributesInput) (*ModifyBandwidthPackageAttributesOutput, error)
+	ModifyBandwidthPackageAttributesWithContext(byteplus.Context, *ModifyBandwidthPackageAttributesInput, ...request.Option) (*ModifyBandwidthPackageAttributesOutput, error)
+	ModifyBandwidthPackageAttributesRequest(*ModifyBandwidthPackageAttributesInput) (*request.Request, *ModifyBandwidthPackageAttributesOutput)
+
+	ModifyBandwidthPackageEipBandwidthCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyBandwidthPackageEipBandwidthCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyBandwidthPackageEipBandwidthCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyBandwidthPackageEipBandwidth(*ModifyBandwidthPackageEipBandwidthInput) (*ModifyBandwidthPackageEipBandwidthOutput, error)
+	ModifyBandwidthPackageEipBandwidthWithContext(byteplus.Context, *ModifyBandwidthPackageEipBandwidthInput, ...request.Option) (*ModifyBandwidthPackageEipBandwidthOutput, error)
+	ModifyBandwidthPackageEipBandwidthRequest(*ModifyBandwidthPackageEipBandwidthInput) (*request.Request, *ModifyBandwidthPackageEipBandwidthOutput)
+
+	ModifyBandwidthPackageSpecCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyBandwidthPackageSpecCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyBandwidthPackageSpecCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyBandwidthPackageSpec(*ModifyBandwidthPackageSpecInput) (*ModifyBandwidthPackageSpecOutput, error)
+	ModifyBandwidthPackageSpecWithContext(byteplus.Context, *ModifyBandwidthPackageSpecInput, ...request.Option) (*ModifyBandwidthPackageSpecOutput, error)
+	ModifyBandwidthPackageSpecRequest(*ModifyBandwidthPackageSpecInput) (*request.Request, *ModifyBandwidthPackageSpecOutput)
+
+	ModifyEipAddressAttributesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyEipAddressAttributesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyEipAddressAttributesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyEipAddressAttributes(*ModifyEipAddressAttributesInput) (*ModifyEipAddressAttributesOutput, error)
+	ModifyEipAddressAttributesWithContext(byteplus.Context, *ModifyEipAddressAttributesInput, ...request.Option) (*ModifyEipAddressAttributesOutput, error)
+	ModifyEipAddressAttributesRequest(*ModifyEipAddressAttributesInput) (*request.Request, *ModifyEipAddressAttributesOutput)
+
+	ModifyFlowLogAttributeCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyFlowLogAttributeCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyFlowLogAttributeCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyFlowLogAttribute(*ModifyFlowLogAttributeInput) (*ModifyFlowLogAttributeOutput, error)
+	ModifyFlowLogAttributeWithContext(byteplus.Context, *ModifyFlowLogAttributeInput, ...request.Option) (*ModifyFlowLogAttributeOutput, error)
+	ModifyFlowLogAttributeRequest(*ModifyFlowLogAttributeInput) (*request.Request, *ModifyFlowLogAttributeOutput)
+
+	ModifyHaVipAttributesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyHaVipAttributesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyHaVipAttributesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyHaVipAttributes(*ModifyHaVipAttributesInput) (*ModifyHaVipAttributesOutput, error)
+	ModifyHaVipAttributesWithContext(byteplus.Context, *ModifyHaVipAttributesInput, ...request.Option) (*ModifyHaVipAttributesOutput, error)
+	ModifyHaVipAttributesRequest(*ModifyHaVipAttributesInput) (*request.Request, *ModifyHaVipAttributesOutput)
+
+	ModifyInstanceGroupAttributesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyInstanceGroupAttributesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyInstanceGroupAttributesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyInstanceGroupAttributes(*ModifyInstanceGroupAttributesInput) (*ModifyInstanceGroupAttributesOutput, error)
+	ModifyInstanceGroupAttributesWithContext(byteplus.Context, *ModifyInstanceGroupAttributesInput, ...request.Option) (*ModifyInstanceGroupAttributesOutput, error)
+	ModifyInstanceGroupAttributesRequest(*ModifyInstanceGroupAttributesInput) (*request.Request, *ModifyInstanceGroupAttributesOutput)
+
+	ModifyInstanceGroupMembersCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyInstanceGroupMembersCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyInstanceGroupMembersCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyInstanceGroupMembers(*ModifyInstanceGroupMembersInput) (*ModifyInstanceGroupMembersOutput, error)
+	ModifyInstanceGroupMembersWithContext(byteplus.Context, *ModifyInstanceGroupMembersInput, ...request.Option) (*ModifyInstanceGroupMembersOutput, error)
+	ModifyInstanceGroupMembersRequest(*ModifyInstanceGroupMembersInput) (*request.Request, *ModifyInstanceGroupMembersOutput)
+
+	ModifyIpAddressPoolAttributesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyIpAddressPoolAttributesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyIpAddressPoolAttributesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyIpAddressPoolAttributes(*ModifyIpAddressPoolAttributesInput) (*ModifyIpAddressPoolAttributesOutput, error)
+	ModifyIpAddressPoolAttributesWithContext(byteplus.Context, *ModifyIpAddressPoolAttributesInput, ...request.Option) (*ModifyIpAddressPoolAttributesOutput, error)
+	ModifyIpAddressPoolAttributesRequest(*ModifyIpAddressPoolAttributesInput) (*request.Request, *ModifyIpAddressPoolAttributesOutput)
+
+	ModifyIpv6AddressBandwidthCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyIpv6AddressBandwidthCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyIpv6AddressBandwidthCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyIpv6AddressBandwidth(*ModifyIpv6AddressBandwidthInput) (*ModifyIpv6AddressBandwidthOutput, error)
+	ModifyIpv6AddressBandwidthWithContext(byteplus.Context, *ModifyIpv6AddressBandwidthInput, ...request.Option) (*ModifyIpv6AddressBandwidthOutput, error)
+	ModifyIpv6AddressBandwidthRequest(*ModifyIpv6AddressBandwidthInput) (*request.Request, *ModifyIpv6AddressBandwidthOutput)
+
+	ModifyIpv6EgressOnlyRuleAttributeCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyIpv6EgressOnlyRuleAttributeCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyIpv6EgressOnlyRuleAttributeCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyIpv6EgressOnlyRuleAttribute(*ModifyIpv6EgressOnlyRuleAttributeInput) (*ModifyIpv6EgressOnlyRuleAttributeOutput, error)
+	ModifyIpv6EgressOnlyRuleAttributeWithContext(byteplus.Context, *ModifyIpv6EgressOnlyRuleAttributeInput, ...request.Option) (*ModifyIpv6EgressOnlyRuleAttributeOutput, error)
+	ModifyIpv6EgressOnlyRuleAttributeRequest(*ModifyIpv6EgressOnlyRuleAttributeInput) (*request.Request, *ModifyIpv6EgressOnlyRuleAttributeOutput)
+
+	ModifyIpv6GatewayAttributeCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyIpv6GatewayAttributeCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyIpv6GatewayAttributeCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyIpv6GatewayAttribute(*ModifyIpv6GatewayAttributeInput) (*ModifyIpv6GatewayAttributeOutput, error)
+	ModifyIpv6GatewayAttributeWithContext(byteplus.Context, *ModifyIpv6GatewayAttributeInput, ...request.Option) (*ModifyIpv6GatewayAttributeOutput, error)
+	ModifyIpv6GatewayAttributeRequest(*ModifyIpv6GatewayAttributeInput) (*request.Request, *ModifyIpv6GatewayAttributeOutput)
+
+	ModifyNetworkAclAttributesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyNetworkAclAttributesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyNetworkAclAttributesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyNetworkAclAttributes(*ModifyNetworkAclAttributesInput) (*ModifyNetworkAclAttributesOutput, error)
+	ModifyNetworkAclAttributesWithContext(byteplus.Context, *ModifyNetworkAclAttributesInput, ...request.Option) (*ModifyNetworkAclAttributesOutput, error)
+	ModifyNetworkAclAttributesRequest(*ModifyNetworkAclAttributesInput) (*request.Request, *ModifyNetworkAclAttributesOutput)
+
+	ModifyNetworkInterfaceAttributesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyNetworkInterfaceAttributesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyNetworkInterfaceAttributesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyNetworkInterfaceAttributes(*ModifyNetworkInterfaceAttributesInput) (*ModifyNetworkInterfaceAttributesOutput, error)
+	ModifyNetworkInterfaceAttributesWithContext(byteplus.Context, *ModifyNetworkInterfaceAttributesInput, ...request.Option) (*ModifyNetworkInterfaceAttributesOutput, error)
+	ModifyNetworkInterfaceAttributesRequest(*ModifyNetworkInterfaceAttributesInput) (*request.Request, *ModifyNetworkInterfaceAttributesOutput)
+
+	ModifyPrefixListCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyPrefixListCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyPrefixListCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyPrefixList(*ModifyPrefixListInput) (*ModifyPrefixListOutput, error)
+	ModifyPrefixListWithContext(byteplus.Context, *ModifyPrefixListInput, ...request.Option) (*ModifyPrefixListOutput, error)
+	ModifyPrefixListRequest(*ModifyPrefixListInput) (*request.Request, *ModifyPrefixListOutput)
+
+	ModifyRouteEntryCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyRouteEntryCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyRouteEntryCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyRouteEntry(*ModifyRouteEntryInput) (*ModifyRouteEntryOutput, error)
+	ModifyRouteEntryWithContext(byteplus.Context, *ModifyRouteEntryInput, ...request.Option) (*ModifyRouteEntryOutput, error)
+	ModifyRouteEntryRequest(*ModifyRouteEntryInput) (*request.Request, *ModifyRouteEntryOutput)
+
+	ModifyRouteTableAttributesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyRouteTableAttributesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyRouteTableAttributesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyRouteTableAttributes(*ModifyRouteTableAttributesInput) (*ModifyRouteTableAttributesOutput, error)
+	ModifyRouteTableAttributesWithContext(byteplus.Context, *ModifyRouteTableAttributesInput, ...request.Option) (*ModifyRouteTableAttributesOutput, error)
+	ModifyRouteTableAttributesRequest(*ModifyRouteTableAttributesInput) (*request.Request, *ModifyRouteTableAttributesOutput)
+
+	ModifySecurityGroupAttributesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifySecurityGroupAttributesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifySecurityGroupAttributesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifySecurityGroupAttributes(*ModifySecurityGroupAttributesInput) (*ModifySecurityGroupAttributesOutput, error)
+	ModifySecurityGroupAttributesWithContext(byteplus.Context, *ModifySecurityGroupAttributesInput, ...request.Option) (*ModifySecurityGroupAttributesOutput, error)
+	ModifySecurityGroupAttributesRequest(*ModifySecurityGroupAttributesInput) (*request.Request, *ModifySecurityGroupAttributesOutput)
+
+	ModifySecurityGroupRuleDescriptionsEgressCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifySecurityGroupRuleDescriptionsEgressCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifySecurityGroupRuleDescriptionsEgressCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifySecurityGroupRuleDescriptionsEgress(*ModifySecurityGroupRuleDescriptionsEgressInput) (*ModifySecurityGroupRuleDescriptionsEgressOutput, error)
+	ModifySecurityGroupRuleDescriptionsEgressWithContext(byteplus.Context, *ModifySecurityGroupRuleDescriptionsEgressInput, ...request.Option) (*ModifySecurityGroupRuleDescriptionsEgressOutput, error)
+	ModifySecurityGroupRuleDescriptionsEgressRequest(*ModifySecurityGroupRuleDescriptionsEgressInput) (*request.Request, *ModifySecurityGroupRuleDescriptionsEgressOutput)
+
+	ModifySecurityGroupRuleDescriptionsIngressCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifySecurityGroupRuleDescriptionsIngressCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifySecurityGroupRuleDescriptionsIngressCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifySecurityGroupRuleDescriptionsIngress(*ModifySecurityGroupRuleDescriptionsIngressInput) (*ModifySecurityGroupRuleDescriptionsIngressOutput, error)
+	ModifySecurityGroupRuleDescriptionsIngressWithContext(byteplus.Context, *ModifySecurityGroupRuleDescriptionsIngressInput, ...request.Option) (*ModifySecurityGroupRuleDescriptionsIngressOutput, error)
+	ModifySecurityGroupRuleDescriptionsIngressRequest(*ModifySecurityGroupRuleDescriptionsIngressInput) (*request.Request, *ModifySecurityGroupRuleDescriptionsIngressOutput)
+
+	ModifySubnetAttributesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifySubnetAttributesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifySubnetAttributesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifySubnetAttributes(*ModifySubnetAttributesInput) (*ModifySubnetAttributesOutput, error)
+	ModifySubnetAttributesWithContext(byteplus.Context, *ModifySubnetAttributesInput, ...request.Option) (*ModifySubnetAttributesOutput, error)
+	ModifySubnetAttributesRequest(*ModifySubnetAttributesInput) (*request.Request, *ModifySubnetAttributesOutput)
+
+	ModifyTrafficMirrorFilterAttributesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyTrafficMirrorFilterAttributesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyTrafficMirrorFilterAttributesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyTrafficMirrorFilterAttributes(*ModifyTrafficMirrorFilterAttributesInput) (*ModifyTrafficMirrorFilterAttributesOutput, error)
+	ModifyTrafficMirrorFilterAttributesWithContext(byteplus.Context, *ModifyTrafficMirrorFilterAttributesInput, ...request.Option) (*ModifyTrafficMirrorFilterAttributesOutput, error)
+	ModifyTrafficMirrorFilterAttributesRequest(*ModifyTrafficMirrorFilterAttributesInput) (*request.Request, *ModifyTrafficMirrorFilterAttributesOutput)
+
+	ModifyTrafficMirrorFilterRuleAttributesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyTrafficMirrorFilterRuleAttributesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyTrafficMirrorFilterRuleAttributesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyTrafficMirrorFilterRuleAttributes(*ModifyTrafficMirrorFilterRuleAttributesInput) (*ModifyTrafficMirrorFilterRuleAttributesOutput, error)
+	ModifyTrafficMirrorFilterRuleAttributesWithContext(byteplus.Context, *ModifyTrafficMirrorFilterRuleAttributesInput, ...request.Option) (*ModifyTrafficMirrorFilterRuleAttributesOutput, error)
+	ModifyTrafficMirrorFilterRuleAttributesRequest(*ModifyTrafficMirrorFilterRuleAttributesInput) (*request.Request, *ModifyTrafficMirrorFilterRuleAttributesOutput)
+
+	ModifyTrafficMirrorSessionAttributesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyTrafficMirrorSessionAttributesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyTrafficMirrorSessionAttributesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyTrafficMirrorSessionAttributes(*ModifyTrafficMirrorSessionAttributesInput) (*ModifyTrafficMirrorSessionAttributesOutput, error)
+	ModifyTrafficMirrorSessionAttributesWithContext(byteplus.Context, *ModifyTrafficMirrorSessionAttributesInput, ...request.Option) (*ModifyTrafficMirrorSessionAttributesOutput, error)
+	ModifyTrafficMirrorSessionAttributesRequest(*ModifyTrafficMirrorSessionAttributesInput) (*request.Request, *ModifyTrafficMirrorSessionAttributesOutput)
+
+	ModifyTrafficMirrorTargetAttributesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyTrafficMirrorTargetAttributesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyTrafficMirrorTargetAttributesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyTrafficMirrorTargetAttributes(*ModifyTrafficMirrorTargetAttributesInput) (*ModifyTrafficMirrorTargetAttributesOutput, error)
+	ModifyTrafficMirrorTargetAttributesWithContext(byteplus.Context, *ModifyTrafficMirrorTargetAttributesInput, ...request.Option) (*ModifyTrafficMirrorTargetAttributesOutput, error)
+	ModifyTrafficMirrorTargetAttributesRequest(*ModifyTrafficMirrorTargetAttributesInput) (*request.Request, *ModifyTrafficMirrorTargetAttributesOutput)
+
+	ModifyVpcAttributesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyVpcAttributesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyVpcAttributesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyVpcAttributes(*ModifyVpcAttributesInput) (*ModifyVpcAttributesOutput, error)
+	ModifyVpcAttributesWithContext(byteplus.Context, *ModifyVpcAttributesInput, ...request.Option) (*ModifyVpcAttributesOutput, error)
+	ModifyVpcAttributesRequest(*ModifyVpcAttributesInput) (*request.Request, *ModifyVpcAttributesOutput)
+
+	ReleaseEipAddressCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ReleaseEipAddressCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ReleaseEipAddressCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ReleaseEipAddress(*ReleaseEipAddressInput) (*ReleaseEipAddressOutput, error)
+	ReleaseEipAddressWithContext(byteplus.Context, *ReleaseEipAddressInput, ...request.Option) (*ReleaseEipAddressOutput, error)
+	ReleaseEipAddressRequest(*ReleaseEipAddressInput) (*request.Request, *ReleaseEipAddressOutput)
+
+	ReleaseIpv6AddressBandwidthCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ReleaseIpv6AddressBandwidthCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ReleaseIpv6AddressBandwidthCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ReleaseIpv6AddressBandwidth(*ReleaseIpv6AddressBandwidthInput) (*ReleaseIpv6AddressBandwidthOutput, error)
+	ReleaseIpv6AddressBandwidthWithContext(byteplus.Context, *ReleaseIpv6AddressBandwidthInput, ...request.Option) (*ReleaseIpv6AddressBandwidthOutput, error)
+	ReleaseIpv6AddressBandwidthRequest(*ReleaseIpv6AddressBandwidthInput) (*request.Request, *ReleaseIpv6AddressBandwidthOutput)
+
+	RemoveBandwidthPackageIpCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	RemoveBandwidthPackageIpCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	RemoveBandwidthPackageIpCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	RemoveBandwidthPackageIp(*RemoveBandwidthPackageIpInput) (*RemoveBandwidthPackageIpOutput, error)
+	RemoveBandwidthPackageIpWithContext(byteplus.Context, *RemoveBandwidthPackageIpInput, ...request.Option) (*RemoveBandwidthPackageIpOutput, error)
+	RemoveBandwidthPackageIpRequest(*RemoveBandwidthPackageIpInput) (*request.Request, *RemoveBandwidthPackageIpOutput)
+
+	RevokeSecurityGroupEgressCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	RevokeSecurityGroupEgressCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	RevokeSecurityGroupEgressCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	RevokeSecurityGroupEgress(*RevokeSecurityGroupEgressInput) (*RevokeSecurityGroupEgressOutput, error)
+	RevokeSecurityGroupEgressWithContext(byteplus.Context, *RevokeSecurityGroupEgressInput, ...request.Option) (*RevokeSecurityGroupEgressOutput, error)
+	RevokeSecurityGroupEgressRequest(*RevokeSecurityGroupEgressInput) (*request.Request, *RevokeSecurityGroupEgressOutput)
+
+	RevokeSecurityGroupIngressCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	RevokeSecurityGroupIngressCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	RevokeSecurityGroupIngressCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	RevokeSecurityGroupIngress(*RevokeSecurityGroupIngressInput) (*RevokeSecurityGroupIngressOutput, error)
+	RevokeSecurityGroupIngressWithContext(byteplus.Context, *RevokeSecurityGroupIngressInput, ...request.Option) (*RevokeSecurityGroupIngressOutput, error)
+	RevokeSecurityGroupIngressRequest(*RevokeSecurityGroupIngressInput) (*request.Request, *RevokeSecurityGroupIngressOutput)
+
+	TagResourcesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	TagResourcesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	TagResourcesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	TagResources(*TagResourcesInput) (*TagResourcesOutput, error)
+	TagResourcesWithContext(byteplus.Context, *TagResourcesInput, ...request.Option) (*TagResourcesOutput, error)
+	TagResourcesRequest(*TagResourcesInput) (*request.Request, *TagResourcesOutput)
+
+	TemporaryUpgradeEipAddressCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	TemporaryUpgradeEipAddressCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	TemporaryUpgradeEipAddressCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	TemporaryUpgradeEipAddress(*TemporaryUpgradeEipAddressInput) (*TemporaryUpgradeEipAddressOutput, error)
+	TemporaryUpgradeEipAddressWithContext(byteplus.Context, *TemporaryUpgradeEipAddressInput, ...request.Option) (*TemporaryUpgradeEipAddressOutput, error)
+	TemporaryUpgradeEipAddressRequest(*TemporaryUpgradeEipAddressInput) (*request.Request, *TemporaryUpgradeEipAddressOutput)
+
+	UnassignIpv6AddressesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	UnassignIpv6AddressesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	UnassignIpv6AddressesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	UnassignIpv6Addresses(*UnassignIpv6AddressesInput) (*UnassignIpv6AddressesOutput, error)
+	UnassignIpv6AddressesWithContext(byteplus.Context, *UnassignIpv6AddressesInput, ...request.Option) (*UnassignIpv6AddressesOutput, error)
+	UnassignIpv6AddressesRequest(*UnassignIpv6AddressesInput) (*request.Request, *UnassignIpv6AddressesOutput)
+
+	UnassignPrivateIpAddressesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	UnassignPrivateIpAddressesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	UnassignPrivateIpAddressesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	UnassignPrivateIpAddresses(*UnassignPrivateIpAddressesInput) (*UnassignPrivateIpAddressesOutput, error)
+	UnassignPrivateIpAddressesWithContext(byteplus.Context, *UnassignPrivateIpAddressesInput, ...request.Option) (*UnassignPrivateIpAddressesOutput, error)
+	UnassignPrivateIpAddressesRequest(*UnassignPrivateIpAddressesInput) (*request.Request, *UnassignPrivateIpAddressesOutput)
+
+	UntagResourcesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	UntagResourcesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	UntagResourcesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	UntagResources(*UntagResourcesInput) (*UntagResourcesOutput, error)
+	UntagResourcesWithContext(byteplus.Context, *UntagResourcesInput, ...request.Option) (*UntagResourcesOutput, error)
+	UntagResourcesRequest(*UntagResourcesInput) (*request.Request, *UntagResourcesOutput)
+
+	UpdateNetworkAclEntriesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	UpdateNetworkAclEntriesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	UpdateNetworkAclEntriesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	UpdateNetworkAclEntries(*UpdateNetworkAclEntriesInput) (*UpdateNetworkAclEntriesOutput, error)
+	UpdateNetworkAclEntriesWithContext(byteplus.Context, *UpdateNetworkAclEntriesInput, ...request.Option) (*UpdateNetworkAclEntriesOutput, error)
+	UpdateNetworkAclEntriesRequest(*UpdateNetworkAclEntriesInput) (*request.Request, *UpdateNetworkAclEntriesOutput)
 }
 
 var _ VPCAPI = (*VPC)(nil)
