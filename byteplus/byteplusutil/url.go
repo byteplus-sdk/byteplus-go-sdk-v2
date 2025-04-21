@@ -1,5 +1,11 @@
 package byteplusutil
 
+import (
+	"os"
+	"path/filepath"
+	"strings"
+)
+
 // Copy from https://github.com/aws/aws-sdk-go
 // May have been modified by Byteplus.
 
@@ -35,10 +41,12 @@ func (c *Endpoint) GetEndpoint() string {
 }
 
 const (
-	separator              = "."
-	openPrefix             = "open"
-	byteplusEndpointSuffix = separator + "byteplusapi.com"
-	endpointSuffix         = separator + "ap-southeast-1.byteplusapi.com"
+	separator               = "."
+	openPrefix              = "open"
+	byteplusEndpointSuffix  = separator + "byteplusapi.com"
+	endpointSuffix          = separator + "ap-southeast-1.byteplusapi.com"
+	dualstackEndpointSuffix = separator + "byteplus-api.com"
+	cnSuffix                = separator + "cn"
 )
 
 var endpoint = openPrefix + endpointSuffix
@@ -52,6 +60,7 @@ type RegionEndpointMap map[string]string
 type ServiceEndpointInfo struct {
 	Service         string
 	IsGlobal        bool
+	Suffix          string
 	GlobalEndpoint  string
 	DefaultEndpoint string
 	RegionEndpointMap
@@ -62,6 +71,7 @@ var defaultEndpoint = map[string]*ServiceEndpointInfo{
 		Service:           "billing",
 		IsGlobal:          true,
 		GlobalEndpoint:    "",
+		Suffix:            byteplusEndpointSuffix,
 		DefaultEndpoint:   "open.byteplusapi.com",
 		RegionEndpointMap: nil,
 	},
@@ -69,6 +79,7 @@ var defaultEndpoint = map[string]*ServiceEndpointInfo{
 		Service:           "iam",
 		IsGlobal:          true,
 		GlobalEndpoint:    "",
+		Suffix:            byteplusEndpointSuffix,
 		DefaultEndpoint:   "open.byteplusapi.com",
 		RegionEndpointMap: nil,
 	},
@@ -76,6 +87,7 @@ var defaultEndpoint = map[string]*ServiceEndpointInfo{
 		Service:         "vpc",
 		IsGlobal:        false,
 		GlobalEndpoint:  "",
+		Suffix:          byteplusEndpointSuffix,
 		DefaultEndpoint: endpoint,
 		RegionEndpointMap: RegionEndpointMap{
 			regionCodeAPSouthEast3: "vpc" + separator + regionCodeAPSouthEast3 + byteplusEndpointSuffix,
@@ -85,11 +97,16 @@ var defaultEndpoint = map[string]*ServiceEndpointInfo{
 		Service:         "ecs",
 		IsGlobal:        false,
 		GlobalEndpoint:  "",
+		Suffix:          byteplusEndpointSuffix,
 		DefaultEndpoint: endpoint,
 		RegionEndpointMap: RegionEndpointMap{
 			regionCodeAPSouthEast3: "ecs" + separator + regionCodeAPSouthEast3 + byteplusEndpointSuffix,
 		},
 	},
+}
+
+func standardizeDomainServiceCode(serviceCode string) string {
+	return strings.ReplaceAll(strings.ToLower(serviceCode), "_", "-")
 }
 
 // GetDefaultEndpointByServiceInfo retrieves the default endpoint for a given service and region.
@@ -101,42 +118,103 @@ var defaultEndpoint = map[string]*ServiceEndpointInfo{
 // Parameters:
 // - service: The name of the service for which to retrieve the endpoint.
 // - regionCode: The region code to look up the region-specific endpoint.
-//
+// - customBootstrapRegion: The map which keys are bootstrapping region code and values are empty struct.
 // Returns:
 // - *string: A pointer to the endpoint string. It could be a global endpoint, a region-specific
 // endpoint, or a default endpoint if the specified service or region does not have a defined endpoint.
 //
 // Example:
 //
-//	endpoint := GetDefaultEndpointByServiceInfo("exampleService", "cn-beijing")
+//	endpoint := GetDefaultEndpointByServiceInfo("exampleService", "cn-beijing", nil)
 //
 // Note: Ensure the `defaultEndpoint` map is properly populated with service and region endpoint
 // information before calling this function.
-func GetDefaultEndpointByServiceInfo(service string, regionCode string) *string {
+func GetDefaultEndpointByServiceInfo(service string, regionCode string, customBootstrapRegion map[string]struct{}) *string {
 	resultEndpoint := endpoint
+
+	if !inBootstrapRegionList(regionCode, customBootstrapRegion) {
+		return &resultEndpoint
+	}
+
 	defaultEndpointInfo, sExist := defaultEndpoint[service]
 	if !sExist {
 		return &resultEndpoint
 	}
 
-	isGlobal := defaultEndpointInfo.IsGlobal
-	if isGlobal {
+	suffix := byteplusEndpointSuffix
+	if hasEnableDualStack() {
+		suffix = dualstackEndpointSuffix
+	}
+
+	if defaultEndpointInfo.IsGlobal {
 		if len(defaultEndpointInfo.GlobalEndpoint) > 0 {
 			resultEndpoint = defaultEndpointInfo.GlobalEndpoint
 			return &resultEndpoint
 		}
-	} else {
-		regionEndpointMp := defaultEndpointInfo.RegionEndpointMap
-		regionEndpointStr, rExist := regionEndpointMp[regionCode]
-		if rExist {
-			resultEndpoint = regionEndpointStr
-			return &resultEndpoint
+		resultEndpoint = standardizeDomainServiceCode(service) + suffix
+		if isCNRegion(regionCode) {
+			resultEndpoint += cnSuffix
+		}
+		return &resultEndpoint
+	}
+
+	// regional endpoint
+	regionEndpointMp := defaultEndpointInfo.RegionEndpointMap
+	regionEndpointStr, rExist := regionEndpointMp[regionCode]
+	if rExist {
+		resultEndpoint = regionEndpointStr
+		return &resultEndpoint
+	}
+
+	resultEndpoint = standardizeDomainServiceCode(service) + separator + regionCode + suffix
+	if isCNRegion(regionCode) {
+		resultEndpoint += cnSuffix
+	}
+	return &resultEndpoint
+
+}
+
+var bootstrapRegion = map[string]struct{}{
+	regionCodeAPSouthEast3: {},
+}
+
+func inBootstrapRegionList(regionCode string, customBootstrapRegion map[string]struct{}) bool {
+	regionCode = strings.TrimSpace(regionCode)
+	bsRegionListPath := os.Getenv("BYTEPLUS_BOOTSTRAP_REGION_LIST_CONF")
+	if len(bsRegionListPath) > 0 {
+		f, err := os.ReadFile(filepath.Clean(bsRegionListPath))
+		if err == nil {
+			for _, l := range strings.Split(string(f), "\n") {
+				l = strings.TrimSpace(l)
+				if len(l) == 0 {
+					continue
+				}
+				if l == regionCode {
+					return true
+				}
+			}
 		}
 	}
 
-	if len(defaultEndpointInfo.DefaultEndpoint) > 0 {
-		resultEndpoint = defaultEndpointInfo.DefaultEndpoint
-		return &resultEndpoint
+	if len(bootstrapRegion) > 0 {
+		_, ok := bootstrapRegion[regionCode]
+		if ok {
+			return ok
+		}
 	}
-	return &resultEndpoint
+
+	if len(customBootstrapRegion) > 0 {
+		_, ok := customBootstrapRegion[regionCode]
+		return ok
+	}
+
+	return false
+}
+
+func hasEnableDualStack() bool {
+	return os.Getenv("BYTEPLUS_ENABLE_DUALSTACK") == "true"
+}
+
+func isCNRegion(region string) bool {
+	return strings.HasPrefix(region, "cn")
 }

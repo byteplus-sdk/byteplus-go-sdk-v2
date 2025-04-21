@@ -587,7 +587,7 @@ func (s *Session) clientConfigWithErr(serviceName string, cfgs ...*byteplus.Conf
 			}
 			endpoint = &endpointFor.URL
 		} else {
-			endpoint = byteplusutil.GetDefaultEndpointByServiceInfo(serviceName, region)
+			endpoint = byteplusutil.GetDefaultEndpointByServiceInfo(serviceName, region, s.Config.BootstrapRegion)
 		}
 		s.Config.Endpoint = endpoint
 	}
