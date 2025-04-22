@@ -54,7 +54,12 @@ var endpoint = openPrefix + endpointSuffix
 
 const (
 	regionCodeAPSouthEast3 = "ap-southeast-3"
+	regionCodeCNHongkong   = "cn-hongkong"
 )
+
+var cnNonMainLandRegion = map[string]struct{}{
+	regionCodeCNHongkong: {},
+}
 
 type RegionEndpointMap map[string]string
 
@@ -213,5 +218,11 @@ func hasEnableDualStack() bool {
 }
 
 func isCNRegion(region string) bool {
-	return strings.HasPrefix(region, "cn-")
+	hasCNPrefix := strings.HasPrefix(region, "cn-")
+	if !hasCNPrefix {
+		return false
+	}
+
+	_, isCNNonMainLangRegion := cnNonMainLandRegion[region]
+	return !isCNNonMainLangRegion
 }
