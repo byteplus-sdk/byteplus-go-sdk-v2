@@ -44,7 +44,8 @@ const (
 	separator               = "."
 	openPrefix              = "open"
 	byteplusEndpointSuffix  = separator + "byteplusapi.com"
-	endpointSuffix          = separator + "ap-southeast-1.byteplusapi.com"
+	apSoutheastPrefix       = separator + "ap-southeast-1"
+	endpointSuffix          = apSoutheastPrefix + ".byteplusapi.com"
 	dualstackEndpointSuffix = separator + "byteplus-api.com"
 	cnSuffix                = separator + "cn"
 )
@@ -58,11 +59,10 @@ const (
 type RegionEndpointMap map[string]string
 
 type ServiceEndpointInfo struct {
-	Service         string
-	IsGlobal        bool
-	Suffix          string
-	GlobalEndpoint  string
-	DefaultEndpoint string
+	Service        string
+	IsGlobal       bool
+	Prefix         string
+	GlobalEndpoint string
 	RegionEndpointMap
 }
 
@@ -71,34 +71,30 @@ var defaultEndpoint = map[string]*ServiceEndpointInfo{
 		Service:           "billing",
 		IsGlobal:          true,
 		GlobalEndpoint:    "",
-		Suffix:            byteplusEndpointSuffix,
-		DefaultEndpoint:   "open.byteplusapi.com",
+		Prefix:            "",
 		RegionEndpointMap: nil,
 	},
 	"iam": {
 		Service:           "iam",
 		IsGlobal:          true,
 		GlobalEndpoint:    "",
-		Suffix:            byteplusEndpointSuffix,
-		DefaultEndpoint:   "open.byteplusapi.com",
+		Prefix:            "",
 		RegionEndpointMap: nil,
 	},
 	"vpc": {
-		Service:         "vpc",
-		IsGlobal:        false,
-		GlobalEndpoint:  "",
-		Suffix:          byteplusEndpointSuffix,
-		DefaultEndpoint: endpoint,
+		Service:        "vpc",
+		IsGlobal:       false,
+		GlobalEndpoint: "",
+		Prefix:         apSoutheastPrefix,
 		RegionEndpointMap: RegionEndpointMap{
 			regionCodeAPSouthEast3: "vpc" + separator + regionCodeAPSouthEast3 + byteplusEndpointSuffix,
 		},
 	},
 	"ecs": {
-		Service:         "ecs",
-		IsGlobal:        false,
-		GlobalEndpoint:  "",
-		Suffix:          byteplusEndpointSuffix,
-		DefaultEndpoint: endpoint,
+		Service:        "ecs",
+		IsGlobal:       false,
+		GlobalEndpoint: "",
+		Prefix:         apSoutheastPrefix,
 		RegionEndpointMap: RegionEndpointMap{
 			regionCodeAPSouthEast3: "ecs" + separator + regionCodeAPSouthEast3 + byteplusEndpointSuffix,
 		},
@@ -145,6 +141,7 @@ func GetDefaultEndpointByServiceInfo(service string, regionCode string, customBo
 	if hasEnableDualStack() {
 		suffix = dualstackEndpointSuffix
 	}
+	suffix = defaultEndpointInfo.Prefix + suffix
 
 	if defaultEndpointInfo.IsGlobal {
 		if len(defaultEndpointInfo.GlobalEndpoint) > 0 {
@@ -216,5 +213,5 @@ func hasEnableDualStack() bool {
 }
 
 func isCNRegion(region string) bool {
-	return strings.HasPrefix(region, "cn")
+	return strings.HasPrefix(region, "cn-")
 }
