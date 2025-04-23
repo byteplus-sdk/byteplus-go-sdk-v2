@@ -53,6 +53,7 @@ const (
 var endpoint = openPrefix + endpointSuffix
 
 const (
+	regionCodeAPSouthEast2 = "ap-southeast-2"
 	regionCodeAPSouthEast3 = "ap-southeast-3"
 	regionCodeCNHongkong   = "cn-hongkong"
 )
@@ -73,36 +74,24 @@ type ServiceEndpointInfo struct {
 
 var defaultEndpoint = map[string]*ServiceEndpointInfo{
 	"billing": {
-		Service:           "billing",
-		IsGlobal:          true,
-		GlobalEndpoint:    "",
-		Prefix:            "",
-		RegionEndpointMap: nil,
+		Service:  "billing",
+		IsGlobal: true,
+		Prefix:   "",
 	},
 	"iam": {
-		Service:           "iam",
-		IsGlobal:          true,
-		GlobalEndpoint:    "",
-		Prefix:            "",
-		RegionEndpointMap: nil,
+		Service:  "iam",
+		IsGlobal: true,
+		Prefix:   "",
 	},
 	"vpc": {
-		Service:        "vpc",
-		IsGlobal:       false,
-		GlobalEndpoint: "",
-		Prefix:         apSoutheastPrefix,
-		RegionEndpointMap: RegionEndpointMap{
-			regionCodeAPSouthEast3: "vpc" + separator + regionCodeAPSouthEast3 + byteplusEndpointSuffix,
-		},
+		Service:  "vpc",
+		IsGlobal: false,
+		Prefix:   apSoutheastPrefix,
 	},
 	"ecs": {
-		Service:        "ecs",
-		IsGlobal:       false,
-		GlobalEndpoint: "",
-		Prefix:         apSoutheastPrefix,
-		RegionEndpointMap: RegionEndpointMap{
-			regionCodeAPSouthEast3: "ecs" + separator + regionCodeAPSouthEast3 + byteplusEndpointSuffix,
-		},
+		Service:  "ecs",
+		IsGlobal: false,
+		Prefix:   apSoutheastPrefix,
 	},
 }
 
@@ -133,7 +122,17 @@ func standardizeDomainServiceCode(serviceCode string) string {
 func GetDefaultEndpointByServiceInfo(service string, regionCode string, customBootstrapRegion map[string]struct{}) *string {
 	resultEndpoint := endpoint
 
+	suffix := byteplusEndpointSuffix
+	if hasEnableDualStack() {
+		suffix = dualstackEndpointSuffix
+	}
+
 	if !inBootstrapRegionList(regionCode, customBootstrapRegion) {
+		defaultEndpointInfo, sExist := defaultEndpoint[service]
+		if !sExist {
+			return &resultEndpoint
+		}
+		resultEndpoint = openPrefix + defaultEndpointInfo.Prefix + suffix
 		return &resultEndpoint
 	}
 
@@ -142,30 +141,23 @@ func GetDefaultEndpointByServiceInfo(service string, regionCode string, customBo
 		return &resultEndpoint
 	}
 
-	suffix := byteplusEndpointSuffix
-	if hasEnableDualStack() {
-		suffix = dualstackEndpointSuffix
-	}
-	suffix = defaultEndpointInfo.Prefix + suffix
-
 	if defaultEndpointInfo.IsGlobal {
 		if len(defaultEndpointInfo.GlobalEndpoint) > 0 {
 			resultEndpoint = defaultEndpointInfo.GlobalEndpoint
 			return &resultEndpoint
 		}
 		resultEndpoint = standardizeDomainServiceCode(service) + suffix
-		if isCNRegion(regionCode) {
-			resultEndpoint += cnSuffix
-		}
 		return &resultEndpoint
 	}
 
 	// regional endpoint
 	regionEndpointMp := defaultEndpointInfo.RegionEndpointMap
-	regionEndpointStr, rExist := regionEndpointMp[regionCode]
-	if rExist {
-		resultEndpoint = regionEndpointStr
-		return &resultEndpoint
+	if regionEndpointMp != nil {
+		regionEndpointStr, rExist := regionEndpointMp[regionCode]
+		if rExist {
+			resultEndpoint = regionEndpointStr
+			return &resultEndpoint
+		}
 	}
 
 	resultEndpoint = standardizeDomainServiceCode(service) + separator + regionCode + suffix
@@ -177,6 +169,7 @@ func GetDefaultEndpointByServiceInfo(service string, regionCode string, customBo
 }
 
 var bootstrapRegion = map[string]struct{}{
+	regionCodeAPSouthEast2: {},
 	regionCodeAPSouthEast3: {},
 }
 
