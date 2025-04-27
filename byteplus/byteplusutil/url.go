@@ -73,6 +73,11 @@ type ServiceEndpointInfo struct {
 }
 
 var defaultEndpoint = map[string]*ServiceEndpointInfo{
+	"ark": {
+		Service:  "ark",
+		IsGlobal: false,
+		Prefix:   "",
+	},
 	"billing": {
 		Service:  "billing",
 		IsGlobal: true,
