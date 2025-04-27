@@ -65,38 +65,38 @@ var cnNonMainLandRegion = map[string]struct{}{
 type RegionEndpointMap map[string]string
 
 type ServiceEndpointInfo struct {
-	Service        string
-	IsGlobal       bool
-	Prefix         string
-	GlobalEndpoint string
+	Service         string
+	IsGlobal        bool
+	DefaultEndpoint string
+	GlobalEndpoint  string
 	RegionEndpointMap
 }
 
 var defaultEndpoint = map[string]*ServiceEndpointInfo{
 	"ark": {
-		Service:  "ark",
-		IsGlobal: false,
-		Prefix:   "",
+		Service:         "ark",
+		IsGlobal:        false,
+		DefaultEndpoint: openPrefix + byteplusEndpointSuffix,
 	},
 	"billing": {
-		Service:  "billing",
-		IsGlobal: true,
-		Prefix:   "",
+		Service:         "billing",
+		IsGlobal:        true,
+		DefaultEndpoint: openPrefix + byteplusEndpointSuffix,
 	},
 	"iam": {
-		Service:  "iam",
-		IsGlobal: true,
-		Prefix:   "",
+		Service:         "iam",
+		IsGlobal:        true,
+		DefaultEndpoint: openPrefix + byteplusEndpointSuffix,
 	},
 	"vpc": {
-		Service:  "vpc",
-		IsGlobal: false,
-		Prefix:   apSoutheastPrefix,
+		Service:         "vpc",
+		IsGlobal:        false,
+		DefaultEndpoint: endpoint,
 	},
 	"ecs": {
-		Service:  "ecs",
-		IsGlobal: false,
-		Prefix:   apSoutheastPrefix,
+		Service:         "ecs",
+		IsGlobal:        false,
+		DefaultEndpoint: endpoint,
 	},
 }
 
@@ -114,6 +114,7 @@ func standardizeDomainServiceCode(serviceCode string) string {
 // - service: The name of the service for which to retrieve the endpoint.
 // - regionCode: The region code to look up the region-specific endpoint.
 // - customBootstrapRegion: The map which keys are bootstrapping region code and values are empty struct.
+// - useDualStack: Whether to use the dualstack endpoint.
 // Returns:
 // - *string: A pointer to the endpoint string. It could be a global endpoint, a region-specific
 // endpoint, or a default endpoint if the specified service or region does not have a defined endpoint.
@@ -124,21 +125,22 @@ func standardizeDomainServiceCode(serviceCode string) string {
 //
 // Note: Ensure the `defaultEndpoint` map is properly populated with service and region endpoint
 // information before calling this function.
-func GetDefaultEndpointByServiceInfo(service string, regionCode string, customBootstrapRegion map[string]struct{}) *string {
+func GetDefaultEndpointByServiceInfo(service string, regionCode string,
+	customBootstrapRegion map[string]struct{}, useDualStack *bool) *string {
 	resultEndpoint := endpoint
-
-	suffix := byteplusEndpointSuffix
-	if hasEnableDualStack() {
-		suffix = dualstackEndpointSuffix
-	}
 
 	if !inBootstrapRegionList(regionCode, customBootstrapRegion) {
 		defaultEndpointInfo, sExist := defaultEndpoint[service]
 		if !sExist {
 			return &resultEndpoint
 		}
-		resultEndpoint = openPrefix + defaultEndpointInfo.Prefix + suffix
+		resultEndpoint = defaultEndpointInfo.DefaultEndpoint
 		return &resultEndpoint
+	}
+
+	suffix := byteplusEndpointSuffix
+	if hasEnableDualStack(useDualStack) {
+		suffix = dualstackEndpointSuffix
 	}
 
 	defaultEndpointInfo, sExist := defaultEndpoint[service]
@@ -211,8 +213,11 @@ func inBootstrapRegionList(regionCode string, customBootstrapRegion map[string]s
 	return false
 }
 
-func hasEnableDualStack() bool {
-	return os.Getenv("BYTEPLUS_ENABLE_DUALSTACK") == "true"
+func hasEnableDualStack(useDualStack *bool) bool {
+	if useDualStack == nil {
+		return os.Getenv("BYTEPLUS_ENABLE_DUALSTACK") == "true"
+	}
+	return *useDualStack
 }
 
 func isCNRegion(region string) bool {
