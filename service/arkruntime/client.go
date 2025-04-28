@@ -33,8 +33,8 @@ type Client struct {
 	advisoryRefreshTimeout  int
 	mandatoryRefreshTimeout int
 
-	batchWorkerOnce sync.Once
-	batchWorkerPool *utils.BatchWorkerPool
+	batchHTTPClient      *http.Client
+	modelBreakerProvider *utils.ModelBreakerProvider
 }
 
 func NewClientWithApiKey(apiKey string, setters ...ConfigOption) *Client {
@@ -54,10 +54,7 @@ func newClientWithConfig(config clientConfig) *Client {
 		WithCredentials(credentials.NewStaticCredentials(config.ak, config.sk, "")).
 		WithRegion(config.region)
 
-	sess, err := session.NewSession(arkConfig)
-	if err != nil {
-		return nil
-	}
+	sess, _ := session.NewSession(arkConfig)
 	arkClient = ark.New(sess)
 
 	return &Client{
@@ -68,6 +65,8 @@ func newClientWithConfig(config clientConfig) *Client {
 		rwLock:                  &sync.RWMutex{},
 		advisoryRefreshTimeout:  model.DefaultAdvisoryRefreshTimeout,
 		mandatoryRefreshTimeout: model.DefaultMandatoryRefreshTimeout,
+		batchHTTPClient:         newBatchHTTPClient(config.batchMaxParallel),
+		modelBreakerProvider:    utils.NewModelBreakerProvider(),
 	}
 }
 
@@ -199,7 +198,7 @@ func (c *Client) newRequest(ctx context.Context, method, url, resourceType, reso
 	return req, nil
 }
 
-func (c *Client) sendRequest(req *http.Request, v model.Response) error {
+func (c *Client) sendRequest(client *http.Client, req *http.Request, v model.Response) error {
 	requestID := req.Header.Get(model.ClientRequestHeader)
 	req.Header.Set("Accept", "application/json")
 
@@ -251,7 +250,7 @@ func (c *Client) Do(ctx context.Context, method, url, resourceType, resourceId s
 				return innerErr
 			}
 
-			return c.sendRequest(req, v)
+			return c.sendRequest(c.config.HTTPClient, req, v)
 		},
 		nil,
 		needRetryError,
@@ -260,27 +259,40 @@ func (c *Client) Do(ctx context.Context, method, url, resourceType, resourceId s
 }
 
 func (c *Client) DoBatch(ctx context.Context, method, url, resourceType, resourceId string, v model.Response, setters ...requestOption) error {
-	doneChan := make(chan error, 1)
-	c.batchWorkerPool.Submit(ctx, resourceId, func() (utils.BatchTaskResult, error) {
-		req, err := c.newRequest(ctx, method, url, resourceType, resourceId, setters...)
-		if err != nil {
-			return utils.BatchTaskResult{}, err
+	breaker := c.modelBreakerProvider.GetOrCreateBreaker(resourceId)
+
+	for {
+		breaker.Wait()
+
+		select {
+		case <-ctx.Done(): // whole context finish
+			return ctx.Err()
+		default:
 		}
-		innerErr := c.sendRequest(req, v)
-		if innerErr != nil {
-			retryAfter := c.getRetryAfter(v)
-			if retryAfter > 0 {
-				return utils.BatchTaskResult{RequeueAfter: retryAfter}, innerErr
+
+		err := func() error {
+			req, er := c.newRequest(ctx, method, url, resourceType, resourceId, setters...)
+			if er != nil {
+				return er
 			}
-			return utils.BatchTaskResult{}, innerErr
+
+			return c.sendRequest(c.batchHTTPClient, req, v)
+		}()
+
+		// no error: just return on this try
+		if err == nil {
+			return nil
 		}
-		return utils.BatchTaskResult{}, nil
-	}, doneChan)
-	select {
-	case doneErr := <-doneChan:
-		return doneErr
-	case <-ctx.Done():
-		return ctx.Err()
+
+		// no need to retry error
+		if !needRetryError(err) {
+			return err
+		}
+
+		retryAfter := c.getRetryAfter(v)
+		if retryAfter > 0 {
+			breaker.Reset(time.Duration(retryAfter) * time.Second)
+		}
 	}
 }
 

@@ -72,17 +72,20 @@ func (j *ChatCompletionMessageContent) UnmarshalJSON(b []byte) error {
 }
 
 type ChatCompletionMessage struct {
-	Role         string                        `json:"role"`
-	Content      *ChatCompletionMessageContent `json:"content"`
-	FunctionCall *FunctionCall                 `json:"function_call,omitempty"`
-	ToolCalls    []*ToolCall                   `json:"tool_calls,omitempty"`
-	ToolCallID   string                        `json:"tool_call_id,omitempty"`
+	Role             string                        `json:"role"`
+	Content          *ChatCompletionMessageContent `json:"content"`
+	ReasoningContent *string                       `json:"reasoning_content,omitempty"`
+	Name             *string                       `json:"name"`
+	FunctionCall     *FunctionCall                 `json:"function_call,omitempty"`
+	ToolCalls        []*ToolCall                   `json:"tool_calls,omitempty"`
+	ToolCallID       string                        `json:"tool_call_id,omitempty"`
 }
 
 type ToolCall struct {
 	ID       string       `json:"id"`
 	Type     ToolType     `json:"type"`
 	Function FunctionCall `json:"function"`
+	Index    *int         `json:"index,omitempty"`
 }
 
 type FunctionCall struct {
@@ -97,7 +100,8 @@ type ChatRequest interface {
 	GetModel() string
 }
 
-// ChatCompletionRequest[Deprecated] - When making a request using this struct, only non-zero fields take effect.
+// Deprecated: use `CreateChatCompletionRequest` instead.
+// ChatCompletionRequest - When making a request using this struct, only non-zero fields take effect.
 // This means that if your field value is 0, an empty string (""), false, or
 // other zero values, it will not be sent to the server.
 // The server will handle these fields according to their default values.
@@ -123,6 +127,7 @@ type ChatCompletionRequest struct {
 	RepetitionPenalty float32                  `json:"repetition_penalty,omitempty"`
 	N                 int                      `json:"n,omitempty"`
 	ResponseFormat    *ResponseFormat          `json:"response_format,omitempty"`
+	ServiceTier       *string                  `json:"service_tier,omitempty"`
 }
 
 func (r ChatCompletionRequest) MarshalJSON() ([]byte, error) {
@@ -171,6 +176,8 @@ type CreateChatCompletionRequest struct {
 	RepetitionPenalty *float32                 `json:"repetition_penalty,omitempty"`
 	N                 *int                     `json:"n,omitempty"`
 	ResponseFormat    *ResponseFormat          `json:"response_format,omitempty"`
+	ParallelToolCalls *bool                    `json:"parallel_tool_calls,omitempty"`
+	ServiceTier       *string                  `json:"service_tier,omitempty"`
 }
 
 func (r CreateChatCompletionRequest) MarshalJSON() ([]byte, error) {
@@ -204,6 +211,9 @@ type StreamOptions struct {
 	// and the choices field will always be an empty array.
 	// All other chunks will also include a usage field, but with a null value.
 	IncludeUsage bool `json:"include_usage,omitempty"`
+	// if set, each data chunk will include a `usage` field
+	// representing the current cumulative token usage for the entire request.
+	ChunkIncludeUsage bool `json:"chunk_include_usage,omitempty"`
 }
 
 type ToolType string
@@ -326,21 +336,24 @@ type ChatCompletionChoice struct {
 
 // ChatCompletionResponse represents a response structure for chat completion API.
 type ChatCompletionResponse struct {
-	ID      string                  `json:"id"`
-	Object  string                  `json:"object"`
-	Created int64                   `json:"created"`
-	Model   string                  `json:"model"`
-	Choices []*ChatCompletionChoice `json:"choices"`
-	Usage   Usage                   `json:"usage"`
+	ID      string `json:"id"`
+	Object  string `json:"object"`
+	Created int64  `json:"created"`
+	Model   string `json:"model"`
+	// mark the request is scale-tier or default, only exists for scale-tier
+	ServiceTier string                  `json:"service_tier,omitempty"`
+	Choices     []*ChatCompletionChoice `json:"choices"`
+	Usage       Usage                   `json:"usage"`
 
 	HttpHeader
 }
 
 type ChatCompletionStreamChoiceDelta struct {
-	Content      string        `json:"content,omitempty"`
-	Role         string        `json:"role,omitempty"`
-	FunctionCall *FunctionCall `json:"function_call,omitempty"`
-	ToolCalls    []*ToolCall   `json:"tool_calls,omitempty"`
+	Content          string        `json:"content,omitempty"`
+	Role             string        `json:"role,omitempty"`
+	ReasoningContent *string       `json:"reasoning_content,omitempty"`
+	FunctionCall     *FunctionCall `json:"function_call,omitempty"`
+	ToolCalls        []*ToolCall   `json:"tool_calls,omitempty"`
 }
 
 type ChatCompletionStreamChoice struct {
@@ -352,11 +365,13 @@ type ChatCompletionStreamChoice struct {
 }
 
 type ChatCompletionStreamResponse struct {
-	ID      string                        `json:"id"`
-	Object  string                        `json:"object"`
-	Created int64                         `json:"created"`
-	Model   string                        `json:"model"`
-	Choices []*ChatCompletionStreamChoice `json:"choices"`
+	ID      string `json:"id"`
+	Object  string `json:"object"`
+	Created int64  `json:"created"`
+	Model   string `json:"model"`
+	// mark the request is scale-tier or default, only exists for scale-tier
+	ServiceTier string                        `json:"service_tier,omitempty"`
+	Choices     []*ChatCompletionStreamChoice `json:"choices"`
 	// An optional field that will only be present when you set stream_options: {"include_usage": true} in your request.
 	// When present, it contains a null value except for the last chunk which contains the token usage statistics
 	// for the entire request.
