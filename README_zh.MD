@@ -1,11 +1,13 @@
-English | [简体中文](README_zh.MD)
+[English](README.MD) | 简体中文
+
 ### Byteplus SDK for Go
+####  概述
+1. Go语言SDK
+2. Go版本最低1.14+，如使用方舟服务(service/arkruntime)，需要使用go1.18+
+3. service目录下的文件请不要修改，都是由代码生成器自动生成
+4. 建议使用go mod方式进行依赖管理
 
-- Go =>1.14+; Go =>1.18+ if using the ModelArk service (service/arkruntime)
-- please don't modify any source code under path /service, which is fully machine generated
-- recommend using Go modules - built-in feature dependency versioning and dependency management
-
-##### Sample:
+##### 代码示例
 ```go 
 package main
 
