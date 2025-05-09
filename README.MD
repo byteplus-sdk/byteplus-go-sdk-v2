@@ -1,4 +1,4 @@
-English | [简体中文](README_zh.MD)
+English | [简体中文](./README_zh.MD)
 ### Byteplus SDK for Go
 
 - Go =>1.14+; Go =>1.18+ if using the ModelArk service (service/arkruntime)
