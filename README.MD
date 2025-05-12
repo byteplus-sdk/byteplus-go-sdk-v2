@@ -1,6 +1,7 @@
 English | [简体中文](./README_zh.MD)
 ### Byteplus SDK for Go
-
+#### Overview
+- SDK for Go
 - Go =>1.14+; Go =>1.18+ if using the ModelArk service (service/arkruntime)
 - please don't modify any source code under path /service, which is fully machine generated
 - recommend using Go modules - built-in feature dependency versioning and dependency management
