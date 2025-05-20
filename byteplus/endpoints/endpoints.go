@@ -49,6 +49,19 @@ type Options struct {
 	//
 	// This option is ignored if StrictMatching is enabled.
 	ResolveUnknownService bool
+
+	// Site is the site of the endpoint, which should be Volcengine in this SDK.
+	// If the Site is set, the endpoint will be resolved based on the site.
+	// If the Site is not set, the endpoint will be resolved based on the region.
+	Site string
+
+	// IPVersion is the IP version of the endpoint, which should be IPv4 or DualStack.
+	// If the IPVersion is set, the endpoint will be resolved based on the IP version.
+	// If the IPVersion is not set, the endpoint will be resolved as IPv4.
+	IPVersion string
+
+	// RunningEnvironment is the running environment of the endpoint.
+	RunningEnvironment string
 }
 
 // Set combines all of the option functions together.
@@ -80,6 +93,30 @@ func StrictMatchingOption(o *Options) {
 // as a functional option when resolving endpoints.
 func ResolveUnknownServiceOption(o *Options) {
 	o.ResolveUnknownService = true
+}
+
+// WithRunningEnvironment sets the RunningEnvironment option. Can be used as a functional
+// option when resolving endpoints.
+func WithRunningEnvironment(env string) func(*Options) {
+	return func(o *Options) {
+		o.RunningEnvironment = env
+	}
+}
+
+// WithSite sets the site option. Can be used as a functional
+// option when resolving endpoints.
+func WithSite(site string) func(*Options) {
+	return func(o *Options) {
+		o.Site = site
+	}
+}
+
+// WithIPVersion sets the IPVersion option. Can be used as a functional
+// option when resolving endpoints.
+func WithIPVersion(ipVersion string) func(*Options) {
+	return func(o *Options) {
+		o.IPVersion = ipVersion
+	}
 }
 
 // A Resolver provides the interface for functionality to resolve endpoints.
