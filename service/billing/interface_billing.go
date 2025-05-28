@@ -38,6 +38,14 @@ type BILLINGAPI interface {
 	CancelInvitationWithContext(byteplus.Context, *CancelInvitationInput, ...request.Option) (*CancelInvitationOutput, error)
 	CancelInvitationRequest(*CancelInvitationInput) (*request.Request, *CancelInvitationOutput)
 
+	CleanUpFinancialRelationCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CleanUpFinancialRelationCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CleanUpFinancialRelationCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CleanUpFinancialRelation(*CleanUpFinancialRelationInput) (*CleanUpFinancialRelationOutput, error)
+	CleanUpFinancialRelationWithContext(byteplus.Context, *CleanUpFinancialRelationInput, ...request.Option) (*CleanUpFinancialRelationOutput, error)
+	CleanUpFinancialRelationRequest(*CleanUpFinancialRelationInput) (*request.Request, *CleanUpFinancialRelationOutput)
+
 	CreateFinancialRelationCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	CreateFinancialRelationCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	CreateFinancialRelationCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -62,6 +70,30 @@ type BILLINGAPI interface {
 	HandleInvitationWithContext(byteplus.Context, *HandleInvitationInput, ...request.Option) (*HandleInvitationOutput, error)
 	HandleInvitationRequest(*HandleInvitationInput) (*request.Request, *HandleInvitationOutput)
 
+	ListAmortizedCostBillDailyCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListAmortizedCostBillDailyCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListAmortizedCostBillDailyCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListAmortizedCostBillDaily(*ListAmortizedCostBillDailyInput) (*ListAmortizedCostBillDailyOutput, error)
+	ListAmortizedCostBillDailyWithContext(byteplus.Context, *ListAmortizedCostBillDailyInput, ...request.Option) (*ListAmortizedCostBillDailyOutput, error)
+	ListAmortizedCostBillDailyRequest(*ListAmortizedCostBillDailyInput) (*request.Request, *ListAmortizedCostBillDailyOutput)
+
+	ListAmortizedCostBillDetailCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListAmortizedCostBillDetailCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListAmortizedCostBillDetailCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListAmortizedCostBillDetail(*ListAmortizedCostBillDetailInput) (*ListAmortizedCostBillDetailOutput, error)
+	ListAmortizedCostBillDetailWithContext(byteplus.Context, *ListAmortizedCostBillDetailInput, ...request.Option) (*ListAmortizedCostBillDetailOutput, error)
+	ListAmortizedCostBillDetailRequest(*ListAmortizedCostBillDetailInput) (*request.Request, *ListAmortizedCostBillDetailOutput)
+
+	ListAmortizedCostBillMonthlyCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListAmortizedCostBillMonthlyCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListAmortizedCostBillMonthlyCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListAmortizedCostBillMonthly(*ListAmortizedCostBillMonthlyInput) (*ListAmortizedCostBillMonthlyOutput, error)
+	ListAmortizedCostBillMonthlyWithContext(byteplus.Context, *ListAmortizedCostBillMonthlyInput, ...request.Option) (*ListAmortizedCostBillMonthlyOutput, error)
+	ListAmortizedCostBillMonthlyRequest(*ListAmortizedCostBillMonthlyInput) (*request.Request, *ListAmortizedCostBillMonthlyOutput)
+
 	ListAvailableInstancesCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ListAvailableInstancesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	ListAvailableInstancesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -69,6 +101,14 @@ type BILLINGAPI interface {
 	ListAvailableInstances(*ListAvailableInstancesInput) (*ListAvailableInstancesOutput, error)
 	ListAvailableInstancesWithContext(byteplus.Context, *ListAvailableInstancesInput, ...request.Option) (*ListAvailableInstancesOutput, error)
 	ListAvailableInstancesRequest(*ListAvailableInstancesInput) (*request.Request, *ListAvailableInstancesOutput)
+
+	ListBillCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListBillCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListBillCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListBill(*ListBillInput) (*ListBillOutput, error)
+	ListBillWithContext(byteplus.Context, *ListBillInput, ...request.Option) (*ListBillOutput, error)
+	ListBillRequest(*ListBillInput) (*request.Request, *ListBillOutput)
 
 	ListBillDetailCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ListBillDetailCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -110,6 +150,22 @@ type BILLINGAPI interface {
 	ListInvitationWithContext(byteplus.Context, *ListInvitationInput, ...request.Option) (*ListInvitationOutput, error)
 	ListInvitationRequest(*ListInvitationInput) (*request.Request, *ListInvitationOutput)
 
+	ListPackageUsageDetailsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListPackageUsageDetailsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListPackageUsageDetailsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListPackageUsageDetails(*ListPackageUsageDetailsInput) (*ListPackageUsageDetailsOutput, error)
+	ListPackageUsageDetailsWithContext(byteplus.Context, *ListPackageUsageDetailsInput, ...request.Option) (*ListPackageUsageDetailsOutput, error)
+	ListPackageUsageDetailsRequest(*ListPackageUsageDetailsInput) (*request.Request, *ListPackageUsageDetailsOutput)
+
+	ListResourcePackagesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListResourcePackagesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListResourcePackagesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListResourcePackages(*ListResourcePackagesInput) (*ListResourcePackagesOutput, error)
+	ListResourcePackagesWithContext(byteplus.Context, *ListResourcePackagesInput, ...request.Option) (*ListResourcePackagesOutput, error)
+	ListResourcePackagesRequest(*ListResourcePackagesInput) (*request.Request, *ListResourcePackagesOutput)
+
 	ListSplitBillDetailCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ListSplitBillDetailCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	ListSplitBillDetailCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -118,6 +174,38 @@ type BILLINGAPI interface {
 	ListSplitBillDetailWithContext(byteplus.Context, *ListSplitBillDetailInput, ...request.Option) (*ListSplitBillDetailOutput, error)
 	ListSplitBillDetailRequest(*ListSplitBillDetailInput) (*request.Request, *ListSplitBillDetailOutput)
 
+	QueryBalanceAcctCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	QueryBalanceAcctCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	QueryBalanceAcctCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	QueryBalanceAcct(*QueryBalanceAcctInput) (*QueryBalanceAcctOutput, error)
+	QueryBalanceAcctWithContext(byteplus.Context, *QueryBalanceAcctInput, ...request.Option) (*QueryBalanceAcctOutput, error)
+	QueryBalanceAcctRequest(*QueryBalanceAcctInput) (*request.Request, *QueryBalanceAcctOutput)
+
+	QueryPriceForPayAsYouGoCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	QueryPriceForPayAsYouGoCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	QueryPriceForPayAsYouGoCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	QueryPriceForPayAsYouGo(*QueryPriceForPayAsYouGoInput) (*QueryPriceForPayAsYouGoOutput, error)
+	QueryPriceForPayAsYouGoWithContext(byteplus.Context, *QueryPriceForPayAsYouGoInput, ...request.Option) (*QueryPriceForPayAsYouGoOutput, error)
+	QueryPriceForPayAsYouGoRequest(*QueryPriceForPayAsYouGoInput) (*request.Request, *QueryPriceForPayAsYouGoOutput)
+
+	QueryPriceForRenewCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	QueryPriceForRenewCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	QueryPriceForRenewCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	QueryPriceForRenew(*QueryPriceForRenewInput) (*QueryPriceForRenewOutput, error)
+	QueryPriceForRenewWithContext(byteplus.Context, *QueryPriceForRenewInput, ...request.Option) (*QueryPriceForRenewOutput, error)
+	QueryPriceForRenewRequest(*QueryPriceForRenewInput) (*request.Request, *QueryPriceForRenewOutput)
+
+	QueryPriceForSubscriptionCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	QueryPriceForSubscriptionCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	QueryPriceForSubscriptionCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	QueryPriceForSubscription(*QueryPriceForSubscriptionInput) (*QueryPriceForSubscriptionOutput, error)
+	QueryPriceForSubscriptionWithContext(byteplus.Context, *QueryPriceForSubscriptionInput, ...request.Option) (*QueryPriceForSubscriptionOutput, error)
+	QueryPriceForSubscriptionRequest(*QueryPriceForSubscriptionInput) (*request.Request, *QueryPriceForSubscriptionOutput)
+
 	UnsubscribeInstanceCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	UnsubscribeInstanceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	UnsubscribeInstanceCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -125,6 +213,14 @@ type BILLINGAPI interface {
 	UnsubscribeInstance(*UnsubscribeInstanceInput) (*UnsubscribeInstanceOutput, error)
 	UnsubscribeInstanceWithContext(byteplus.Context, *UnsubscribeInstanceInput, ...request.Option) (*UnsubscribeInstanceOutput, error)
 	UnsubscribeInstanceRequest(*UnsubscribeInstanceInput) (*request.Request, *UnsubscribeInstanceOutput)
+
+	UpdateAuthCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	UpdateAuthCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	UpdateAuthCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	UpdateAuth(*UpdateAuthInput) (*UpdateAuthOutput, error)
+	UpdateAuthWithContext(byteplus.Context, *UpdateAuthInput, ...request.Option) (*UpdateAuthOutput, error)
+	UpdateAuthRequest(*UpdateAuthInput) (*request.Request, *UpdateAuthOutput)
 }
 
 var _ BILLINGAPI = (*BILLING)(nil)

@@ -148,11 +148,13 @@ type CreateFinancialRelationInput struct {
 
 	AccountAlias *string `type:"string" json:",omitempty"`
 
+	AuthListStr *string `type:"string" json:",omitempty"`
+
 	// Relation is a required field
 	Relation *int32 `type:"int32" json:",omitempty" required:"true"`
 
 	// SubAccountID is a required field
-	SubAccountID *int32 `type:"int32" json:",omitempty" required:"true"`
+	SubAccountID *int64 `type:"int64" json:",omitempty" required:"true"`
 }
 
 // String returns the string representation
@@ -187,6 +189,12 @@ func (s *CreateFinancialRelationInput) SetAccountAlias(v string) *CreateFinancia
 	return s
 }
 
+// SetAuthListStr sets the AuthListStr field's value.
+func (s *CreateFinancialRelationInput) SetAuthListStr(v string) *CreateFinancialRelationInput {
+	s.AuthListStr = &v
+	return s
+}
+
 // SetRelation sets the Relation field's value.
 func (s *CreateFinancialRelationInput) SetRelation(v int32) *CreateFinancialRelationInput {
 	s.Relation = &v
@@ -194,7 +202,7 @@ func (s *CreateFinancialRelationInput) SetRelation(v int32) *CreateFinancialRela
 }
 
 // SetSubAccountID sets the SubAccountID field's value.
-func (s *CreateFinancialRelationInput) SetSubAccountID(v int32) *CreateFinancialRelationInput {
+func (s *CreateFinancialRelationInput) SetSubAccountID(v int64) *CreateFinancialRelationInput {
 	s.SubAccountID = &v
 	return s
 }

@@ -143,91 +143,23 @@ func (c *BILLING) ListBillDetailWithContext(ctx byteplus.Context, input *ListBil
 	return out, req.Send()
 }
 
-type BaseForListBillDetailInput struct {
-	_ struct{} `type:"structure" json:",omitempty"`
-
-	Addr *string `type:"string" json:",omitempty"`
-
-	Caller *string `type:"string" json:",omitempty"`
-
-	Client *string `type:"string" json:",omitempty"`
-
-	Extra *string `type:"string" json:",omitempty"`
-
-	LogID *string `type:"string" json:",omitempty"`
-
-	TrafficEnv *TrafficEnvForListBillDetailInput `type:"structure" json:",omitempty"`
-}
-
-// String returns the string representation
-func (s BaseForListBillDetailInput) String() string {
-	return byteplusutil.Prettify(s)
-}
-
-// GoString returns the string representation
-func (s BaseForListBillDetailInput) GoString() string {
-	return s.String()
-}
-
-// SetAddr sets the Addr field's value.
-func (s *BaseForListBillDetailInput) SetAddr(v string) *BaseForListBillDetailInput {
-	s.Addr = &v
-	return s
-}
-
-// SetCaller sets the Caller field's value.
-func (s *BaseForListBillDetailInput) SetCaller(v string) *BaseForListBillDetailInput {
-	s.Caller = &v
-	return s
-}
-
-// SetClient sets the Client field's value.
-func (s *BaseForListBillDetailInput) SetClient(v string) *BaseForListBillDetailInput {
-	s.Client = &v
-	return s
-}
-
-// SetExtra sets the Extra field's value.
-func (s *BaseForListBillDetailInput) SetExtra(v string) *BaseForListBillDetailInput {
-	s.Extra = &v
-	return s
-}
-
-// SetLogID sets the LogID field's value.
-func (s *BaseForListBillDetailInput) SetLogID(v string) *BaseForListBillDetailInput {
-	s.LogID = &v
-	return s
-}
-
-// SetTrafficEnv sets the TrafficEnv field's value.
-func (s *BaseForListBillDetailInput) SetTrafficEnv(v *TrafficEnvForListBillDetailInput) *BaseForListBillDetailInput {
-	s.TrafficEnv = v
-	return s
-}
-
 type ListBillDetailInput struct {
 	_ struct{} `type:"structure" json:",omitempty"`
 
-	AccountID *int64 `type:"int64" json:",omitempty"`
-
-	Base *BaseForListBillDetailInput `type:"structure" json:",omitempty"`
-
 	BillCategory []*string `type:"list" json:",omitempty"`
 
-	BillPeriod *string `type:"string" json:",omitempty"`
+	// BillPeriod is a required field
+	BillPeriod *string `type:"string" json:",omitempty" required:"true"`
 
 	BillingMode []*string `type:"list" json:",omitempty"`
 
 	ExpenseDate *string `type:"string" json:",omitempty"`
 
-	// GroupPeriod is a required field
-	GroupPeriod *int32 `type:"int32" json:",omitempty" required:"true"`
+	GroupPeriod *int32 `type:"int32" json:",omitempty"`
 
-	// GroupTerm is a required field
-	GroupTerm *int32 `type:"int32" json:",omitempty" required:"true"`
+	GroupTerm *int32 `type:"int32" json:",omitempty"`
 
-	// IgnoreZero is a required field
-	IgnoreZero *int32 `type:"int32" json:",omitempty" required:"true"`
+	IgnoreZero *int32 `type:"int32" json:",omitempty"`
 
 	InstanceNo *string `type:"string" json:",omitempty"`
 
@@ -236,20 +168,13 @@ type ListBillDetailInput struct {
 
 	NeedRecordNum *int32 `type:"int32" json:",omitempty"`
 
-	// Offset is a required field
-	Offset *int32 `type:"int32" json:",omitempty" required:"true"`
-
-	OrderBy *string `type:"string" json:",omitempty"`
-
-	OrderType *int32 `type:"int32" json:",omitempty"`
+	Offset *int32 `type:"int32" json:",omitempty"`
 
 	OwnerID []*int64 `type:"list" json:",omitempty"`
 
 	PayerID []*int64 `type:"list" json:",omitempty"`
 
 	Product []*string `type:"list" json:",omitempty"`
-
-	SubjectNo *string `type:"string" json:",omitempty"`
 }
 
 // String returns the string representation
@@ -265,38 +190,17 @@ func (s ListBillDetailInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *ListBillDetailInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ListBillDetailInput"}
-	if s.GroupPeriod == nil {
-		invalidParams.Add(request.NewErrParamRequired("GroupPeriod"))
-	}
-	if s.GroupTerm == nil {
-		invalidParams.Add(request.NewErrParamRequired("GroupTerm"))
-	}
-	if s.IgnoreZero == nil {
-		invalidParams.Add(request.NewErrParamRequired("IgnoreZero"))
+	if s.BillPeriod == nil {
+		invalidParams.Add(request.NewErrParamRequired("BillPeriod"))
 	}
 	if s.Limit == nil {
 		invalidParams.Add(request.NewErrParamRequired("Limit"))
-	}
-	if s.Offset == nil {
-		invalidParams.Add(request.NewErrParamRequired("Offset"))
 	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
 	}
 	return nil
-}
-
-// SetAccountID sets the AccountID field's value.
-func (s *ListBillDetailInput) SetAccountID(v int64) *ListBillDetailInput {
-	s.AccountID = &v
-	return s
-}
-
-// SetBase sets the Base field's value.
-func (s *ListBillDetailInput) SetBase(v *BaseForListBillDetailInput) *ListBillDetailInput {
-	s.Base = v
-	return s
 }
 
 // SetBillCategory sets the BillCategory field's value.
@@ -365,18 +269,6 @@ func (s *ListBillDetailInput) SetOffset(v int32) *ListBillDetailInput {
 	return s
 }
 
-// SetOrderBy sets the OrderBy field's value.
-func (s *ListBillDetailInput) SetOrderBy(v string) *ListBillDetailInput {
-	s.OrderBy = &v
-	return s
-}
-
-// SetOrderType sets the OrderType field's value.
-func (s *ListBillDetailInput) SetOrderType(v int32) *ListBillDetailInput {
-	s.OrderType = &v
-	return s
-}
-
 // SetOwnerID sets the OwnerID field's value.
 func (s *ListBillDetailInput) SetOwnerID(v []*int64) *ListBillDetailInput {
 	s.OwnerID = v
@@ -392,12 +284,6 @@ func (s *ListBillDetailInput) SetPayerID(v []*int64) *ListBillDetailInput {
 // SetProduct sets the Product field's value.
 func (s *ListBillDetailInput) SetProduct(v []*string) *ListBillDetailInput {
 	s.Product = v
-	return s
-}
-
-// SetSubjectNo sets the SubjectNo field's value.
-func (s *ListBillDetailInput) SetSubjectNo(v string) *ListBillDetailInput {
-	s.SubjectNo = &v
 	return s
 }
 
@@ -536,6 +422,8 @@ type ListForListBillDetailOutput struct {
 
 	PaidAmount *string `type:"string" json:",omitempty"`
 
+	PayableAmount *string `type:"string" json:",omitempty"`
+
 	PayerCustomerName *string `type:"string" json:",omitempty"`
 
 	PayerID *string `type:"string" json:",omitempty"`
@@ -572,7 +460,7 @@ type ListForListBillDetailOutput struct {
 
 	ReservationInstance *string `type:"string" json:",omitempty"`
 
-	RoundAmount *float64 `type:"float" json:",omitempty"`
+	RoundAmount *float64 `type:"double" json:",omitempty"`
 
 	SellerCustomerName *string `type:"string" json:",omitempty"`
 
@@ -881,6 +769,12 @@ func (s *ListForListBillDetailOutput) SetPaidAmount(v string) *ListForListBillDe
 	return s
 }
 
+// SetPayableAmount sets the PayableAmount field's value.
+func (s *ListForListBillDetailOutput) SetPayableAmount(v string) *ListForListBillDetailOutput {
+	s.PayableAmount = &v
+	return s
+}
+
 // SetPayerCustomerName sets the PayerCustomerName field's value.
 func (s *ListForListBillDetailOutput) SetPayerCustomerName(v string) *ListForListBillDetailOutput {
 	s.PayerCustomerName = &v
@@ -1124,35 +1018,5 @@ func (s *ListForListBillDetailOutput) SetZone(v string) *ListForListBillDetailOu
 // SetZoneCode sets the ZoneCode field's value.
 func (s *ListForListBillDetailOutput) SetZoneCode(v string) *ListForListBillDetailOutput {
 	s.ZoneCode = &v
-	return s
-}
-
-type TrafficEnvForListBillDetailInput struct {
-	_ struct{} `type:"structure" json:",omitempty"`
-
-	Env *string `type:"string" json:",omitempty"`
-
-	Open *bool `type:"boolean" json:",omitempty"`
-}
-
-// String returns the string representation
-func (s TrafficEnvForListBillDetailInput) String() string {
-	return byteplusutil.Prettify(s)
-}
-
-// GoString returns the string representation
-func (s TrafficEnvForListBillDetailInput) GoString() string {
-	return s.String()
-}
-
-// SetEnv sets the Env field's value.
-func (s *TrafficEnvForListBillDetailInput) SetEnv(v string) *TrafficEnvForListBillDetailInput {
-	s.Env = &v
-	return s
-}
-
-// SetOpen sets the Open field's value.
-func (s *TrafficEnvForListBillDetailInput) SetOpen(v bool) *TrafficEnvForListBillDetailInput {
-	s.Open = &v
 	return s
 }

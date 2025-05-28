@@ -146,6 +146,8 @@ func (c *BILLING) CancelInvitationWithContext(ctx byteplus.Context, input *Cance
 type CancelInvitationInput struct {
 	_ struct{} `type:"structure" json:",omitempty"`
 
+	AuthID *string `type:"string" json:",omitempty"`
+
 	// InvitationType is a required field
 	InvitationType *int32 `type:"int32" json:",omitempty" required:"true"`
 
@@ -154,7 +156,7 @@ type CancelInvitationInput struct {
 	// RelationID is a required field
 	RelationID *string `type:"string" json:",omitempty" required:"true"`
 
-	SubAccountID *int32 `type:"int32" json:",omitempty"`
+	SubAccountID *int64 `type:"int64" json:",omitempty"`
 }
 
 // String returns the string representation
@@ -183,6 +185,12 @@ func (s *CancelInvitationInput) Validate() error {
 	return nil
 }
 
+// SetAuthID sets the AuthID field's value.
+func (s *CancelInvitationInput) SetAuthID(v string) *CancelInvitationInput {
+	s.AuthID = &v
+	return s
+}
+
 // SetInvitationType sets the InvitationType field's value.
 func (s *CancelInvitationInput) SetInvitationType(v int32) *CancelInvitationInput {
 	s.InvitationType = &v
@@ -202,7 +210,7 @@ func (s *CancelInvitationInput) SetRelationID(v string) *CancelInvitationInput {
 }
 
 // SetSubAccountID sets the SubAccountID field's value.
-func (s *CancelInvitationInput) SetSubAccountID(v int32) *CancelInvitationInput {
+func (s *CancelInvitationInput) SetSubAccountID(v int64) *CancelInvitationInput {
 	s.SubAccountID = &v
 	return s
 }
