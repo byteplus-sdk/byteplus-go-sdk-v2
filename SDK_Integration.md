@@ -691,7 +691,7 @@ cfg := byteplus.NewConfig().
 
 ## Default Logger
 
-If no logger is supplied, `volcengine/logger.go` provides a minimal console logger.
+If no logger is supplied, `byteplus/logger.go` provides a minimal console logger.
 
 ## Implementing Your Own Logger
 
