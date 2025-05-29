@@ -176,7 +176,7 @@ func (s *SuccessInstanceInfoForUnsubscribeInstanceOutput) SetProduct(v string) *
 type UnsubscribeInstanceInput struct {
 	_ struct{} `type:"structure" json:",omitempty"`
 
-	ClientToken *string `type:"string" json:",omitempty"`
+	ClientToken *string `max:"36" type:"string" json:",omitempty"`
 
 	// InstanceID is a required field
 	InstanceID *string `type:"string" json:",omitempty" required:"true"`
@@ -200,6 +200,9 @@ func (s UnsubscribeInstanceInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *UnsubscribeInstanceInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "UnsubscribeInstanceInput"}
+	if s.ClientToken != nil && len(*s.ClientToken) > 36 {
+		invalidParams.Add(request.NewErrParamMaxLen("ClientToken", 36, *s.ClientToken))
+	}
 	if s.InstanceID == nil {
 		invalidParams.Add(request.NewErrParamRequired("InstanceID"))
 	}
@@ -244,6 +247,8 @@ type UnsubscribeInstanceOutput struct {
 
 	OrderID *string `type:"string" json:",omitempty"`
 
+	OrderIDList []*string `type:"list" json:",omitempty"`
+
 	SuccessInstanceInfos []*SuccessInstanceInfoForUnsubscribeInstanceOutput `type:"list" json:",omitempty"`
 }
 
@@ -260,6 +265,12 @@ func (s UnsubscribeInstanceOutput) GoString() string {
 // SetOrderID sets the OrderID field's value.
 func (s *UnsubscribeInstanceOutput) SetOrderID(v string) *UnsubscribeInstanceOutput {
 	s.OrderID = &v
+	return s
+}
+
+// SetOrderIDList sets the OrderIDList field's value.
+func (s *UnsubscribeInstanceOutput) SetOrderIDList(v []*string) *UnsubscribeInstanceOutput {
+	s.OrderIDList = v
 	return s
 }
 

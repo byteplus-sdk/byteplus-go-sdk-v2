@@ -158,13 +158,13 @@ type ListForListSplitBillDetailOutput struct {
 
 	BillingMode *string `type:"string" json:",omitempty"`
 
+	BusiPeriod *string `type:"string" json:",omitempty"`
+
 	BusinessMode *string `type:"string" json:",omitempty"`
 
 	ConfigName *string `type:"string" json:",omitempty"`
 
 	ConfigurationCode *string `type:"string" json:",omitempty"`
-
-	CountryRegion *string `type:"string" json:",omitempty"`
 
 	CouponDeductionAmount *string `type:"string" json:",omitempty"`
 
@@ -208,17 +208,23 @@ type ListForListSplitBillDetailOutput struct {
 
 	OriginalBillAmount *string `type:"string" json:",omitempty"`
 
+	OwnerCustomerName *string `type:"string" json:",omitempty"`
+
+	OwnerID *string `type:"string" json:",omitempty"`
+
 	OwnerUserName *string `type:"string" json:",omitempty"`
 
 	PaidAmount *string `type:"string" json:",omitempty"`
 
+	PayableAmount *string `type:"string" json:",omitempty"`
+
+	PayerCustomerName *string `type:"string" json:",omitempty"`
+
+	PayerID *string `type:"string" json:",omitempty"`
+
 	PayerUserName *string `type:"string" json:",omitempty"`
 
-	PosttaxAmount *string `type:"string" json:",omitempty"`
-
 	PreferentialBillAmount *string `type:"string" json:",omitempty"`
-
-	PretaxAmount *string `type:"string" json:",omitempty"`
 
 	Price *string `type:"string" json:",omitempty"`
 
@@ -232,11 +238,17 @@ type ListForListSplitBillDetailOutput struct {
 
 	Project *string `type:"string" json:",omitempty"`
 
+	ProjectDisplayName *string `type:"string" json:",omitempty"`
+
 	Region *string `type:"string" json:",omitempty"`
 
 	RegionCode *string `type:"string" json:",omitempty"`
 
 	ReservationInstance *string `type:"string" json:",omitempty"`
+
+	SellerCustomerName *string `type:"string" json:",omitempty"`
+
+	SellerID *string `type:"string" json:",omitempty"`
 
 	SellerUserName *string `type:"string" json:",omitempty"`
 
@@ -259,8 +271,6 @@ type ListForListSplitBillDetailOutput struct {
 	SubjectName *string `type:"string" json:",omitempty"`
 
 	Tag *string `type:"string" json:",omitempty"`
-
-	Tax *string `type:"string" json:",omitempty"`
 
 	TradeTime *string `type:"string" json:",omitempty"`
 
@@ -323,6 +333,12 @@ func (s *ListForListSplitBillDetailOutput) SetBillingMode(v string) *ListForList
 	return s
 }
 
+// SetBusiPeriod sets the BusiPeriod field's value.
+func (s *ListForListSplitBillDetailOutput) SetBusiPeriod(v string) *ListForListSplitBillDetailOutput {
+	s.BusiPeriod = &v
+	return s
+}
+
 // SetBusinessMode sets the BusinessMode field's value.
 func (s *ListForListSplitBillDetailOutput) SetBusinessMode(v string) *ListForListSplitBillDetailOutput {
 	s.BusinessMode = &v
@@ -338,12 +354,6 @@ func (s *ListForListSplitBillDetailOutput) SetConfigName(v string) *ListForListS
 // SetConfigurationCode sets the ConfigurationCode field's value.
 func (s *ListForListSplitBillDetailOutput) SetConfigurationCode(v string) *ListForListSplitBillDetailOutput {
 	s.ConfigurationCode = &v
-	return s
-}
-
-// SetCountryRegion sets the CountryRegion field's value.
-func (s *ListForListSplitBillDetailOutput) SetCountryRegion(v string) *ListForListSplitBillDetailOutput {
-	s.CountryRegion = &v
 	return s
 }
 
@@ -473,6 +483,18 @@ func (s *ListForListSplitBillDetailOutput) SetOriginalBillAmount(v string) *List
 	return s
 }
 
+// SetOwnerCustomerName sets the OwnerCustomerName field's value.
+func (s *ListForListSplitBillDetailOutput) SetOwnerCustomerName(v string) *ListForListSplitBillDetailOutput {
+	s.OwnerCustomerName = &v
+	return s
+}
+
+// SetOwnerID sets the OwnerID field's value.
+func (s *ListForListSplitBillDetailOutput) SetOwnerID(v string) *ListForListSplitBillDetailOutput {
+	s.OwnerID = &v
+	return s
+}
+
 // SetOwnerUserName sets the OwnerUserName field's value.
 func (s *ListForListSplitBillDetailOutput) SetOwnerUserName(v string) *ListForListSplitBillDetailOutput {
 	s.OwnerUserName = &v
@@ -485,27 +507,33 @@ func (s *ListForListSplitBillDetailOutput) SetPaidAmount(v string) *ListForListS
 	return s
 }
 
+// SetPayableAmount sets the PayableAmount field's value.
+func (s *ListForListSplitBillDetailOutput) SetPayableAmount(v string) *ListForListSplitBillDetailOutput {
+	s.PayableAmount = &v
+	return s
+}
+
+// SetPayerCustomerName sets the PayerCustomerName field's value.
+func (s *ListForListSplitBillDetailOutput) SetPayerCustomerName(v string) *ListForListSplitBillDetailOutput {
+	s.PayerCustomerName = &v
+	return s
+}
+
+// SetPayerID sets the PayerID field's value.
+func (s *ListForListSplitBillDetailOutput) SetPayerID(v string) *ListForListSplitBillDetailOutput {
+	s.PayerID = &v
+	return s
+}
+
 // SetPayerUserName sets the PayerUserName field's value.
 func (s *ListForListSplitBillDetailOutput) SetPayerUserName(v string) *ListForListSplitBillDetailOutput {
 	s.PayerUserName = &v
 	return s
 }
 
-// SetPosttaxAmount sets the PosttaxAmount field's value.
-func (s *ListForListSplitBillDetailOutput) SetPosttaxAmount(v string) *ListForListSplitBillDetailOutput {
-	s.PosttaxAmount = &v
-	return s
-}
-
 // SetPreferentialBillAmount sets the PreferentialBillAmount field's value.
 func (s *ListForListSplitBillDetailOutput) SetPreferentialBillAmount(v string) *ListForListSplitBillDetailOutput {
 	s.PreferentialBillAmount = &v
-	return s
-}
-
-// SetPretaxAmount sets the PretaxAmount field's value.
-func (s *ListForListSplitBillDetailOutput) SetPretaxAmount(v string) *ListForListSplitBillDetailOutput {
-	s.PretaxAmount = &v
 	return s
 }
 
@@ -545,6 +573,12 @@ func (s *ListForListSplitBillDetailOutput) SetProject(v string) *ListForListSpli
 	return s
 }
 
+// SetProjectDisplayName sets the ProjectDisplayName field's value.
+func (s *ListForListSplitBillDetailOutput) SetProjectDisplayName(v string) *ListForListSplitBillDetailOutput {
+	s.ProjectDisplayName = &v
+	return s
+}
+
 // SetRegion sets the Region field's value.
 func (s *ListForListSplitBillDetailOutput) SetRegion(v string) *ListForListSplitBillDetailOutput {
 	s.Region = &v
@@ -560,6 +594,18 @@ func (s *ListForListSplitBillDetailOutput) SetRegionCode(v string) *ListForListS
 // SetReservationInstance sets the ReservationInstance field's value.
 func (s *ListForListSplitBillDetailOutput) SetReservationInstance(v string) *ListForListSplitBillDetailOutput {
 	s.ReservationInstance = &v
+	return s
+}
+
+// SetSellerCustomerName sets the SellerCustomerName field's value.
+func (s *ListForListSplitBillDetailOutput) SetSellerCustomerName(v string) *ListForListSplitBillDetailOutput {
+	s.SellerCustomerName = &v
+	return s
+}
+
+// SetSellerID sets the SellerID field's value.
+func (s *ListForListSplitBillDetailOutput) SetSellerID(v string) *ListForListSplitBillDetailOutput {
+	s.SellerID = &v
 	return s
 }
 
@@ -629,12 +675,6 @@ func (s *ListForListSplitBillDetailOutput) SetTag(v string) *ListForListSplitBil
 	return s
 }
 
-// SetTax sets the Tax field's value.
-func (s *ListForListSplitBillDetailOutput) SetTax(v string) *ListForListSplitBillDetailOutput {
-	s.Tax = &v
-	return s
-}
-
 // SetTradeTime sets the TradeTime field's value.
 func (s *ListForListSplitBillDetailOutput) SetTradeTime(v string) *ListForListSplitBillDetailOutput {
 	s.TradeTime = &v
@@ -687,6 +727,8 @@ type ListSplitBillDetailInput struct {
 
 	BillingMode []*string `type:"list" json:",omitempty"`
 
+	ExpenseDate *string `type:"string" json:",omitempty"`
+
 	GroupPeriod *int32 `type:"int32" json:",omitempty"`
 
 	IgnoreZero *int32 `type:"int32" json:",omitempty"`
@@ -699,6 +741,10 @@ type ListSplitBillDetailInput struct {
 	NeedRecordNum *int32 `type:"int32" json:",omitempty"`
 
 	Offset *int32 `type:"int32" json:",omitempty"`
+
+	OwnerID []*int64 `type:"list" json:",omitempty"`
+
+	PayerID []*int64 `type:"list" json:",omitempty"`
 
 	Product []*string `type:"list" json:",omitempty"`
 
@@ -749,6 +795,12 @@ func (s *ListSplitBillDetailInput) SetBillingMode(v []*string) *ListSplitBillDet
 	return s
 }
 
+// SetExpenseDate sets the ExpenseDate field's value.
+func (s *ListSplitBillDetailInput) SetExpenseDate(v string) *ListSplitBillDetailInput {
+	s.ExpenseDate = &v
+	return s
+}
+
 // SetGroupPeriod sets the GroupPeriod field's value.
 func (s *ListSplitBillDetailInput) SetGroupPeriod(v int32) *ListSplitBillDetailInput {
 	s.GroupPeriod = &v
@@ -782,6 +834,18 @@ func (s *ListSplitBillDetailInput) SetNeedRecordNum(v int32) *ListSplitBillDetai
 // SetOffset sets the Offset field's value.
 func (s *ListSplitBillDetailInput) SetOffset(v int32) *ListSplitBillDetailInput {
 	s.Offset = &v
+	return s
+}
+
+// SetOwnerID sets the OwnerID field's value.
+func (s *ListSplitBillDetailInput) SetOwnerID(v []*int64) *ListSplitBillDetailInput {
+	s.OwnerID = v
+	return s
+}
+
+// SetPayerID sets the PayerID field's value.
+func (s *ListSplitBillDetailInput) SetPayerID(v []*int64) *ListSplitBillDetailInput {
+	s.PayerID = v
 	return s
 }
 
