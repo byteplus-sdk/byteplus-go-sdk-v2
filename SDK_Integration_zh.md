@@ -1,3 +1,42 @@
+[English](./SDK_Integration.md) | 简体中文
+
+# 目录
+
+- [集成SDK](#集成sdk)
+- [环境要求](#环境要求)
+- [安全设置访问凭据](#安全设置访问凭据)
+   - [环境变量设置](#环境变量设置)
+      - [Linux 设置](#linux-设置)
+      - [Windows 设置](#windows-设置)
+         - [图形化界面设置](#图形化界面设置)
+         - [命令行设置](#命令行设置)
+- [访问凭据](#访问凭据)
+   - [AK、SK设置](#aksk设置)
+   - [STS Token设置](#sts-token设置)
+   - [AssumeRole](#assumerole)
+- [EndPoint配置](#endpoint配置)
+   - [自定义Endpoint](#自定义endpoint)
+   - [自定义RegionId](#自定义regionid)
+   - [自动化Endpoint寻址](#自动化endpoint寻址)
+      - [Endpoint默认寻址](#endpoint默认寻址)
+- [Http连接池配置](#http连接池配置)
+- [Https请求配置](#https请求配置)
+   - [指定scheme](#指定scheme)
+   - [忽略SSL验证](#忽略ssl验证)
+   - [指定TLS协议版本](#指定tls协议版本)
+- [超时配置](#超时配置)
+   - [全局超时设置（Client级别）](#全局超时设置client级别)
+   - [单接口指定超时设置](#单接口指定超时设置)
+- [重试机制](#重试机制)
+   - [开启重试机制](#开启重试机制)
+   - [重试次数](#重试次数)
+   - [自定义重试错误码](#自定义重试错误码)
+- [异常处理](#异常处理)
+- [Debug机制](#debug机制)
+- [指定日志Logger](#指定日志logger)
+   - [自定义Logger](#自定义logger)
+
+
 # 集成SDK
 
 在调用接口时，推荐在项目中集成 SDK 的方式进行接入。通过使用 SDK，不仅可以简化开发流程、加快功能集成速度，还能有效降低后期的维护成本。火山引擎 SDK 的集成主要包括以下三个步骤：引入 SDK、配置访问凭证，以及编写接口调用代码。本文将结合常见使用场景，详细说明各步骤的实现方法及注意事项。
@@ -168,8 +207,7 @@ func main() {
     config := byteplus.NewConfig().
        WithCredentials(credentials.NewEnvCredentials()). //环境变量配置：BYTEPLUS_ACCESS_KEY_ID、BYTEPLUS_SECRET_ACCESS_KEY、BYTEPLUS_SESSION_TOKEN
        WithRegion(region).
-       // 自定义Endpoint
-       WithEndpoint("ecs.volcengineapi.com")
+       WithEndpoint("<service>.<regionId>.byteplusapi.com")// 自定义Endpoint, example: ecs.cn-beijing.byteplusapi.com
      sess, err := session.NewSession(config)
      if err != nil {
         panic(err)
@@ -184,8 +222,7 @@ func main() {
     regionId := "cn-beijing"
     config := byteplus.NewConfig().
        WithCredentials(credentials.NewEnvCredentials()). //环境变量配置：BYTEPLUS_ACCESS_KEY_ID、BYTEPLUS_SECRET_ACCESS_KEY、BYTEPLUS_SESSION_TOKEN
-       WithRegion(regionId). // 自定义regionId
-       WithEndpoint("ecs.cn-beijing-autodriving.volcengineapi.com")
+       WithRegion(regionId) // 自定义regionId
 	sess, err := session.NewSession(config)
         if err != nil {
         panic(err)
@@ -225,8 +262,8 @@ func main() {
         WithRegion(regionId).
         WithUseDualStack(true). // 定义是否启用双栈网络（IPv4 + IPv6）访问地址，默认false；也可以使用环境变量VOLC_ENABLE_DUALSTACK=true
         WithBootstrapRegion(map[string]struct{}{
-        "cn-beijing-autodriving": {},
-        "cn-shanghai-autodriving": {},
+           "cn-beijing-autodriving": {},
+           "cn-shanghai-autodriving": {},
         }) // 自定义自举Region；也可以使用环境变量VOLC_BOOTSTRAP_REGION_LIST_CONF	
     sess, err := session.NewSession(config)
     if err != nil {
@@ -263,7 +300,7 @@ func main() {
 
     client := &http.Client{
        Transport: transport,
-       Timeout:   60 * time.Second, // 这个相当于ReadTimeout
+       Timeout:   60 * time.Second, // 设置ReadTimeout
     }
     config := byteplus.NewConfig().
        WithRegion(region).
@@ -280,19 +317,19 @@ func main() {
 
 # Https请求配置
 
-## 指定schema
+## 指定scheme
 
 > - **默认**  
 >   https
 
-schema是参数DisableSSL来控的，为true表示schema为http，为false表示schema为https；建议使用HTTPS，这样可以提升数据传输的安全性。若不设置，则使用默认支持的请求协议类型（HTTPS）
+scheme是参数DisableSSL来控的，为true表示scheme为http，为false表示scheme为https；建议使用HTTPS，这样可以提升数据传输的安全性。若不设置，则使用默认支持的请求协议类型（HTTPS）
 
 ```go
 func main() {
     region := "cn-beijing"
     config := byteplus.NewConfig().
        WithRegion(region).
-       WithDisableSSL(true). //true 表示schema为http，false表示为https，默认为false
+       WithDisableSSL(true). //true 表示scheme为http，false表示为https，默认为false
        WithCredentials(credentials.NewEnvCredentials()) // 环境变量配置：BYTEPLUS_ACCESS_KEY_ID、BYTEPLUS_SECRET_ACCESS_KEY、BYTEPLUS_SESSION_TOKEN
 
     sess, err := session.NewSession(config)
@@ -330,7 +367,7 @@ func main() {
 
     client := &http.Client{
        Transport: transport,
-       Timeout:   60 * time.Second, // 这个相当于ReadTimeout
+       Timeout:   60 * time.Second, // 设置ReadTimeout
     }
     config := byteplus.NewConfig().
        WithRegion(region).
@@ -375,7 +412,7 @@ func main() {
 
     client := &http.Client{
        Transport: transport,
-       Timeout:   60 * time.Second, // 这个相当于ReadTimeout
+       Timeout:   60 * time.Second, // 设置ReadTimeout
     }
     config := byteplus.NewConfig().
        WithRegion(region).
@@ -407,7 +444,7 @@ func main() {
     transport := &http.Transport{
        Proxy: http.ProxyFromEnvironment,
        DialContext: (&net.Dialer{
-          Timeout:   30 * time.Second, // 这个相当于ConnectTimeOut
+          Timeout:   30 * time.Second, // 设置ConnectTimeOut
           KeepAlive: 30 * time.Second,
           DualStack: true,
        }).DialContext,
@@ -419,7 +456,7 @@ func main() {
 
     client := &http.Client{
        Transport: transport,
-       Timeout:   60 * time.Second, // 这个相当于ReadTimeout
+       Timeout:   60 * time.Second, // 设置ReadTimeout
     }
     config := byteplus.NewConfig().
        WithRegion(region).
@@ -454,7 +491,7 @@ func main() {
        InstanceIds: byteplus.StringSlice([]string{"i-3tiefmkskq3vj0******"}),
     }
 
-    // 创建带5秒超时的上下文
+    // 创建带5秒超时的上下文；注意：如果已经存在上下文context，请把这里context.Background()替换为已有的上下文
     ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
     // 防止资源泄漏
     defer cancel() 
@@ -471,6 +508,31 @@ func main() {
 # 重试机制
 
 请求的处理逻辑内置了网络异常重试逻辑，即当遇到网络异常问题或限流错误时，系统会自动尝试重新发起请求，以确保服务的稳定性和可靠性。若请求因业务逻辑错误而报错，例如参数错误、资源不存在等情况，SDK将不会执行重试操作，这是因为业务层面的错误通常需要应用程序根据具体的错误信息做出相应的处理或调整，而非简单地重复尝试
+
+> **重试延迟说明：**  
+> SDK为了防止请求风暴，提高系统稳定性，并有效缓解服务雪崩风险，增加重试间的延迟，实现对服务端压力的自适应控制。  
+> **延迟时间公式：**    
+> delay = min(MaxDelay, 2ⁿ × minDelay × (1 + Rand[0, 1)) + Retry-After
+>
+>
+> | 参数            | 说明                                                    |
+> | --------------- | ------------------------------------------------------- |
+> | maxDelay        | 最大延迟时间，计算的最大延迟不会超过maxDelay，默认500ms |
+> | 2ⁿ             | 纯指数增长                                              |
+> | (1 + Rand[0, 1) | 把结果随机放大 1 ~ 2 倍，避免「惊群效应」               |
+> | min(...)        | 防止无限增长，超过MaxDelay                              |
+> | Retry-After     | 服务端如果显式告知休眠时长，则先按它要求静默            |
+>
+> **举例说明：**  
+> MaxDelay=500ms，minDelay=30ms
+>
+>
+> | 重试次数（从第0次开始） | 指数退避×抖动区间(ms) | Retry-After(ms) | 最终延迟时间（指数退避×抖动区间+Retry-After） |
+> | ----------------------- | ---------------------- | --------------- | ---------------------------------------------- |
+> | 0                       | [30,60]                | 10              | [40,70]                                        |
+> | 1                       | [60,120]               | 20              | [80,140]                                       |
+> | 3                       | [120,240]              | 30              | [150,270]                                      |
+> | ...                     | ...<=500ms             | 10              | <=510                                          |
 
 ## 开启重试机制
 
@@ -565,148 +627,102 @@ func main() {
 
 在调用接口时，可能会返回不同类型的错误。客户可根据具体的错误类型和错误码，采取有针对性的处理策略。例如，对于网络异常可选择重试，对于业务逻辑错误则应根据错误信息进行参数调整或业务逻辑修正，从而提升系统的健壮性和用户体验。
 
-错误分类：
+**错误分类：**
+
+| 错误类型         | 错误描述                             | 返回错误类型                   | 公共属性                                                                         | 私有属性                                          |
+| ---------------- | ------------------------------------ | ------------------------------ |------------------------------------------------------------------------------| ------------------------------------------------- |
+| 1. 创建会话错误  | 创建会话会做一些配置的前置校验       | bytepluserr.Error或原生error | Code()：错误码;  <br>Message():错误描述信息;  <br>Error()：详细错误信息;  <br>OrigErr(): 原始错误 | 无                                                |
+| 2. 参数验证错误  | 发起请求前会对一些参数做一些校验     | request.ErrInvalidParam        | 同上                                                                           | 可以通过Field()获取验证失败的属性                 |
+| 3. 服务端错误    | 请求成功到达服务器，返回业务逻辑错误 | bytepluserr.RequestFailure   | 同上                                                                           | 可以通过RequestID()获取请求id，方便服务端问题排查 |
+| 4. 网络/超时错误 | DNS解析错误或请求超时                | bytepluserr.Error            | 同上                                                                           | 无                                                |
+| 5. 其它错误      | 未包含在前4中错误的其它错误处理      | bytepluserr.Error或原生error | 同上                                                                           | 无                                                |
 
 
-| 错误类型                         | 错误描述                                                      |
-| -------------------------------- | ------------------------------------------------------------- |
-| 1. 配置缺失/验证错误             | 某些全局配置没有配置，如：Region,endpoint,请求body格式验证等  |
-| 2. 网络错误                      | SDK 在尝试发起 HTTP 请求前就失败，或在建立连接/发送请求时失败 |
-| 3. 超时错误                      | 请求已成功发出，但等待响应超时（可细分为连接超时、读取超时）  |
-| 4. 业务错误                      | 请求成功到达服务器，但返回的是业务逻辑错误（参数不合法）      |
-| 5. 认证错误                      | 请求签名无效、Token 过期或缺失                                |
-| 6. 限流/熔断错误(ThrottingError) | 服务端返回限流标志，通常 HTTP 429，或内部系统降级             |
-| 7. 反序列化数据错误              | 对json或xml反序列化报的错误                                   |
-
-代码示例：
+**代码示例：**
 
 ```go
 package main
 
 import (
-    "context"
-    "errors"
-    "fmt"
-    "github.com/volcengine/volcengine-go-sdk/service/ecs"
-    "github.com/volcengine/volcengine-go-sdk/volcengine"
-    "github.com/volcengine/volcengine-go-sdk/volcengine/credentials"
-    "github.com/volcengine/volcengine-go-sdk/volcengine/request"
-    "github.com/volcengine/volcengine-go-sdk/volcengine/session"
-    "github.com/volcengine/volcengine-go-sdk/volcengine/volcengineerr"
-    "net"
-    "net/http"
-    "time"
+   "context"
+   "errors"
+   "fmt"
+   "github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
+   "github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/bytepluserr"
+   "github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
+   "github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/request"
+   "github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/session"
+   "github.com/byteplus-sdk/byteplus-go-sdk-v2/service/ecs"
+   "net"
 )
 
 func main() {
-    region := "cn-beijing"
-    config := byteplus.NewConfig().
-       WithRegion(region).
-       WithCredentials(credentials.NewEnvCredentials())
-    sess, err := session.NewSession(config)
-    var be bytepluserr.Error
-    if err != nil {
-       // 1. 配置/参数验证错误
-       if errors.As(err, &be) {
-          switch be.Code() {
-          case "LoadCustomCABundleError":
-             fmt.Println("1. 配置缺失/验证错误：当在配置文件中未找到配置文件时会出现此错误")
-          case "SharedConfigLoadError":
-             fmt.Println("1. 配置缺失/验证错误：SharedConfigLoadError是共享配置文件加载失败时的错误。")
-          case "SharedConfigProfileNotExistsError":
-             fmt.Println("1. 配置缺失/验证错误：共享配置文件不存在错误是共享配置出现的一种错误，当在配置文件中未找到配置文件时就会出现该错误。")
-          case "SharedConfigAssumeRoleError":
-             fmt.Println("1. 配置缺失/验证错误：SharedConfigAssumeRoleError是共享配置中的一种错误，当配置文件包含角色假设信息，但该信息无效或不完整时会出现此错误。")
-          case "CredentialRequiresARNError":
-             fmt.Println("1. 配置缺失/验证错误：credential type (source_profile|credential_source|web_identity_token_file) requires role_arn, profile ")
-          }
+   region := "cn-beijing"
+   config := byteplus.NewConfig().
+      WithRegion(region).
+      WithCredentials(credentials.NewEnvCredentials())
+   sess, err := session.NewSession(config)
+   var be bytepluserr.Error
+   if err != nil {
+      if errors.As(err, &be) {
+         fmt.Println("1. 创建session失败", be.Code(), be.Message(), be.Error())
+      } else {
+         fmt.Println("5. 其它错误", err.Error())
+      }
+      panic(err)
+   }
+   svc := ecs.New(sess)
 
-       } else {
-          fmt.Println("处理其它错误")
-       }
-       panic(err)
-    }
-    svc := ecs.New(sess)
+   tags := make([]*ecs.TagForCreateKeyPairInput, 0, 2)
+   tags = append(tags, &ecs.TagForCreateKeyPairInput{Key: byteplus.String("testTag")})
+   createKeyPairInput := &ecs.CreateKeyPairInput{
+      KeyPairName: byteplus.String(("testKeyPairName")),
+      Tags:        tags,
+   }
 
-    tags := make([]*ecs.TagForCreateKeyPairInput, 0, 2)
-    tags = append(tags, &ecs.TagForCreateKeyPairInput{Key: byteplus.String("testTag")})
-    createKeyPairInput := &ecs.CreateKeyPairInput{
-       KeyPairName: byteplus.String("testKeyPairName"),
-       Tags:        tags,
-    }
+   _, err = svc.CreateKeyPair(createKeyPairInput)
+   if err != nil {
+      var requestFailure bytepluserr.RequestFailure // 服务端返回的错误
+      var errInvalidParam request.ErrInvalidParam   // 参数验证错误
+      // 请求未达到服务前参数验证
+      if errors.As(err, &errInvalidParam) {
+         fmt.Println("2. 参数验证错误：", errInvalidParam.Code(), errInvalidParam.Field(), errInvalidParam.Error())
+         // 请求到达服务端，服务端返回错误
+      } else if errors.As(err, &requestFailure) {
+         fmt.Println("4. 服务端错误：", requestFailure.RequestID(), requestFailure.Code(), requestFailure.StatusCode(), requestFailure.Error())
+      } else if errors.As(err, &be) {
+         // 发送请求，但没有到达后端服务
+         switch be.Code() {
+         case "RequestCanceled":
+            fmt.Println("3. 网络/超时错误：这里是请求接口传入context上下文超时")
+         case "RequestError":
+            if be.OrigErr() != nil {
+               var netErr net.Error
+               var dnsError *net.DNSError
+               if errors.As(be.OrigErr(), &dnsError) {
+                  fmt.Println("3. 网络/超时错误：DNS解析错误处理")
+               } else if errors.As(be.OrigErr(), &netErr) && netErr.Timeout() {
+                  var oPError *net.OpError
+                  if errors.Is(be.OrigErr(), context.DeadlineExceeded) {
+                     fmt.Println("3. 网络/超时错误：http.Client Timeout(ReadTimeout)....", be.Code(), be.Error())
+                  } else if errors.As(be.OrigErr(), &oPError) && oPError.Op == "dial" {
+                     fmt.Println("3. 网络/超时错误：http.Client Transport.Dialer Timeout(ConnectTimeout)....", be.Code(), be.Error())
+                  } else {
+                     fmt.Println("3. 网络/超时错误：其它超时处理", be.Code(), be.Message(), be.Error())
+                  }
+               }
+            }
+         default:
+            fmt.Println("5. 其它错误", be.Code(), be.Message(), be.Error())
+         }
+      } else {
+         fmt.Println("5. 其它错误", err.Error())
+      }
 
-    _, err = svc.CreateKeyPair(createKeyPairInput)
-    if err != nil {
-       var requestFailure bytepluserr.RequestFailure // 服务端返回的错误
-       var errInvalidParam request.ErrInvalidParam     // 参数验证错误
-       var unmarshalError bytepluserr.UnmarshalError // 返回数据解析错误
-       var batchedErrors bytepluserr.BatchedErrors   // 批量错误
-       // 请求未达到服务前参数验证
-       if errors.As(err, &errInvalidParam) {
-          fmt.Println("1. 配置缺失/验证错误：", errInvalidParam.Field(), errInvalidParam.Error())
-       // 请求到达服务端，服务端返回错误   
-       } else if errors.As(err, &requestFailure) {
-          fmt.Println("请求错误：", requestFailure.RequestID(), requestFailure.StatusCode())
-          switch requestFailure.Code() {
-          // 请求过于频繁
-          case "FlowLimitExceeded":
-             fmt.Println("6. 限流/熔断错误(ThrottingError): 请求过于频繁，超出了限速。请降低请求QPS，如果有提升限速需求")
-          case "AccessDenied":
-             fmt.Println("5. 认证错误：用户拥有的权限不支持当前操作")
-          case "InvalidActionOrVersion":
-             fmt.Println("4. 业务错误：请求接口不存在")
-          case "InvalidAccessKey":
-             fmt.Println("5. 认证错误：请求的Access Key不合法。请检查Access key Id和Secret Access Key是否正确，注意不要有多余的空格符号")
-          case "InternalServiceTimeout":
-             fmt.Println("3. 超时错误：服务内部执行超时")
-          case "InvalidAuthorization":
-             fmt.Println("5. 认证错误：Authorization头格式错误，构造的 Authorization Header 不正确，比如没有填 Region 字段、字符不在合法字符集中，请检查Authorization")
-          case "InvalidCredential":
-             fmt.Println("5. 认证错误： Authorization头中的Credential格式错误，比如 AK 不在合法字符集中检查Credential")
-          case "InvalidSecretToken":
-             fmt.Println("5. 认证错误：错误的STS（临时安全凭证），可能是多种错误，例如签名错误、过期等。请检查AssumeRole产生的临时凭证是否过期，以及签名是正确")
-          default:
-             fmt.Println("4. 业务错误：可以把其它未处理的后端返回错误归结为业务错误")
-          }
-        // 反序列化数据错误
-       } else if errors.As(err, &unmarshalError) {
-          fmt.Println("7. 反序列化数据错误：", string(unmarshalError.Bytes()))
-       } else if errors.As(err, &batchedErrors) {
-          for _, e := range batchedErrors.OrigErrs() {
-             fmt.Println("批量错误:", e)
-          }
-       // 发送请求，但没有到达后端服务   
-       }else if errors.As(err, &be) {
-          switch be.Code() {
-          case "RequestCanceled":
-             fmt.Println("3. 超时错误：这里是请求接口传入context上下文超时")
-          case "RequestError":
-             if be.OrigErr() != nil {
-                var netErr net.Error
-                var dnsError *net.DNSError
-                if errors.As(be.OrigErr(), &dnsError) {
-                    fmt.Println("2. 网络错误：DNS解析错误处理")
-                }else if errors.As(be.OrigErr(), &netErr) && netErr.Timeout() {
-                   var oPError *net.OpError
-                   if errors.Is(be.OrigErr(), context.DeadlineExceeded) {
-                      fmt.Println("3. 超时错误：http.Client Timeout(ReadTimeout)....")
-                   } else if errors.As(be.OrigErr(), &oPError) && oPError.Op == "dial" {
-                      fmt.Println("3. 超时错误：http.Client Transport.Dialer Timeout(ConnectTimeout)....")
-                   } else {
-                      fmt.Println("3. 超时错误：其它超时处理")
-                   }
-                }
-             }
-          default:
-             fmt.Println("处理其它错误")
-          }
-       }  else {
-          fmt.Println("处理其它错误")
-       }
-
-    }
+   }
 
 }
+
 
 ```
 
@@ -729,15 +745,6 @@ func main() {
 >      记录服务请求的重试情况
 >      用于跟踪服务请求何时被重试
 >      会同时启用 LogDebug
->    - LogDebugWithRequestErrors
->      记录服务请求构建、发送、验证或反序列化失败的情况
->    - LogDebugWithEventStreamBody
->      记录 EventStream 请求和响应的 body
->      用于查看 EventStream 消息内容
->      会同时启用 LogDebug
->    - LogInfoWithInputAndOutput
->      记录结构体(STRUCT)的输入和输出
->      会同时启用 LogInfo
 >    - LogDebugWithInputAndOutput
 >      记录结构体(STRUCT)的输入和输出
 >      会同时启用 LogDebug
