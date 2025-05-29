@@ -575,13 +575,22 @@ func (s *Session) clientConfigWithErr(serviceName string, cfgs ...*byteplus.Conf
 	s = s.Copy(cfgs...)
 
 	var resolved endpoints.ResolvedEndpoint
-	var err error
 
 	region := byteplus.StringValue(s.Config.Region)
 	if s.Config.Endpoint == nil {
 		var endpoint *string
-		if byteplus.BoolValue(s.Config.EndpointConfigState) && s.Config.EndpointResolver != nil {
-			endpointFor, err := s.Config.EndpointResolver.EndpointFor(serviceName, region)
+		if s.Config.EndpointResolver != nil {
+			var opts []func(*endpoints.Options)
+			if s.Config.Site != nil {
+				opts = append(opts, endpoints.WithSite(*s.Config.Site))
+			}
+			if s.Config.IPVersion != nil {
+				opts = append(opts, endpoints.WithIPVersion(*s.Config.IPVersion))
+			}
+			if s.Config.RunningEnvironment != nil {
+				opts = append(opts, endpoints.WithRunningEnvironment(*s.Config.RunningEnvironment))
+			}
+			endpointFor, err := s.Config.EndpointResolver.EndpointFor(serviceName, region, opts...)
 			if err != nil {
 				return client.Config{}, err
 			}
@@ -604,7 +613,7 @@ func (s *Session) clientConfigWithErr(serviceName string, cfgs ...*byteplus.Conf
 		SigningRegion:      resolved.SigningRegion,
 		SigningNameDerived: resolved.SigningNameDerived,
 		SigningName:        resolved.SigningName,
-	}, err
+	}, nil
 }
 
 // ClientConfigNoResolveEndpoint is the same as ClientConfig with the exception
