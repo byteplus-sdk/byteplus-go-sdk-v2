@@ -276,7 +276,8 @@ BytePlus constructs the endpoint from service name and region, and supports IPv6
 
 ### Default Endpoint Resolution
 
-1. **Bootstrap Regions**
+1. **Auto-discoverable Regions**  
+   内置自动寻址Region列表代码:[./byteplus/byteplusutil/url.go#bootstrapRegion](./byteplus/byteplusutil/url.go#L179)   
    Automatic resolution applies only to predefined regions (e.g. `ap-southeast-2`).
    Extend the list via the `BYTEPLUS_BOOTSTRAP_REGION_LIST_CONF` env var or `WithBootstrapRegion()`.
 2. **DualStack (IPv6)**
@@ -297,7 +298,7 @@ func main() {
         WithBootstrapRegion(map[string]struct{}{
            "cn-beijing-autodriving": {},
            "cn-shanghai-autodriving": {},
-        })
+        }) // Custom auto-discoverable Regions can also be configured using the environment variable VOLC_BOOTSTRAP_REGION_LIST_CONF
 
     sess, err := session.NewSession(cfg)
     if err != nil { 
