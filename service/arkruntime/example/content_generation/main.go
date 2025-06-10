@@ -29,16 +29,16 @@ func main() {
 		Content: []*model.CreateContentGenerationContentItem{
 			{
 				Type: model.ContentGenerationContentItemTypeText,
-				Text: byteplus.String("Dragon soaring above vast grasslands --ratio 1:1"),
+				Text: byteplus.String("Bird soaring above vast grasslands --ratio 1:1"),
 			},
 			{
 				Type: model.ContentGenerationContentItemTypeImage,
 				ImageURL: &model.ImageURL{
 					URL: "${YOUR URL HERE}", // Replace with URL
 				},
-				// Role: byteplus.String("first_frame"),
 			},
 		},
+		// CallbackUrl: byteplus.String("CALLBACK_URL"),
 	}
 
 	createResponse, err := client.CreateContentGenerationTask(ctx, createReq)

@@ -25,7 +25,7 @@ func main() {
 	fmt.Println("----- generate images url -----")
 	generateReq := model.GenerateImagesRequest{
 		Model:          modelEp, // Replace with your endpoint ID
-		Prompt:         "Dragon soaring above vast grasslands",
+		Prompt:         "Bird soaring above vast grasslands",
 		ResponseFormat: byteplus.String(model.GenerateImagesResponseFormatURL),
 		Seed:           byteplus.Int64(1234567890),
 		Watermark:      byteplus.Bool(true),
@@ -52,7 +52,7 @@ func main() {
 	fmt.Println("----- generate images base64 -----")
 	generateReq = model.GenerateImagesRequest{
 		Model:          modelEp, // Replace with your endpoint ID
-		Prompt:         "Dragon soaring above vast grasslands",
+		Prompt:         "Bird soaring above vast grasslands",
 		ResponseFormat: byteplus.String(model.GenerateImagesResponseFormatBase64),
 		Seed:           byteplus.Int64(1234567890),
 		Watermark:      byteplus.Bool(true),
