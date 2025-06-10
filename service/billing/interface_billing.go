@@ -38,6 +38,14 @@ type BILLINGAPI interface {
 	CancelInvitationWithContext(byteplus.Context, *CancelInvitationInput, ...request.Option) (*CancelInvitationOutput, error)
 	CancelInvitationRequest(*CancelInvitationInput) (*request.Request, *CancelInvitationOutput)
 
+	CancelOrderCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CancelOrderCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CancelOrderCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CancelOrder(*CancelOrderInput) (*CancelOrderOutput, error)
+	CancelOrderWithContext(byteplus.Context, *CancelOrderInput, ...request.Option) (*CancelOrderOutput, error)
+	CancelOrderRequest(*CancelOrderInput) (*request.Request, *CancelOrderOutput)
+
 	CleanUpFinancialRelationCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	CleanUpFinancialRelationCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	CleanUpFinancialRelationCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -150,6 +158,22 @@ type BILLINGAPI interface {
 	ListInvitationWithContext(byteplus.Context, *ListInvitationInput, ...request.Option) (*ListInvitationOutput, error)
 	ListInvitationRequest(*ListInvitationInput) (*request.Request, *ListInvitationOutput)
 
+	ListOrderProductDetailsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListOrderProductDetailsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListOrderProductDetailsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListOrderProductDetails(*ListOrderProductDetailsInput) (*ListOrderProductDetailsOutput, error)
+	ListOrderProductDetailsWithContext(byteplus.Context, *ListOrderProductDetailsInput, ...request.Option) (*ListOrderProductDetailsOutput, error)
+	ListOrderProductDetailsRequest(*ListOrderProductDetailsInput) (*request.Request, *ListOrderProductDetailsOutput)
+
+	ListOrdersCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListOrdersCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListOrdersCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListOrders(*ListOrdersInput) (*ListOrdersOutput, error)
+	ListOrdersWithContext(byteplus.Context, *ListOrdersInput, ...request.Option) (*ListOrdersOutput, error)
+	ListOrdersRequest(*ListOrdersInput) (*request.Request, *ListOrdersOutput)
+
 	ListPackageUsageDetailsCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ListPackageUsageDetailsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	ListPackageUsageDetailsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -173,6 +197,14 @@ type BILLINGAPI interface {
 	ListSplitBillDetail(*ListSplitBillDetailInput) (*ListSplitBillDetailOutput, error)
 	ListSplitBillDetailWithContext(byteplus.Context, *ListSplitBillDetailInput, ...request.Option) (*ListSplitBillDetailOutput, error)
 	ListSplitBillDetailRequest(*ListSplitBillDetailInput) (*request.Request, *ListSplitBillDetailOutput)
+
+	PayOrderCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	PayOrderCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	PayOrderCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	PayOrder(*PayOrderInput) (*PayOrderOutput, error)
+	PayOrderWithContext(byteplus.Context, *PayOrderInput, ...request.Option) (*PayOrderOutput, error)
+	PayOrderRequest(*PayOrderInput) (*request.Request, *PayOrderOutput)
 
 	QueryBalanceAcctCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	QueryBalanceAcctCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -205,6 +237,22 @@ type BILLINGAPI interface {
 	QueryPriceForSubscription(*QueryPriceForSubscriptionInput) (*QueryPriceForSubscriptionOutput, error)
 	QueryPriceForSubscriptionWithContext(byteplus.Context, *QueryPriceForSubscriptionInput, ...request.Option) (*QueryPriceForSubscriptionOutput, error)
 	QueryPriceForSubscriptionRequest(*QueryPriceForSubscriptionInput) (*request.Request, *QueryPriceForSubscriptionOutput)
+
+	RenewInstanceCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	RenewInstanceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	RenewInstanceCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	RenewInstance(*RenewInstanceInput) (*RenewInstanceOutput, error)
+	RenewInstanceWithContext(byteplus.Context, *RenewInstanceInput, ...request.Option) (*RenewInstanceOutput, error)
+	RenewInstanceRequest(*RenewInstanceInput) (*request.Request, *RenewInstanceOutput)
+
+	SetRenewalTypeCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	SetRenewalTypeCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	SetRenewalTypeCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	SetRenewalType(*SetRenewalTypeInput) (*SetRenewalTypeOutput, error)
+	SetRenewalTypeWithContext(byteplus.Context, *SetRenewalTypeInput, ...request.Option) (*SetRenewalTypeOutput, error)
+	SetRenewalTypeRequest(*SetRenewalTypeInput) (*request.Request, *SetRenewalTypeOutput)
 
 	UnsubscribeInstanceCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	UnsubscribeInstanceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
