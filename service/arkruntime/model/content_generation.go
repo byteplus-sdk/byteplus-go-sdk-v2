@@ -64,7 +64,6 @@ type CreateContentGenerationContentItem struct {
 	Type     ContentGenerationContentItemType `json:"type"`
 	Text     *string                          `json:"text,omitempty"`
 	ImageURL *ImageURL                        `json:"image_url,omitempty"`
-	Role     *string                          `json:"role,omitempty"`
 }
 
 type ImageURL struct {
