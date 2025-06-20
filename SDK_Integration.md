@@ -160,7 +160,7 @@ AK (AccessKey) and SK (SecretKey) are permanent credentials created in the ByteP
 
 ```go
 func main() {
-    ak, sk, region := "Your AK", "Your SK", "cn-beijing"
+    ak, sk, region := "Your AK", "Your SK", "ap-southeast-1"
     cfg := byteplus.NewConfig().
        WithRegion(region).
        // 1. Static credentials—*NOT* recommended for production
@@ -184,7 +184,7 @@ Security Token Service (STS) issues **temporary** credentials (AK, SK, Token).
 
 ```go
 func main() {
-    ak, sk, token, region := "Your AK", "Your SK", "Your token", "cn-beijing"
+    ak, sk, token, region := "Your AK", "Your SK", "Your token", "ap-southeast-1"
     cfg := byteplus.NewConfig().
        WithRegion(region).
        WithCredentials(credentials.NewStaticCredentials(ak, sk, token))
@@ -208,7 +208,7 @@ Obtains **auto-refreshing temporary credentials** before your STS token expires 
 
 ```go
 func main() {
-    ak, sk, region := "Your AK", "Your SK", "cn-beijing"
+    ak, sk, region := "Your AK", "Your SK", "ap-southeast-1"
     cfg := byteplus.NewConfig().
         WithRegion(region).
         WithCredentials(credentials.NewStsCredentials(credentials.StsValue{
@@ -239,11 +239,11 @@ func main() {
 
 ```go
 func main() {
-    region := "cn-beijing"
+    region := "ap-southeast-1"
     cfg := byteplus.NewConfig().
        WithCredentials(credentials.NewEnvCredentials()).
        WithRegion(region).
-       WithEndpoint("<service>.<regionid>.byteplusapi.com") // e.g. ecs.cn-beijing.byteplusapi.com
+       WithEndpoint("<service>.<regionid>.byteplusapi.com")
 
     sess, err := session.NewSession(cfg)
     if err != nil { 
@@ -256,7 +256,7 @@ func main() {
 
 ```go
 func main() {
-    regionId := "cn-beijing"
+    regionId := "ap-southeast-1"
     cfg := byteplus.NewConfig().
        WithCredentials(credentials.NewEnvCredentials()).
        WithRegion(regionId)
@@ -277,7 +277,7 @@ BytePlus constructs the endpoint from service name and region, and supports IPv6
 ### Default Endpoint Resolution
 
 1. **Auto-discoverable Regions**  
-   内置自动寻址Region列表代码:[./byteplus/byteplusutil/url.go#bootstrapRegion](./byteplus/byteplusutil/url.go#L179)   
+   Built-in automatic addressing Region list code:[./byteplus/byteplusutil/url.go#bootstrapRegion](./byteplus/byteplusutil/url.go#L179)   
    Automatic resolution applies only to predefined regions (e.g. `ap-southeast-2`).
    Extend the list via the `BYTEPLUS_BOOTSTRAP_REGION_LIST_CONF` env var or `WithBootstrapRegion()`.
 2. **DualStack (IPv6)**
@@ -290,15 +290,15 @@ BytePlus constructs the endpoint from service name and region, and supports IPv6
 
 ```go
 func main() {
-    region := "cn-beijing"
+    region := "ap-southeast-1"
     cfg := byteplus.NewConfig().
         WithCredentials(credentials.NewEnvCredentials()).
         WithRegion(region).
         WithUseDualStack(true). // or env var
         WithBootstrapRegion(map[string]struct{}{
-           "cn-beijing-autodriving": {},
-           "cn-shanghai-autodriving": {},
-        }) // Custom auto-discoverable Regions can also be configured using the environment variable VOLC_BOOTSTRAP_REGION_LIST_CONF
+           "custom_example_region1": {},
+           "custom_example_region2": {},
+        }) // Custom auto-discoverable Regions can also be configured using the environment variable BYTEPLUS_BOOTSTRAP_REGION_LIST_CONF
 
     sess, err := session.NewSession(cfg)
     if err != nil { 
@@ -321,7 +321,7 @@ Configure by supplying a custom `http.Client`:
 
 ```go
 func main() {
-    region := "cn-beijing"
+    region := "ap-southeast-1"
     tr := &http.Transport{
         Proxy: http.ProxyFromEnvironment,
         DialContext: (&net.Dialer{
@@ -363,7 +363,7 @@ func main() {
 
 ```go
 func main() {
-    region := "cn-beijing"
+    region := "ap-southeast-1"
     cfg := byteplus.NewConfig().
        WithRegion(region).
        WithDisableSSL(true). //true means http, false means https
@@ -412,7 +412,7 @@ Set by injecting a custom `http.Client`.
 
 ```Go
 func main() {
-    region := "cn-beijing"
+    region := "ap-southeast-1"
     transport := &http.Transport{
        Proxy: http.ProxyFromEnvironment,
        DialContext: (&net.Dialer{
@@ -492,7 +492,7 @@ Disable by setting `WithMaxRetries(0)`.
 
 ```go
 func main() {  
-        region := "cn-beijing"
+        region := "ap-southeast-1"
         // Configure retry settings
         config := byteplus.NewConfig().
                 WithRegion(region).
@@ -515,7 +515,7 @@ Set with `WithMaxRetries(n)`.
 
 ```go
 func main() {
-        region := "cn-beijing"
+        region := "ap-southeast-1"
         // Configure retry settings
         config := byteplus.NewConfig().
                 WithRegion(region).
@@ -538,7 +538,7 @@ Pass a callback to override `request.RetryErrorCodes`.
 
 ```go
 func main() {
-    region := "cn-beijing"
+    region := "ap-southeast-1"
     // Configure retry settings
     config := byteplus.NewConfig().
         WithRegion(region).
@@ -574,13 +574,12 @@ func main() {
 # Error Handling
 
 
-| Type                        | Scenario               | Returns                        | Common Fields                                 | Extra Fields                  |
-|-----------------------------| ---------------------- | ------------------------------ | --------------------------------------------- | ----------------------------- |
-| **1. Session Creation**     | Pre-flight validation  | `bytepluserr.Error` or `error` | `Code()`, `Message()`, `Error()`, `OrigErr()` | —                            |
-| **2. Parameter Validation** | Local arg check        | `request.ErrInvalidParam`      | same                                          | `Field()`                     |
-| **3. Server Error**         | Request reached server | `bytepluserr.RequestFailure`   | same                                          | `RequestID()`, `StatusCode()` |
-| **4. Network / Timeout**    | DNS failure, deadline  | `bytepluserr.Error`            | same                                          | —                            |
-| **5. Other Error**          | Uncategorized          | same as above                  | same                                          | —                            |
+| Type                     | Scenario               | Returns                        | Common Fields                                 | Extra Fields                  |
+|--------------------------| ---------------------- | ------------------------------ | --------------------------------------------- | ----------------------------- |
+| **1. Client Error**      | The request did not reach the server, verify the parameters  | `bytepluserr.Error` or `error` | `Code()`, `Message()`, `Error()`, `OrigErr()` | —                            |
+| **2. Server Error**      | Request reached server | `bytepluserr.RequestFailure`   | same                                          | `RequestID()`, `StatusCode()` |
+| **3. Network / Timeout** | DNS failure, deadline  | `bytepluserr.Error`            | same                                          | —                            |
+| **4. Other Error**       | Uncategorized          | same as above                  | same                                          | —                            |
 
 (See the full sample code for detailed handling.)
 
@@ -601,7 +600,7 @@ import (
 )
 
 func main() {
-   region := "cn-beijing"
+   region := "ap-southeast-1"
    config := byteplus.NewConfig().
       WithRegion(region).
       WithCredentials(credentials.NewEnvCredentials())
@@ -609,9 +608,9 @@ func main() {
    var be bytepluserr.Error
    if err != nil {
       if errors.As(err, &be) {
-         fmt.Println("1. Session Creation", be.Code(), be.Message(), be.Error())
+         fmt.Println("1. Client Error(Session Creation)", be.Code(), be.Message(), be.Error())
       } else {
-         fmt.Println("5. Other Error", err.Error())
+         fmt.Println("4. Other Error", err.Error())
       }
       panic(err)
    }
@@ -629,35 +628,35 @@ func main() {
       var requestFailure bytepluserr.RequestFailure // Server Error
       var errInvalidParam request.ErrInvalidParam   // Parameter Validation
       if errors.As(err, &errInvalidParam) {
-         fmt.Println("2. Parameter Validation：", errInvalidParam.Code(), errInvalidParam.Field(), errInvalidParam.Error())
+         fmt.Println("1. Client Error(Parameter Validation)：", errInvalidParam.Code(), errInvalidParam.Field(), errInvalidParam.Error())
       } else if errors.As(err, &requestFailure) {
-         fmt.Println("3. Server Error：", requestFailure.RequestID(), requestFailure.Code(), requestFailure.StatusCode(), requestFailure.Error())
+         fmt.Println("2. Server Error：", requestFailure.RequestID(), requestFailure.Code(), requestFailure.StatusCode(), requestFailure.Error())
       } else if errors.As(err, &be) {
          switch be.Code() {
          case "RequestCanceled":
-            fmt.Println("4. Network / Timeout：context timeout")
+            fmt.Println("3. Network / Timeout：context timeout")
          case "RequestError":
             if be.OrigErr() != nil {
                var netErr net.Error
                var dnsError *net.DNSError
                if errors.As(be.OrigErr(), &dnsError) {
-                  fmt.Println("4. Network / Timeout：DNS parse error")
+                  fmt.Println("3. Network / Timeout：DNS parse error")
                } else if errors.As(be.OrigErr(), &netErr) && netErr.Timeout() {
                   var oPError *net.OpError
                   if errors.Is(be.OrigErr(), context.DeadlineExceeded) {
-                     fmt.Println("4. Network / Timeout：http.Client Timeout(ReadTimeout)....", be.Code(), be.Error())
+                     fmt.Println("3. Network / Timeout：http.Client Timeout(ReadTimeout)....", be.Code(), be.Error())
                   } else if errors.As(be.OrigErr(), &oPError) && oPError.Op == "dial" {
-                     fmt.Println("4. Network / Timeout：http.Client Transport.Dialer Timeout(ConnectTimeout)....", be.Code(), be.Error())
+                     fmt.Println("3. Network / Timeout：http.Client Transport.Dialer Timeout(ConnectTimeout)....", be.Code(), be.Error())
                   } else {
-                     fmt.Println("4. Network / Timeout", be.Code(), be.Message(), be.Error())
+                     fmt.Println("3. Network / Timeout", be.Code(), be.Message(), be.Error())
                   }
                }
             }
          default:
-            fmt.Println("5. Other Error", be.Code(), be.Message(), be.Error())
+            fmt.Println("4. Other Error", be.Code(), be.Message(), be.Error())
          }
       } else {
-         fmt.Println("5. Other Error", err.Error())
+         fmt.Println("4. Other Error", err.Error())
       }
 
    }
@@ -719,7 +718,7 @@ func main() {
         WithLogLevel(byteplus.LogDebugWithInputAndOutput).
         WithLogger(custom).
         WithCredentials(credentials.NewEnvCredentials()).
-        WithRegion("cn-beijing")
+        WithRegion("ap-southeast-1")
 
     sess, err := session.NewSession(cfg)
     if err != nil { panic(err) }

@@ -57,3 +57,4 @@ func main() {
 	fmt.Println(&resp)
 }
 ```
+更多代码示例请参考：[SDK接入文档](./SDK_Integration_zh.md)
