@@ -142,7 +142,8 @@ func (c *ECS) DeleteCommandWithContext(ctx byteplus.Context, input *DeleteComman
 type DeleteCommandInput struct {
 	_ struct{} `type:"structure"`
 
-	CommandId *string `type:"string"`
+	// CommandId is a required field
+	CommandId *string `type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -153,6 +154,19 @@ func (s DeleteCommandInput) String() string {
 // GoString returns the string representation
 func (s DeleteCommandInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteCommandInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteCommandInput"}
+	if s.CommandId == nil {
+		invalidParams.Add(request.NewErrParamRequired("CommandId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetCommandId sets the CommandId field's value.

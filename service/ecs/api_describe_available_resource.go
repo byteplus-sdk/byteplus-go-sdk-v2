@@ -218,7 +218,8 @@ func (s *AvailableZoneForDescribeAvailableResourceOutput) SetZoneId(v string) *A
 type DescribeAvailableResourceInput struct {
 	_ struct{} `type:"structure"`
 
-	DestinationResource *string `type:"string"`
+	// DestinationResource is a required field
+	DestinationResource *string `type:"string" required:"true"`
 
 	ElasticScheduledInstanceType *string `type:"string"`
 
@@ -243,6 +244,19 @@ func (s DescribeAvailableResourceInput) String() string {
 // GoString returns the string representation
 func (s DescribeAvailableResourceInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeAvailableResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeAvailableResourceInput"}
+	if s.DestinationResource == nil {
+		invalidParams.Add(request.NewErrParamRequired("DestinationResource"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetDestinationResource sets the DestinationResource field's value.

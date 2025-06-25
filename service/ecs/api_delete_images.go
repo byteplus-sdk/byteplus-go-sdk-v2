@@ -144,7 +144,8 @@ type DeleteImagesInput struct {
 
 	DeleteBindedSnapshots *bool `type:"boolean"`
 
-	ImageIds []*string `type:"list"`
+	// ImageIds is a required field
+	ImageIds []*string `type:"list" required:"true"`
 }
 
 // String returns the string representation
@@ -155,6 +156,19 @@ func (s DeleteImagesInput) String() string {
 // GoString returns the string representation
 func (s DeleteImagesInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteImagesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteImagesInput"}
+	if s.ImageIds == nil {
+		invalidParams.Add(request.NewErrParamRequired("ImageIds"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetDeleteBindedSnapshots sets the DeleteBindedSnapshots field's value.

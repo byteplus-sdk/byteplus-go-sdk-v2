@@ -156,7 +156,8 @@ type PurchaseReservedInstancesInput struct {
 
 	InstanceCount *int32 `type:"int32"`
 
-	InstanceTypeId *string `type:"string"`
+	// InstanceTypeId is a required field
+	InstanceTypeId *string `type:"string" required:"true"`
 
 	Period *int32 `type:"int32"`
 
@@ -166,11 +167,22 @@ type PurchaseReservedInstancesInput struct {
 
 	RegionId *string `type:"string"`
 
-	ReservedInstanceName *string `type:"string"`
+	ReservedCapacity *int32 `type:"int32"`
+
+	// ReservedInstanceName is a required field
+	ReservedInstanceName *string `type:"string" required:"true"`
+
+	ReservedStorageCapacityName *string `type:"string"`
+
+	RscAutoRenew *bool `type:"boolean"`
+
+	RscAutoRenewPeriod *int32 `type:"int32"`
 
 	Scope *string `type:"string"`
 
 	Tags []*TagForPurchaseReservedInstancesInput `type:"list"`
+
+	VolumeType *string `type:"string"`
 
 	ZoneId *string `type:"string"`
 }
@@ -188,6 +200,12 @@ func (s PurchaseReservedInstancesInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *PurchaseReservedInstancesInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "PurchaseReservedInstancesInput"}
+	if s.InstanceTypeId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceTypeId"))
+	}
+	if s.ReservedInstanceName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ReservedInstanceName"))
+	}
 	if s.Tags != nil {
 		for i, v := range s.Tags {
 			if v == nil {
@@ -271,9 +289,33 @@ func (s *PurchaseReservedInstancesInput) SetRegionId(v string) *PurchaseReserved
 	return s
 }
 
+// SetReservedCapacity sets the ReservedCapacity field's value.
+func (s *PurchaseReservedInstancesInput) SetReservedCapacity(v int32) *PurchaseReservedInstancesInput {
+	s.ReservedCapacity = &v
+	return s
+}
+
 // SetReservedInstanceName sets the ReservedInstanceName field's value.
 func (s *PurchaseReservedInstancesInput) SetReservedInstanceName(v string) *PurchaseReservedInstancesInput {
 	s.ReservedInstanceName = &v
+	return s
+}
+
+// SetReservedStorageCapacityName sets the ReservedStorageCapacityName field's value.
+func (s *PurchaseReservedInstancesInput) SetReservedStorageCapacityName(v string) *PurchaseReservedInstancesInput {
+	s.ReservedStorageCapacityName = &v
+	return s
+}
+
+// SetRscAutoRenew sets the RscAutoRenew field's value.
+func (s *PurchaseReservedInstancesInput) SetRscAutoRenew(v bool) *PurchaseReservedInstancesInput {
+	s.RscAutoRenew = &v
+	return s
+}
+
+// SetRscAutoRenewPeriod sets the RscAutoRenewPeriod field's value.
+func (s *PurchaseReservedInstancesInput) SetRscAutoRenewPeriod(v int32) *PurchaseReservedInstancesInput {
+	s.RscAutoRenewPeriod = &v
 	return s
 }
 
@@ -289,6 +331,12 @@ func (s *PurchaseReservedInstancesInput) SetTags(v []*TagForPurchaseReservedInst
 	return s
 }
 
+// SetVolumeType sets the VolumeType field's value.
+func (s *PurchaseReservedInstancesInput) SetVolumeType(v string) *PurchaseReservedInstancesInput {
+	s.VolumeType = &v
+	return s
+}
+
 // SetZoneId sets the ZoneId field's value.
 func (s *PurchaseReservedInstancesInput) SetZoneId(v string) *PurchaseReservedInstancesInput {
 	s.ZoneId = &v
@@ -301,6 +349,8 @@ type PurchaseReservedInstancesOutput struct {
 	Metadata *response.ResponseMetadata
 
 	ReservedInstanceId *string `type:"string"`
+
+	ReservedStorageCapacityId *string `type:"string"`
 }
 
 // String returns the string representation
@@ -316,6 +366,12 @@ func (s PurchaseReservedInstancesOutput) GoString() string {
 // SetReservedInstanceId sets the ReservedInstanceId field's value.
 func (s *PurchaseReservedInstancesOutput) SetReservedInstanceId(v string) *PurchaseReservedInstancesOutput {
 	s.ReservedInstanceId = &v
+	return s
+}
+
+// SetReservedStorageCapacityId sets the ReservedStorageCapacityId field's value.
+func (s *PurchaseReservedInstancesOutput) SetReservedStorageCapacityId(v string) *PurchaseReservedInstancesOutput {
+	s.ReservedStorageCapacityId = &v
 	return s
 }
 

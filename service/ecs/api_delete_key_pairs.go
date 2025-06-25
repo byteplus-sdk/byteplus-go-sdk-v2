@@ -144,7 +144,8 @@ type DeleteKeyPairsInput struct {
 
 	ClientToken *string `type:"string"`
 
-	KeyPairNames []*string `type:"list"`
+	// KeyPairNames is a required field
+	KeyPairNames []*string `type:"list" required:"true"`
 }
 
 // String returns the string representation
@@ -155,6 +156,19 @@ func (s DeleteKeyPairsInput) String() string {
 // GoString returns the string representation
 func (s DeleteKeyPairsInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteKeyPairsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteKeyPairsInput"}
+	if s.KeyPairNames == nil {
+		invalidParams.Add(request.NewErrParamRequired("KeyPairNames"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetClientToken sets the ClientToken field's value.

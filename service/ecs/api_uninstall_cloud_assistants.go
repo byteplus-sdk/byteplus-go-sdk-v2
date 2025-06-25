@@ -172,7 +172,8 @@ func (s *FailedInstanceForUninstallCloudAssistantsOutput) SetId(v string) *Faile
 type UninstallCloudAssistantsInput struct {
 	_ struct{} `type:"structure"`
 
-	InstanceIds []*string `type:"list"`
+	// InstanceIds is a required field
+	InstanceIds []*string `type:"list" required:"true"`
 }
 
 // String returns the string representation
@@ -183,6 +184,19 @@ func (s UninstallCloudAssistantsInput) String() string {
 // GoString returns the string representation
 func (s UninstallCloudAssistantsInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UninstallCloudAssistantsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UninstallCloudAssistantsInput"}
+	if s.InstanceIds == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceIds"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetInstanceIds sets the InstanceIds field's value.

@@ -142,7 +142,8 @@ func (c *ECS) GetConsoleScreenshotWithContext(ctx byteplus.Context, input *GetCo
 type GetConsoleScreenshotInput struct {
 	_ struct{} `type:"structure"`
 
-	InstanceId *string `type:"string"`
+	// InstanceId is a required field
+	InstanceId *string `type:"string" required:"true"`
 
 	WakeUp *bool `type:"boolean"`
 }
@@ -155,6 +156,19 @@ func (s GetConsoleScreenshotInput) String() string {
 // GoString returns the string representation
 func (s GetConsoleScreenshotInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetConsoleScreenshotInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetConsoleScreenshotInput"}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetInstanceId sets the InstanceId field's value.

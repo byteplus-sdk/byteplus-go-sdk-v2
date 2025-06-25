@@ -144,7 +144,8 @@ type RedeployDedicatedHostInput struct {
 
 	ClientToken *string `type:"string"`
 
-	DedicatedHostId *string `type:"string"`
+	// DedicatedHostId is a required field
+	DedicatedHostId *string `type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -155,6 +156,19 @@ func (s RedeployDedicatedHostInput) String() string {
 // GoString returns the string representation
 func (s RedeployDedicatedHostInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RedeployDedicatedHostInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RedeployDedicatedHostInput"}
+	if s.DedicatedHostId == nil {
+		invalidParams.Add(request.NewErrParamRequired("DedicatedHostId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetClientToken sets the ClientToken field's value.

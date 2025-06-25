@@ -142,7 +142,8 @@ func (c *ECS) DetectImageWithContext(ctx byteplus.Context, input *DetectImageInp
 type DetectImageInput struct {
 	_ struct{} `type:"structure"`
 
-	ImageId *string `type:"string"`
+	// ImageId is a required field
+	ImageId *string `type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -153,6 +154,19 @@ func (s DetectImageInput) String() string {
 // GoString returns the string representation
 func (s DetectImageInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DetectImageInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DetectImageInput"}
+	if s.ImageId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ImageId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetImageId sets the ImageId field's value.

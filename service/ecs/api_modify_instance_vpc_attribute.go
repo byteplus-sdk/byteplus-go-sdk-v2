@@ -144,13 +144,15 @@ type ModifyInstanceVpcAttributeInput struct {
 
 	ClientToken *string `type:"string"`
 
-	InstanceId *string `type:"string"`
+	// InstanceId is a required field
+	InstanceId *string `type:"string" required:"true"`
 
 	PrimaryIpAddress *string `type:"string"`
 
 	SecurityGroupIds []*string `type:"list"`
 
-	SubnetId *string `type:"string"`
+	// SubnetId is a required field
+	SubnetId *string `type:"string" required:"true"`
 
 	VpcId *string `type:"string"`
 }
@@ -163,6 +165,22 @@ func (s ModifyInstanceVpcAttributeInput) String() string {
 // GoString returns the string representation
 func (s ModifyInstanceVpcAttributeInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ModifyInstanceVpcAttributeInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ModifyInstanceVpcAttributeInput"}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+	if s.SubnetId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SubnetId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetClientToken sets the ClientToken field's value.

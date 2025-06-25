@@ -144,7 +144,8 @@ type DeleteScheduledInstanceInput struct {
 
 	ClientToken *string `type:"string"`
 
-	ScheduledInstanceId *string `type:"string"`
+	// ScheduledInstanceId is a required field
+	ScheduledInstanceId *string `type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -155,6 +156,19 @@ func (s DeleteScheduledInstanceInput) String() string {
 // GoString returns the string representation
 func (s DeleteScheduledInstanceInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteScheduledInstanceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteScheduledInstanceInput"}
+	if s.ScheduledInstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ScheduledInstanceId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetClientToken sets the ClientToken field's value.

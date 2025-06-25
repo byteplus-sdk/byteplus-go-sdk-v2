@@ -148,7 +148,8 @@ type DescribeTagsInput struct {
 
 	ResourceIds []*string `type:"list"`
 
-	ResourceType *string `type:"string"`
+	// ResourceType is a required field
+	ResourceType *string `type:"string" required:"true"`
 
 	TagFilters []*TagFilterForDescribeTagsInput `type:"list"`
 }
@@ -161,6 +162,19 @@ func (s DescribeTagsInput) String() string {
 // GoString returns the string representation
 func (s DescribeTagsInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeTagsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeTagsInput"}
+	if s.ResourceType == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceType"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetMaxResults sets the MaxResults field's value.

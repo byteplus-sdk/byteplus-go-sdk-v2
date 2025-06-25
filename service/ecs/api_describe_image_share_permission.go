@@ -164,7 +164,8 @@ func (s *AccountForDescribeImageSharePermissionOutput) SetAccountId(v string) *A
 type DescribeImageSharePermissionInput struct {
 	_ struct{} `type:"structure"`
 
-	ImageId *string `type:"string"`
+	// ImageId is a required field
+	ImageId *string `type:"string" required:"true"`
 
 	MaxResults *int32 `type:"int32"`
 
@@ -179,6 +180,19 @@ func (s DescribeImageSharePermissionInput) String() string {
 // GoString returns the string representation
 func (s DescribeImageSharePermissionInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeImageSharePermissionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeImageSharePermissionInput"}
+	if s.ImageId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ImageId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetImageId sets the ImageId field's value.

@@ -144,7 +144,8 @@ type ModifyImageSharePermissionInput struct {
 
 	AddAccounts []*string `type:"list"`
 
-	ImageId *string `type:"string"`
+	// ImageId is a required field
+	ImageId *string `type:"string" required:"true"`
 
 	RemoveAccounts []*string `type:"list"`
 }
@@ -157,6 +158,19 @@ func (s ModifyImageSharePermissionInput) String() string {
 // GoString returns the string representation
 func (s ModifyImageSharePermissionInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ModifyImageSharePermissionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ModifyImageSharePermissionInput"}
+	if s.ImageId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ImageId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetAddAccounts sets the AddAccounts field's value.

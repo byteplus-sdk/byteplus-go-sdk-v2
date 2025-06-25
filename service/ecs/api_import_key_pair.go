@@ -148,11 +148,13 @@ type ImportKeyPairInput struct {
 
 	Description *string `type:"string"`
 
-	KeyPairName *string `type:"string"`
+	// KeyPairName is a required field
+	KeyPairName *string `type:"string" required:"true"`
 
 	ProjectName *string `type:"string"`
 
-	PublicKey *string `type:"string"`
+	// PublicKey is a required field
+	PublicKey *string `type:"string" required:"true"`
 
 	Tags []*TagForImportKeyPairInput `type:"list"`
 }
@@ -170,6 +172,12 @@ func (s ImportKeyPairInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *ImportKeyPairInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ImportKeyPairInput"}
+	if s.KeyPairName == nil {
+		invalidParams.Add(request.NewErrParamRequired("KeyPairName"))
+	}
+	if s.PublicKey == nil {
+		invalidParams.Add(request.NewErrParamRequired("PublicKey"))
+	}
 	if s.Tags != nil {
 		for i, v := range s.Tags {
 			if v == nil {

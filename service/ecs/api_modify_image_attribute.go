@@ -146,7 +146,8 @@ type ModifyImageAttributeInput struct {
 
 	Description *string `type:"string"`
 
-	ImageId *string `type:"string"`
+	// ImageId is a required field
+	ImageId *string `type:"string" required:"true"`
 
 	ImageName *string `type:"string"`
 }
@@ -159,6 +160,19 @@ func (s ModifyImageAttributeInput) String() string {
 // GoString returns the string representation
 func (s ModifyImageAttributeInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ModifyImageAttributeInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ModifyImageAttributeInput"}
+	if s.ImageId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ImageId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetBootMode sets the BootMode field's value.

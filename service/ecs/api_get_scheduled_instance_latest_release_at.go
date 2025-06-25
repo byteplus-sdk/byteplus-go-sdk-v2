@@ -144,13 +144,16 @@ type GetScheduledInstanceLatestReleaseAtInput struct {
 
 	DeliveryType *string `type:"string"`
 
-	InstanceTypeId *string `type:"string"`
+	// InstanceTypeId is a required field
+	InstanceTypeId *string `type:"string" required:"true"`
 
 	StartDeliveryAt *string `type:"string"`
 
-	VolumeType *string `type:"string"`
+	// VolumeType is a required field
+	VolumeType *string `type:"string" required:"true"`
 
-	ZoneId *string `type:"string"`
+	// ZoneId is a required field
+	ZoneId *string `type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -161,6 +164,25 @@ func (s GetScheduledInstanceLatestReleaseAtInput) String() string {
 // GoString returns the string representation
 func (s GetScheduledInstanceLatestReleaseAtInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetScheduledInstanceLatestReleaseAtInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetScheduledInstanceLatestReleaseAtInput"}
+	if s.InstanceTypeId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceTypeId"))
+	}
+	if s.VolumeType == nil {
+		invalidParams.Add(request.NewErrParamRequired("VolumeType"))
+	}
+	if s.ZoneId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ZoneId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetDeliveryType sets the DeliveryType field's value.

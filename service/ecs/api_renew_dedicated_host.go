@@ -144,11 +144,14 @@ type RenewDedicatedHostInput struct {
 
 	ClientToken *string `type:"string"`
 
-	DedicatedHostId *string `type:"string"`
+	// DedicatedHostId is a required field
+	DedicatedHostId *string `type:"string" required:"true"`
 
-	Period *int32 `type:"int32"`
+	// Period is a required field
+	Period *int32 `type:"int32" required:"true"`
 
-	PeriodUnit *string `type:"string"`
+	// PeriodUnit is a required field
+	PeriodUnit *string `type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -159,6 +162,25 @@ func (s RenewDedicatedHostInput) String() string {
 // GoString returns the string representation
 func (s RenewDedicatedHostInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RenewDedicatedHostInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RenewDedicatedHostInput"}
+	if s.DedicatedHostId == nil {
+		invalidParams.Add(request.NewErrParamRequired("DedicatedHostId"))
+	}
+	if s.Period == nil {
+		invalidParams.Add(request.NewErrParamRequired("Period"))
+	}
+	if s.PeriodUnit == nil {
+		invalidParams.Add(request.NewErrParamRequired("PeriodUnit"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetClientToken sets the ClientToken field's value.

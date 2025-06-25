@@ -150,7 +150,8 @@ type ModifyDedicatedHostAttributeInput struct {
 
 	DedicatedHostClusterId *string `type:"string"`
 
-	DedicatedHostId *string `type:"string"`
+	// DedicatedHostId is a required field
+	DedicatedHostId *string `type:"string" required:"true"`
 
 	DedicatedHostName *string `type:"string"`
 
@@ -167,6 +168,19 @@ func (s ModifyDedicatedHostAttributeInput) String() string {
 // GoString returns the string representation
 func (s ModifyDedicatedHostAttributeInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ModifyDedicatedHostAttributeInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ModifyDedicatedHostAttributeInput"}
+	if s.DedicatedHostId == nil {
+		invalidParams.Add(request.NewErrParamRequired("DedicatedHostId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetAutoPlacement sets the AutoPlacement field's value.

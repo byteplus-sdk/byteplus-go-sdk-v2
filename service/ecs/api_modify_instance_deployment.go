@@ -146,9 +146,11 @@ type ModifyInstanceDeploymentInput struct {
 
 	DeploymentSetGroupNumber *int32 `type:"int32"`
 
-	DeploymentSetId *string `type:"string"`
+	// DeploymentSetId is a required field
+	DeploymentSetId *string `type:"string" required:"true"`
 
-	InstanceId *string `type:"string"`
+	// InstanceId is a required field
+	InstanceId *string `type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -159,6 +161,22 @@ func (s ModifyInstanceDeploymentInput) String() string {
 // GoString returns the string representation
 func (s ModifyInstanceDeploymentInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ModifyInstanceDeploymentInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ModifyInstanceDeploymentInput"}
+	if s.DeploymentSetId == nil {
+		invalidParams.Add(request.NewErrParamRequired("DeploymentSetId"))
+	}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetClientToken sets the ClientToken field's value.

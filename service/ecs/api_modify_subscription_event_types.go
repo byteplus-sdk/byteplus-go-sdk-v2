@@ -144,7 +144,8 @@ type ModifySubscriptionEventTypesInput struct {
 
 	EventTypes []*string `type:"list"`
 
-	SubscriptionId *string `type:"string"`
+	// SubscriptionId is a required field
+	SubscriptionId *string `type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -155,6 +156,19 @@ func (s ModifySubscriptionEventTypesInput) String() string {
 // GoString returns the string representation
 func (s ModifySubscriptionEventTypesInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ModifySubscriptionEventTypesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ModifySubscriptionEventTypesInput"}
+	if s.SubscriptionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SubscriptionId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetEventTypes sets the EventTypes field's value.

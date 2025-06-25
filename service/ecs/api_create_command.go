@@ -142,7 +142,8 @@ func (c *ECS) CreateCommandWithContext(ctx byteplus.Context, input *CreateComman
 type CreateCommandInput struct {
 	_ struct{} `type:"structure"`
 
-	CommandContent *string `type:"string"`
+	// CommandContent is a required field
+	CommandContent *string `type:"string" required:"true"`
 
 	ContentEncoding *string `type:"string"`
 
@@ -150,7 +151,8 @@ type CreateCommandInput struct {
 
 	EnableParameter *bool `type:"boolean"`
 
-	Name *string `type:"string"`
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
 
 	ParameterDefinitions []*ParameterDefinitionForCreateCommandInput `type:"list"`
 
@@ -160,7 +162,8 @@ type CreateCommandInput struct {
 
 	Timeout *int32 `type:"int32"`
 
-	Type *string `type:"string"`
+	// Type is a required field
+	Type *string `type:"string" required:"true"`
 
 	Username *string `type:"string"`
 
@@ -175,6 +178,25 @@ func (s CreateCommandInput) String() string {
 // GoString returns the string representation
 func (s CreateCommandInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateCommandInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateCommandInput"}
+	if s.CommandContent == nil {
+		invalidParams.Add(request.NewErrParamRequired("CommandContent"))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetCommandContent sets the CommandContent field's value.

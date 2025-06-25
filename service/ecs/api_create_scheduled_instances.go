@@ -150,6 +150,10 @@ type CreateScheduledInstancesInput struct {
 
 	Count *int32 `type:"int32"`
 
+	CpuMaxFrequency *float64 `type:"float"`
+
+	DeletionProtection *bool `type:"boolean"`
+
 	DeliveryType *string `type:"string"`
 
 	Description *string `type:"string"`
@@ -166,17 +170,22 @@ type CreateScheduledInstancesInput struct {
 
 	HpcClusterId *string `type:"string"`
 
-	ImageId *string `type:"string"`
+	// ImageId is a required field
+	ImageId *string `type:"string" required:"true"`
 
 	InstallRunCommandAgent *bool `type:"boolean"`
 
-	InstanceName *string `type:"string"`
+	// InstanceName is a required field
+	InstanceName *string `type:"string" required:"true"`
 
-	InstanceTypeId *string `type:"string"`
+	// InstanceTypeId is a required field
+	InstanceTypeId *string `type:"string" required:"true"`
 
 	KeepImageCredential *bool `type:"boolean"`
 
 	KeyPairName *string `type:"string"`
+
+	MinCount *int32 `type:"int32"`
 
 	NetworkInterfaces []*NetworkInterfaceForCreateScheduledInstancesInput `type:"list"`
 
@@ -186,7 +195,8 @@ type CreateScheduledInstancesInput struct {
 
 	ScheduledInstanceDescription *string `type:"string"`
 
-	ScheduledInstanceName *string `type:"string"`
+	// ScheduledInstanceName is a required field
+	ScheduledInstanceName *string `type:"string" required:"true"`
 
 	SecurityEnhancementStrategy *string `type:"string"`
 
@@ -202,7 +212,8 @@ type CreateScheduledInstancesInput struct {
 
 	Volumes []*VolumeForCreateScheduledInstancesInput `type:"list"`
 
-	ZoneId *string `type:"string"`
+	// ZoneId is a required field
+	ZoneId *string `type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -218,6 +229,21 @@ func (s CreateScheduledInstancesInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *CreateScheduledInstancesInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateScheduledInstancesInput"}
+	if s.ImageId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ImageId"))
+	}
+	if s.InstanceName == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceName"))
+	}
+	if s.InstanceTypeId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceTypeId"))
+	}
+	if s.ScheduledInstanceName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ScheduledInstanceName"))
+	}
+	if s.ZoneId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ZoneId"))
+	}
 	if s.NetworkInterfaces != nil {
 		for i, v := range s.NetworkInterfaces {
 			if v == nil {
@@ -260,6 +286,18 @@ func (s *CreateScheduledInstancesInput) SetClientToken(v string) *CreateSchedule
 // SetCount sets the Count field's value.
 func (s *CreateScheduledInstancesInput) SetCount(v int32) *CreateScheduledInstancesInput {
 	s.Count = &v
+	return s
+}
+
+// SetCpuMaxFrequency sets the CpuMaxFrequency field's value.
+func (s *CreateScheduledInstancesInput) SetCpuMaxFrequency(v float64) *CreateScheduledInstancesInput {
+	s.CpuMaxFrequency = &v
+	return s
+}
+
+// SetDeletionProtection sets the DeletionProtection field's value.
+func (s *CreateScheduledInstancesInput) SetDeletionProtection(v bool) *CreateScheduledInstancesInput {
+	s.DeletionProtection = &v
 	return s
 }
 
@@ -344,6 +382,12 @@ func (s *CreateScheduledInstancesInput) SetKeepImageCredential(v bool) *CreateSc
 // SetKeyPairName sets the KeyPairName field's value.
 func (s *CreateScheduledInstancesInput) SetKeyPairName(v string) *CreateScheduledInstancesInput {
 	s.KeyPairName = &v
+	return s
+}
+
+// SetMinCount sets the MinCount field's value.
+func (s *CreateScheduledInstancesInput) SetMinCount(v int32) *CreateScheduledInstancesInput {
+	s.MinCount = &v
 	return s
 }
 

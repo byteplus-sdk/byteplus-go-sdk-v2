@@ -148,7 +148,8 @@ type StopInstanceInput struct {
 
 	ForceStop *bool `type:"boolean"`
 
-	InstanceId *string `type:"string"`
+	// InstanceId is a required field
+	InstanceId *string `type:"string" required:"true"`
 
 	StoppedMode *string `type:"string"`
 }
@@ -161,6 +162,19 @@ func (s StopInstanceInput) String() string {
 // GoString returns the string representation
 func (s StopInstanceInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StopInstanceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StopInstanceInput"}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetClientToken sets the ClientToken field's value.

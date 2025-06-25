@@ -156,7 +156,8 @@ type ModifyInstanceChargeTypeInput struct {
 
 	InstanceChargeType *string `type:"string"`
 
-	InstanceIds []*string `type:"list"`
+	// InstanceIds is a required field
+	InstanceIds []*string `type:"list" required:"true"`
 
 	Period *int32 `type:"int32"`
 
@@ -171,6 +172,19 @@ func (s ModifyInstanceChargeTypeInput) String() string {
 // GoString returns the string representation
 func (s ModifyInstanceChargeTypeInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ModifyInstanceChargeTypeInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ModifyInstanceChargeTypeInput"}
+	if s.InstanceIds == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceIds"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetAutoPay sets the AutoPay field's value.

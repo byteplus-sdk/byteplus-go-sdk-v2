@@ -142,7 +142,8 @@ func (c *ECS) GetConsoleOutputWithContext(ctx byteplus.Context, input *GetConsol
 type GetConsoleOutputInput struct {
 	_ struct{} `type:"structure"`
 
-	InstanceId *string `type:"string"`
+	// InstanceId is a required field
+	InstanceId *string `type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -153,6 +154,19 @@ func (s GetConsoleOutputInput) String() string {
 // GoString returns the string representation
 func (s GetConsoleOutputInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetConsoleOutputInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetConsoleOutputInput"}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetInstanceId sets the InstanceId field's value.
