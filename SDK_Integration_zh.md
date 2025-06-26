@@ -117,7 +117,7 @@ AK/SK 是由 Byteplus 用户在控制台创建的一对永久访问密钥。SDK 
 
 ```go
 func main() {
-    ak, sk, region := "Your AK", "Your SK", "cn-beijing"
+    ak, sk, region := "Your AK", "Your SK", "ap-southeast-1"
     config := byteplus.NewConfig().
        WithRegion(region).
        // 1. credentials.NewStaticCredentials 是输入静态ak和sk可能泄漏会导致AK/SK泄漏，生产环境不能这样使用
@@ -143,7 +143,7 @@ STS（Security Token Service）是 Byteplus 提供的临时访问凭证机制。
 
 ```Go
 func main() {
-    ak, sk,token,region := "Your AK", "Your SK", "Your token", "cn-beijing"
+    ak, sk,token,region := "Your AK", "Your SK", "Your token", "ap-southeast-1"
     config := byteplus.NewConfig().
        WithRegion(region).
        // 1. credentials.NewStaticCredentials 是输入静态ak和sk可能泄漏会导致AK/SK泄漏，生产环境不能这样使用
@@ -169,7 +169,7 @@ func main() {
 
 ```go
 func main() {
-    ak, sk, region := "Your AK", "Your SK", "cn-beijing"
+    ak, sk, region := "Your AK", "Your SK", "ap-southeast-1"
     config := byteplus.NewConfig().
         WithRegion(region).
         WithCredentials(credentials.NewStsCredentials(credentials.StsValue{
@@ -203,11 +203,11 @@ func main() {
 
 ```go
 func main() {
-    region := "cn-beijing"
+    region := "ap-southeast-1"
     config := byteplus.NewConfig().
        WithCredentials(credentials.NewEnvCredentials()). //环境变量配置：BYTEPLUS_ACCESS_KEY_ID、BYTEPLUS_SECRET_ACCESS_KEY、BYTEPLUS_SESSION_TOKEN
        WithRegion(region).
-       WithEndpoint("<service>.<regionId>.byteplusapi.com")// 自定义Endpoint, example: ecs.cn-beijing.byteplusapi.com
+       WithEndpoint("<service>.<regionId>.byteplusapi.com")
      sess, err := session.NewSession(config)
      if err != nil {
         panic(err)
@@ -219,7 +219,7 @@ func main() {
 
 ```go
 func main() {
-    regionId := "cn-beijing"
+    regionId := "ap-southeast-1"
     config := byteplus.NewConfig().
        WithCredentials(credentials.NewEnvCredentials()). //环境变量配置：BYTEPLUS_ACCESS_KEY_ID、BYTEPLUS_SECRET_ACCESS_KEY、BYTEPLUS_SESSION_TOKEN
        WithRegion(regionId) // 自定义regionId
@@ -257,15 +257,15 @@ func main() {
 **代码示例：**
 ```go
 func main() {
-    regionId := "cn-beijing"
+    regionId := "ap-southeast-1"
     config := byteplus.NewConfig().
-        WithCredentials(credentials.NewEnvCredentials()). //环境变量配置：VOLCSTACK_ACCESS_KEY_ID、VOLCSTACK_SECRET_ACCESS_KEY、VOLCSTACK_SESSION_TOKEN
+        WithCredentials(credentials.NewEnvCredentials()). //环境变量配置：BYTEPLUS_ACCESS_KEY_ID、BYTEPLUS_SECRET_ACCESS_KEY、BYTEPLUS_SESSION_TOKEN
         WithRegion(regionId).
-        WithUseDualStack(true). // 定义是否启用双栈网络（IPv4 + IPv6）访问地址，默认false；也可以使用环境变量VOLC_ENABLE_DUALSTACK=true
+        WithUseDualStack(true). // 定义是否启用双栈网络（IPv4 + IPv6）访问地址，默认false；也可以使用环境变量BYTEPLUS_ENABLE_DUALSTACK=true
         WithBootstrapRegion(map[string]struct{}{
-           "cn-beijing-autodriving": {},
-           "cn-shanghai-autodriving": {},
-        }) // 自定义自动寻址Region；也可以使用环境变量VOLC_BOOTSTRAP_REGION_LIST_CONF	
+           "custom_example_region1": {},
+           "custom_example_region2": {},
+        }) // 自定义自动寻址Region；也可以使用环境变量BYTEPLUS_BOOTSTRAP_REGION_LIST_CONF	
     sess, err := session.NewSession(config)
     if err != nil {
         panic(err)
@@ -284,7 +284,7 @@ func main() {
 
 ```go
 func main() {
-    region := "cn-beijing"
+    region := "ap-southeast-1"
     transport := &http.Transport{
        Proxy: http.ProxyFromEnvironment,
        DialContext: (&net.Dialer{
@@ -327,7 +327,7 @@ scheme是参数DisableSSL来控的，为true表示scheme为http，为false表示
 
 ```go
 func main() {
-    region := "cn-beijing"
+    region := "ap-southeast-1"
     config := byteplus.NewConfig().
        WithRegion(region).
        WithDisableSSL(true). //true 表示scheme为http，false表示为https，默认为false
@@ -350,7 +350,7 @@ func main() {
 
 ```go
 func main() {
-    region :=  "cn-beijing"
+    region :=  "ap-southeast-1"
     transport := &http.Transport{
        Proxy: http.ProxyFromEnvironment,
        DialContext: (&net.Dialer{
@@ -392,7 +392,7 @@ func main() {
 
 ```go
 func main() {
-    region := "cn-beijing"
+    region := "ap-southeast-1"
     transport := &http.Transport{
        Proxy: http.ProxyFromEnvironment,
        DialContext: (&net.Dialer{
@@ -441,7 +441,7 @@ func main() {
 
 ```Go
 func main() {
-    region := "cn-beijing"
+    region := "ap-southeast-1"
     transport := &http.Transport{
        Proxy: http.ProxyFromEnvironment,
        DialContext: (&net.Dialer{
@@ -478,7 +478,7 @@ func main() {
 
 ```go
 func main() {
-	region :=  "cn-beijing"
+	region :=  "ap-southeast-1"
     config := byteplus.NewConfig().
        WithRegion(region).
        WithCredentials(credentials.NewEnvCredentials()) //环境变量配置：BYTEPLUS_ACCESS_KEY_ID、BYTEPLUS_SECRET_ACCESS_KEY、BYTEPLUS_SESSION_TOKEN
@@ -544,7 +544,7 @@ func main() {
 
 ```go
 func main() {  
-        region := "cn-beijing"
+        region := "ap-southeast-1"
         // Configure retry settings
         config := byteplus.NewConfig().
                 WithRegion(region).
@@ -570,7 +570,7 @@ func main() {
 
 ```go
 func main() {
-        region := "cn-beijing"
+        region := "ap-southeast-1"
         // Configure retry settings
         config := byteplus.NewConfig().
                 WithRegion(region).
@@ -593,7 +593,7 @@ func main() {
 
 ```go
 func main() {
-        region := "cn-beijing"
+        region := "ap-southeast-1"
         // Configure retry settings
         config := byteplus.NewConfig().
                 WithRegion(region).
@@ -630,13 +630,12 @@ func main() {
 
 **错误分类：**
 
-| 错误类型         | 错误描述                             | 返回错误类型                   | 公共属性                                                                         | 私有属性                                          |
-| ---------------- | ------------------------------------ | ------------------------------ |------------------------------------------------------------------------------| ------------------------------------------------- |
-| 1. 创建会话错误  | 创建会话会做一些配置的前置校验       | bytepluserr.Error或原生error | Code()：错误码;  <br>Message():错误描述信息;  <br>Error()：详细错误信息;  <br>OrigErr(): 原始错误 | 无                                                |
-| 2. 参数验证错误  | 发起请求前会对一些参数做一些校验     | request.ErrInvalidParam        | 同上                                                                           | 可以通过Field()获取验证失败的属性                 |
-| 3. 服务端错误    | 请求成功到达服务器，返回业务逻辑错误 | bytepluserr.RequestFailure   | 同上                                                                           | 可以通过RequestID()获取请求id，方便服务端问题排查 |
-| 4. 网络/超时错误 | DNS解析错误或请求超时                | bytepluserr.Error            | 同上                                                                           | 无                                                |
-| 5. 其它错误      | 未包含在前4中错误的其它错误处理      | bytepluserr.Error或原生error | 同上                                                                           | 无                                                |
+| 错误类型       | 错误描述               | 返回错误类型                   | 公共属性                                                                         | 私有属性                                          |
+|------------|--------------------| ------------------------------ |------------------------------------------------------------------------------| ------------------------------------------------- |
+| 1. 客户端错误   | 请求未到达服务端，对参数作验证    | bytepluserr.Error或原生error | Code()：错误码;  <br>Message():错误描述信息;  <br>Error()：详细错误信息;  <br>OrigErr(): 原始错误 | 无                                                |
+| 2. 服务端错误   | 请求成功到达服务器，返回业务逻辑错误 | bytepluserr.RequestFailure   | 同上                                                                           | 可以通过RequestID()获取请求id，方便服务端问题排查 |
+| 3. 网络/超时错误 | DNS解析错误或请求超时       | bytepluserr.Error            | 同上                                                                           | 无                                                |
+| 4. 其它错误    | 未包含在前4中错误的其它错误处理   | bytepluserr.Error或原生error | 同上                                                                           | 无                                                |
 
 
 **代码示例：**
@@ -658,7 +657,7 @@ import (
 )
 
 func main() {
-   region := "cn-beijing"
+   region := "ap-southeast-1"
    config := byteplus.NewConfig().
       WithRegion(region).
       WithCredentials(credentials.NewEnvCredentials())
@@ -666,9 +665,9 @@ func main() {
    var be bytepluserr.Error
    if err != nil {
       if errors.As(err, &be) {
-         fmt.Println("1. 创建session失败", be.Code(), be.Message(), be.Error())
+         fmt.Println("1. 客户端错误(创建session失败)", be.Code(), be.Message(), be.Error())
       } else {
-         fmt.Println("5. 其它错误", err.Error())
+         fmt.Println("4. 其它错误", err.Error())
       }
       panic(err)
    }
@@ -687,10 +686,10 @@ func main() {
       var errInvalidParam request.ErrInvalidParam   // 参数验证错误
       // 请求未达到服务前参数验证
       if errors.As(err, &errInvalidParam) {
-         fmt.Println("2. 参数验证错误：", errInvalidParam.Code(), errInvalidParam.Field(), errInvalidParam.Error())
+         fmt.Println("1. 客户端错误(参数验证错误)：", errInvalidParam.Code(), errInvalidParam.Field(), errInvalidParam.Error())
          // 请求到达服务端，服务端返回错误
       } else if errors.As(err, &requestFailure) {
-         fmt.Println("4. 服务端错误：", requestFailure.RequestID(), requestFailure.Code(), requestFailure.StatusCode(), requestFailure.Error())
+         fmt.Println("2. 服务端错误：", requestFailure.RequestID(), requestFailure.Code(), requestFailure.StatusCode(), requestFailure.Error())
       } else if errors.As(err, &be) {
          // 发送请求，但没有到达后端服务
          switch be.Code() {
@@ -714,10 +713,10 @@ func main() {
                }
             }
          default:
-            fmt.Println("5. 其它错误", be.Code(), be.Message(), be.Error())
+            fmt.Println("4. 其它错误", be.Code(), be.Message(), be.Error())
          }
       } else {
-         fmt.Println("5. 其它错误", err.Error())
+         fmt.Println("4. 其它错误", err.Error())
       }
 
    }
@@ -752,7 +751,7 @@ func main() {
 
 ```go
 func main() {
-    region :=  "cn-beijing"
+    region :=  "ap-southeast-1"
     config := byteplus.NewConfig().
        WithRegion(region).
        WithLogLevel(byteplus.LogDebugWithInputAndOutput). // 设置日志打印级别，不设置默认LogOff 不打印日志
@@ -782,9 +781,9 @@ func main() {
 # 指定日志Logger
 
 > - 默认  
->   volcengine/logger.go
+>   byteplus/logger.go
 
-在不指定logger的情况下默认使用的是volcengine/logger.go下的defaultLogger，核心代码如下：
+byteplus/logger.go下的defaultLogger，核心代码如下：
 
 ```go
 func NewDefaultLogger() Logger {
@@ -825,7 +824,7 @@ func (l *myLogger) Log(args ...interface{}) {
 }
 
 func main() {
-        region := "cn-beijing"
+        region := "ap-southeast-1"
         // 定义输出文件路径
         file, _ := os.Create("ecs_test.log")
         // 同时输出到控制台和文件
