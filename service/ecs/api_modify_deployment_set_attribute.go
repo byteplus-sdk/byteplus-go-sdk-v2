@@ -144,7 +144,8 @@ type ModifyDeploymentSetAttributeInput struct {
 
 	ClientToken *string `type:"string"`
 
-	DeploymentSetId *string `type:"string"`
+	// DeploymentSetId is a required field
+	DeploymentSetId *string `type:"string" required:"true"`
 
 	DeploymentSetName *string `type:"string"`
 
@@ -159,6 +160,19 @@ func (s ModifyDeploymentSetAttributeInput) String() string {
 // GoString returns the string representation
 func (s ModifyDeploymentSetAttributeInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ModifyDeploymentSetAttributeInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ModifyDeploymentSetAttributeInput"}
+	if s.DeploymentSetId == nil {
+		invalidParams.Add(request.NewErrParamRequired("DeploymentSetId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetClientToken sets the ClientToken field's value.

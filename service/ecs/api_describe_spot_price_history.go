@@ -142,7 +142,8 @@ func (c *ECS) DescribeSpotPriceHistoryWithContext(ctx byteplus.Context, input *D
 type DescribeSpotPriceHistoryInput struct {
 	_ struct{} `type:"structure"`
 
-	InstanceTypeId *string `type:"string"`
+	// InstanceTypeId is a required field
+	InstanceTypeId *string `type:"string" required:"true"`
 
 	MaxResults *int32 `type:"int32"`
 
@@ -163,6 +164,19 @@ func (s DescribeSpotPriceHistoryInput) String() string {
 // GoString returns the string representation
 func (s DescribeSpotPriceHistoryInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeSpotPriceHistoryInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeSpotPriceHistoryInput"}
+	if s.InstanceTypeId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceTypeId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetInstanceTypeId sets the InstanceTypeId field's value.

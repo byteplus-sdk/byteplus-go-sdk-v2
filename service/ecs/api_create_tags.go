@@ -148,7 +148,8 @@ type CreateTagsInput struct {
 
 	ResourceIds []*string `type:"list"`
 
-	ResourceType *string `type:"string"`
+	// ResourceType is a required field
+	ResourceType *string `type:"string" required:"true"`
 
 	Tags []*TagForCreateTagsInput `type:"list"`
 }
@@ -166,6 +167,9 @@ func (s CreateTagsInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *CreateTagsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateTagsInput"}
+	if s.ResourceType == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceType"))
+	}
 	if s.Tags != nil {
 		for i, v := range s.Tags {
 			if v == nil {

@@ -146,7 +146,8 @@ type CreateImageInput struct {
 
 	Description *string `type:"string"`
 
-	ImageName *string `type:"string"`
+	// ImageName is a required field
+	ImageName *string `type:"string" required:"true"`
 
 	InstanceId *string `type:"string"`
 
@@ -169,6 +170,19 @@ func (s CreateImageInput) String() string {
 // GoString returns the string representation
 func (s CreateImageInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateImageInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateImageInput"}
+	if s.ImageName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ImageName"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetCreateWholeImage sets the CreateWholeImage field's value.

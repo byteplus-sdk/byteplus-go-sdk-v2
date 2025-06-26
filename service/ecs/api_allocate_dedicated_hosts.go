@@ -158,11 +158,13 @@ type AllocateDedicatedHostsInput struct {
 
 	DedicatedHostClusterId *string `type:"string"`
 
-	DedicatedHostName *string `type:"string"`
+	// DedicatedHostName is a required field
+	DedicatedHostName *string `type:"string" required:"true"`
 
 	DedicatedHostRecovery *string `type:"string"`
 
-	DedicatedHostTypeId *string `type:"string"`
+	// DedicatedHostTypeId is a required field
+	DedicatedHostTypeId *string `type:"string" required:"true"`
 
 	Description *string `type:"string"`
 
@@ -172,7 +174,8 @@ type AllocateDedicatedHostsInput struct {
 
 	PeriodUnit *string `type:"string"`
 
-	ZoneId *string `type:"string"`
+	// ZoneId is a required field
+	ZoneId *string `type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -183,6 +186,25 @@ func (s AllocateDedicatedHostsInput) String() string {
 // GoString returns the string representation
 func (s AllocateDedicatedHostsInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AllocateDedicatedHostsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AllocateDedicatedHostsInput"}
+	if s.DedicatedHostName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DedicatedHostName"))
+	}
+	if s.DedicatedHostTypeId == nil {
+		invalidParams.Add(request.NewErrParamRequired("DedicatedHostTypeId"))
+	}
+	if s.ZoneId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ZoneId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetAutoPlacement sets the AutoPlacement field's value.

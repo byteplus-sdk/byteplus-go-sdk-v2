@@ -144,7 +144,8 @@ type DeleteDedicatedHostClusterInput struct {
 
 	ClientToken *string `type:"string"`
 
-	DedicatedHostClusterId *string `type:"string"`
+	// DedicatedHostClusterId is a required field
+	DedicatedHostClusterId *string `type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -155,6 +156,19 @@ func (s DeleteDedicatedHostClusterInput) String() string {
 // GoString returns the string representation
 func (s DeleteDedicatedHostClusterInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteDedicatedHostClusterInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteDedicatedHostClusterInput"}
+	if s.DedicatedHostClusterId == nil {
+		invalidParams.Add(request.NewErrParamRequired("DedicatedHostClusterId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetClientToken sets the ClientToken field's value.

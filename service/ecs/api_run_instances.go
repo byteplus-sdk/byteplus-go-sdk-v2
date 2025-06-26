@@ -141,28 +141,6 @@ func (c *ECS) RunInstancesWithContext(ctx byteplus.Context, input *RunInstancesI
 	return out, req.Send()
 }
 
-type ConvertNetworkInterfaceForRunInstancesInput struct {
-	_ struct{} `type:"structure"`
-
-	PrimaryIpAddress *string `type:"string"`
-}
-
-// String returns the string representation
-func (s ConvertNetworkInterfaceForRunInstancesInput) String() string {
-	return byteplusutil.Prettify(s)
-}
-
-// GoString returns the string representation
-func (s ConvertNetworkInterfaceForRunInstancesInput) GoString() string {
-	return s.String()
-}
-
-// SetPrimaryIpAddress sets the PrimaryIpAddress field's value.
-func (s *ConvertNetworkInterfaceForRunInstancesInput) SetPrimaryIpAddress(v string) *ConvertNetworkInterfaceForRunInstancesInput {
-	s.PrimaryIpAddress = &v
-	return s
-}
-
 type EipAddressForRunInstancesInput struct {
 	_ struct{} `type:"structure"`
 
@@ -354,6 +332,8 @@ func (s *PlacementForRunInstancesInput) SetTenancy(v string) *PlacementForRunIns
 type RunInstancesInput struct {
 	_ struct{} `type:"structure"`
 
+	AffinityGroupSize *int32 `type:"int32"`
+
 	AutoRenew *bool `type:"boolean"`
 
 	AutoRenewPeriod *int32 `type:"int32"`
@@ -362,7 +342,11 @@ type RunInstancesInput struct {
 
 	Count *int32 `type:"int32"`
 
+	CpuMaxFrequency *float64 `type:"float"`
+
 	CreditSpecification *string `type:"string"`
+
+	DeletionProtection *bool `type:"boolean"`
 
 	DeploymentSetGroupNumber *int32 `type:"int32"`
 
@@ -380,7 +364,8 @@ type RunInstancesInput struct {
 
 	HpcClusterId *string `type:"string"`
 
-	ImageId *string `type:"string"`
+	// ImageId is a required field
+	ImageId *string `type:"string" required:"true"`
 
 	ImageReleaseVersion *string `type:"string"`
 
@@ -388,7 +373,8 @@ type RunInstancesInput struct {
 
 	InstanceChargeType *string `type:"string"`
 
-	InstanceName *string `type:"string"`
+	// InstanceName is a required field
+	InstanceName *string `type:"string" required:"true"`
 
 	InstanceType *string `type:"string"`
 
@@ -399,8 +385,6 @@ type RunInstancesInput struct {
 	KeyPairName *string `type:"string"`
 
 	MinCount *int32 `type:"int32"`
-
-	NetworkInterface []*ConvertNetworkInterfaceForRunInstancesInput `type:"list"`
 
 	NetworkInterfaces []*NetworkInterfaceForRunInstancesInput `type:"list"`
 
@@ -430,7 +414,8 @@ type RunInstancesInput struct {
 
 	Volumes []*VolumeForRunInstancesInput `type:"list"`
 
-	ZoneId *string `type:"string"`
+	// ZoneId is a required field
+	ZoneId *string `type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -446,6 +431,15 @@ func (s RunInstancesInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *RunInstancesInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "RunInstancesInput"}
+	if s.ImageId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ImageId"))
+	}
+	if s.InstanceName == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceName"))
+	}
+	if s.ZoneId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ZoneId"))
+	}
 	if s.NetworkInterfaces != nil {
 		for i, v := range s.NetworkInterfaces {
 			if v == nil {
@@ -473,6 +467,12 @@ func (s *RunInstancesInput) Validate() error {
 	return nil
 }
 
+// SetAffinityGroupSize sets the AffinityGroupSize field's value.
+func (s *RunInstancesInput) SetAffinityGroupSize(v int32) *RunInstancesInput {
+	s.AffinityGroupSize = &v
+	return s
+}
+
 // SetAutoRenew sets the AutoRenew field's value.
 func (s *RunInstancesInput) SetAutoRenew(v bool) *RunInstancesInput {
 	s.AutoRenew = &v
@@ -497,9 +497,21 @@ func (s *RunInstancesInput) SetCount(v int32) *RunInstancesInput {
 	return s
 }
 
+// SetCpuMaxFrequency sets the CpuMaxFrequency field's value.
+func (s *RunInstancesInput) SetCpuMaxFrequency(v float64) *RunInstancesInput {
+	s.CpuMaxFrequency = &v
+	return s
+}
+
 // SetCreditSpecification sets the CreditSpecification field's value.
 func (s *RunInstancesInput) SetCreditSpecification(v string) *RunInstancesInput {
 	s.CreditSpecification = &v
+	return s
+}
+
+// SetDeletionProtection sets the DeletionProtection field's value.
+func (s *RunInstancesInput) SetDeletionProtection(v bool) *RunInstancesInput {
+	s.DeletionProtection = &v
 	return s
 }
 
@@ -608,12 +620,6 @@ func (s *RunInstancesInput) SetKeyPairName(v string) *RunInstancesInput {
 // SetMinCount sets the MinCount field's value.
 func (s *RunInstancesInput) SetMinCount(v int32) *RunInstancesInput {
 	s.MinCount = &v
-	return s
-}
-
-// SetNetworkInterface sets the NetworkInterface field's value.
-func (s *RunInstancesInput) SetNetworkInterface(v []*ConvertNetworkInterfaceForRunInstancesInput) *RunInstancesInput {
-	s.NetworkInterface = v
 	return s
 }
 

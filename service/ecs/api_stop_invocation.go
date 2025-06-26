@@ -142,7 +142,8 @@ func (c *ECS) StopInvocationWithContext(ctx byteplus.Context, input *StopInvocat
 type StopInvocationInput struct {
 	_ struct{} `type:"structure"`
 
-	InvocationId *string `type:"string"`
+	// InvocationId is a required field
+	InvocationId *string `type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -153,6 +154,19 @@ func (s StopInvocationInput) String() string {
 // GoString returns the string representation
 func (s StopInvocationInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StopInvocationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StopInvocationInput"}
+	if s.InvocationId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InvocationId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetInvocationId sets the InvocationId field's value.

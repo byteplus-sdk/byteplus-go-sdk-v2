@@ -148,11 +148,13 @@ type ReplaceSystemVolumeInput struct {
 
 	DryRun *bool `type:"boolean"`
 
-	ImageId *string `type:"string"`
+	// ImageId is a required field
+	ImageId *string `type:"string" required:"true"`
 
 	ImageReleaseVersion *string `type:"string"`
 
-	InstanceId *string `type:"string"`
+	// InstanceId is a required field
+	InstanceId *string `type:"string" required:"true"`
 
 	KeepImageCredential *bool `type:"boolean"`
 
@@ -173,6 +175,22 @@ func (s ReplaceSystemVolumeInput) String() string {
 // GoString returns the string representation
 func (s ReplaceSystemVolumeInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ReplaceSystemVolumeInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ReplaceSystemVolumeInput"}
+	if s.ImageId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ImageId"))
+	}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetClientToken sets the ClientToken field's value.

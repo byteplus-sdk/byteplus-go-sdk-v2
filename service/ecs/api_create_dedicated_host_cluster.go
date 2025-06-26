@@ -144,11 +144,13 @@ type CreateDedicatedHostClusterInput struct {
 
 	ClientToken *string `type:"string"`
 
-	DedicatedHostClusterName *string `type:"string"`
+	// DedicatedHostClusterName is a required field
+	DedicatedHostClusterName *string `type:"string" required:"true"`
 
 	Description *string `type:"string"`
 
-	ZoneId *string `type:"string"`
+	// ZoneId is a required field
+	ZoneId *string `type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -159,6 +161,22 @@ func (s CreateDedicatedHostClusterInput) String() string {
 // GoString returns the string representation
 func (s CreateDedicatedHostClusterInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateDedicatedHostClusterInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateDedicatedHostClusterInput"}
+	if s.DedicatedHostClusterName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DedicatedHostClusterName"))
+	}
+	if s.ZoneId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ZoneId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetClientToken sets the ClientToken field's value.

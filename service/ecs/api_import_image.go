@@ -139,6 +139,28 @@ func (c *ECS) ImportImageWithContext(ctx byteplus.Context, input *ImportImageInp
 	return out, req.Send()
 }
 
+type ImportDataVolumeForImportImageInput struct {
+	_ struct{} `type:"structure"`
+
+	DataVolumeUrl *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ImportDataVolumeForImportImageInput) String() string {
+	return byteplusutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ImportDataVolumeForImportImageInput) GoString() string {
+	return s.String()
+}
+
+// SetDataVolumeUrl sets the DataVolumeUrl field's value.
+func (s *ImportDataVolumeForImportImageInput) SetDataVolumeUrl(v string) *ImportDataVolumeForImportImageInput {
+	s.DataVolumeUrl = &v
+	return s
+}
+
 type ImportImageInput struct {
 	_ struct{} `type:"structure"`
 
@@ -148,7 +170,10 @@ type ImportImageInput struct {
 
 	Description *string `type:"string"`
 
-	ImageName *string `type:"string"`
+	// ImageName is a required field
+	ImageName *string `type:"string" required:"true"`
+
+	ImportDataVolumes []*ImportDataVolumeForImportImageInput `type:"list"`
 
 	LicenseType *string `type:"string"`
 
@@ -156,7 +181,8 @@ type ImportImageInput struct {
 
 	OsType *string `type:"string"`
 
-	Platform *string `type:"string"`
+	// Platform is a required field
+	Platform *string `type:"string" required:"true"`
 
 	PlatformVersion *string `type:"string"`
 
@@ -164,7 +190,8 @@ type ImportImageInput struct {
 
 	Tags []*TagForImportImageInput `type:"list"`
 
-	Url *string `type:"string"`
+	// Url is a required field
+	Url *string `type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -175,6 +202,25 @@ func (s ImportImageInput) String() string {
 // GoString returns the string representation
 func (s ImportImageInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ImportImageInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ImportImageInput"}
+	if s.ImageName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ImageName"))
+	}
+	if s.Platform == nil {
+		invalidParams.Add(request.NewErrParamRequired("Platform"))
+	}
+	if s.Url == nil {
+		invalidParams.Add(request.NewErrParamRequired("Url"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetArchitecture sets the Architecture field's value.
@@ -198,6 +244,12 @@ func (s *ImportImageInput) SetDescription(v string) *ImportImageInput {
 // SetImageName sets the ImageName field's value.
 func (s *ImportImageInput) SetImageName(v string) *ImportImageInput {
 	s.ImageName = &v
+	return s
+}
+
+// SetImportDataVolumes sets the ImportDataVolumes field's value.
+func (s *ImportImageInput) SetImportDataVolumes(v []*ImportDataVolumeForImportImageInput) *ImportImageInput {
+	s.ImportDataVolumes = v
 	return s
 }
 

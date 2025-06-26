@@ -146,7 +146,8 @@ type ModifyInstanceSpecInput struct {
 
 	DryRun *bool `type:"boolean"`
 
-	InstanceId *string `type:"string"`
+	// InstanceId is a required field
+	InstanceId *string `type:"string" required:"true"`
 
 	InstanceType *string `type:"string"`
 
@@ -161,6 +162,19 @@ func (s ModifyInstanceSpecInput) String() string {
 // GoString returns the string representation
 func (s ModifyInstanceSpecInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ModifyInstanceSpecInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ModifyInstanceSpecInput"}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetClientToken sets the ClientToken field's value.

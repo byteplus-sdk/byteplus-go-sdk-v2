@@ -234,7 +234,8 @@ type ModifyReservedInstancesInput struct {
 
 	RegionId *string `type:"string"`
 
-	ReservedInstanceIds []*string `type:"list"`
+	// ReservedInstanceIds is a required field
+	ReservedInstanceIds []*string `type:"list" required:"true"`
 
 	Tags []*TagForModifyReservedInstancesInput `type:"list"`
 }
@@ -252,6 +253,9 @@ func (s ModifyReservedInstancesInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *ModifyReservedInstancesInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ModifyReservedInstancesInput"}
+	if s.ReservedInstanceIds == nil {
+		invalidParams.Add(request.NewErrParamRequired("ReservedInstanceIds"))
+	}
 	if s.Configurations != nil {
 		for i, v := range s.Configurations {
 			if v == nil {

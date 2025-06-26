@@ -142,7 +142,8 @@ func (c *ECS) DescribeInstanceECSTerminalUrlWithContext(ctx byteplus.Context, in
 type DescribeInstanceECSTerminalUrlInput struct {
 	_ struct{} `type:"structure"`
 
-	InstanceId *string `type:"string"`
+	// InstanceId is a required field
+	InstanceId *string `type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -153,6 +154,19 @@ func (s DescribeInstanceECSTerminalUrlInput) String() string {
 // GoString returns the string representation
 func (s DescribeInstanceECSTerminalUrlInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeInstanceECSTerminalUrlInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeInstanceECSTerminalUrlInput"}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetInstanceId sets the InstanceId field's value.

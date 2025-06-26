@@ -142,11 +142,14 @@ func (c *ECS) ExportImageWithContext(ctx byteplus.Context, input *ExportImageInp
 type ExportImageInput struct {
 	_ struct{} `type:"structure"`
 
-	ImageId *string `type:"string"`
+	// ImageId is a required field
+	ImageId *string `type:"string" required:"true"`
 
-	TOSBucket *string `type:"string"`
+	// TOSBucket is a required field
+	TOSBucket *string `type:"string" required:"true"`
 
-	TOSPrefix *string `type:"string"`
+	// TOSPrefix is a required field
+	TOSPrefix *string `type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -157,6 +160,25 @@ func (s ExportImageInput) String() string {
 // GoString returns the string representation
 func (s ExportImageInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ExportImageInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ExportImageInput"}
+	if s.ImageId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ImageId"))
+	}
+	if s.TOSBucket == nil {
+		invalidParams.Add(request.NewErrParamRequired("TOSBucket"))
+	}
+	if s.TOSPrefix == nil {
+		invalidParams.Add(request.NewErrParamRequired("TOSPrefix"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetImageId sets the ImageId field's value.

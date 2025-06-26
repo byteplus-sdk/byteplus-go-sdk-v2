@@ -142,7 +142,8 @@ func (c *ECS) DeleteInvocationWithContext(ctx byteplus.Context, input *DeleteInv
 type DeleteInvocationInput struct {
 	_ struct{} `type:"structure"`
 
-	InvocationId *string `type:"string"`
+	// InvocationId is a required field
+	InvocationId *string `type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -153,6 +154,19 @@ func (s DeleteInvocationInput) String() string {
 // GoString returns the string representation
 func (s DeleteInvocationInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteInvocationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteInvocationInput"}
+	if s.InvocationId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InvocationId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetInvocationId sets the InvocationId field's value.

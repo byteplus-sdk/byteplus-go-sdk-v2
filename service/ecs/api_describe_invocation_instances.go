@@ -144,7 +144,8 @@ type DescribeInvocationInstancesInput struct {
 
 	InstanceId *string `type:"string"`
 
-	InvocationId *string `type:"string"`
+	// InvocationId is a required field
+	InvocationId *string `type:"string" required:"true"`
 
 	PageNumber *int32 `type:"int32"`
 
@@ -159,6 +160,19 @@ func (s DescribeInvocationInstancesInput) String() string {
 // GoString returns the string representation
 func (s DescribeInvocationInstancesInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeInvocationInstancesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeInvocationInstancesInput"}
+	if s.InvocationId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InvocationId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetInstanceId sets the InstanceId field's value.

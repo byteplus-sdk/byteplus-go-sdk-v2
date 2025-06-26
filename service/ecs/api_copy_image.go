@@ -146,11 +146,14 @@ type CopyImageInput struct {
 
 	Description *string `type:"string"`
 
-	DestinationRegion *string `type:"string"`
+	// DestinationRegion is a required field
+	DestinationRegion *string `type:"string" required:"true"`
 
-	ImageId *string `type:"string"`
+	// ImageId is a required field
+	ImageId *string `type:"string" required:"true"`
 
-	ImageName *string `type:"string"`
+	// ImageName is a required field
+	ImageName *string `type:"string" required:"true"`
 
 	ProjectName *string `type:"string"`
 }
@@ -163,6 +166,25 @@ func (s CopyImageInput) String() string {
 // GoString returns the string representation
 func (s CopyImageInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CopyImageInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CopyImageInput"}
+	if s.DestinationRegion == nil {
+		invalidParams.Add(request.NewErrParamRequired("DestinationRegion"))
+	}
+	if s.ImageId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ImageId"))
+	}
+	if s.ImageName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ImageName"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetCopyImageTags sets the CopyImageTags field's value.

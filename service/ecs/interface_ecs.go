@@ -86,6 +86,14 @@ type ECSAPI interface {
 	CreateDeploymentSetWithContext(byteplus.Context, *CreateDeploymentSetInput, ...request.Option) (*CreateDeploymentSetOutput, error)
 	CreateDeploymentSetRequest(*CreateDeploymentSetInput) (*request.Request, *CreateDeploymentSetOutput)
 
+	CreateHpcClusterCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateHpcClusterCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateHpcClusterCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateHpcCluster(*CreateHpcClusterInput) (*CreateHpcClusterOutput, error)
+	CreateHpcClusterWithContext(byteplus.Context, *CreateHpcClusterInput, ...request.Option) (*CreateHpcClusterOutput, error)
+	CreateHpcClusterRequest(*CreateHpcClusterInput) (*request.Request, *CreateHpcClusterOutput)
+
 	CreateImageCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	CreateImageCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	CreateImageCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -149,6 +157,14 @@ type ECSAPI interface {
 	DeleteDeploymentSet(*DeleteDeploymentSetInput) (*DeleteDeploymentSetOutput, error)
 	DeleteDeploymentSetWithContext(byteplus.Context, *DeleteDeploymentSetInput, ...request.Option) (*DeleteDeploymentSetOutput, error)
 	DeleteDeploymentSetRequest(*DeleteDeploymentSetInput) (*request.Request, *DeleteDeploymentSetOutput)
+
+	DeleteHpcClusterCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteHpcClusterCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteHpcClusterCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteHpcCluster(*DeleteHpcClusterInput) (*DeleteHpcClusterOutput, error)
+	DeleteHpcClusterWithContext(byteplus.Context, *DeleteHpcClusterInput, ...request.Option) (*DeleteHpcClusterOutput, error)
+	DeleteHpcClusterRequest(*DeleteHpcClusterInput) (*request.Request, *DeleteHpcClusterOutput)
 
 	DeleteImagesCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DeleteImagesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -277,6 +293,14 @@ type ECSAPI interface {
 	DescribeEventTypes(*DescribeEventTypesInput) (*DescribeEventTypesOutput, error)
 	DescribeEventTypesWithContext(byteplus.Context, *DescribeEventTypesInput, ...request.Option) (*DescribeEventTypesOutput, error)
 	DescribeEventTypesRequest(*DescribeEventTypesInput) (*request.Request, *DescribeEventTypesOutput)
+
+	DescribeHpcClustersCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeHpcClustersCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeHpcClustersCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeHpcClusters(*DescribeHpcClustersInput) (*DescribeHpcClustersOutput, error)
+	DescribeHpcClustersWithContext(byteplus.Context, *DescribeHpcClustersInput, ...request.Option) (*DescribeHpcClustersOutput, error)
+	DescribeHpcClustersRequest(*DescribeHpcClustersInput) (*request.Request, *DescribeHpcClustersOutput)
 
 	DescribeImageSharePermissionCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DescribeImageSharePermissionCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -733,6 +757,14 @@ type ECSAPI interface {
 	RenewInstance(*RenewInstanceInput) (*RenewInstanceOutput, error)
 	RenewInstanceWithContext(byteplus.Context, *RenewInstanceInput, ...request.Option) (*RenewInstanceOutput, error)
 	RenewInstanceRequest(*RenewInstanceInput) (*request.Request, *RenewInstanceOutput)
+
+	RepairImageCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	RepairImageCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	RepairImageCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	RepairImage(*RepairImageInput) (*RepairImageOutput, error)
+	RepairImageWithContext(byteplus.Context, *RepairImageInput, ...request.Option) (*RepairImageOutput, error)
+	RepairImageRequest(*RepairImageInput) (*request.Request, *RepairImageOutput)
 
 	ReplaceSystemVolumeCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ReplaceSystemVolumeCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)

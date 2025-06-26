@@ -142,9 +142,11 @@ func (c *ECS) CreateSubscriptionWithContext(ctx byteplus.Context, input *CreateS
 type CreateSubscriptionInput struct {
 	_ struct{} `type:"structure"`
 
-	EventTypes []*string `type:"list"`
+	// EventTypes is a required field
+	EventTypes []*string `type:"list" required:"true"`
 
-	Type *string `type:"string"`
+	// Type is a required field
+	Type *string `type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -155,6 +157,22 @@ func (s CreateSubscriptionInput) String() string {
 // GoString returns the string representation
 func (s CreateSubscriptionInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateSubscriptionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateSubscriptionInput"}
+	if s.EventTypes == nil {
+		invalidParams.Add(request.NewErrParamRequired("EventTypes"))
+	}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetEventTypes sets the EventTypes field's value.

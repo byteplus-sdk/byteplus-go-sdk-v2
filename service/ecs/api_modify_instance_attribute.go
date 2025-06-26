@@ -144,11 +144,14 @@ type ModifyInstanceAttributeInput struct {
 
 	ClientToken *string `type:"string"`
 
+	DeletionProtection *bool `type:"boolean"`
+
 	Description *string `type:"string"`
 
 	Hostname *string `type:"string"`
 
-	InstanceId *string `type:"string"`
+	// InstanceId is a required field
+	InstanceId *string `type:"string" required:"true"`
 
 	InstanceName *string `type:"string"`
 
@@ -167,9 +170,28 @@ func (s ModifyInstanceAttributeInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ModifyInstanceAttributeInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ModifyInstanceAttributeInput"}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // SetClientToken sets the ClientToken field's value.
 func (s *ModifyInstanceAttributeInput) SetClientToken(v string) *ModifyInstanceAttributeInput {
 	s.ClientToken = &v
+	return s
+}
+
+// SetDeletionProtection sets the DeletionProtection field's value.
+func (s *ModifyInstanceAttributeInput) SetDeletionProtection(v bool) *ModifyInstanceAttributeInput {
+	s.DeletionProtection = &v
 	return s
 }
 

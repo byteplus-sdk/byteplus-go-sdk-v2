@@ -142,15 +142,18 @@ func (c *ECS) InvokeCommandWithContext(ctx byteplus.Context, input *InvokeComman
 type InvokeCommandInput struct {
 	_ struct{} `type:"structure"`
 
-	CommandId *string `type:"string"`
+	// CommandId is a required field
+	CommandId *string `type:"string" required:"true"`
 
 	Frequency *string `type:"string"`
 
-	InstanceIds []*string `type:"list"`
+	// InstanceIds is a required field
+	InstanceIds []*string `type:"list" required:"true"`
 
 	InvocationDescription *string `type:"string"`
 
-	InvocationName *string `type:"string"`
+	// InvocationName is a required field
+	InvocationName *string `type:"string" required:"true"`
 
 	LaunchTime *string `type:"string"`
 
@@ -168,6 +171,8 @@ type InvokeCommandInput struct {
 
 	Username *string `type:"string"`
 
+	WindowsPassword *string `type:"string"`
+
 	WorkingDir *string `type:"string"`
 }
 
@@ -179,6 +184,25 @@ func (s InvokeCommandInput) String() string {
 // GoString returns the string representation
 func (s InvokeCommandInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *InvokeCommandInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "InvokeCommandInput"}
+	if s.CommandId == nil {
+		invalidParams.Add(request.NewErrParamRequired("CommandId"))
+	}
+	if s.InstanceIds == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceIds"))
+	}
+	if s.InvocationName == nil {
+		invalidParams.Add(request.NewErrParamRequired("InvocationName"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetCommandId sets the CommandId field's value.
@@ -256,6 +280,12 @@ func (s *InvokeCommandInput) SetTimeout(v int32) *InvokeCommandInput {
 // SetUsername sets the Username field's value.
 func (s *InvokeCommandInput) SetUsername(v string) *InvokeCommandInput {
 	s.Username = &v
+	return s
+}
+
+// SetWindowsPassword sets the WindowsPassword field's value.
+func (s *InvokeCommandInput) SetWindowsPassword(v string) *InvokeCommandInput {
+	s.WindowsPassword = &v
 	return s
 }
 

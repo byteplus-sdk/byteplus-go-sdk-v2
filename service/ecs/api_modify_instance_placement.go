@@ -150,7 +150,8 @@ type ModifyInstancePlacementInput struct {
 
 	DryRun *bool `type:"boolean"`
 
-	InstanceId *string `type:"string"`
+	// InstanceId is a required field
+	InstanceId *string `type:"string" required:"true"`
 
 	InstanceTypeId *string `type:"string"`
 
@@ -167,6 +168,19 @@ func (s ModifyInstancePlacementInput) String() string {
 // GoString returns the string representation
 func (s ModifyInstancePlacementInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ModifyInstancePlacementInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ModifyInstancePlacementInput"}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetAffinity sets the Affinity field's value.

@@ -144,7 +144,8 @@ type ModifyKeyPairAttributeInput struct {
 
 	ClientToken *string `type:"string"`
 
-	Description *string `type:"string"`
+	// Description is a required field
+	Description *string `type:"string" required:"true"`
 
 	KeyPairId *string `type:"string"`
 
@@ -159,6 +160,19 @@ func (s ModifyKeyPairAttributeInput) String() string {
 // GoString returns the string representation
 func (s ModifyKeyPairAttributeInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ModifyKeyPairAttributeInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ModifyKeyPairAttributeInput"}
+	if s.Description == nil {
+		invalidParams.Add(request.NewErrParamRequired("Description"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetClientToken sets the ClientToken field's value.

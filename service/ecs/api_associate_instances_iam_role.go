@@ -144,9 +144,11 @@ type AssociateInstancesIamRoleInput struct {
 
 	ClientToken *string `type:"string"`
 
-	IamRoleName *string `type:"string"`
+	// IamRoleName is a required field
+	IamRoleName *string `type:"string" required:"true"`
 
-	InstanceIds []*string `type:"list"`
+	// InstanceIds is a required field
+	InstanceIds []*string `type:"list" required:"true"`
 }
 
 // String returns the string representation
@@ -157,6 +159,22 @@ func (s AssociateInstancesIamRoleInput) String() string {
 // GoString returns the string representation
 func (s AssociateInstancesIamRoleInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AssociateInstancesIamRoleInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AssociateInstancesIamRoleInput"}
+	if s.IamRoleName == nil {
+		invalidParams.Add(request.NewErrParamRequired("IamRoleName"))
+	}
+	if s.InstanceIds == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceIds"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetClientToken sets the ClientToken field's value.
