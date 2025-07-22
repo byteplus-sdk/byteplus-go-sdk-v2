@@ -2,49 +2,45 @@ English | [简体中文](./SDK_Integration_zh.md)
 
 # Table of Contents
 
-* [Integrate the SDK](#integrate-the-sdk)
-* [Environment Requirements](#environment-requirements)
-* [Securely Configure Credentials](#securely-configure-credentials)
-
-  * [Environment Variables](#environment-variables)
-
-    * [Linux](#linux)
-    * [Windows](#windows)
-
-      * [Graphical Interface](#graphical-interface)
-      * [Command Line](#command-line)
-* [Credentials](#credentials)
-
-  * [AK / SK](#aksk)
-  * [STS Token](#sts-token)
-  * [AssumeRole](#assumerole)
-* [Endpoint Configuration](#endpoint-configuration)
-
-  * [Custom Endpoint](#custom-endpoint)
-  * [Custom RegionId](#custom-regionid)
-  * [Automatic Endpoint Resolution](#automatic-endpoint-resolution)
-
-    * [Default Resolution Logic](#default-endpoint-resolution)
-* [HTTP Connection-Pool Settings](#http-connection-pool-settings)
-* [HTTPS Request Settings](#https-request-settings)
-
-  * [Specify the Scheme](#specify-the-scheme)
-  * [Skip SSL Verification](#skip-ssl-verification)
-  * [Specify the TLS Version](#specify-the-tls-version)
-* [Timeouts](#timeouts)
-
-  * [Global Timeouts (Client Level)](#global-timeouts-client-level)
-  * [Per-API Timeout](#per-api-timeout)
-* [Retry Mechanism](#retry-mechanism)
-
-  * [Enable Retries](#enable-retries)
-  * [Retry Attempts](#retry-attempts)
-  * [Custom Retry Error Codes](#custom-retry-error-codes)
-* [Error Handling](#error-handling)
-* [Debugging](#debugging)
-* [Custom Logger](#custom-logger)
-
-  * [Implementing Your Own Logger](#implementing-your-own-logger)
+- [Table of Contents](#table-of-contents)
+- [Integrate the SDK](#integrate-the-sdk)
+- [Environment Requirements](#environment-requirements)
+- [Securely Configure Credentials](#securely-configure-credentials)
+  - [Environment Variables](#environment-variables)
+    - [Linux](#linux)
+    - [Windows](#windows)
+      - [Graphical Interface](#graphical-interface)
+      - [Command Line](#command-line)
+- [Credentials](#credentials)
+  - [AK/SK](#aksk)
+  - [STS Token](#sts-token)
+  - [AssumeRole](#assumerole)
+- [Endpoint Configuration](#endpoint-configuration)
+  - [Custom Endpoint](#custom-endpoint)
+  - [Custom RegionId](#custom-regionid)
+  - [Automatic Endpoint Resolution](#automatic-endpoint-resolution)
+    - [Default Endpoint Resolution](#default-endpoint-resolution)
+- [HTTP Connection-Pool Settings](#http-connection-pool-settings)
+- [HTTPS Request Settings](#https-request-settings)
+  - [Specify the Scheme](#specify-the-scheme)
+  - [Skip SSL Verification](#skip-ssl-verification)
+  - [Specify the TLS Version](#specify-the-tls-version)
+- [Http(s) Proxy Configuration](#https-proxy-configuration)
+  - [Set Http(s) Proxy](#set-https-proxy)
+  - [Set No Proxy](#set-no-proxy)
+  - [Notice](#notice)
+- [Timeouts](#timeouts)
+  - [Global Timeouts (Client Level)](#global-timeouts-client-level)
+  - [Per-API Timeout](#per-api-timeout)
+- [Retry Mechanism](#retry-mechanism)
+  - [Enable Retries](#enable-retries)
+  - [Retry Attempts](#retry-attempts)
+  - [Custom Retry Error Codes](#custom-retry-error-codes)
+- [Error Handling](#error-handling)
+- [Debugging](#debugging)
+- [Custom Logger](#custom-logger)
+  - [Default Logger](#default-logger)
+  - [Implementing Your Own Logger](#implementing-your-own-logger)
 
 ---
 
@@ -398,6 +394,44 @@ tr := &http.Transport{
 ```
 
 ---
+
+
+# Http(s) Proxy Configuration
+
+> - **default** 
+>   no proxy
+
+## Set Http(s) Proxy
+
+```go
+var ak, sk, region string
+config = byteplus.NewConfig().
+	WithCredentials(credentials.NewStaticCredentials(ak, sk, "")).
+	WithRegion(region).WithHTTPProxy("http://your_proxy:8080").WithHTTPSProxy("http://your_proxy:8080")
+
+sess, _ = session.NewSession(config)
+client = vpc.New(sess)
+```
+
+## Set No Proxy
+
+```go
+var ak, sk, region string
+config = byteplus.NewConfig().
+	WithCredentials(credentials.NewStaticCredentials(ak, sk, "")).
+	WithRegion(region).WithHTTPProxy("http://your_proxy:8080").WithHTTPSProxy("http://your_proxy:8080").WithNoProxy("host1_without_proxy,host2_without_proxy")
+
+sess, _ = session.NewSession(config)
+client = vpc.New(sess)
+```
+
+## Notice
+
+You can set environment variables below:
+
+http_proxy/HTTP_PROXY, https_proxy/HTTPS_PROXY, no_proxy/NO_PROXY
+
+Priority: Code > Environment variables
 
 # Timeouts
 
