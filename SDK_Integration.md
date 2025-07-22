@@ -27,7 +27,6 @@ English | [简体中文](./SDK_Integration_zh.md)
   - [Specify the TLS Version](#specify-the-tls-version)
 - [Http(s) Proxy Configuration](#https-proxy-configuration)
   - [Set Http(s) Proxy](#set-https-proxy)
-  - [Set No Proxy](#set-no-proxy)
   - [Notice](#notice)
 - [Timeouts](#timeouts)
   - [Global Timeouts (Client Level)](#global-timeouts-client-level)
@@ -413,23 +412,11 @@ sess, _ = session.NewSession(config)
 client = vpc.New(sess)
 ```
 
-## Set No Proxy
-
-```go
-var ak, sk, region string
-config = byteplus.NewConfig().
-	WithCredentials(credentials.NewStaticCredentials(ak, sk, "")).
-	WithRegion(region).WithHTTPProxy("http://your_proxy:8080").WithHTTPSProxy("http://your_proxy:8080").WithNoProxy("host1_without_proxy,host2_without_proxy")
-
-sess, _ = session.NewSession(config)
-client = vpc.New(sess)
-```
-
 ## Notice
 
 You can set environment variables below:
 
-http_proxy/HTTP_PROXY, https_proxy/HTTPS_PROXY, no_proxy/NO_PROXY
+http_proxy/HTTP_PROXY, https_proxy/HTTPS_PROXY
 
 Priority: Code > Environment variables
 
