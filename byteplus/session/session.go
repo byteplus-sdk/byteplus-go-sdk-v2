@@ -10,7 +10,9 @@ import (
 	"io/ioutil"
 	"net"
 	"net/http"
+	"net/url"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
@@ -606,6 +608,35 @@ func (s *Session) clientConfigWithErr(serviceName string, cfgs ...*byteplus.Conf
 		resolved.SigningRegion = region
 	}
 
+	var proxy *url.URL
+	var err error
+	if s.Config.DisableSSL != nil && *s.Config.DisableSSL {
+		if s.Config.HTTPProxy != nil && *s.Config.HTTPProxy != "" {
+			proxy, err = url.Parse(*s.Config.HTTPProxy)
+		} else if r := os.Getenv("HTTP_PROXY"); r != "" {
+			proxy, err = url.Parse(r)
+		} else if r = os.Getenv("http_proxy"); r != "" {
+			proxy, err = url.Parse(r)
+		}
+	} else {
+		if s.Config.HTTPSProxy != nil && *s.Config.HTTPSProxy != "" {
+			proxy, err = url.Parse(*s.Config.HTTPSProxy)
+		} else if r := os.Getenv("HTTPS_PROXY"); r != "" {
+			proxy, err = url.Parse(r)
+		} else if r = os.Getenv("https_proxy"); r != "" {
+			proxy, err = url.Parse(r)
+		}
+	}
+	if err != nil {
+		return client.Config{}, err
+	}
+	if s.Config.HTTPClient.Transport == nil {
+		s.Config.HTTPClient.Transport = http.DefaultTransport
+	}
+	if t, ok := s.Config.HTTPClient.Transport.(*http.Transport); ok {
+		t.Proxy = http.ProxyURL(proxy)
+	}
+
 	return client.Config{
 		Config:             s.Config,
 		Handlers:           s.Handlers,
@@ -639,4 +670,16 @@ func (s *Session) ClientConfigNoResolveEndpoint(cfgs ...*byteplus.Config) client
 		SigningNameDerived: resolved.SigningNameDerived,
 		SigningName:        resolved.SigningName,
 	}
+}
+
+func getNoProxy(noProxy *string) []string {
+	var urls []string
+	if noProxy != nil && *noProxy != "" {
+		urls = strings.Split(*noProxy, ",")
+	} else if r := os.Getenv("NO_PROXY"); r != "" {
+		urls = strings.Split(r, ",")
+	} else if r = os.Getenv("no_proxy"); r != "" {
+		urls = strings.Split(r, ",")
+	}
+	return urls
 }
