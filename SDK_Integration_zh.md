@@ -2,39 +2,43 @@
 
 # 目录
 
+- [目录](#目录)
 - [集成SDK](#集成sdk)
 - [环境要求](#环境要求)
 - [安全设置访问凭据](#安全设置访问凭据)
-   - [环境变量设置](#环境变量设置)
-      - [Linux 设置](#linux-设置)
-      - [Windows 设置](#windows-设置)
-         - [图形化界面设置](#图形化界面设置)
-         - [命令行设置](#命令行设置)
+  - [环境变量设置](#环境变量设置)
+    - [Linux 设置](#linux-设置)
+    - [Windows 设置](#windows-设置)
+      - [图形化界面设置](#图形化界面设置)
+      - [命令行设置](#命令行设置)
 - [访问凭据](#访问凭据)
-   - [AK、SK设置](#aksk设置)
-   - [STS Token设置](#sts-token设置)
-   - [AssumeRole](#assumerole)
+  - [AK、SK设置](#aksk设置)
+  - [STS Token设置](#sts-token设置)
+  - [AssumeRole](#assumerole)
 - [EndPoint配置](#endpoint配置)
-   - [自定义Endpoint](#自定义endpoint)
-   - [自定义RegionId](#自定义regionid)
-   - [自动化Endpoint寻址](#自动化endpoint寻址)
-      - [Endpoint默认寻址](#endpoint默认寻址)
+  - [自定义Endpoint](#自定义endpoint)
+  - [自定义RegionId](#自定义regionid)
+  - [自动化Endpoint寻址](#自动化endpoint寻址)
+    - [Endpoint默认寻址](#endpoint默认寻址)
 - [Http连接池配置](#http连接池配置)
 - [Https请求配置](#https请求配置)
-   - [指定scheme](#指定scheme)
-   - [忽略SSL验证](#忽略ssl验证)
-   - [指定TLS协议版本](#指定tls协议版本)
+  - [指定scheme](#指定scheme)
+  - [忽略SSL验证](#忽略ssl验证)
+  - [指定TLS协议版本](#指定tls协议版本)
+- [Http(s)代理配置](#https代理配置)
+  - [配置Http(s)代理](#配置https代理)
+  - [注意事项](#注意事项)
 - [超时配置](#超时配置)
-   - [全局超时设置（Client级别）](#全局超时设置client级别)
-   - [单接口指定超时设置](#单接口指定超时设置)
+  - [全局超时设置（Client级别）](#全局超时设置client级别)
+  - [单接口指定超时设置](#单接口指定超时设置)
 - [重试机制](#重试机制)
-   - [开启重试机制](#开启重试机制)
-   - [重试次数](#重试次数)
-   - [自定义重试错误码](#自定义重试错误码)
+  - [开启重试机制](#开启重试机制)
+  - [重试次数](#重试次数)
+  - [自定义重试错误码](#自定义重试错误码)
 - [异常处理](#异常处理)
 - [Debug机制](#debug机制)
 - [指定日志Logger](#指定日志logger)
-   - [自定义Logger](#自定义logger)
+  - [自定义Logger](#自定义logger)
 
 
 # 集成SDK
@@ -427,6 +431,31 @@ func main() {
     svc := ecs.New(sess)
 }
 ```
+
+# Http(s)代理配置
+
+> - **默认** 
+>   无代理
+
+## 配置Http(s)代理
+
+```go
+var ak, sk, region string
+config = byteplus.NewConfig().
+	WithCredentials(credentials.NewStaticCredentials(ak, sk, "")).
+	WithRegion(region).WithHTTPProxy("http://your_proxy:8080").WithHTTPSProxy("http://your_proxy:8080")
+
+sess, _ = session.NewSession(config)
+client = vpc.New(sess)
+```
+
+## 注意事项
+
+支持通过以下环境变量配置代理:
+
+http_proxy/HTTP_PROXY, https_proxy/HTTPS_PROXY
+
+优先级：代码 > 环境变量
 
 # 超时配置
 
