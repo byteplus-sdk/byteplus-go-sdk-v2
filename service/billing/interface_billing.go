@@ -70,6 +70,14 @@ type BILLINGAPI interface {
 	DeleteFinancialRelationWithContext(byteplus.Context, *DeleteFinancialRelationInput, ...request.Option) (*DeleteFinancialRelationOutput, error)
 	DeleteFinancialRelationRequest(*DeleteFinancialRelationInput) (*request.Request, *DeleteFinancialRelationOutput)
 
+	GetOrderCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	GetOrderCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	GetOrderCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	GetOrder(*GetOrderInput) (*GetOrderOutput, error)
+	GetOrderWithContext(byteplus.Context, *GetOrderInput, ...request.Option) (*GetOrderOutput, error)
+	GetOrderRequest(*GetOrderInput) (*request.Request, *GetOrderOutput)
+
 	HandleInvitationCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	HandleInvitationCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	HandleInvitationCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
