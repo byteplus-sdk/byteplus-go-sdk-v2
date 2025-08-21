@@ -8,7 +8,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"net/http"
 	"reflect"
 
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/bytepluserr"
@@ -133,7 +132,7 @@ func processBodyError(r *request.Request, byteplusResponse *response.ByteplusRes
 	if byteplusResponse.ResponseMetadata.Error != nil && byteplusResponse.ResponseMetadata.Error.Code != "" {
 		r.Error = bytepluserr.NewRequestFailure(
 			bytepluserr.New(byteplusResponse.ResponseMetadata.Error.Code, byteplusResponse.ResponseMetadata.Error.Message, nil),
-			http.StatusBadRequest,
+			r.HTTPResponse.StatusCode,
 			byteplusResponse.ResponseMetadata.RequestId,
 		)
 		processUnmarshalError(unmarshalErrorInfo{
