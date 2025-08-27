@@ -4,6 +4,7 @@ package client
 // May have been modified by Byteplus.
 
 import (
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
 	"math"
 	"strconv"
 	"time"
@@ -132,8 +133,10 @@ func getJitterDelay(duration time.Duration) time.Duration {
 // ShouldRetry returns true if the request should be retried.
 func (d DefaultRetryer) ShouldRetry(r *request.Request) bool {
 
+	logger := r.Config.Logger
 	// ShouldRetry returns false if number of max retries is 0.
 	if d.NumMaxRetries == 0 {
+		logger.DebugByLevel(byteplus.LogDebugWithRequestRetries, "[Retry] max retries is 0, not retrying")
 		return false
 	}
 

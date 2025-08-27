@@ -1,6 +1,8 @@
 package byteplusutil
 
 import (
+	"fmt"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -132,43 +134,56 @@ func standardizeDomainServiceCode(serviceCode string) string {
 // Note: Ensure the `defaultEndpoint` map is properly populated with service and region endpoint
 // information before calling this function.
 func GetDefaultEndpointByServiceInfo(service string, regionCode string,
-	customBootstrapRegion map[string]struct{}, useDualStack *bool) *string {
+	customBootstrapRegion map[string]struct{}, useDualStack *bool, logger byteplus.Logger) *string {
+
+	debug(logger, fmt.Sprintf("GetDefaultEndpointByServiceInfo start, service: %s, region: %s", service, regionCode))
+
 	resultEndpoint := endpoint
 
 	if !inBootstrapRegionList(regionCode, customBootstrapRegion) {
+		debug(logger, fmt.Sprintf("region %s not in bootstrap region list, use default endpoint: %s", regionCode, resultEndpoint))
 		defaultEndpointInfo, sExist := defaultEndpoint[service]
 		if !sExist {
+			debug(logger, fmt.Sprintf("service %s not found in default endpoint map, use default endpoint: %s", service, resultEndpoint))
 			return &resultEndpoint
 		}
 		resultEndpoint = defaultEndpointInfo.DefaultEndpoint
+		debug(logger, fmt.Sprintf("service %s found in default endpoint map, use default map endpoint: %s", service, resultEndpoint))
 		return &resultEndpoint
 	}
 
 	suffix := byteplusEndpointSuffix
 	if hasEnableDualStack(useDualStack) {
+		debug(logger, fmt.Sprintf("dual stack enabled, use suffix: %s", suffix))
 		suffix = dualstackEndpointSuffix
 	}
 
 	defaultEndpointInfo, sExist := defaultEndpoint[service]
 	if !sExist {
+		debug(logger, fmt.Sprintf("service %s not found in default endpoint map, use default endpoint: %s", service, resultEndpoint))
 		return &resultEndpoint
 	}
 
 	if defaultEndpointInfo.IsGlobal {
+		debug(logger, fmt.Sprintf("service %s is global", service))
 		if len(defaultEndpointInfo.GlobalEndpoint) > 0 {
 			resultEndpoint = defaultEndpointInfo.GlobalEndpoint
+			debug(logger, fmt.Sprintf("use predefined global endpoint: %s", resultEndpoint))
 			return &resultEndpoint
 		}
 		resultEndpoint = standardizeDomainServiceCode(service) + suffix
+		debug(logger, fmt.Sprintf("use constructed global endpoint: %s", resultEndpoint))
 		return &resultEndpoint
 	}
 
+	debug(logger, fmt.Sprintf("service %s is regional", service))
 	// regional endpoint
 	regionEndpointMp := defaultEndpointInfo.RegionEndpointMap
 	if regionEndpointMp != nil {
 		regionEndpointStr, rExist := regionEndpointMp[regionCode]
 		if rExist {
 			resultEndpoint = regionEndpointStr
+			debug(logger, fmt.Sprintf("found predefined regional endpoint for region %s: %s", regionCode, resultEndpoint))
 			return &resultEndpoint
 		}
 	}
@@ -176,7 +191,9 @@ func GetDefaultEndpointByServiceInfo(service string, regionCode string,
 	resultEndpoint = standardizeDomainServiceCode(service) + separator + regionCode + suffix
 	if isCNRegion(regionCode) {
 		resultEndpoint += cnSuffix
+		debug(logger, fmt.Sprintf("region %s is cn region, add suffix: %s", regionCode, cnSuffix))
 	}
+	debug(logger, fmt.Sprintf("use constructed regional endpoint: %s", resultEndpoint))
 	return &resultEndpoint
 
 }
@@ -234,4 +251,8 @@ func isCNRegion(region string) bool {
 
 	_, isCNNonMainLangRegion := cnNonMainLandRegion[region]
 	return !isCNNonMainLangRegion
+}
+
+func debug(logger byteplus.Logger, args ...interface{}) {
+	logger.DebugByLevel(byteplus.LogDebugWithEndpoint, append([]interface{}{"[Endpoint]"}, args...)...)
 }
