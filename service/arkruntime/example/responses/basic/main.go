@@ -6,9 +6,9 @@ import (
 	"io"
 	"os"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/service/arkruntime"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/service/arkruntime/model/responses"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
 )
 
 /**
@@ -41,7 +41,7 @@ func main() {
 				Union: &responses.ContentItem_Text{
 					Text: &responses.ContentItemText{
 						Type: responses.ContentItemType_input_text,
-						Text: "Please describe the picture",
+						Text: "请给出图片的描述",
 					},
 				},
 			},
@@ -85,7 +85,7 @@ func main() {
 	fmt.Println()
 	// round 2 messages
 	fmt.Println("-----round 2---------")
-	createResponsesReq.Input.Union = &responses.ResponsesInput_StringValue{StringValue: "how many pictures are mentioned in the previous conversation?"}
+	createResponsesReq.Input.Union = &responses.ResponsesInput_StringValue{StringValue: "上述对话中有几幅图片，每幅图片的描述是？"}
 	createResponsesReq.PreviousResponseId = byteplus.String(responseId)
 	resp, err = client.CreateResponsesStream(ctx, createResponsesReq)
 	if err != nil {
