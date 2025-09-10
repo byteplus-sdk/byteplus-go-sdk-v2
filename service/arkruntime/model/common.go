@@ -22,13 +22,11 @@ const (
 )
 
 type PromptTokensDetail struct {
-	CachedTokens      int  `json:"cached_tokens"`
-	ProvisionedTokens *int `json:"provisioned_tokens,omitempty"`
+	CachedTokens int `json:"cached_tokens"`
 }
 
 type CompletionTokensDetails struct {
-	ReasoningTokens   int  `json:"reasoning_tokens"`
-	ProvisionedTokens *int `json:"provisioned_tokens,omitempty"`
+	ReasoningTokens int `json:"reasoning_tokens"`
 }
 
 type Usage struct {
