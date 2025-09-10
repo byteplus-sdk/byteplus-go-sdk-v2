@@ -15,11 +15,9 @@ const (
 )
 
 type TruncationStrategy struct {
-	Type                TruncationStrategyType `json:"type"`
-	LastHistoryTokens   *int                   `json:"last_history_tokens,omitempty"`
-	RollingTokens       *bool                  `json:"rolling_tokens,omitempty"`
-	MaxWindowTokens     *int                   `json:"max_window_tokens,omitempty"`
-	RollingWindowTokens *int                   `json:"rolling_window_tokens,omitempty"`
+	Type              TruncationStrategyType `json:"type"`
+	LastHistoryTokens *int                   `json:"last_history_tokens,omitempty"`
+	RollingTokens     *bool                  `json:"rolling_tokens,omitempty"`
 }
 
 type CreateContextRequest struct {
