@@ -13,33 +13,33 @@ import (
 )
 
 func main() {
-	// 使用 API 密钥创建一个新的客户端实例，并设置超时时间
+	// Create a client with your api key
 	client := arkruntime.NewClientWithApiKey(
 		"YOUR_API_KEY",
-		arkruntime.WithBatchMaxParallel(3000), // 设置发起请求的最大并发数量为 3000
+		arkruntime.WithBatchMaxParallel(3000), // set batch max parallel to 3000
 	)
 
-	// 这里手动构造 50000 个请求，在实际应用中，你可以从文件、消息队列或数据库中加载真实的请求
+	// Mock 50000 requests for testing. You can load real requests from file, message queue or database, etc.
 	requests := MockRequests("YOUR_ENDPOINT_ID", 50000)
 
 	wg, ctx := sync.WaitGroup{}, context.Background()
 
-	// 可以在这里设置全局的超时时间，如果超过这个时间，所有的请求都会被取消
+	// set global timeout for all requests. If timeout, all requests will be canceled.
 	ctx, cancel := context.WithTimeout(ctx, 24*time.Hour)
 	defer cancel()
 
-	// 发起请求
+	// do batch inference
 	for request := range requests {
 		wg.Add(1)
-		// 异步发起请求
+		// create a goroutine for each request
 		go func(request model.EmbeddingRequestConverter) {
 			defer wg.Done()
 
-			// 可以在这里设置每个请求的超时时间，如果超过这个时间，这个请求会被取消
+			// set timeout for each request. If timeout, the request will be canceled.
 			ctx, cancel := context.WithTimeout(ctx, 24*time.Hour)
 			defer cancel()
 
-			// 发起批量推理请求
+			// do batch inference
 			result, err := client.CreateBatchEmbeddings(ctx, request)
 			if err != nil {
 				fmt.Fprintln(os.Stderr, err)
@@ -48,12 +48,12 @@ func main() {
 			}
 		}(request)
 	}
-	// 等待所有协程完成任务
+	// wait for all requests to finish
 	wg.Wait()
 }
 
-// MockRequests 模拟生成请求，这里只是简单地生成了 count 个相同的请求。
-// 在实际应用中，你可以从文件、消息队列或数据库中加载真实的请求。
+// MockRequests mock requests for testing.
+// You can load real requests from file, message queue or database, etc.
 func MockRequests(endpoint string, count int) <-chan model.EmbeddingRequestConverter {
 	requests := make(chan model.EmbeddingRequestConverter)
 
@@ -63,7 +63,6 @@ func MockRequests(endpoint string, count int) <-chan model.EmbeddingRequestConve
 			requests <- model.EmbeddingRequestStrings{
 				Model: endpoint,
 				Input: []string{
-					"你是豆包，是由字节跳动开发的 AI 人工智能助手",
 					"常见的十字花科植物有哪些？",
 				},
 			}
