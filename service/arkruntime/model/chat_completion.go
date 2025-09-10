@@ -24,17 +24,24 @@ type ChatMessageImageURL struct {
 	Detail ImageURLDetail `json:"detail,omitempty"`
 }
 
+type ChatMessageVideoURL struct {
+	URL string   `json:"url"`
+	FPS *float64 `json:"fps,omitempty"`
+}
+
 type ChatCompletionMessageContentPartType string
 
 const (
 	ChatCompletionMessageContentPartTypeText     ChatCompletionMessageContentPartType = "text"
 	ChatCompletionMessageContentPartTypeImageURL ChatCompletionMessageContentPartType = "image_url"
+	ChatCompletionMessageContentPartTypeVideoURL ChatCompletionMessageContentPartType = "video_url"
 )
 
 type ChatCompletionMessageContentPart struct {
 	Type     ChatCompletionMessageContentPartType `json:"type,omitempty"`
 	Text     string                               `json:"text,omitempty"`
 	ImageURL *ChatMessageImageURL                 `json:"image_url,omitempty"`
+	VideoURL *ChatMessageVideoURL                 `json:"video_url,omitempty"`
 }
 
 type ChatCompletionMessageContent struct {
@@ -91,6 +98,18 @@ type ToolCall struct {
 type FunctionCall struct {
 	Name      string `json:"name,omitempty"`
 	Arguments string `json:"arguments,omitempty"`
+}
+
+type ThinkingType string
+
+const (
+	ThinkingTypeEnabled  ThinkingType = "enabled"
+	ThinkingTypeDisabled ThinkingType = "disabled"
+	ThinkingTypeAuto     ThinkingType = "auto"
+)
+
+type Thinking struct {
+	Type ThinkingType `json:"type"`
 }
 
 type ChatRequest interface {
@@ -156,28 +175,30 @@ func (r ChatCompletionRequest) GetModel() string {
 // an empty string (""), false, or other zero values, it will be sent to
 // the server. The server will handle these fields according to the specified values.
 type CreateChatCompletionRequest struct {
-	Model             string                   `json:"model"`
-	Messages          []*ChatCompletionMessage `json:"messages"`
-	MaxTokens         *int                     `json:"max_tokens,omitempty"`
-	Temperature       *float32                 `json:"temperature,omitempty"`
-	TopP              *float32                 `json:"top_p,omitempty"`
-	Stream            *bool                    `json:"stream,omitempty"`
-	Stop              []string                 `json:"stop,omitempty"`
-	FrequencyPenalty  *float32                 `json:"frequency_penalty,omitempty"`
-	LogitBias         map[string]int           `json:"logit_bias,omitempty"`
-	LogProbs          *bool                    `json:"logprobs,omitempty"`
-	TopLogProbs       *int                     `json:"top_logprobs,omitempty"`
-	User              *string                  `json:"user,omitempty"`
-	FunctionCall      interface{}              `json:"function_call,omitempty"`
-	Tools             []*Tool                  `json:"tools,omitempty"`
-	ToolChoice        interface{}              `json:"tool_choice,omitempty"`
-	StreamOptions     *StreamOptions           `json:"stream_options,omitempty"`
-	PresencePenalty   *float32                 `json:"presence_penalty,omitempty"`
-	RepetitionPenalty *float32                 `json:"repetition_penalty,omitempty"`
-	N                 *int                     `json:"n,omitempty"`
-	ResponseFormat    *ResponseFormat          `json:"response_format,omitempty"`
-	ParallelToolCalls *bool                    `json:"parallel_tool_calls,omitempty"`
-	ServiceTier       *string                  `json:"service_tier,omitempty"`
+	Model               string                   `json:"model"`
+	Messages            []*ChatCompletionMessage `json:"messages"`
+	MaxTokens           *int                     `json:"max_tokens,omitempty"`
+	Temperature         *float32                 `json:"temperature,omitempty"`
+	TopP                *float32                 `json:"top_p,omitempty"`
+	Stream              *bool                    `json:"stream,omitempty"`
+	Stop                []string                 `json:"stop,omitempty"`
+	FrequencyPenalty    *float32                 `json:"frequency_penalty,omitempty"`
+	LogitBias           map[string]int           `json:"logit_bias,omitempty"`
+	LogProbs            *bool                    `json:"logprobs,omitempty"`
+	TopLogProbs         *int                     `json:"top_logprobs,omitempty"`
+	User                *string                  `json:"user,omitempty"`
+	FunctionCall        interface{}              `json:"function_call,omitempty"`
+	Tools               []*Tool                  `json:"tools,omitempty"`
+	ToolChoice          interface{}              `json:"tool_choice,omitempty"`
+	StreamOptions       *StreamOptions           `json:"stream_options,omitempty"`
+	PresencePenalty     *float32                 `json:"presence_penalty,omitempty"`
+	RepetitionPenalty   *float32                 `json:"repetition_penalty,omitempty"`
+	N                   *int                     `json:"n,omitempty"`
+	ResponseFormat      *ResponseFormat          `json:"response_format,omitempty"`
+	ParallelToolCalls   *bool                    `json:"parallel_tool_calls,omitempty"`
+	ServiceTier         *string                  `json:"service_tier,omitempty"`
+	Thinking            *Thinking                `json:"thinking,omitempty"`
+	MaxCompletionTokens *int                     `json:"max_completion_tokens,omitempty"`
 }
 
 func (r CreateChatCompletionRequest) MarshalJSON() ([]byte, error) {
@@ -281,11 +302,29 @@ type LogProbs struct {
 type ResponseFormatType string
 
 type ResponseFormat struct {
-	Type   ResponseFormatType `json:"type"`
-	Schema interface{}        `json:"schema,omitempty"`
+	Type       ResponseFormatType                       `json:"type"`
+	JSONSchema *ResponseFormatJSONSchemaJSONSchemaParam `json:"json_schema,omitempty"`
+	// Deprecated: use `JSONSchema` instead.
+	Schema interface{} `json:"schema,omitempty"`
+}
+
+type ResponseFormatJSONSchemaJSONSchemaParam struct {
+	// The name of the response format. Must be a-z, A-Z, 0-9, or contain underscores
+	// and dashes, with a maximum length of 64.
+	Name string `json:"name"`
+	// A description of what the response format is for, used by the model to determine
+	// how to respond in the format.
+	Description string `json:"description"`
+	// The schema for the response format, described as a JSON Schema object.
+	Schema interface{} `json:"schema"`
+	// Whether to enable strict schema adherence when generating the output. If set to
+	// true, the model will always follow the exact schema defined in the `schema`
+	// field. Only a subset of JSON Schema is supported when `strict` is `true`.
+	Strict bool `json:"strict"`
 }
 
 const (
+	ResponseFormatJSONSchema ResponseFormatType = "json_schema"
 	ResponseFormatJsonObject ResponseFormatType = "json_object"
 	ResponseFormatText       ResponseFormatType = "text"
 )

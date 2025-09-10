@@ -6,9 +6,9 @@ import (
 	"io"
 	"os"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/service/arkruntime"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/service/arkruntime/model"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
 )
 
 /**
@@ -18,8 +18,8 @@ import (
  * Note: If you use an API key, this API key will not be refreshed.
  * To prevent the API from expiring and failing after some time, choose an API key with no expiration date.
  *
- * 2.If you authorize your endpoint with Volcengine Identity and Access Management（IAM), set your api key to environment variable "BYTEPLUS_ACCESSKEY", "BYTEPLUS_SECRETKEY"
- * client := arkruntime.NewClientWithAkSk(os.Getenv("BYTEPLUS_ACCESSKEY"), os.Getenv("BYTEPLUS_SECRETKEY"))
+ * 2.If you authorize your endpoint with Volcengine Identity and Access Management（IAM), set your api key to environment variable "VOLC_ACCESSKEY", "VOLC_SECRETKEY"
+ * client := arkruntime.NewClientWithAkSk(os.Getenv("VOLC_ACCESSKEY"), os.Getenv("VOLC_SECRETKEY"))
  * To get your ak&sk, please refer to this document(https://www.byteplus.com/docs/6291/65568)
  * For more information，please check this document（https://www.byteplus.com/docs/82379/1263279）
  */
@@ -37,7 +37,7 @@ func main() {
 			{
 				Role: model.ChatMessageRoleSystem,
 				Content: &model.ChatCompletionMessageContent{
-					StringValue: byteplus.String("You are Francis, a helpful AI assistant."),
+					StringValue: byteplus.String("你是豆包，是由字节跳动开发的 AI 人工智能助手"),
 				},
 			},
 		},
@@ -59,7 +59,7 @@ func main() {
 			{
 				Role: model.ChatMessageRoleUser,
 				Content: &model.ChatCompletionMessageContent{
-					StringValue: byteplus.String("Hello, I am Jack."),
+					StringValue: byteplus.String("我的名字是方方"),
 				},
 			},
 		},
@@ -70,9 +70,7 @@ func main() {
 		fmt.Printf("non-stream chat error: %v\n", err)
 		return
 	}
-	if len(resp.Choices) > 0 {
-		fmt.Println(*resp.Choices[0].Message.Content.StringValue)
-	}
+	fmt.Println(*resp.Choices[0].Message.Content.StringValue)
 
 	fmt.Println("----- chat round 2 (stream) -----")
 	req = model.ContextChatCompletionRequest{
@@ -82,7 +80,7 @@ func main() {
 			{
 				Role: model.ChatMessageRoleUser,
 				Content: &model.ChatCompletionMessageContent{
-					StringValue: byteplus.String("Who am I?"),
+					StringValue: byteplus.String("我是谁？"),
 				},
 			},
 		},

@@ -144,7 +144,6 @@ func (stream *ImageGenerationStreamReader) processLines() (model.ImagesStreamRes
 			if emptyMessagesCount > stream.EmptyMessagesLimit {
 				return model.ImagesStreamResponse{}, model.ErrTooManyEmptyStreamMessages
 			}
-
 			continue
 		}
 

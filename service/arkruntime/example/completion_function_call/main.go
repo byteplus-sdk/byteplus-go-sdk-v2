@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 	"os"
@@ -28,20 +29,37 @@ func main() {
 	client := arkruntime.NewClientWithApiKey(os.Getenv("ARK_API_KEY"))
 	ctx := context.Background()
 
-	fmt.Println("----- standard request -----")
+	fmt.Println("----- function call request -----")
 	req := model.CreateChatCompletionRequest{
 		Model: "${YOUR_ENDPOINT_ID}",
 		Messages: []*model.ChatCompletionMessage{
 			{
-				Role: model.ChatMessageRoleSystem,
-				Content: &model.ChatCompletionMessageContent{
-					StringValue: byteplus.String("你是豆包，是由字节跳动开发的 AI 人工智能助手"),
-				},
-			},
-			{
 				Role: model.ChatMessageRoleUser,
 				Content: &model.ChatCompletionMessageContent{
-					StringValue: byteplus.String("常见的十字花科植物有哪些？"),
+					StringValue: byteplus.String("What's the weather like in Boston today?"),
+				},
+			},
+		},
+		Tools: []*model.Tool{
+			{
+				Type: model.ToolTypeFunction,
+				Function: &model.FunctionDefinition{
+					Name:        "get_current_weather",
+					Description: "Get the current weather in a given location",
+					Parameters: map[string]interface{}{
+						"type": "object",
+						"properties": map[string]interface{}{
+							"location": map[string]interface{}{
+								"type":        "string",
+								"description": "The city and state, e.g. San Francisco, CA",
+							},
+							"unit": map[string]interface{}{
+								"type": "string",
+								"enum": []string{"celsius", "fahrenheit"},
+							},
+						},
+						"required": []string{"location"},
+					},
 				},
 			},
 		},
@@ -52,26 +70,11 @@ func main() {
 		fmt.Printf("standard chat error: %v\n", err)
 		return
 	}
-	fmt.Println(*resp.Choices[0].Message.Content.StringValue)
 
-	fmt.Println("----- streaming request -----")
-	req = model.CreateChatCompletionRequest{
-		Model: "${YOUR_ENDPOINT_ID}",
-		Messages: []*model.ChatCompletionMessage{
-			{
-				Role: model.ChatMessageRoleSystem,
-				Content: &model.ChatCompletionMessageContent{
-					StringValue: byteplus.String("你是豆包，是由字节跳动开发的 AI 人工智能助手"),
-				},
-			},
-			{
-				Role: model.ChatMessageRoleUser,
-				Content: &model.ChatCompletionMessageContent{
-					StringValue: byteplus.String("常见的十字花科植物有哪些？"),
-				},
-			},
-		},
-	}
+	s, _ := json.Marshal(resp)
+	fmt.Println(string(s))
+
+	fmt.Println("----- function call stream request -----")
 	stream, err := client.CreateChatCompletionStream(ctx, req)
 	if err != nil {
 		fmt.Printf("stream chat error: %v\n", err)
@@ -79,18 +82,32 @@ func main() {
 	}
 	defer stream.Close()
 
+	finalToolCalls := make(map[int]*model.ToolCall)
 	for {
 		recv, err := stream.Recv()
 		if err == io.EOF {
-			return
+			break
 		}
 		if err != nil {
 			fmt.Printf("Stream chat error: %v\n", err)
-			return
+			break
 		}
+		fmt.Print(recv.Choices[0].Delta.Content)
 
-		if len(recv.Choices) > 0 {
-			fmt.Print(recv.Choices[0].Delta.Content)
+		for _, toolCall := range recv.Choices[0].Delta.ToolCalls {
+			index := 0
+			if toolCall.Index != nil {
+				index = *toolCall.Index
+			}
+
+			if _, exists := finalToolCalls[index]; !exists {
+				finalToolCalls[index] = toolCall
+			}
+			finalToolCalls[index].Function.Arguments += toolCall.Function.Arguments
+
 		}
+	}
+	for _, finalToolCall := range finalToolCalls {
+		fmt.Println(*finalToolCall)
 	}
 }

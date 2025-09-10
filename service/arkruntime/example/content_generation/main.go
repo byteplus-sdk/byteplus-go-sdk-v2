@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
 
@@ -21,7 +22,8 @@ import (
 func main() {
 	client := arkruntime.NewClientWithApiKey(os.Getenv("ARK_API_KEY"))
 	ctx := context.Background()
-	modelEp := "YOUR_ENDPOINT_ID"
+	modelEp := os.Getenv("ENDPOINT_ID")
+	//imageURL := os.Getenv("IMAGE_URL")
 
 	fmt.Println("----- create content generation task -----")
 	createReq := model.CreateContentGenerationTaskRequest{
@@ -29,14 +31,17 @@ func main() {
 		Content: []*model.CreateContentGenerationContentItem{
 			{
 				Type: model.ContentGenerationContentItemTypeText,
-				Text: byteplus.String("Bird soaring above vast grasslands --ratio 1:1"),
+				Text: byteplus.String("龙与地下城女骑士背景是起伏的平原，目光从镜头转向平原"),
 			},
-			{
-				Type: model.ContentGenerationContentItemTypeImage,
-				ImageURL: &model.ImageURL{
-					URL: "${YOUR URL HERE}", // Replace with URL
+			/*
+				{
+					Type: model.ContentGenerationContentItemTypeImage,
+					ImageURL: &model.ImageURL{
+						URL: imageURL, // Replace with URL
+					},
+					// Role: byteplus.String("first_frame"),
 				},
-			},
+			*/
 		},
 		// CallbackUrl: byteplus.String("CALLBACK_URL"),
 	}
@@ -48,6 +53,7 @@ func main() {
 	}
 	fmt.Printf("Task Created with ID: %s\n", createResponse.ID)
 
+	time.Sleep(1 * time.Minute)
 	fmt.Println("----- get content generation task -----")
 	taskID := createResponse.ID
 
@@ -66,6 +72,12 @@ func main() {
 	fmt.Printf("Completion Tokens: %d\n", getResponse.Usage.CompletionTokens)
 	fmt.Printf("Created At: %d\n", getResponse.CreatedAt)
 	fmt.Printf("Updated At: %d\n", getResponse.UpdatedAt)
+	if getResponse.Seed != nil {
+		fmt.Printf("Seed: %d\n", getResponse.Seed)
+	}
+	if getResponse.RevisedPrompt != nil {
+		fmt.Printf("RevisedPrompt: %s\n", *getResponse.RevisedPrompt)
+	}
 	if getResponse.Error != nil {
 		fmt.Printf("Error Code: %s\n", getResponse.Error.Code)
 		fmt.Printf("Error Message: %s\n", getResponse.Error.Message)

@@ -28,48 +28,19 @@ func main() {
 	client := arkruntime.NewClientWithApiKey(os.Getenv("ARK_API_KEY"))
 	ctx := context.Background()
 
-	fmt.Println("----- standard request -----")
+	fmt.Println("----- streaming request -----")
 	req := model.CreateChatCompletionRequest{
 		Model: "${YOUR_ENDPOINT_ID}",
 		Messages: []*model.ChatCompletionMessage{
 			{
-				Role: model.ChatMessageRoleSystem,
-				Content: &model.ChatCompletionMessageContent{
-					StringValue: byteplus.String("你是豆包，是由字节跳动开发的 AI 人工智能助手"),
-				},
-			},
-			{
 				Role: model.ChatMessageRoleUser,
 				Content: &model.ChatCompletionMessageContent{
-					StringValue: byteplus.String("常见的十字花科植物有哪些？"),
+					StringValue: byteplus.String("How many Rs are there in the word 'strawberry'?"),
 				},
 			},
 		},
-	}
-
-	resp, err := client.CreateChatCompletion(ctx, req)
-	if err != nil {
-		fmt.Printf("standard chat error: %v\n", err)
-		return
-	}
-	fmt.Println(*resp.Choices[0].Message.Content.StringValue)
-
-	fmt.Println("----- streaming request -----")
-	req = model.CreateChatCompletionRequest{
-		Model: "${YOUR_ENDPOINT_ID}",
-		Messages: []*model.ChatCompletionMessage{
-			{
-				Role: model.ChatMessageRoleSystem,
-				Content: &model.ChatCompletionMessageContent{
-					StringValue: byteplus.String("你是豆包，是由字节跳动开发的 AI 人工智能助手"),
-				},
-			},
-			{
-				Role: model.ChatMessageRoleUser,
-				Content: &model.ChatCompletionMessageContent{
-					StringValue: byteplus.String("常见的十字花科植物有哪些？"),
-				},
-			},
+		Thinking: &model.Thinking{
+			Type: model.ThinkingTypeEnabled,
 		},
 	}
 	stream, err := client.CreateChatCompletionStream(ctx, req)
@@ -86,11 +57,42 @@ func main() {
 		}
 		if err != nil {
 			fmt.Printf("Stream chat error: %v\n", err)
-			return
+			break
 		}
 
 		if len(recv.Choices) > 0 {
-			fmt.Print(recv.Choices[0].Delta.Content)
+			if recv.Choices[0].Delta.ReasoningContent != nil && *recv.Choices[0].Delta.ReasoningContent != "" {
+				fmt.Print(*recv.Choices[0].Delta.ReasoningContent)
+			} else {
+				fmt.Print(recv.Choices[0].Delta.Content)
+			}
 		}
 	}
+	fmt.Println()
+
+	fmt.Println("----- standard request -----")
+	req = model.CreateChatCompletionRequest{
+		Model: "${YOUR_ENDPOINT_ID}",
+		Messages: []*model.ChatCompletionMessage{
+			{
+				Role: model.ChatMessageRoleUser,
+				Content: &model.ChatCompletionMessageContent{
+					StringValue: byteplus.String("How many Rs are there in the word 'strawberry'?"),
+				},
+			},
+		},
+		Thinking: &model.Thinking{
+			Type: model.ThinkingTypeEnabled,
+		},
+	}
+
+	resp, err := client.CreateChatCompletion(ctx, req)
+	if err != nil {
+		fmt.Printf("standard chat error: %v\n", err)
+		return
+	}
+	if resp.Choices[0].Message.ReasoningContent != nil {
+		fmt.Println(*resp.Choices[0].Message.ReasoningContent)
+	}
+	fmt.Println(*resp.Choices[0].Message.Content.StringValue)
 }

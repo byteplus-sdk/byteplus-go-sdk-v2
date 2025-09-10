@@ -3,12 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
-	"io"
 	"os"
 
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/service/arkruntime"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/service/arkruntime/model"
-	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
 )
 
 /**
@@ -28,20 +26,25 @@ func main() {
 	client := arkruntime.NewClientWithApiKey(os.Getenv("ARK_API_KEY"))
 	ctx := context.Background()
 
-	fmt.Println("----- standard request -----")
+	fmt.Println("----- image input -----")
 	req := model.CreateChatCompletionRequest{
 		Model: "${YOUR_ENDPOINT_ID}",
 		Messages: []*model.ChatCompletionMessage{
 			{
-				Role: model.ChatMessageRoleSystem,
-				Content: &model.ChatCompletionMessageContent{
-					StringValue: byteplus.String("你是豆包，是由字节跳动开发的 AI 人工智能助手"),
-				},
-			},
-			{
 				Role: model.ChatMessageRoleUser,
 				Content: &model.ChatCompletionMessageContent{
-					StringValue: byteplus.String("常见的十字花科植物有哪些？"),
+					ListValue: []*model.ChatCompletionMessageContentPart{
+						{
+							Type: model.ChatCompletionMessageContentPartTypeText,
+							Text: "这是哪里？",
+						},
+						{
+							Type: model.ChatCompletionMessageContentPartTypeImageURL,
+							ImageURL: &model.ChatMessageImageURL{
+								URL: "https://ark-project.tos-cn-beijing.volces.com/images/view.jpeg",
+							},
+						},
+					},
 				},
 			},
 		},
@@ -53,44 +56,4 @@ func main() {
 		return
 	}
 	fmt.Println(*resp.Choices[0].Message.Content.StringValue)
-
-	fmt.Println("----- streaming request -----")
-	req = model.CreateChatCompletionRequest{
-		Model: "${YOUR_ENDPOINT_ID}",
-		Messages: []*model.ChatCompletionMessage{
-			{
-				Role: model.ChatMessageRoleSystem,
-				Content: &model.ChatCompletionMessageContent{
-					StringValue: byteplus.String("你是豆包，是由字节跳动开发的 AI 人工智能助手"),
-				},
-			},
-			{
-				Role: model.ChatMessageRoleUser,
-				Content: &model.ChatCompletionMessageContent{
-					StringValue: byteplus.String("常见的十字花科植物有哪些？"),
-				},
-			},
-		},
-	}
-	stream, err := client.CreateChatCompletionStream(ctx, req)
-	if err != nil {
-		fmt.Printf("stream chat error: %v\n", err)
-		return
-	}
-	defer stream.Close()
-
-	for {
-		recv, err := stream.Recv()
-		if err == io.EOF {
-			return
-		}
-		if err != nil {
-			fmt.Printf("Stream chat error: %v\n", err)
-			return
-		}
-
-		if len(recv.Choices) > 0 {
-			fmt.Print(recv.Choices[0].Delta.Content)
-		}
-	}
 }

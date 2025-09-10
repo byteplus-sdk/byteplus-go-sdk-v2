@@ -29,50 +29,43 @@ func main() {
 	ctx := context.Background()
 
 	fmt.Println("----- standard request -----")
-	req := model.CreateChatCompletionRequest{
-		Model: "${YOUR_ENDPOINT_ID}",
+	req := model.BotChatCompletionRequest{
+		BotId: "${YOUR_BOT_ID}",
 		Messages: []*model.ChatCompletionMessage{
-			{
-				Role: model.ChatMessageRoleSystem,
-				Content: &model.ChatCompletionMessageContent{
-					StringValue: byteplus.String("你是豆包，是由字节跳动开发的 AI 人工智能助手"),
-				},
-			},
 			{
 				Role: model.ChatMessageRoleUser,
 				Content: &model.ChatCompletionMessageContent{
-					StringValue: byteplus.String("常见的十字花科植物有哪些？"),
+					StringValue: byteplus.String("北京今天的天气如何？"),
 				},
 			},
 		},
 	}
 
-	resp, err := client.CreateChatCompletion(ctx, req)
+	resp, err := client.CreateBotChatCompletion(ctx, req)
 	if err != nil {
 		fmt.Printf("standard chat error: %v\n", err)
 		return
 	}
 	fmt.Println(*resp.Choices[0].Message.Content.StringValue)
+	if resp.References != nil {
+		for _, ref := range resp.References {
+			fmt.Printf("reference url: %s\n", ref.Url)
+		}
+	}
 
 	fmt.Println("----- streaming request -----")
-	req = model.CreateChatCompletionRequest{
-		Model: "${YOUR_ENDPOINT_ID}",
+	req = model.BotChatCompletionRequest{
+		BotId: "${YOUR_BOT_ID}",
 		Messages: []*model.ChatCompletionMessage{
-			{
-				Role: model.ChatMessageRoleSystem,
-				Content: &model.ChatCompletionMessageContent{
-					StringValue: byteplus.String("你是豆包，是由字节跳动开发的 AI 人工智能助手"),
-				},
-			},
 			{
 				Role: model.ChatMessageRoleUser,
 				Content: &model.ChatCompletionMessageContent{
-					StringValue: byteplus.String("常见的十字花科植物有哪些？"),
+					StringValue: byteplus.String("北京今天的天气如何？"),
 				},
 			},
 		},
 	}
-	stream, err := client.CreateChatCompletionStream(ctx, req)
+	stream, err := client.CreateBotChatCompletionStream(ctx, req)
 	if err != nil {
 		fmt.Printf("stream chat error: %v\n", err)
 		return
@@ -88,9 +81,13 @@ func main() {
 			fmt.Printf("Stream chat error: %v\n", err)
 			return
 		}
-
 		if len(recv.Choices) > 0 {
 			fmt.Print(recv.Choices[0].Delta.Content)
+			if recv.References != nil {
+				for _, ref := range recv.References {
+					fmt.Printf("reference url: %s\n", ref.Url)
+				}
+			}
 		}
 	}
 }

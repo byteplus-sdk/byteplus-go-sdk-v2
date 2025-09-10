@@ -8,39 +8,39 @@ import (
 	"sync"
 	"time"
 
-	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/service/arkruntime"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/service/arkruntime/model"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
 )
 
 func main() {
-	// Create a client with your api key
+	// 使用 API 密钥创建一个新的客户端实例，并设置超时时间
 	client := arkruntime.NewClientWithApiKey(
 		"YOUR_API_KEY",
-		arkruntime.WithBatchMaxParallel(3000), // set batch max parallel to 3000
+		arkruntime.WithBatchMaxParallel(3000), // 设置发起请求的最大并发数量为 3000
 	)
 
-	// Mock 50000 requests for testing. You can load real requests from file, message queue or database, etc.
+	// 这里手动构造 50000 个请求，在实际应用中，你可以从文件、消息队列或数据库中加载真实的请求
 	requests := MockRequests("YOUR_ENDPOINT_ID", 50000)
 
 	wg, ctx := sync.WaitGroup{}, context.Background()
 
-	// set global timeout for all requests. If timeout, all requests will be canceled.
+	// 可以在这里设置全局的超时时间，如果超过这个时间，所有的请求都会被取消
 	ctx, cancel := context.WithTimeout(ctx, 24*time.Hour)
 	defer cancel()
 
-	// do batch inference
+	// 发起请求
 	for request := range requests {
 		wg.Add(1)
-		// create a goroutine for each request
+		// 异步发起请求
 		go func(request model.CreateChatCompletionRequest) {
 			defer wg.Done()
 
-			// set timeout for each request. If timeout, the request will be canceled.
+			// 可以在这里设置每个请求的超时时间，如果超过这个时间，这个请求会被取消
 			ctx, cancel := context.WithTimeout(ctx, 24*time.Hour)
 			defer cancel()
 
-			// do batch inference
+			// 发起批量推理请求
 			result, err := client.CreateBatchChatCompletion(ctx, request)
 			if err != nil {
 				fmt.Fprintln(os.Stderr, err)
@@ -49,12 +49,12 @@ func main() {
 			}
 		}(request)
 	}
-	// wait for all requests to finish
+	// 等待所有协程完成任务
 	wg.Wait()
 }
 
-// MockRequests mock requests for testing.
-// You can load real requests from file, message queue or database, etc.
+// MockRequests 模拟生成请求，这里只是简单地生成了 count 个相同的请求。
+// 在实际应用中，你可以从文件、消息队列或数据库中加载真实的请求。
 func MockRequests(endpoint string, count int) <-chan model.CreateChatCompletionRequest {
 	requests := make(chan model.CreateChatCompletionRequest)
 
@@ -67,13 +67,13 @@ func MockRequests(endpoint string, count int) <-chan model.CreateChatCompletionR
 					{
 						Role: model.ChatMessageRoleSystem,
 						Content: &model.ChatCompletionMessageContent{
-							StringValue: byteplus.String("You are a helpful AI assistant."),
+							StringValue: byteplus.String("你是豆包，是由字节跳动开发的 AI 人工智能助手"),
 						},
 					},
 					{
 						Role: model.ChatMessageRoleUser,
 						Content: &model.ChatCompletionMessageContent{
-							StringValue: byteplus.String("Hello, how are you?"),
+							StringValue: byteplus.String("常见的十字花科植物有哪些？"),
 						},
 					},
 				},

@@ -27,11 +27,12 @@ func main() {
 	fmt.Println("----- [Seedream] generate images (response format: url) -----")
 	generateReq := model.GenerateImagesRequest{
 		Model:          modelEp, // Replace with your Seedream endpoint ID
-		Prompt:         "Bird soaring above vast grasslands",
+		Prompt:         "龙与地下城女骑士背景是起伏的平原，目光从镜头转向平原",
 		ResponseFormat: byteplus.String(model.GenerateImagesResponseFormatURL),
 		Seed:           byteplus.Int64(1234567890),
 		Watermark:      byteplus.Bool(true),
 		Size:           byteplus.String("1024x1024"),
+		GuidanceScale:  byteplus.Float64(2.5),
 	}
 
 	imagesResponse, err := client.GenerateImages(ctx, generateReq)
@@ -52,12 +53,13 @@ func main() {
 
 	fmt.Println("----- [Seedream] generate images (response format: base64) -----")
 	generateReq = model.GenerateImagesRequest{
-		Model:          modelEp, // Replace with your Seedream endpoint ID
-		Prompt:         "Bird soaring above vast grasslands",
+		Model:          modelEp, // Replace with your endpoint ID
+		Prompt:         "龙与地下城女骑士背景是起伏的平原，目光从镜头转向平原",
 		ResponseFormat: byteplus.String(model.GenerateImagesResponseFormatBase64),
 		Seed:           byteplus.Int64(1234567890),
 		Watermark:      byteplus.Bool(true),
 		Size:           byteplus.String("1024x1024"),
+		GuidanceScale:  byteplus.Float64(2.5),
 	}
 
 	imagesResponse, err = client.GenerateImages(ctx, generateReq)
@@ -76,6 +78,7 @@ func main() {
 	fmt.Printf("Generated Images: %d\n", imagesResponse.Usage.GeneratedImages)
 	fmt.Printf("Created: %d\n", imagesResponse.Created)
 
+	fmt.Println("----- [Seededit] generate images (input format: url) -----")
 	generateReq = model.GenerateImagesRequest{
 		Model:          modelEp, // Replace with your endpoint ID
 		Prompt:         "Bird soaring above vast grasslands",
@@ -85,19 +88,23 @@ func main() {
 		Watermark:      byteplus.Bool(true),
 		Size:           byteplus.String("1024x1024"),
 	}
+
 	imagesResponse, err = client.GenerateImages(ctx, generateReq)
 	if err != nil {
 		fmt.Printf("generate images error: %v\n", err)
 		return
 	}
+
 	if imagesResponse.Error != nil {
 		fmt.Printf("Error Code: %s\n", imagesResponse.Error.Code)
 		fmt.Printf("Error Message: %s\n", imagesResponse.Error.Message)
 	}
+
 	fmt.Printf("Model: %s\n", imagesResponse.Model)
 	fmt.Printf("Image URL: %s\n", *imagesResponse.Data[0].Url)
 	fmt.Printf("Generated Images: %d\n", imagesResponse.Usage.GeneratedImages)
 	fmt.Printf("Created: %d\n", imagesResponse.Created)
+
 	fmt.Println("----- [Seededit] generate images (input format: base64) -----")
 	generateReq = model.GenerateImagesRequest{
 		Model:          modelEp, // Replace with your Seededit endpoint ID
@@ -108,15 +115,18 @@ func main() {
 		Watermark:      byteplus.Bool(true),
 		Size:           byteplus.String("1024x1024"),
 	}
+
 	imagesResponse, err = client.GenerateImages(ctx, generateReq)
 	if err != nil {
 		fmt.Printf("generate images error: %v\n", err)
 		return
 	}
+
 	if imagesResponse.Error != nil {
 		fmt.Printf("Error Code: %s\n", imagesResponse.Error.Code)
 		fmt.Printf("Error Message: %s\n", imagesResponse.Error.Message)
 	}
+
 	fmt.Printf("Model: %s\n", imagesResponse.Model)
 	fmt.Printf("Image URL: %s\n", *imagesResponse.Data[0].Url)
 	fmt.Printf("Generated Images: %d\n", imagesResponse.Usage.GeneratedImages)
@@ -127,7 +137,7 @@ func main() {
 	maxImages := 9
 	generateReq = model.GenerateImagesRequest{
 		Model:                     modelEp, // Replace with your Seedream endpoint ID
-		Prompt:                    "Bird soaring above vast grasslands",
+		Prompt:                    "星球大战, 场面壮观, 需要描述3个连续场面",
 		ResponseFormat:            byteplus.String(model.GenerateImagesResponseFormatURL),
 		Seed:                      byteplus.Int64(1234567890),
 		Watermark:                 byteplus.Bool(true),
@@ -158,7 +168,7 @@ func main() {
 
 		if recv.Type == "image_generation.partial_failed" {
 			fmt.Printf("Stream generate images error: %v\n", recv.Error)
-			if strings.EqualFold(recv.Error.Code, "InternalServiceError") {
+			if strings.HasPrefix(recv.Error.Code, "5") {
 				break
 			}
 		}
@@ -176,16 +186,15 @@ func main() {
 		}
 	}
 
-	fmt.Println("----- [Seededit] streaming generate images (response format: base64) -----")
+	fmt.Println("----- [Seedream] streaming generate images (response format: base64) -----")
 
 	generateReq = model.GenerateImagesRequest{
 		Model:                     modelEp, // Replace with your Seedream endpoint ID
-		Prompt:                    "Bird soaring above vast grasslands",
+		Prompt:                    "星球大战, 场面壮观, 需要描述3个连续场面",
 		ResponseFormat:            byteplus.String(model.GenerateImagesResponseFormatBase64),
 		Seed:                      byteplus.Int64(1234567890),
 		Watermark:                 byteplus.Bool(true),
 		Size:                      byteplus.String("1024x1024"),
-		Image:                     []string{"YOUR_IMAGE_URL_HERE", "YOUR_IMAGE_URL_HERE"}, // Replace with your input image URL
 		SequentialImageGeneration: &sequentialImageGeneration,
 		SequentialImageGenerationOptions: &model.SequentialImageGenerationOptions{
 			MaxImages: &maxImages,
@@ -212,7 +221,7 @@ func main() {
 
 		if recv.Type == "image_generation.partial_failed" {
 			fmt.Printf("Stream generate images error: %v\n", recv.Error)
-			if strings.EqualFold(recv.Error.Code, "InternalServiceError") {
+			if strings.HasPrefix(recv.Error.Code, "5") {
 				break
 			}
 		}
