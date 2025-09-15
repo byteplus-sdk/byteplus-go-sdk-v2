@@ -74,7 +74,8 @@ type ImageURL struct {
 	URL string `json:"url"`
 }
 type Content struct {
-	VideoURL string `json:"video_url"`
+	VideoURL     string `json:"video_url"`
+	LastFrameURL string `json:"last_frame_url"`
 }
 
 type ContentGenerationUsage struct {
