@@ -16,9 +16,10 @@ const (
 )
 
 type CreateContentGenerationTaskRequest struct {
-	Model       string                                `json:"model"`
-	Content     []*CreateContentGenerationContentItem `json:"content"`
-	CallbackUrl *string                               `json:"callback_url,omitempty"`
+	Model           string                                `json:"model"`
+	Content         []*CreateContentGenerationContentItem `json:"content"`
+	CallbackUrl     *string                               `json:"callback_url,omitempty"`
+	ReturnLastFrame *bool                                 `json:"return_last_frame,omitempty"`
 }
 
 type CreateContentGenerationTaskResponse struct {
