@@ -144,6 +144,7 @@ func (stream *ImageGenerationStreamReader) processLines() (model.ImagesStreamRes
 			if emptyMessagesCount > stream.EmptyMessagesLimit {
 				return model.ImagesStreamResponse{}, model.ErrTooManyEmptyStreamMessages
 			}
+
 			continue
 		}
 
@@ -156,6 +157,7 @@ func (stream *ImageGenerationStreamReader) processLines() (model.ImagesStreamRes
 		unmarshalErr := stream.Unmarshaler.Unmarshal(trimedLine, &response)
 		if unmarshalErr != nil {
 			return model.ImagesStreamResponse{}, unmarshalErr
+
 		}
 
 		return response, nil
