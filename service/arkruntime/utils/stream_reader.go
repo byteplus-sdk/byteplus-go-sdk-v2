@@ -180,13 +180,13 @@ func (stream *ChatCompletionStreamReader) unmarshalError() (errResp *model.Error
 	return
 }
 
+func (stream *ChatCompletionStreamReader) Close() error {
+	return stream.Response.Body.Close()
+}
+
 func (stream *BotChatCompletionStreamReader) Close() error {
 	// fmt.Printf("%#v\n", stream)
 	// fmt.Printf("%#v\n", stream.Response)
 	// fmt.Printf("%#v\n", stream.Response.Body)
 	return stream.ChatCompletionStreamReader.Response.Body.Close()
-}
-
-func (stream *ChatCompletionStreamReader) Close() error {
-	return stream.Response.Body.Close()
 }
