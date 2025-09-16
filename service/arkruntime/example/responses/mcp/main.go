@@ -22,6 +22,8 @@ func main() {
 	nonStream()
 }
 
+const MODEL = "seed-1-6-250615"
+
 func nonStream() {
 	fmt.Println("non stream")
 	client := arkruntime.NewClientWithApiKey(os.Getenv("ARK_API_KEY"))
@@ -37,14 +39,14 @@ func nonStream() {
 				Union: &responses.ContentItem_Text{
 					Text: &responses.ContentItemText{
 						Type: responses.ContentItemType_input_text,
-						Text: "查一下 mark3labs/mcp-go 这个仓库的结构",
+						Text: "check the repo structure of this repo: mark3labs/mcp-go",
 					},
 				},
 			},
 		},
 	}
 	createResponsesReq := &responses.ResponsesRequest{
-		Model: "doubao-seed-1-6",
+		Model: MODEL,
 		Input: &responses.ResponsesInput{
 			Union: &responses.ResponsesInput_ListValue{
 				ListValue: &responses.InputItemList{ListValue: []*responses.InputItem{{
@@ -83,7 +85,7 @@ func nonStream() {
 	fmt.Println()
 	fmt.Println("-----round 2---------")
 	createResponsesReq2 := &responses.ResponsesRequest{
-		Model: "doubao-seed-1-6",
+		Model: MODEL,
 		Input: &responses.ResponsesInput{
 			Union: &responses.ResponsesInput_ListValue{
 				ListValue: &responses.InputItemList{ListValue: []*responses.InputItem{{
@@ -120,7 +122,7 @@ func nonStream() {
 
 	fmt.Println("----- round 3 never require approval -----")
 	createResponsesReq3 := &responses.ResponsesRequest{
-		Model: "doubao-seed-1-6",
+		Model: MODEL,
 		Input: &responses.ResponsesInput{
 			Union: &responses.ResponsesInput_ListValue{
 				ListValue: &responses.InputItemList{ListValue: []*responses.InputItem{{
@@ -155,7 +157,6 @@ func nonStream() {
 
 func stream() {
 	fmt.Println("stream")
-
 	client := arkruntime.NewClientWithApiKey(os.Getenv("ARK_API_KEY"))
 	ctx := context.Background()
 
@@ -169,14 +170,14 @@ func stream() {
 				Union: &responses.ContentItem_Text{
 					Text: &responses.ContentItemText{
 						Type: responses.ContentItemType_input_text,
-						Text: "查一下 mark3labs/mcp-go 这个仓库的结构",
+						Text: "check the repo structure of this repo: mark3labs/mcp-go",
 					},
 				},
 			},
 		},
 	}
 	createResponsesReq := &responses.ResponsesRequest{
-		Model: "doubao-seed-1-6",
+		Model: MODEL,
 		Input: &responses.ResponsesInput{
 			Union: &responses.ResponsesInput_ListValue{
 				ListValue: &responses.InputItemList{ListValue: []*responses.InputItem{{
@@ -229,7 +230,7 @@ func stream() {
 	fmt.Println()
 	fmt.Println("-----round 2---------")
 	createResponsesReq2 := &responses.ResponsesRequest{
-		Model: "doubao-seed-1-6",
+		Model: MODEL,
 		Input: &responses.ResponsesInput{
 			Union: &responses.ResponsesInput_ListValue{
 				ListValue: &responses.InputItemList{ListValue: []*responses.InputItem{{
@@ -277,7 +278,7 @@ func stream() {
 
 	fmt.Println("----- round 3 never require approval -----")
 	createResponsesReq3 := &responses.ResponsesRequest{
-		Model: "doubao-seed-1-6",
+		Model: MODEL,
 		Input: &responses.ResponsesInput{
 			Union: &responses.ResponsesInput_ListValue{
 				ListValue: &responses.InputItemList{ListValue: []*responses.InputItem{{

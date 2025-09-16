@@ -3,12 +3,11 @@ package main
 import (
 	"context"
 	"fmt"
-	"io"
-	"os"
-
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/service/arkruntime"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/service/arkruntime/model/responses"
-	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
+	"io"
+	"os"
 )
 
 /**
@@ -33,7 +32,7 @@ func main() {
 					Image: &responses.ContentItemImage{
 						Type:     responses.ContentItemType_input_image,
 						Detail:   responses.ContentItemImageDetail_auto.Enum(),
-						ImageUrl: "https://ark-project.tos-cn-beijing.volces.com/images/view.jpeg",
+						ImageUrl: "https://ark-doc.tos-ap-southeast-1.bytepluses.com/see_i2v.jpeg",
 					},
 				},
 			},
@@ -41,14 +40,14 @@ func main() {
 				Union: &responses.ContentItem_Text{
 					Text: &responses.ContentItemText{
 						Type: responses.ContentItemType_input_text,
-						Text: "请给出图片的描述",
+						Text: "What is the person doing in this picture?",
 					},
 				},
 			},
 		},
 	}
 	createResponsesReq := &responses.ResponsesRequest{
-		Model: "doubao-seed-1-6",
+		Model: "seed-1-6-250615",
 		Input: &responses.ResponsesInput{
 			Union: &responses.ResponsesInput_ListValue{
 				ListValue: &responses.InputItemList{ListValue: []*responses.InputItem{{
@@ -85,7 +84,7 @@ func main() {
 	fmt.Println()
 	// round 2 messages
 	fmt.Println("-----round 2---------")
-	createResponsesReq.Input.Union = &responses.ResponsesInput_StringValue{StringValue: "上述对话中有几幅图片，每幅图片的描述是？"}
+	createResponsesReq.Input.Union = &responses.ResponsesInput_StringValue{StringValue: "How many pictures are there in the former conversation? Describe them please"}
 	createResponsesReq.PreviousResponseId = byteplus.String(responseId)
 	resp, err = client.CreateResponsesStream(ctx, createResponsesReq)
 	if err != nil {
