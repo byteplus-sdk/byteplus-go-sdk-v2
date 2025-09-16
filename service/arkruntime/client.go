@@ -234,6 +234,14 @@ func WithCustomHeader(key, value string) requestOption {
 	}
 }
 
+func WithCustomHeaders(m map[string]string) requestOption {
+	return func(args *requestOptions) {
+		for k, v := range m {
+			args.header.Set(k, v)
+		}
+	}
+}
+
 func (c *Client) newRequest(ctx context.Context, method, url, resourceType, resourceId string, setters ...requestOption) (*http.Request, *model.RequestError) {
 	// Default Options
 	args := &requestOptions{
