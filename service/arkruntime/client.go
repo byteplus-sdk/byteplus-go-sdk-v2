@@ -234,22 +234,6 @@ func WithCustomHeader(key, value string) requestOption {
 	}
 }
 
-func WithCustomHeaders(m map[string]string) requestOption {
-	return func(args *requestOptions) {
-		for k, v := range m {
-			args.header.Set(k, v)
-		}
-	}
-}
-
-// WithQuery returns a RequestOption that sets the query value to the associated key. It overwrites
-// any value if there was one already present.
-func WithQuery(key, value string) requestOption {
-	return func(args *requestOptions) {
-		args.query.Set(key, value)
-	}
-}
-
 func (c *Client) newRequest(ctx context.Context, method, url, resourceType, resourceId string, setters ...requestOption) (*http.Request, *model.RequestError) {
 	// Default Options
 	args := &requestOptions{
@@ -422,32 +406,6 @@ func sendChatCompletionRequestStream(client *Client, req *http.Request) (*utils.
 	}, nil
 }
 
-func sendBotChatCompletionRequestStream(client *Client, httpClient *http.Client, req *http.Request) (*utils.BotChatCompletionStreamReader, error) {
-	requestID := req.Header.Get(model.ClientRequestHeader)
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Accept", "text/event-stream")
-	req.Header.Set("Cache-Control", "no-cache")
-	req.Header.Set("Connection", "keep-alive")
-
-	resp, err := httpClient.Do(req) //nolint:bodyclose // body is closed in stream.Close()
-	if err != nil {
-		return &utils.BotChatCompletionStreamReader{}, model.NewRequestError(http.StatusInternalServerError, err, requestID)
-	}
-	if isFailureStatusCode(resp) {
-		return &utils.BotChatCompletionStreamReader{}, client.handleErrorResp(resp)
-	}
-	return &utils.BotChatCompletionStreamReader{
-		ChatCompletionStreamReader: utils.ChatCompletionStreamReader{
-			EmptyMessagesLimit: client.config.EmptyMessagesLimit,
-			Reader:             bufio.NewReader(resp.Body),
-			Response:           resp,
-			ErrAccumulator:     utils.NewErrorAccumulator(),
-			Unmarshaler:        &utils.JSONUnmarshaler{},
-			HttpHeader:         model.HttpHeader(resp.Header),
-		},
-	}, nil
-}
-
 func sendCreateResponsesRequestStream(client *Client, httpClient *http.Client, req *http.Request) (*utils.ResponsesStreamReader, error) {
 	requestID := req.Header.Get(model.ClientRequestHeader)
 	req.Header.Set("Content-Type", "application/json")
@@ -472,58 +430,6 @@ func sendCreateResponsesRequestStream(client *Client, httpClient *http.Client, r
 		},
 		Decoder: utils.NewEventStreamDecoder(resp.Body),
 	}, nil
-}
-
-func sendImageGenerationStream(client *Client, httpClient *http.Client, req *http.Request) (*utils.ImageGenerationStreamReader, error) {
-
-	requestID := req.Header.Get(model.ClientRequestHeader)
-	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("Accept", "text/event-stream")
-	req.Header.Set("Cache-Control", "no-cache")
-	req.Header.Set("Connection", "keep-alive")
-
-	resp, err := httpClient.Do(req) //nolint:bodyclose // body is closed in stream.Close()
-	if err != nil {
-		return &utils.ImageGenerationStreamReader{}, model.NewRequestError(http.StatusInternalServerError, err, requestID)
-	}
-	if isFailureStatusCode(resp) {
-		return &utils.ImageGenerationStreamReader{}, client.handleErrorResp(resp)
-	}
-	return &utils.ImageGenerationStreamReader{
-		ChatCompletionStreamReader: utils.ChatCompletionStreamReader{
-			EmptyMessagesLimit: client.config.EmptyMessagesLimit,
-			Reader:             bufio.NewReader(resp.Body),
-			Response:           resp,
-			ErrAccumulator:     utils.NewErrorAccumulator(),
-			Unmarshaler:        &utils.JSONUnmarshaler{},
-			HttpHeader:         model.HttpHeader(resp.Header),
-		},
-	}, nil
-}
-
-func (c *Client) BotChatCompletionRequestStreamDo(ctx context.Context, method, url, botId string, setters ...requestOption) (streamReader *utils.BotChatCompletionStreamReader, err error) {
-	err = utils.Retry(
-		ctx,
-		utils.RetryPolicy{
-			MaxAttempts:    c.config.RetryTimes,
-			InitialBackoff: model.ErrorRetryBaseDelay,
-			MaxBackoff:     model.ErrorRetryMaxDelay,
-		},
-		func() bool { return true },
-		func() error {
-			req, innerErr := c.newRequest(ctx, method, url, resourceTypeBot, botId, setters...)
-			if innerErr != nil {
-				return innerErr
-			}
-
-			streamReader, err = sendBotChatCompletionRequestStream(c, c.config.HTTPClient, req)
-			return err
-		},
-		nil,
-		needRetryError,
-	)
-
-	return
 }
 
 func (c *Client) ChatCompletionRequestStreamDo(ctx context.Context, method, url, resourceId string, setters ...requestOption) (streamReader *utils.ChatCompletionStreamReader, err error) {
@@ -567,30 +473,6 @@ func (c *Client) ResponsesRequestStreamDo(ctx context.Context, method, url, reso
 				return innerErr
 			}
 			resp, err = sendCreateResponsesRequestStream(c, c.config.HTTPClient, req)
-			return err
-		},
-		nil,
-		needRetryError,
-	)
-	return
-}
-func (c *Client) ImageGenerationStreamDo(ctx context.Context, method, url, resourceId string, setters ...requestOption) (streamReader *utils.ImageGenerationStreamReader, err error) {
-	err = utils.Retry(
-		ctx,
-		utils.RetryPolicy{
-			MaxAttempts:    c.config.RetryTimes,
-			InitialBackoff: model.ErrorRetryBaseDelay,
-			MaxBackoff:     model.ErrorRetryMaxDelay,
-		},
-		func() bool { return true },
-		func() error {
-			req, innerErr := c.newRequest(ctx, method, url, resourceTypeEndpoint, resourceId, setters...)
-			if innerErr != nil {
-				return innerErr
-			}
-
-			streamReader, err = sendImageGenerationStream(c, c.config.HTTPClient, req)
-
 			return err
 		},
 		nil,

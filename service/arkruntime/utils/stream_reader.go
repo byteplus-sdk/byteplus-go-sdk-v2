@@ -27,14 +27,6 @@ type ChatCompletionStreamReader struct {
 	model.HttpHeader
 }
 
-type BotChatCompletionStreamReader struct {
-	ChatCompletionStreamReader
-}
-
-type ImageGenerationStreamReader struct {
-	ChatCompletionStreamReader
-}
-
 func (stream *ChatCompletionStreamReader) Recv() (response model.ChatCompletionStreamResponse, err error) {
 	if stream.IsFinished {
 		err = io.EOF
@@ -185,16 +177,5 @@ func (stream *ChatCompletionStreamReader) unmarshalError() (errResp *model.Error
 }
 
 func (stream *ChatCompletionStreamReader) Close() error {
-	return stream.Response.Body.Close()
-}
-
-func (stream *BotChatCompletionStreamReader) Close() error {
-	// fmt.Printf("%#v\n", stream)
-	// fmt.Printf("%#v\n", stream.Response)
-	// fmt.Printf("%#v\n", stream.Response.Body)
-	return stream.ChatCompletionStreamReader.Response.Body.Close()
-}
-
-func (stream *ImageGenerationStreamReader) Close() error {
 	return stream.Response.Body.Close()
 }
