@@ -32,7 +32,7 @@ const opGetCustomerDetailsByTypeCommon = "GetCustomerDetailsByType"
 func (c *ECOPARTNER) GetCustomerDetailsByTypeCommonRequest(input *map[string]interface{}) (req *request.Request, output *map[string]interface{}) {
 	op := &request.Operation{
 		Name:       opGetCustomerDetailsByTypeCommon,
-		HTTPMethod: "GET",
+		HTTPMethod: "POST",
 		HTTPPath:   "/",
 	}
 
@@ -42,6 +42,8 @@ func (c *ECOPARTNER) GetCustomerDetailsByTypeCommonRequest(input *map[string]int
 
 	output = &map[string]interface{}{}
 	req = c.newRequest(op, input, output)
+
+	req.HTTPRequest.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	return
 }
@@ -97,7 +99,7 @@ const opGetCustomerDetailsByType = "GetCustomerDetailsByType"
 func (c *ECOPARTNER) GetCustomerDetailsByTypeRequest(input *GetCustomerDetailsByTypeInput) (req *request.Request, output *GetCustomerDetailsByTypeOutput) {
 	op := &request.Operation{
 		Name:       opGetCustomerDetailsByType,
-		HTTPMethod: "GET",
+		HTTPMethod: "POST",
 		HTTPPath:   "/",
 	}
 
@@ -107,6 +109,8 @@ func (c *ECOPARTNER) GetCustomerDetailsByTypeRequest(input *GetCustomerDetailsBy
 
 	output = &GetCustomerDetailsByTypeOutput{}
 	req = c.newRequest(op, input, output)
+
+	req.HTTPRequest.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	return
 }
@@ -140,43 +144,43 @@ func (c *ECOPARTNER) GetCustomerDetailsByTypeWithContext(ctx byteplus.Context, i
 }
 
 type CustomerForGetCustomerDetailsByTypeOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" json:",omitempty"`
 
-	AccountType *string `type:"string"`
+	AccountType *string `type:"string" json:",omitempty"`
 
-	AccountUsername *string `type:"string"`
+	AccountUsername *string `type:"string" json:",omitempty"`
 
-	AssociationSuccessTime *string `type:"string"`
+	AssociationSuccessTime *string `type:"string" json:",omitempty"`
 
-	CustomerAccountVerified *bool `type:"boolean"`
+	CustomerAccountVerified *bool `type:"boolean" json:",omitempty"`
 
-	CustomerBd *string `type:"string"`
+	CustomerBd *string `type:"string" json:",omitempty"`
 
-	Email *string `type:"string"`
+	Email *string `type:"string" json:",omitempty"`
 
-	Mobile *string `type:"string"`
+	Mobile *string `type:"string" json:",omitempty"`
 
-	OutstandingAmount *float64 `type:"float"`
+	OutstandingAmount *float64 `type:"float" json:",omitempty"`
 
-	ParentOrganizationName *string `type:"string"`
+	ParentOrganizationName *string `type:"string" json:",omitempty"`
 
-	ParentPartnerUid *int32 `type:"int32"`
+	ParentPartnerUid *int64 `type:"int64" json:",omitempty"`
 
-	ParentPartnerUsername *string `type:"string"`
+	ParentPartnerUsername *string `type:"string" json:",omitempty"`
 
-	QuotaAllocated *float64 `type:"float"`
+	QuotaAllocated *float64 `type:"float" json:",omitempty"`
 
-	QuotaBalance *float64 `type:"float"`
+	QuotaBalance *float64 `type:"float" json:",omitempty"`
 
-	QuotaUnit *string `type:"string"`
+	QuotaUnit *string `type:"string" json:",omitempty"`
 
-	RegisterCountryCode *string `type:"string"`
+	RegisterCountryCode *string `type:"string" json:",omitempty"`
 
-	Remark *string `type:"string"`
+	Remark *string `type:"string" json:",omitempty"`
 
-	SuspensionPolicy *string `type:"string"`
+	SuspensionPolicy *string `type:"string" json:",omitempty"`
 
-	Uid *int32 `type:"int32"`
+	Uid *int64 `type:"int64" json:",omitempty"`
 }
 
 // String returns the string representation
@@ -244,7 +248,7 @@ func (s *CustomerForGetCustomerDetailsByTypeOutput) SetParentOrganizationName(v 
 }
 
 // SetParentPartnerUid sets the ParentPartnerUid field's value.
-func (s *CustomerForGetCustomerDetailsByTypeOutput) SetParentPartnerUid(v int32) *CustomerForGetCustomerDetailsByTypeOutput {
+func (s *CustomerForGetCustomerDetailsByTypeOutput) SetParentPartnerUid(v int64) *CustomerForGetCustomerDetailsByTypeOutput {
 	s.ParentPartnerUid = &v
 	return s
 }
@@ -292,15 +296,15 @@ func (s *CustomerForGetCustomerDetailsByTypeOutput) SetSuspensionPolicy(v string
 }
 
 // SetUid sets the Uid field's value.
-func (s *CustomerForGetCustomerDetailsByTypeOutput) SetUid(v int32) *CustomerForGetCustomerDetailsByTypeOutput {
+func (s *CustomerForGetCustomerDetailsByTypeOutput) SetUid(v int64) *CustomerForGetCustomerDetailsByTypeOutput {
 	s.Uid = &v
 	return s
 }
 
 type GetCustomerDetailsByTypeInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" json:",omitempty"`
 
-	CustomerType *string `type:"string" enum:"EnumOfCustomerTypeForGetCustomerDetailsByTypeInput"`
+	CustomerType *string `max:"50" type:"string" json:",omitempty" enum:"EnumOfCustomerTypeForGetCustomerDetailsByTypeInput"`
 }
 
 // String returns the string representation
@@ -313,6 +317,19 @@ func (s GetCustomerDetailsByTypeInput) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetCustomerDetailsByTypeInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetCustomerDetailsByTypeInput"}
+	if s.CustomerType != nil && len(*s.CustomerType) > 50 {
+		invalidParams.Add(request.NewErrParamMaxLen("CustomerType", 50, *s.CustomerType))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // SetCustomerType sets the CustomerType field's value.
 func (s *GetCustomerDetailsByTypeInput) SetCustomerType(v string) *GetCustomerDetailsByTypeInput {
 	s.CustomerType = &v
@@ -320,11 +337,11 @@ func (s *GetCustomerDetailsByTypeInput) SetCustomerType(v string) *GetCustomerDe
 }
 
 type GetCustomerDetailsByTypeOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" json:",omitempty"`
 
 	Metadata *response.ResponseMetadata
 
-	Customers []*CustomerForGetCustomerDetailsByTypeOutput `type:"list"`
+	Customers []*CustomerForGetCustomerDetailsByTypeOutput `type:"list" json:",omitempty"`
 }
 
 // String returns the string representation

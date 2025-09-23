@@ -32,7 +32,7 @@ const opModifyQuotaCommon = "ModifyQuota"
 func (c *ECOPARTNER) ModifyQuotaCommonRequest(input *map[string]interface{}) (req *request.Request, output *map[string]interface{}) {
 	op := &request.Operation{
 		Name:       opModifyQuotaCommon,
-		HTTPMethod: "GET",
+		HTTPMethod: "POST",
 		HTTPPath:   "/",
 	}
 
@@ -42,6 +42,8 @@ func (c *ECOPARTNER) ModifyQuotaCommonRequest(input *map[string]interface{}) (re
 
 	output = &map[string]interface{}{}
 	req = c.newRequest(op, input, output)
+
+	req.HTTPRequest.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	return
 }
@@ -97,7 +99,7 @@ const opModifyQuota = "ModifyQuota"
 func (c *ECOPARTNER) ModifyQuotaRequest(input *ModifyQuotaInput) (req *request.Request, output *ModifyQuotaOutput) {
 	op := &request.Operation{
 		Name:       opModifyQuota,
-		HTTPMethod: "GET",
+		HTTPMethod: "POST",
 		HTTPPath:   "/",
 	}
 
@@ -107,6 +109,8 @@ func (c *ECOPARTNER) ModifyQuotaRequest(input *ModifyQuotaInput) (req *request.R
 
 	output = &ModifyQuotaOutput{}
 	req = c.newRequest(op, input, output)
+
+	req.HTTPRequest.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	return
 }
@@ -140,15 +144,15 @@ func (c *ECOPARTNER) ModifyQuotaWithContext(ctx byteplus.Context, input *ModifyQ
 }
 
 type ModifyQuotaInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" json:",omitempty"`
 
 	// QuotaAmount is a required field
-	QuotaAmount *float64 `type:"float" required:"true"`
+	QuotaAmount *float64 `type:"float" json:",omitempty" required:"true"`
 
-	Remarks *string `max:"512" type:"string"`
+	Remarks *string `max:"512" type:"string" json:",omitempty"`
 
 	// Uid is a required field
-	Uid *int32 `min:"10" max:"10" type:"int32" required:"true"`
+	Uid *int64 `type:"int64" json:",omitempty" required:"true"`
 }
 
 // String returns the string representation
@@ -173,12 +177,6 @@ func (s *ModifyQuotaInput) Validate() error {
 	if s.Uid == nil {
 		invalidParams.Add(request.NewErrParamRequired("Uid"))
 	}
-	if s.Uid != nil && *s.Uid < 10 {
-		invalidParams.Add(request.NewErrParamMinValue("Uid", 10))
-	}
-	if s.Uid != nil && *s.Uid > 10 {
-		invalidParams.Add(request.NewErrParamMaxValue("Uid", 10))
-	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -199,29 +197,29 @@ func (s *ModifyQuotaInput) SetRemarks(v string) *ModifyQuotaInput {
 }
 
 // SetUid sets the Uid field's value.
-func (s *ModifyQuotaInput) SetUid(v int32) *ModifyQuotaInput {
+func (s *ModifyQuotaInput) SetUid(v int64) *ModifyQuotaInput {
 	s.Uid = &v
 	return s
 }
 
 type ModifyQuotaOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" json:",omitempty"`
 
 	Metadata *response.ResponseMetadata
 
-	LastUpdatedTime *string `type:"string"`
+	LastUpdatedTime *string `type:"string" json:",omitempty"`
 
-	OutstandingAmount *float64 `type:"float"`
+	OutstandingAmount *float64 `type:"float" json:",omitempty"`
 
-	QuotaAllocatedAfter *float64 `type:"float"`
+	QuotaAllocatedAfter *float64 `type:"float" json:",omitempty"`
 
-	QuotaAllocatedBefore *float64 `type:"float"`
+	QuotaAllocatedBefore *float64 `type:"float" json:",omitempty"`
 
-	QuotaBalance *float64 `type:"float"`
+	QuotaBalance *float64 `type:"float" json:",omitempty"`
 
-	QuotaUnit *string `type:"string"`
+	QuotaUnit *string `type:"string" json:",omitempty"`
 
-	Uid *int32 `type:"int32"`
+	Uid *int64 `type:"int64" json:",omitempty"`
 }
 
 // String returns the string representation
@@ -271,7 +269,7 @@ func (s *ModifyQuotaOutput) SetQuotaUnit(v string) *ModifyQuotaOutput {
 }
 
 // SetUid sets the Uid field's value.
-func (s *ModifyQuotaOutput) SetUid(v int32) *ModifyQuotaOutput {
+func (s *ModifyQuotaOutput) SetUid(v int64) *ModifyQuotaOutput {
 	s.Uid = &v
 	return s
 }

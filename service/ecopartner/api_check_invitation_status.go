@@ -32,7 +32,7 @@ const opCheckInvitationStatusCommon = "CheckInvitationStatus"
 func (c *ECOPARTNER) CheckInvitationStatusCommonRequest(input *map[string]interface{}) (req *request.Request, output *map[string]interface{}) {
 	op := &request.Operation{
 		Name:       opCheckInvitationStatusCommon,
-		HTTPMethod: "GET",
+		HTTPMethod: "POST",
 		HTTPPath:   "/",
 	}
 
@@ -42,6 +42,8 @@ func (c *ECOPARTNER) CheckInvitationStatusCommonRequest(input *map[string]interf
 
 	output = &map[string]interface{}{}
 	req = c.newRequest(op, input, output)
+
+	req.HTTPRequest.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	return
 }
@@ -97,7 +99,7 @@ const opCheckInvitationStatus = "CheckInvitationStatus"
 func (c *ECOPARTNER) CheckInvitationStatusRequest(input *CheckInvitationStatusInput) (req *request.Request, output *CheckInvitationStatusOutput) {
 	op := &request.Operation{
 		Name:       opCheckInvitationStatus,
-		HTTPMethod: "GET",
+		HTTPMethod: "POST",
 		HTTPPath:   "/",
 	}
 
@@ -107,6 +109,8 @@ func (c *ECOPARTNER) CheckInvitationStatusRequest(input *CheckInvitationStatusIn
 
 	output = &CheckInvitationStatusOutput{}
 	req = c.newRequest(op, input, output)
+
+	req.HTTPRequest.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	return
 }
@@ -140,10 +144,10 @@ func (c *ECOPARTNER) CheckInvitationStatusWithContext(ctx byteplus.Context, inpu
 }
 
 type CheckInvitationStatusInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" json:",omitempty"`
 
 	// Token is a required field
-	Token *string `type:"string" required:"true"`
+	Token *string `type:"string" json:",omitempty" required:"true"`
 }
 
 // String returns the string representation
@@ -176,25 +180,25 @@ func (s *CheckInvitationStatusInput) SetToken(v string) *CheckInvitationStatusIn
 }
 
 type CheckInvitationStatusOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" json:",omitempty"`
 
 	Metadata *response.ResponseMetadata
 
-	ClaimedTime *string `type:"string"`
+	ClaimedTime *string `type:"string" json:",omitempty"`
 
-	ClaimedUserUid *int32 `type:"int32"`
+	ClaimedUserUid *int64 `type:"int64" json:",omitempty"`
 
-	CreatedTime *string `type:"string"`
+	CreatedTime *string `type:"string" json:",omitempty"`
 
-	CustomerType *string `type:"string"`
+	CustomerType *string `type:"string" json:",omitempty"`
 
-	FailureReason *string `type:"string"`
+	FailureReason *string `type:"string" json:",omitempty"`
 
-	PartnerUid *int32 `type:"int32"`
+	PartnerUid *int64 `type:"int64" json:",omitempty"`
 
-	Status *string `type:"string"`
+	Status *string `type:"string" json:",omitempty"`
 
-	Token *string `type:"string"`
+	Token *string `type:"string" json:",omitempty"`
 }
 
 // String returns the string representation
@@ -214,7 +218,7 @@ func (s *CheckInvitationStatusOutput) SetClaimedTime(v string) *CheckInvitationS
 }
 
 // SetClaimedUserUid sets the ClaimedUserUid field's value.
-func (s *CheckInvitationStatusOutput) SetClaimedUserUid(v int32) *CheckInvitationStatusOutput {
+func (s *CheckInvitationStatusOutput) SetClaimedUserUid(v int64) *CheckInvitationStatusOutput {
 	s.ClaimedUserUid = &v
 	return s
 }
@@ -238,7 +242,7 @@ func (s *CheckInvitationStatusOutput) SetFailureReason(v string) *CheckInvitatio
 }
 
 // SetPartnerUid sets the PartnerUid field's value.
-func (s *CheckInvitationStatusOutput) SetPartnerUid(v int32) *CheckInvitationStatusOutput {
+func (s *CheckInvitationStatusOutput) SetPartnerUid(v int64) *CheckInvitationStatusOutput {
 	s.PartnerUid = &v
 	return s
 }

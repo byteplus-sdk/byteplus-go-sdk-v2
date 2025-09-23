@@ -32,7 +32,7 @@ const opSettleQuotaPaymentCommon = "SettleQuotaPayment"
 func (c *ECOPARTNER) SettleQuotaPaymentCommonRequest(input *map[string]interface{}) (req *request.Request, output *map[string]interface{}) {
 	op := &request.Operation{
 		Name:       opSettleQuotaPaymentCommon,
-		HTTPMethod: "GET",
+		HTTPMethod: "POST",
 		HTTPPath:   "/",
 	}
 
@@ -42,6 +42,8 @@ func (c *ECOPARTNER) SettleQuotaPaymentCommonRequest(input *map[string]interface
 
 	output = &map[string]interface{}{}
 	req = c.newRequest(op, input, output)
+
+	req.HTTPRequest.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	return
 }
@@ -97,7 +99,7 @@ const opSettleQuotaPayment = "SettleQuotaPayment"
 func (c *ECOPARTNER) SettleQuotaPaymentRequest(input *SettleQuotaPaymentInput) (req *request.Request, output *SettleQuotaPaymentOutput) {
 	op := &request.Operation{
 		Name:       opSettleQuotaPayment,
-		HTTPMethod: "GET",
+		HTTPMethod: "POST",
 		HTTPPath:   "/",
 	}
 
@@ -107,6 +109,8 @@ func (c *ECOPARTNER) SettleQuotaPaymentRequest(input *SettleQuotaPaymentInput) (
 
 	output = &SettleQuotaPaymentOutput{}
 	req = c.newRequest(op, input, output)
+
+	req.HTTPRequest.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	return
 }
@@ -140,15 +144,15 @@ func (c *ECOPARTNER) SettleQuotaPaymentWithContext(ctx byteplus.Context, input *
 }
 
 type SettleQuotaPaymentInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" json:",omitempty"`
 
-	Remarks *string `max:"256" type:"string"`
+	Remarks *string `max:"256" type:"string" json:",omitempty"`
 
 	// RepaymentAmount is a required field
-	RepaymentAmount *float64 `type:"float" required:"true"`
+	RepaymentAmount *float64 `type:"float" json:",omitempty" required:"true"`
 
 	// Uid is a required field
-	Uid *int32 `min:"10" max:"10" type:"int32" required:"true"`
+	Uid *int64 `type:"int64" json:",omitempty" required:"true"`
 }
 
 // String returns the string representation
@@ -173,12 +177,6 @@ func (s *SettleQuotaPaymentInput) Validate() error {
 	if s.Uid == nil {
 		invalidParams.Add(request.NewErrParamRequired("Uid"))
 	}
-	if s.Uid != nil && *s.Uid < 10 {
-		invalidParams.Add(request.NewErrParamMinValue("Uid", 10))
-	}
-	if s.Uid != nil && *s.Uid > 10 {
-		invalidParams.Add(request.NewErrParamMaxValue("Uid", 10))
-	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -199,31 +197,33 @@ func (s *SettleQuotaPaymentInput) SetRepaymentAmount(v float64) *SettleQuotaPaym
 }
 
 // SetUid sets the Uid field's value.
-func (s *SettleQuotaPaymentInput) SetUid(v int32) *SettleQuotaPaymentInput {
+func (s *SettleQuotaPaymentInput) SetUid(v int64) *SettleQuotaPaymentInput {
 	s.Uid = &v
 	return s
 }
 
 type SettleQuotaPaymentOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" json:",omitempty"`
 
 	Metadata *response.ResponseMetadata
 
-	LastUpdatedTime *string `type:"string"`
+	LastUpdatedTime *string `type:"string" json:",omitempty"`
 
-	OutstandingAmountAfter *float64 `type:"float"`
+	OutstandingAmountAfter *float64 `type:"float" json:",omitempty"`
 
-	OutstandingAmountBefore *float64 `type:"float"`
+	OutstandingAmountBefore *float64 `type:"float" json:",omitempty"`
 
-	QuotaAllocated *float64 `type:"float"`
+	QuotaAllocated *float64 `type:"float" json:",omitempty"`
 
-	QuotaBalance *float64 `type:"float"`
+	QuotaBalance *float64 `type:"float" json:",omitempty"`
 
-	QuotaUnit *string `type:"string"`
+	QuotaUnit *string `type:"string" json:",omitempty"`
 
-	RepaymentAmount *float64 `type:"float"`
+	RepaymentAmount *float64 `type:"float" json:",omitempty"`
 
-	Uid *int32 `type:"int32"`
+	Success *bool `type:"boolean" json:",omitempty"`
+
+	Uid *int64 `type:"int64" json:",omitempty"`
 }
 
 // String returns the string representation
@@ -278,8 +278,14 @@ func (s *SettleQuotaPaymentOutput) SetRepaymentAmount(v float64) *SettleQuotaPay
 	return s
 }
 
+// SetSuccess sets the Success field's value.
+func (s *SettleQuotaPaymentOutput) SetSuccess(v bool) *SettleQuotaPaymentOutput {
+	s.Success = &v
+	return s
+}
+
 // SetUid sets the Uid field's value.
-func (s *SettleQuotaPaymentOutput) SetUid(v int32) *SettleQuotaPaymentOutput {
+func (s *SettleQuotaPaymentOutput) SetUid(v int64) *SettleQuotaPaymentOutput {
 	s.Uid = &v
 	return s
 }

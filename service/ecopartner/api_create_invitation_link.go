@@ -32,7 +32,7 @@ const opCreateInvitationLinkCommon = "CreateInvitationLink"
 func (c *ECOPARTNER) CreateInvitationLinkCommonRequest(input *map[string]interface{}) (req *request.Request, output *map[string]interface{}) {
 	op := &request.Operation{
 		Name:       opCreateInvitationLinkCommon,
-		HTTPMethod: "GET",
+		HTTPMethod: "POST",
 		HTTPPath:   "/",
 	}
 
@@ -42,6 +42,8 @@ func (c *ECOPARTNER) CreateInvitationLinkCommonRequest(input *map[string]interfa
 
 	output = &map[string]interface{}{}
 	req = c.newRequest(op, input, output)
+
+	req.HTTPRequest.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	return
 }
@@ -97,7 +99,7 @@ const opCreateInvitationLink = "CreateInvitationLink"
 func (c *ECOPARTNER) CreateInvitationLinkRequest(input *CreateInvitationLinkInput) (req *request.Request, output *CreateInvitationLinkOutput) {
 	op := &request.Operation{
 		Name:       opCreateInvitationLink,
-		HTTPMethod: "GET",
+		HTTPMethod: "POST",
 		HTTPPath:   "/",
 	}
 
@@ -107,6 +109,8 @@ func (c *ECOPARTNER) CreateInvitationLinkRequest(input *CreateInvitationLinkInpu
 
 	output = &CreateInvitationLinkOutput{}
 	req = c.newRequest(op, input, output)
+
+	req.HTTPRequest.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	return
 }
@@ -140,19 +144,19 @@ func (c *ECOPARTNER) CreateInvitationLinkWithContext(ctx byteplus.Context, input
 }
 
 type CreateInvitationLinkInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" json:",omitempty"`
 
 	// InvitationType is a required field
-	InvitationType *string `type:"string" required:"true" enum:"EnumOfInvitationTypeForCreateInvitationLinkInput"`
+	InvitationType *string `type:"string" json:",omitempty" required:"true" enum:"EnumOfInvitationTypeForCreateInvitationLinkInput"`
 
 	// RecipientCompany is a required field
-	RecipientCompany *string `max:"128" type:"string" required:"true"`
+	RecipientCompany *string `max:"128" type:"string" json:",omitempty" required:"true"`
 
 	// RecipientEmail is a required field
-	RecipientEmail *string `max:"254" type:"string" required:"true"`
+	RecipientEmail *string `max:"254" type:"string" json:",omitempty" required:"true"`
 
 	// SendEmail is a required field
-	SendEmail *bool `type:"boolean" required:"true"`
+	SendEmail *bool `type:"boolean" json:",omitempty" required:"true"`
 }
 
 // String returns the string representation
@@ -218,13 +222,13 @@ func (s *CreateInvitationLinkInput) SetSendEmail(v bool) *CreateInvitationLinkIn
 }
 
 type CreateInvitationLinkOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" json:",omitempty"`
 
 	Metadata *response.ResponseMetadata
 
-	Link *string `type:"string"`
+	Link *string `type:"string" json:",omitempty"`
 
-	Token *string `type:"string"`
+	Token *string `type:"string" json:",omitempty"`
 }
 
 // String returns the string representation
