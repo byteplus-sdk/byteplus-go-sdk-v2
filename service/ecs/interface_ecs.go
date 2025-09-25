@@ -118,6 +118,22 @@ type ECSAPI interface {
 	CreateKeyPairWithContext(byteplus.Context, *CreateKeyPairInput, ...request.Option) (*CreateKeyPairOutput, error)
 	CreateKeyPairRequest(*CreateKeyPairInput) (*request.Request, *CreateKeyPairOutput)
 
+	CreateLaunchTemplateCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateLaunchTemplateCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateLaunchTemplateCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateLaunchTemplate(*CreateLaunchTemplateInput) (*CreateLaunchTemplateOutput, error)
+	CreateLaunchTemplateWithContext(byteplus.Context, *CreateLaunchTemplateInput, ...request.Option) (*CreateLaunchTemplateOutput, error)
+	CreateLaunchTemplateRequest(*CreateLaunchTemplateInput) (*request.Request, *CreateLaunchTemplateOutput)
+
+	CreateLaunchTemplateVersionCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateLaunchTemplateVersionCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateLaunchTemplateVersionCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateLaunchTemplateVersion(*CreateLaunchTemplateVersionInput) (*CreateLaunchTemplateVersionOutput, error)
+	CreateLaunchTemplateVersionWithContext(byteplus.Context, *CreateLaunchTemplateVersionInput, ...request.Option) (*CreateLaunchTemplateVersionOutput, error)
+	CreateLaunchTemplateVersionRequest(*CreateLaunchTemplateVersionInput) (*request.Request, *CreateLaunchTemplateVersionOutput)
+
 	CreateScheduledInstancesCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	CreateScheduledInstancesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	CreateScheduledInstancesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -213,6 +229,22 @@ type ECSAPI interface {
 	DeleteKeyPairs(*DeleteKeyPairsInput) (*DeleteKeyPairsOutput, error)
 	DeleteKeyPairsWithContext(byteplus.Context, *DeleteKeyPairsInput, ...request.Option) (*DeleteKeyPairsOutput, error)
 	DeleteKeyPairsRequest(*DeleteKeyPairsInput) (*request.Request, *DeleteKeyPairsOutput)
+
+	DeleteLaunchTemplateCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteLaunchTemplateCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteLaunchTemplateCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteLaunchTemplate(*DeleteLaunchTemplateInput) (*DeleteLaunchTemplateOutput, error)
+	DeleteLaunchTemplateWithContext(byteplus.Context, *DeleteLaunchTemplateInput, ...request.Option) (*DeleteLaunchTemplateOutput, error)
+	DeleteLaunchTemplateRequest(*DeleteLaunchTemplateInput) (*request.Request, *DeleteLaunchTemplateOutput)
+
+	DeleteLaunchTemplateVersionCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteLaunchTemplateVersionCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteLaunchTemplateVersionCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteLaunchTemplateVersion(*DeleteLaunchTemplateVersionInput) (*DeleteLaunchTemplateVersionOutput, error)
+	DeleteLaunchTemplateVersionWithContext(byteplus.Context, *DeleteLaunchTemplateVersionInput, ...request.Option) (*DeleteLaunchTemplateVersionOutput, error)
+	DeleteLaunchTemplateVersionRequest(*DeleteLaunchTemplateVersionInput) (*request.Request, *DeleteLaunchTemplateVersionOutput)
 
 	DeleteScheduledInstanceCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DeleteScheduledInstanceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -422,6 +454,22 @@ type ECSAPI interface {
 	DescribeKeyPairsWithContext(byteplus.Context, *DescribeKeyPairsInput, ...request.Option) (*DescribeKeyPairsOutput, error)
 	DescribeKeyPairsRequest(*DescribeKeyPairsInput) (*request.Request, *DescribeKeyPairsOutput)
 
+	DescribeLaunchTemplateVersionsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeLaunchTemplateVersionsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeLaunchTemplateVersionsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeLaunchTemplateVersions(*DescribeLaunchTemplateVersionsInput) (*DescribeLaunchTemplateVersionsOutput, error)
+	DescribeLaunchTemplateVersionsWithContext(byteplus.Context, *DescribeLaunchTemplateVersionsInput, ...request.Option) (*DescribeLaunchTemplateVersionsOutput, error)
+	DescribeLaunchTemplateVersionsRequest(*DescribeLaunchTemplateVersionsInput) (*request.Request, *DescribeLaunchTemplateVersionsOutput)
+
+	DescribeLaunchTemplatesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeLaunchTemplatesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeLaunchTemplatesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeLaunchTemplates(*DescribeLaunchTemplatesInput) (*DescribeLaunchTemplatesOutput, error)
+	DescribeLaunchTemplatesWithContext(byteplus.Context, *DescribeLaunchTemplatesInput, ...request.Option) (*DescribeLaunchTemplatesOutput, error)
+	DescribeLaunchTemplatesRequest(*DescribeLaunchTemplatesInput) (*request.Request, *DescribeLaunchTemplatesOutput)
+
 	DescribeRegionsCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DescribeRegionsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	DescribeRegionsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -477,6 +525,14 @@ type ECSAPI interface {
 	DescribeSubscriptions(*DescribeSubscriptionsInput) (*DescribeSubscriptionsOutput, error)
 	DescribeSubscriptionsWithContext(byteplus.Context, *DescribeSubscriptionsInput, ...request.Option) (*DescribeSubscriptionsOutput, error)
 	DescribeSubscriptionsRequest(*DescribeSubscriptionsInput) (*request.Request, *DescribeSubscriptionsOutput)
+
+	DescribeSystemEventDefaultActionCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeSystemEventDefaultActionCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeSystemEventDefaultActionCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeSystemEventDefaultAction(*DescribeSystemEventDefaultActionInput) (*DescribeSystemEventDefaultActionOutput, error)
+	DescribeSystemEventDefaultActionWithContext(byteplus.Context, *DescribeSystemEventDefaultActionInput, ...request.Option) (*DescribeSystemEventDefaultActionOutput, error)
+	DescribeSystemEventDefaultActionRequest(*DescribeSystemEventDefaultActionInput) (*request.Request, *DescribeSystemEventDefaultActionOutput)
 
 	DescribeSystemEventsCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DescribeSystemEventsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -718,6 +774,14 @@ type ECSAPI interface {
 	ModifyInstanceVpcAttributeWithContext(byteplus.Context, *ModifyInstanceVpcAttributeInput, ...request.Option) (*ModifyInstanceVpcAttributeOutput, error)
 	ModifyInstanceVpcAttributeRequest(*ModifyInstanceVpcAttributeInput) (*request.Request, *ModifyInstanceVpcAttributeOutput)
 
+	ModifyInstancesSpecCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyInstancesSpecCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyInstancesSpecCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyInstancesSpec(*ModifyInstancesSpecInput) (*ModifyInstancesSpecOutput, error)
+	ModifyInstancesSpecWithContext(byteplus.Context, *ModifyInstancesSpecInput, ...request.Option) (*ModifyInstancesSpecOutput, error)
+	ModifyInstancesSpecRequest(*ModifyInstancesSpecInput) (*request.Request, *ModifyInstancesSpecOutput)
+
 	ModifyKeyPairAttributeCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ModifyKeyPairAttributeCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	ModifyKeyPairAttributeCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -741,6 +805,22 @@ type ECSAPI interface {
 	ModifySubscriptionEventTypes(*ModifySubscriptionEventTypesInput) (*ModifySubscriptionEventTypesOutput, error)
 	ModifySubscriptionEventTypesWithContext(byteplus.Context, *ModifySubscriptionEventTypesInput, ...request.Option) (*ModifySubscriptionEventTypesOutput, error)
 	ModifySubscriptionEventTypesRequest(*ModifySubscriptionEventTypesInput) (*request.Request, *ModifySubscriptionEventTypesOutput)
+
+	ModifySystemEventDefaultActionCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifySystemEventDefaultActionCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifySystemEventDefaultActionCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifySystemEventDefaultAction(*ModifySystemEventDefaultActionInput) (*ModifySystemEventDefaultActionOutput, error)
+	ModifySystemEventDefaultActionWithContext(byteplus.Context, *ModifySystemEventDefaultActionInput, ...request.Option) (*ModifySystemEventDefaultActionOutput, error)
+	ModifySystemEventDefaultActionRequest(*ModifySystemEventDefaultActionInput) (*request.Request, *ModifySystemEventDefaultActionOutput)
+
+	ModifyTemplateDefaultVersionCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyTemplateDefaultVersionCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyTemplateDefaultVersionCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyTemplateDefaultVersion(*ModifyTemplateDefaultVersionInput) (*ModifyTemplateDefaultVersionOutput, error)
+	ModifyTemplateDefaultVersionWithContext(byteplus.Context, *ModifyTemplateDefaultVersionInput, ...request.Option) (*ModifyTemplateDefaultVersionOutput, error)
+	ModifyTemplateDefaultVersionRequest(*ModifyTemplateDefaultVersionInput) (*request.Request, *ModifyTemplateDefaultVersionOutput)
 
 	PurchaseReservedInstancesCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	PurchaseReservedInstancesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -813,6 +893,14 @@ type ECSAPI interface {
 	ReplaceSystemVolume(*ReplaceSystemVolumeInput) (*ReplaceSystemVolumeOutput, error)
 	ReplaceSystemVolumeWithContext(byteplus.Context, *ReplaceSystemVolumeInput, ...request.Option) (*ReplaceSystemVolumeOutput, error)
 	ReplaceSystemVolumeRequest(*ReplaceSystemVolumeInput) (*request.Request, *ReplaceSystemVolumeOutput)
+
+	ReportInstancesStatusCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ReportInstancesStatusCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ReportInstancesStatusCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ReportInstancesStatus(*ReportInstancesStatusInput) (*ReportInstancesStatusOutput, error)
+	ReportInstancesStatusWithContext(byteplus.Context, *ReportInstancesStatusInput, ...request.Option) (*ReportInstancesStatusOutput, error)
+	ReportInstancesStatusRequest(*ReportInstancesStatusInput) (*request.Request, *ReportInstancesStatusOutput)
 
 	RunCommandCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	RunCommandCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
