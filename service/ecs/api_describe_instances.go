@@ -468,6 +468,8 @@ type InstanceForDescribeInstancesOutput struct {
 
 	ElasticScheduledInstanceType *string `type:"string"`
 
+	EnableJumboFrame *bool `type:"boolean"`
+
 	ExpiredAt *string `type:"string"`
 
 	HostName *string `type:"string"`
@@ -507,6 +509,8 @@ type InstanceForDescribeInstancesOutput struct {
 	ProjectName *string `type:"string"`
 
 	RdmaIpAddresses []*string `type:"list"`
+
+	RdmaNetworkInterfaceDetails []*RdmaNetworkInterfaceDetailForDescribeInstancesOutput `type:"list"`
 
 	ScheduledInstanceId *string `type:"string"`
 
@@ -598,6 +602,12 @@ func (s *InstanceForDescribeInstancesOutput) SetEipAddress(v *EipAddressForDescr
 // SetElasticScheduledInstanceType sets the ElasticScheduledInstanceType field's value.
 func (s *InstanceForDescribeInstancesOutput) SetElasticScheduledInstanceType(v string) *InstanceForDescribeInstancesOutput {
 	s.ElasticScheduledInstanceType = &v
+	return s
+}
+
+// SetEnableJumboFrame sets the EnableJumboFrame field's value.
+func (s *InstanceForDescribeInstancesOutput) SetEnableJumboFrame(v bool) *InstanceForDescribeInstancesOutput {
+	s.EnableJumboFrame = &v
 	return s
 }
 
@@ -718,6 +728,12 @@ func (s *InstanceForDescribeInstancesOutput) SetProjectName(v string) *InstanceF
 // SetRdmaIpAddresses sets the RdmaIpAddresses field's value.
 func (s *InstanceForDescribeInstancesOutput) SetRdmaIpAddresses(v []*string) *InstanceForDescribeInstancesOutput {
 	s.RdmaIpAddresses = v
+	return s
+}
+
+// SetRdmaNetworkInterfaceDetails sets the RdmaNetworkInterfaceDetails field's value.
+func (s *InstanceForDescribeInstancesOutput) SetRdmaNetworkInterfaceDetails(v []*RdmaNetworkInterfaceDetailForDescribeInstancesOutput) *InstanceForDescribeInstancesOutput {
+	s.RdmaNetworkInterfaceDetails = v
 	return s
 }
 
@@ -968,6 +984,60 @@ func (s *PlacementForDescribeInstancesOutput) SetDedicatedHostId(v string) *Plac
 // SetTenancy sets the Tenancy field's value.
 func (s *PlacementForDescribeInstancesOutput) SetTenancy(v string) *PlacementForDescribeInstancesOutput {
 	s.Tenancy = &v
+	return s
+}
+
+type RdmaNetworkInterfaceDetailForDescribeInstancesOutput struct {
+	_ struct{} `type:"structure"`
+
+	Gateway *string `type:"string"`
+
+	Ip *string `type:"string"`
+
+	Mask *string `type:"string"`
+
+	SwitchName *string `type:"string"`
+
+	SwitchPort *string `type:"string"`
+}
+
+// String returns the string representation
+func (s RdmaNetworkInterfaceDetailForDescribeInstancesOutput) String() string {
+	return byteplusutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RdmaNetworkInterfaceDetailForDescribeInstancesOutput) GoString() string {
+	return s.String()
+}
+
+// SetGateway sets the Gateway field's value.
+func (s *RdmaNetworkInterfaceDetailForDescribeInstancesOutput) SetGateway(v string) *RdmaNetworkInterfaceDetailForDescribeInstancesOutput {
+	s.Gateway = &v
+	return s
+}
+
+// SetIp sets the Ip field's value.
+func (s *RdmaNetworkInterfaceDetailForDescribeInstancesOutput) SetIp(v string) *RdmaNetworkInterfaceDetailForDescribeInstancesOutput {
+	s.Ip = &v
+	return s
+}
+
+// SetMask sets the Mask field's value.
+func (s *RdmaNetworkInterfaceDetailForDescribeInstancesOutput) SetMask(v string) *RdmaNetworkInterfaceDetailForDescribeInstancesOutput {
+	s.Mask = &v
+	return s
+}
+
+// SetSwitchName sets the SwitchName field's value.
+func (s *RdmaNetworkInterfaceDetailForDescribeInstancesOutput) SetSwitchName(v string) *RdmaNetworkInterfaceDetailForDescribeInstancesOutput {
+	s.SwitchName = &v
+	return s
+}
+
+// SetSwitchPort sets the SwitchPort field's value.
+func (s *RdmaNetworkInterfaceDetailForDescribeInstancesOutput) SetSwitchPort(v string) *RdmaNetworkInterfaceDetailForDescribeInstancesOutput {
+	s.SwitchPort = &v
 	return s
 }
 
