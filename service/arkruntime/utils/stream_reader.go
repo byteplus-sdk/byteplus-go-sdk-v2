@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/service/arkruntime/model"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/service/arkruntime/model/responses"
 )
 
 var (
@@ -36,6 +37,21 @@ type ImageGenerationStreamReader struct {
 }
 
 func (stream *ChatCompletionStreamReader) Recv() (response model.ChatCompletionStreamResponse, err error) {
+	if stream.IsFinished {
+		err = io.EOF
+		return
+	}
+
+	response, err = stream.processLines()
+	return
+}
+
+type ResponsesStreamReader struct {
+	ChatCompletionStreamReader
+	Decoder *EventStreamDecoder
+}
+
+func (stream *ResponsesStreamReader) Recv() (response *responses.Event, err error) {
 	if stream.IsFinished {
 		err = io.EOF
 		return
@@ -107,6 +123,46 @@ func (stream *ChatCompletionStreamReader) processLines() (model.ChatCompletionSt
 
 		return response, nil
 	}
+}
+
+func (stream *ResponsesStreamReader) processLines() (*responses.Event, error) {
+	var (
+		emptyMessagesCount uint
+	)
+
+	for stream.Decoder.Next() {
+
+		// trimedLine is trimed with header and followed space (if exists)
+		if bytes.HasPrefix(stream.Decoder.Event().Data, errorPrefix) {
+			writeErr := stream.ErrAccumulator.Write(stream.Decoder.Event().Data)
+			if writeErr != nil {
+				return nil, writeErr
+			}
+			emptyMessagesCount++
+			if emptyMessagesCount > stream.EmptyMessagesLimit {
+				return nil, model.ErrTooManyEmptyStreamMessages
+			}
+			if respErr := stream.unmarshalError(); respErr != nil {
+				return nil, fmt.Errorf("error, %w", respErr.Error)
+			}
+			continue
+		}
+
+		if bytes.HasPrefix(stream.Decoder.Event().Data, []byte("[DONE]")) {
+			// In this case we don't break because we still want to iterate through the full stream.
+			stream.IsFinished = true
+			return nil, io.EOF
+		}
+
+		response := &responses.Event{}
+		unmarshalErr := stream.Unmarshaler.Unmarshal(stream.Decoder.Event().Data, response)
+		if unmarshalErr != nil {
+			return nil, unmarshalErr
+		}
+
+		return response, nil
+	}
+	return nil, stream.Decoder.Err()
 }
 
 func (stream *ImageGenerationStreamReader) processLines() (model.ImagesStreamResponse, error) {

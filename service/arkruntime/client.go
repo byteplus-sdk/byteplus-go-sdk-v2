@@ -390,7 +390,7 @@ func (c *Client) sendRequestRaw(req *http.Request) (response model.RawResponse, 
 	return
 }
 
-func sendChatCompletionRequestStream(client *Client, req *http.Request) (*utils.ChatCompletionStreamReader, error) {
+func sendChatCompletionRequestStream(client *Client, httpClient *http.Client, req *http.Request) (*utils.ChatCompletionStreamReader, error) {
 	requestID := req.Header.Get(model.ClientRequestHeader)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Accept", "text/event-stream")

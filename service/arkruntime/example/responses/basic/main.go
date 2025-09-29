@@ -7,7 +7,6 @@ import (
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/service/arkruntime"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/service/arkruntime/model/responses"
 	"io"
-	"os"
 )
 
 /**
@@ -19,7 +18,7 @@ import (
  */
 
 func main() {
-	client := arkruntime.NewClientWithApiKey(os.Getenv("ARK_API_KEY"))
+	client := arkruntime.NewClientWithApiKey("bad15305-3fed-4c35-986f-2676f1ad5828")
 	ctx := context.Background()
 
 	fmt.Println("----- round 1 message -----")
