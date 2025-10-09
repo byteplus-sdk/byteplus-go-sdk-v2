@@ -391,7 +391,7 @@ func debugLogReqError(r *Request, stage, retryStr string, err error) {
 		return
 	}
 
-	r.Config.Logger.Log(fmt.Sprintf("DEBUG: %s %s/%s failed, %s, error %v",
+	r.Config.Logger.Error(fmt.Sprintf("%s %s/%s failed, %s, error %v",
 		stage, r.ClientInfo.ServiceName, r.Operation.Name, retryStr, err))
 }
 
@@ -566,7 +566,7 @@ func (r *Request) Send() error {
 
 func (r *Request) prepareRetry() error {
 	if r.Config.LogLevel.Matches(byteplus.LogDebugWithRequestRetries) {
-		r.Config.Logger.Log(fmt.Sprintf("DEBUG: Retrying Request %s/%s, attempt %d",
+		r.Config.Logger.Debug(fmt.Sprintf("Retrying Request %s/%s, attempt %d",
 			r.ClientInfo.ServiceName, r.Operation.Name, r.RetryCount))
 	}
 

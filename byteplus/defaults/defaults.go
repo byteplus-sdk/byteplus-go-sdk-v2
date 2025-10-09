@@ -155,7 +155,7 @@ func localHTTPCredProvider(cfg byteplus.Config, handlers request.Handlers, u str
 
 	if len(errMsg) > 0 {
 		if cfg.Logger != nil {
-			cfg.Logger.Log("Ignoring, HTTP credential provider", errMsg, err)
+			cfg.Logger.Error("Ignoring, HTTP credential provider", errMsg, err)
 		}
 		return credentials.ErrorProvider{
 			Err:          bytepluserr.New("CredentialsEndpointError", errMsg, err),
