@@ -254,5 +254,7 @@ func isCNRegion(region string) bool {
 }
 
 func debug(logger byteplus.Logger, args ...interface{}) {
-	logger.DebugByLevel(byteplus.LogDebugWithEndpoint, append([]interface{}{"[Endpoint]"}, args...)...)
+	if logger != nil {
+		logger.DebugByLevel(byteplus.LogDebugWithEndpoint, append([]interface{}{"[Endpoint]"}, args...)...)
+	}
 }
