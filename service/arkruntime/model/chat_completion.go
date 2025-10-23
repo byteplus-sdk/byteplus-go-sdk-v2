@@ -178,6 +178,7 @@ type CreateChatCompletionRequest struct {
 	ResponseFormat    *ResponseFormat          `json:"response_format,omitempty"`
 	ParallelToolCalls *bool                    `json:"parallel_tool_calls,omitempty"`
 	ServiceTier       *string                  `json:"service_tier,omitempty"`
+	Thinking          *Thinking                `json:"thinking,omitempty"`
 }
 
 func (r CreateChatCompletionRequest) MarshalJSON() ([]byte, error) {
@@ -203,6 +204,18 @@ func (r CreateChatCompletionRequest) IsStream() bool {
 
 func (r CreateChatCompletionRequest) GetModel() string {
 	return r.Model
+}
+
+type ThinkingType string
+
+const (
+	ThinkingTypeEnabled  ThinkingType = "enabled"
+	ThinkingTypeDisabled ThinkingType = "disabled"
+	ThinkingTypeAuto     ThinkingType = "auto"
+)
+
+type Thinking struct {
+	Type ThinkingType `json:"type"`
 }
 
 type StreamOptions struct {
