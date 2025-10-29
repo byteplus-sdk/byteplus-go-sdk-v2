@@ -71,7 +71,10 @@ func (c *Client) doRequestSign(request *http.Request, body []byte) error {
 	now := time.Now()
 	date := now.UTC().Format("20060102T150405Z")
 	//date := "20250826T150405Z"
-	authDate := date[:8]
+	authDate := ""
+	if len(date) >= 8 {
+		authDate = date[:8]
+	}
 	request.Header.Set("X-Date", date)
 	request.Header.Set("X-Top-Service", Service)
 	request.Header.Set("X-Top-Region", c.region)
