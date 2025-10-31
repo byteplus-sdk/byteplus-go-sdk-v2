@@ -61,8 +61,8 @@ func New(cfg byteplus.Config, info metadata.ClientInfo, handlers request.Handler
 	case ok:
 		svc.Retryer = retryer
 	case cfg.Retryer != nil && cfg.Logger != nil:
-		s := fmt.Sprintf("WARNING: %T does not implement request.Retryer; using DefaultRetryer instead", cfg.Retryer)
-		cfg.Logger.Log(s)
+		s := fmt.Sprintf("%T does not implement request.Retryer; using DefaultRetryer instead", cfg.Retryer)
+		cfg.Logger.Warn(s)
 		fallthrough
 	default:
 		maxRetries := byteplus.IntValue(cfg.MaxRetries)
@@ -97,7 +97,6 @@ func (c *Client) AddDebugHandlers() {
 		c.Config.LogLevel.Matches(byteplus.LogDebugWithInputAndOutput) {
 		c.Handlers.Send.PushFrontNamed(LogInputHandler)
 		c.Handlers.Complete.PushBackNamed(LogOutHandler)
-		return
 	}
 
 	c.Handlers.Send.PushFrontNamed(LogHTTPRequestHandler)

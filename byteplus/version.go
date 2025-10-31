@@ -8,4 +8,4 @@ package byteplus
 const SDKName = "byteplus-go-sdk-v2"
 
 // SDKVersion is the version of this SDK
-const SDKVersion = "1.0.27"
+const SDKVersion = "1.0.36"

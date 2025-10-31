@@ -16,9 +16,10 @@ const (
 )
 
 type CreateContentGenerationTaskRequest struct {
-	Model       string                                `json:"model"`
-	Content     []*CreateContentGenerationContentItem `json:"content"`
-	CallbackUrl *string                               `json:"callback_url,omitempty"`
+	Model           string                                `json:"model"`
+	Content         []*CreateContentGenerationContentItem `json:"content"`
+	CallbackUrl     *string                               `json:"callback_url,omitempty"`
+	ReturnLastFrame *bool                                 `json:"return_last_frame,omitempty"`
 }
 
 type CreateContentGenerationTaskResponse struct {
@@ -32,16 +33,20 @@ type GetContentGenerationTaskRequest struct {
 }
 
 type GetContentGenerationTaskResponse struct {
-	ID            string                  `json:"id"`
-	Model         string                  `json:"model"`
-	Status        string                  `json:"status"`
-	Error         *ContentGenerationError `json:"error,omitempty"`
-	Content       Content                 `json:"content"`
-	Usage         Usage                   `json:"usage"`
-	CreatedAt     int64                   `json:"created_at"`
-	UpdatedAt     int64                   `json:"updated_at"`
-	Seed          *int64                  `json:"seed,omitempty"`
-	RevisedPrompt *string                 `json:"revised_prompt,omitempty"`
+	ID               string                  `json:"id"`
+	Model            string                  `json:"model"`
+	Status           string                  `json:"status"`
+	Error            *ContentGenerationError `json:"error,omitempty"`
+	Content          Content                 `json:"content"`
+	Usage            Usage                   `json:"usage"`
+	SubdivisionLevel *string                 `json:"subdivisionlevel,omitempty"`
+	FileFormat       *string                 `json:"fileformat,omitempty"`
+	Frames           *int64                  `json:"frames"`
+	FramesPerSecond  *int64                  `json:"framespersecond"`
+	CreatedAt        int64                   `json:"created_at"`
+	UpdatedAt        int64                   `json:"updated_at"`
+	Seed             *int64                  `json:"seed,omitempty"`
+	RevisedPrompt    *string                 `json:"revised_prompt,omitempty"`
 
 	HttpHeader
 }
@@ -73,7 +78,9 @@ type ImageURL struct {
 	URL string `json:"url"`
 }
 type Content struct {
-	VideoURL string `json:"video_url"`
+	VideoURL     string `json:"video_url"`
+	LastFrameURL string `json:"last_frame_url"`
+	FileURL      string `json:"file_url"`
 }
 
 type ContentGenerationUsage struct {
@@ -87,16 +94,20 @@ type ListContentGenerationTasksResponse struct {
 }
 
 type ListContentGenerationTaskItem struct {
-	ID            string                  `json:"id"`
-	Model         string                  `json:"model"`
-	Status        string                  `json:"status"`
-	FailureReason *ContentGenerationError `json:"failure_reason,omitempty"`
-	Content       Content                 `json:"content"`
-	Usage         Usage                   `json:"usage"`
-	CreatedAt     int64                   `json:"created_at"`
-	UpdatedAt     int64                   `json:"updated_at"`
-	Seed          *int64                  `json:"seed,omitempty"`
-	RevisedPrompt *string                 `json:"revised_prompt,omitempty"`
+	ID               string                  `json:"id"`
+	Model            string                  `json:"model"`
+	Status           string                  `json:"status"`
+	FailureReason    *ContentGenerationError `json:"failure_reason,omitempty"`
+	Content          Content                 `json:"content"`
+	Usage            Usage                   `json:"usage"`
+	SubdivisionLevel *string                 `json:"subdivisionlevel,omitempty"`
+	FileFormat       *string                 `json:"fileformat,omitempty"`
+	Frames           *int64                  `json:"frames"`
+	FramesPerSecond  *int64                  `json:"framespersecond"`
+	CreatedAt        int64                   `json:"created_at"`
+	UpdatedAt        int64                   `json:"updated_at"`
+	Seed             *int64                  `json:"seed,omitempty"`
+	RevisedPrompt    *string                 `json:"revised_prompt,omitempty"`
 }
 
 type ContentGenerationError struct {

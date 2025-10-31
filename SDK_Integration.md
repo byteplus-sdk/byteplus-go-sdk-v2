@@ -37,9 +37,8 @@ English | [简体中文](./SDK_Integration_zh.md)
   - [Custom Retry Error Codes](#custom-retry-error-codes)
 - [Error Handling](#error-handling)
 - [Debugging](#debugging)
-- [Custom Logger](#custom-logger)
-  - [Default Logger](#default-logger)
-  - [Implementing Your Own Logger](#implementing-your-own-logger)
+    - [Enable Debug Mode](#enable-debug-mode)
+- [Specify the log output location](#specify-the-log-output-location)
 
 ---
 
@@ -689,59 +688,57 @@ func main() {
 
 # Debugging
 
-Log levels:
+To facilitate troubleshooting and debugging during request processing, the SDK supports logging and offers various log level settings. Customers can configure the log level based on their needs to obtain detailed request and response information, improving troubleshooting efficiency and system observability.
 
+## Enable Debug Mode
 
-| Level                        | Description             |
-| ---------------------------- | ----------------------- |
-| `LogOff`                     | Disable logs (default)  |
-| `LogDebug`                   | Enable debug logs       |
-| `LogDebugWithSigning`        | Include signing details |
-| `LogDebugWithHTTPBody`       | Include HTTP bodies     |
-| `LogDebugWithRequestRetries` | Include retry info      |
-| `LogDebugWithInputAndOutput` | Include struct I/O      |
+Debug logging is disabled by default. To enable it, use the `WithDebug` method.
 
-```go
-cfg := byteplus.NewConfig().
-    WithLogLevel(byteplus.LogDebugWithInputAndOutput)
-```
+> **Default**
+> * `debug` - `False`
 
----
+**Code example:**
+```golang
+package main
 
-# Custom Logger
-
-## Default Logger
-
-If no logger is supplied, `byteplus/logger.go` provides a minimal console logger.
-
-## Implementing Your Own Logger
-
-```go
-type myLogger struct {
-    logger *log.Logger
-}
-func (l *myLogger) Log(args ...interface{}) {
-    for i, arg := range args {
-        if s, ok := arg.(string); ok {
-            args[i] = strings.ReplaceAll(s, "KeyWord", "***") // redact secrets
-        }
-    }
-    l.logger.Println(args...)
-}
+import (
+    "github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
+    "github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
+)
 
 func main() {
-    file, _ := os.Create("ecs_test.log")
-    multi := io.MultiWriter(os.Stdout, file)
-    custom := &myLogger{
-        logger: log.New(multi, "[MyApp] ", log.LstdFlags|log.Lshortfile),
-    }
-    cfg := byteplus.NewConfig().
-        WithLogLevel(byteplus.LogDebugWithInputAndOutput).
-        WithLogger(custom).
-        WithCredentials(credentials.NewEnvCredentials()).
-        WithRegion("ap-southeast-1")
+	region := "ap-southeast-1"
+	config := byteplus.NewConfig().
+		WithRegion(region).
+		WithDebug(true).
+		WithCredentials(credentials.NewEnvCredentials()) // Environment variable configuration: BYTEPLUS_ACCESS_KEY_ID, BYTEPLUS_SECRET_ACCESS_KEY, BYTEPLUS_SESSION_TOKEN
+}
+```
 
-    sess, err := session.NewSession(cfg)
-    if err != nil { panic(err) }
+# Specify the log output location
+> **Default**
+> * `LogWriter` - `os.Stdout`
+
+By default, the SDK outputs logs to standard output (stdout). If you need to output logs to a file or other location, you can use the `WithLogWriter` method to specify the log output location.
+If you are using a different logging library, simply pass in the library's writer.
+
+**Code example:**
+```go
+package main
+
+import (
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
+	"os"
+)
+
+func main() {
+    region := "ap-southeast-1"
+    file, _ := os.Create("sdk.log")
+    config := byteplus.NewConfig().
+      WithRegion(region).
+      WithDebug(true).
+	  WithLogWriter(file).
+      WithCredentials(credentials.NewEnvCredentials()) // Environment variable configuration: BYTEPLUS_ACCESS_KEY_ID, BYTEPLUS_SECRET_ACCESS_KEY, BYTEPLUS_SESSION_TOKEN
 }
 ```
