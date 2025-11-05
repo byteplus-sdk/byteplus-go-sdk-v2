@@ -148,12 +148,6 @@ type AutoSnapshotPolicyForDescribeAutoSnapshotPolicyOutput struct {
 
 	CreatedAt *string `type:"string"`
 
-	DestinationRegion *string `type:"string"`
-
-	DestinationRetentionDays *int32 `max:"65536" type:"int32"`
-
-	EnableCopy *bool `type:"boolean"`
-
 	ProjectName *string `type:"string"`
 
 	RepeatDays *int32 `type:"int32"`
@@ -198,24 +192,6 @@ func (s *AutoSnapshotPolicyForDescribeAutoSnapshotPolicyOutput) SetAutoSnapshotP
 // SetCreatedAt sets the CreatedAt field's value.
 func (s *AutoSnapshotPolicyForDescribeAutoSnapshotPolicyOutput) SetCreatedAt(v string) *AutoSnapshotPolicyForDescribeAutoSnapshotPolicyOutput {
 	s.CreatedAt = &v
-	return s
-}
-
-// SetDestinationRegion sets the DestinationRegion field's value.
-func (s *AutoSnapshotPolicyForDescribeAutoSnapshotPolicyOutput) SetDestinationRegion(v string) *AutoSnapshotPolicyForDescribeAutoSnapshotPolicyOutput {
-	s.DestinationRegion = &v
-	return s
-}
-
-// SetDestinationRetentionDays sets the DestinationRetentionDays field's value.
-func (s *AutoSnapshotPolicyForDescribeAutoSnapshotPolicyOutput) SetDestinationRetentionDays(v int32) *AutoSnapshotPolicyForDescribeAutoSnapshotPolicyOutput {
-	s.DestinationRetentionDays = &v
-	return s
-}
-
-// SetEnableCopy sets the EnableCopy field's value.
-func (s *AutoSnapshotPolicyForDescribeAutoSnapshotPolicyOutput) SetEnableCopy(v bool) *AutoSnapshotPolicyForDescribeAutoSnapshotPolicyOutput {
-	s.EnableCopy = &v
 	return s
 }
 

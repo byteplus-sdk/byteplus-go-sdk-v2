@@ -141,44 +141,6 @@ func (c *STORAGEEBS) DescribeVolumesWithContext(ctx byteplus.Context, input *Des
 	return out, req.Send()
 }
 
-type AttachmentForDescribeVolumesOutput struct {
-	_ struct{} `type:"structure"`
-
-	AttachStatus *string `type:"string"`
-
-	AttachedTime *string `type:"string"`
-
-	InstanceId *string `type:"string"`
-}
-
-// String returns the string representation
-func (s AttachmentForDescribeVolumesOutput) String() string {
-	return byteplusutil.Prettify(s)
-}
-
-// GoString returns the string representation
-func (s AttachmentForDescribeVolumesOutput) GoString() string {
-	return s.String()
-}
-
-// SetAttachStatus sets the AttachStatus field's value.
-func (s *AttachmentForDescribeVolumesOutput) SetAttachStatus(v string) *AttachmentForDescribeVolumesOutput {
-	s.AttachStatus = &v
-	return s
-}
-
-// SetAttachedTime sets the AttachedTime field's value.
-func (s *AttachmentForDescribeVolumesOutput) SetAttachedTime(v string) *AttachmentForDescribeVolumesOutput {
-	s.AttachedTime = &v
-	return s
-}
-
-// SetInstanceId sets the InstanceId field's value.
-func (s *AttachmentForDescribeVolumesOutput) SetInstanceId(v string) *AttachmentForDescribeVolumesOutput {
-	s.InstanceId = &v
-	return s
-}
-
 type BaselinePerformanceForDescribeVolumesOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -223,6 +185,8 @@ type DescribeVolumesInput struct {
 	PageSize *int32 `max:"100" type:"int32"`
 
 	ProjectName *string `type:"string"`
+
+	SysTagVisible *bool `type:"boolean"`
 
 	TagFilters []*TagFilterForDescribeVolumesInput `type:"list"`
 
@@ -293,6 +257,12 @@ func (s *DescribeVolumesInput) SetPageSize(v int32) *DescribeVolumesInput {
 // SetProjectName sets the ProjectName field's value.
 func (s *DescribeVolumesInput) SetProjectName(v string) *DescribeVolumesInput {
 	s.ProjectName = &v
+	return s
+}
+
+// SetSysTagVisible sets the SysTagVisible field's value.
+func (s *DescribeVolumesInput) SetSysTagVisible(v bool) *DescribeVolumesInput {
+	s.SysTagVisible = &v
 	return s
 }
 
@@ -511,8 +481,6 @@ func (s *TotalPerformanceForDescribeVolumesOutput) SetThroughput(v int32) *Total
 type VolumeForDescribeVolumesOutput struct {
 	_ struct{} `type:"structure"`
 
-	Attachments []*AttachmentForDescribeVolumesOutput `type:"list"`
-
 	AutoSnapshotPolicyId *string `type:"string"`
 
 	AutoSnapshotPolicyName *string `type:"string"`
@@ -527,19 +495,11 @@ type VolumeForDescribeVolumesOutput struct {
 
 	Description *string `type:"string"`
 
-	DeviceName *string `type:"string"`
-
 	ErrorDetail *string `type:"string"`
 
 	ExpiredTime *string `type:"string"`
 
 	ExtraPerformance *ExtraPerformanceForDescribeVolumesOutput `type:"structure"`
-
-	ExtraPerformanceIOPS *int32 `type:"int32"`
-
-	ExtraPerformanceThroughputMB *int32 `type:"int32"`
-
-	ExtraPerformanceTypeId *string `type:"string"`
 
 	ImageId *string `type:"string"`
 
@@ -596,12 +556,6 @@ func (s VolumeForDescribeVolumesOutput) GoString() string {
 	return s.String()
 }
 
-// SetAttachments sets the Attachments field's value.
-func (s *VolumeForDescribeVolumesOutput) SetAttachments(v []*AttachmentForDescribeVolumesOutput) *VolumeForDescribeVolumesOutput {
-	s.Attachments = v
-	return s
-}
-
 // SetAutoSnapshotPolicyId sets the AutoSnapshotPolicyId field's value.
 func (s *VolumeForDescribeVolumesOutput) SetAutoSnapshotPolicyId(v string) *VolumeForDescribeVolumesOutput {
 	s.AutoSnapshotPolicyId = &v
@@ -644,12 +598,6 @@ func (s *VolumeForDescribeVolumesOutput) SetDescription(v string) *VolumeForDesc
 	return s
 }
 
-// SetDeviceName sets the DeviceName field's value.
-func (s *VolumeForDescribeVolumesOutput) SetDeviceName(v string) *VolumeForDescribeVolumesOutput {
-	s.DeviceName = &v
-	return s
-}
-
 // SetErrorDetail sets the ErrorDetail field's value.
 func (s *VolumeForDescribeVolumesOutput) SetErrorDetail(v string) *VolumeForDescribeVolumesOutput {
 	s.ErrorDetail = &v
@@ -665,24 +613,6 @@ func (s *VolumeForDescribeVolumesOutput) SetExpiredTime(v string) *VolumeForDesc
 // SetExtraPerformance sets the ExtraPerformance field's value.
 func (s *VolumeForDescribeVolumesOutput) SetExtraPerformance(v *ExtraPerformanceForDescribeVolumesOutput) *VolumeForDescribeVolumesOutput {
 	s.ExtraPerformance = v
-	return s
-}
-
-// SetExtraPerformanceIOPS sets the ExtraPerformanceIOPS field's value.
-func (s *VolumeForDescribeVolumesOutput) SetExtraPerformanceIOPS(v int32) *VolumeForDescribeVolumesOutput {
-	s.ExtraPerformanceIOPS = &v
-	return s
-}
-
-// SetExtraPerformanceThroughputMB sets the ExtraPerformanceThroughputMB field's value.
-func (s *VolumeForDescribeVolumesOutput) SetExtraPerformanceThroughputMB(v int32) *VolumeForDescribeVolumesOutput {
-	s.ExtraPerformanceThroughputMB = &v
-	return s
-}
-
-// SetExtraPerformanceTypeId sets the ExtraPerformanceTypeId field's value.
-func (s *VolumeForDescribeVolumesOutput) SetExtraPerformanceTypeId(v string) *VolumeForDescribeVolumesOutput {
-	s.ExtraPerformanceTypeId = &v
 	return s
 }
 
