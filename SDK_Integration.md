@@ -301,6 +301,47 @@ func main() {
 }
 ```
 
+### Standard Endpoint Resolution
+**Standard Endpoint Resolution Rules**
+
+Currently, only `cn-hongkong` indicates regions outside mainland China; other regions starting with `cn` indicate regions outside mainland China.
+
+| Global Services | Dual stack | Format                                                                                                | 备注             |
+|--------------|-----------|-------------------------------------------------------------------------------------------------------|----------------|
+| Yes          | Yes       | `{Service}.byteplus-api.com`                                                                          |                |
+| Yes             | No        | `{Service}.byteplusapi.com`                                                                           |                |
+| No             | Yes       | Non-mainland China(cn-hongkong)：`{Service}.{region}.byteplus-api.com` <br/>  Chinese mainland：`{Service}.{region}.byteplus-api.com.cn` | For non-global services, "cn" will be added to the end. |
+| No             | No          | Non-mainland China(cn-hongkong)：`{Service}.{region}.byteplusapi.com` <br/> Chinese mainland：`{Service}.{region}.byteplusapi.com.cn` | For non-global services, "cn" will be added to the end.        |
+
+**Code Example：**
+
+Whether a service is global depends on the specific service being called, and whether it is global cannot be modified.  
+You can refer to the list：[./byteplus/endpoints/standard_resolver.go#ServiceInfos](./byteplus/endpoints/standard_resolver.go#L70)
+```go
+package main
+import (
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/endpoints"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/session"
+)
+
+func main() {
+	regionId := "cn-hongkong"
+	config := byteplus.NewConfig().
+		WithCredentials(credentials.NewEnvCredentials()).
+		WithEndpointResolver(endpoints.NewStandardEndpointResolver()). // Configure standard addressing
+		WithRegion(regionId). //  Configure region
+		WithUseDualStack(true) // Configure whether to use dual stack
+	sess, err := session.NewSession(config)
+	if err != nil {
+		panic(err)
+	}
+}
+```
+
+
+
 ---
 
 # HTTP Connection-Pool Settings
