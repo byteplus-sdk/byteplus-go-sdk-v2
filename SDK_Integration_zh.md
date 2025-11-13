@@ -20,6 +20,7 @@
   - [自定义RegionId](#自定义regionid)
   - [自动化Endpoint寻址](#自动化endpoint寻址)
     - [Endpoint默认寻址](#endpoint默认寻址)
+    - [Endpoint标准寻址](#endpoint标准寻址)
 - [Http连接池配置](#http连接池配置)
 - [Https请求配置](#https请求配置)
   - [指定scheme](#指定scheme)
@@ -276,6 +277,46 @@ func main() {
     }
 }
 ```
+
+### Endpoint标准寻址
+**标准寻址规则**
+
+目前为止只有`cn-hongkong`表示非大陆地区，其它`cn`开头的region表示大陆地区。
+
+| Global服务 | 双栈 | 格式                                                                                                       | 备注             |
+|----------|----|----------------------------------------------------------------------------------------------------------|----------------|
+| 是        | 是  | `{Service}.byteplus-api.com`                                                                               |                |
+| 是        | 否  | `{Service}.byteplusapi.com`                                                                                |                |
+| 否        | 是  | 非中国大陆(cn-hongkong)：`{Service}.{region}.byteplus-api.com` <br/>  中国大陆：`{Service}.{region}.byteplus-api.com.cn` | 非gloabl服务，中国大陆地区会在末尾加上cn |
+| 否        | 否  | 非中国大陆(cn-hongkong)：`{Service}.{region}.byteplusapi.com` <br/> 中国大陆：`{Service}.{region}.byteplusapi.com.cn`   | 非gloabl服务，中国大陆地区会在末尾加上cn        |
+
+**代码示例：**
+
+是否global服务根据具体调用的服务决定的，是否global无法修改的。  
+可以参考列表：[./byteplus/endpoints/standard_resolver.go#ServiceInfos](./byteplus/endpoints/standard_resolver.go#L70)
+```go
+package main
+import (
+"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
+"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
+"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/endpoints"
+"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/session"
+)
+
+func main() {
+    regionId := "cn-hongkong"
+    config := byteplus.NewConfig().
+        WithCredentials(credentials.NewEnvCredentials()). //环境变量配置：BYTEPLUS_ACCESS_KEY_ID、BYTEPLUS_SECRET_ACCESS_KEY、BYTEPLUS_SESSION_TOKEN
+		WithEndpointResolver(endpoints.NewStandardEndpointResolver()). // 配置标准寻址
+		WithRegion(regionId). // 配置regionId
+        WithUseDualStack(true) // 配置是否双栈
+    sess, err := session.NewSession(config)
+    if err != nil {
+        panic(err)
+    }
+}
+```
+
 
 # Http连接池配置
 

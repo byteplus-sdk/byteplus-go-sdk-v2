@@ -46,13 +46,13 @@ type STORAGEEBSAPI interface {
 	AttachVolumeWithContext(byteplus.Context, *AttachVolumeInput, ...request.Option) (*AttachVolumeOutput, error)
 	AttachVolumeRequest(*AttachVolumeInput) (*request.Request, *AttachVolumeOutput)
 
-	AutoRenewReservedStorageCapacityCommon(*map[string]interface{}) (*map[string]interface{}, error)
-	AutoRenewReservedStorageCapacityCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
-	AutoRenewReservedStorageCapacityCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+	CalculatePriceV2Common(*map[string]interface{}) (*map[string]interface{}, error)
+	CalculatePriceV2CommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CalculatePriceV2CommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
 
-	AutoRenewReservedStorageCapacity(*AutoRenewReservedStorageCapacityInput) (*AutoRenewReservedStorageCapacityOutput, error)
-	AutoRenewReservedStorageCapacityWithContext(byteplus.Context, *AutoRenewReservedStorageCapacityInput, ...request.Option) (*AutoRenewReservedStorageCapacityOutput, error)
-	AutoRenewReservedStorageCapacityRequest(*AutoRenewReservedStorageCapacityInput) (*request.Request, *AutoRenewReservedStorageCapacityOutput)
+	CalculatePriceV2(*CalculatePriceV2Input) (*CalculatePriceV2Output, error)
+	CalculatePriceV2WithContext(byteplus.Context, *CalculatePriceV2Input, ...request.Option) (*CalculatePriceV2Output, error)
+	CalculatePriceV2Request(*CalculatePriceV2Input) (*request.Request, *CalculatePriceV2Output)
 
 	CancelAutoSnapshotPolicyCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	CancelAutoSnapshotPolicyCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -61,14 +61,6 @@ type STORAGEEBSAPI interface {
 	CancelAutoSnapshotPolicy(*CancelAutoSnapshotPolicyInput) (*CancelAutoSnapshotPolicyOutput, error)
 	CancelAutoSnapshotPolicyWithContext(byteplus.Context, *CancelAutoSnapshotPolicyInput, ...request.Option) (*CancelAutoSnapshotPolicyOutput, error)
 	CancelAutoSnapshotPolicyRequest(*CancelAutoSnapshotPolicyInput) (*request.Request, *CancelAutoSnapshotPolicyOutput)
-
-	CheckUserRscPermitCommon(*map[string]interface{}) (*map[string]interface{}, error)
-	CheckUserRscPermitCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
-	CheckUserRscPermitCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
-
-	CheckUserRscPermit(*CheckUserRscPermitInput) (*CheckUserRscPermitOutput, error)
-	CheckUserRscPermitWithContext(byteplus.Context, *CheckUserRscPermitInput, ...request.Option) (*CheckUserRscPermitOutput, error)
-	CheckUserRscPermitRequest(*CheckUserRscPermitInput) (*request.Request, *CheckUserRscPermitOutput)
 
 	CreateAutoSnapshotPolicyCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	CreateAutoSnapshotPolicyCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -270,14 +262,6 @@ type STORAGEEBSAPI interface {
 	ExtendVolumeWithContext(byteplus.Context, *ExtendVolumeInput, ...request.Option) (*ExtendVolumeOutput, error)
 	ExtendVolumeRequest(*ExtendVolumeInput) (*request.Request, *ExtendVolumeOutput)
 
-	ManualRenewReservedStorageCapacityCommon(*map[string]interface{}) (*map[string]interface{}, error)
-	ManualRenewReservedStorageCapacityCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
-	ManualRenewReservedStorageCapacityCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
-
-	ManualRenewReservedStorageCapacity(*ManualRenewReservedStorageCapacityInput) (*ManualRenewReservedStorageCapacityOutput, error)
-	ManualRenewReservedStorageCapacityWithContext(byteplus.Context, *ManualRenewReservedStorageCapacityInput, ...request.Option) (*ManualRenewReservedStorageCapacityOutput, error)
-	ManualRenewReservedStorageCapacityRequest(*ManualRenewReservedStorageCapacityInput) (*request.Request, *ManualRenewReservedStorageCapacityOutput)
-
 	ModifyAutoSnapshotPolicyCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ModifyAutoSnapshotPolicyCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	ModifyAutoSnapshotPolicyCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -373,14 +357,6 @@ type STORAGEEBSAPI interface {
 	RollbackVolume(*RollbackVolumeInput) (*RollbackVolumeOutput, error)
 	RollbackVolumeWithContext(byteplus.Context, *RollbackVolumeInput, ...request.Option) (*RollbackVolumeOutput, error)
 	RollbackVolumeRequest(*RollbackVolumeInput) (*request.Request, *RollbackVolumeOutput)
-
-	ServicePurchaseRscPreorderCommon(*map[string]interface{}) (*map[string]interface{}, error)
-	ServicePurchaseRscPreorderCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
-	ServicePurchaseRscPreorderCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
-
-	ServicePurchaseRscPreorder(*ServicePurchaseRscPreorderInput) (*ServicePurchaseRscPreorderOutput, error)
-	ServicePurchaseRscPreorderWithContext(byteplus.Context, *ServicePurchaseRscPreorderInput, ...request.Option) (*ServicePurchaseRscPreorderOutput, error)
-	ServicePurchaseRscPreorderRequest(*ServicePurchaseRscPreorderInput) (*request.Request, *ServicePurchaseRscPreorderOutput)
 }
 
 var _ STORAGEEBSAPI = (*STORAGEEBS)(nil)

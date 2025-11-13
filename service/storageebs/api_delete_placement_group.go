@@ -32,7 +32,7 @@ const opDeletePlacementGroupCommon = "DeletePlacementGroup"
 func (c *STORAGEEBS) DeletePlacementGroupCommonRequest(input *map[string]interface{}) (req *request.Request, output *map[string]interface{}) {
 	op := &request.Operation{
 		Name:       opDeletePlacementGroupCommon,
-		HTTPMethod: "GET",
+		HTTPMethod: "POST",
 		HTTPPath:   "/",
 	}
 
@@ -42,6 +42,8 @@ func (c *STORAGEEBS) DeletePlacementGroupCommonRequest(input *map[string]interfa
 
 	output = &map[string]interface{}{}
 	req = c.newRequest(op, input, output)
+
+	req.HTTPRequest.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	return
 }
@@ -97,7 +99,7 @@ const opDeletePlacementGroup = "DeletePlacementGroup"
 func (c *STORAGEEBS) DeletePlacementGroupRequest(input *DeletePlacementGroupInput) (req *request.Request, output *DeletePlacementGroupOutput) {
 	op := &request.Operation{
 		Name:       opDeletePlacementGroup,
-		HTTPMethod: "GET",
+		HTTPMethod: "POST",
 		HTTPPath:   "/",
 	}
 
@@ -107,6 +109,8 @@ func (c *STORAGEEBS) DeletePlacementGroupRequest(input *DeletePlacementGroupInpu
 
 	output = &DeletePlacementGroupOutput{}
 	req = c.newRequest(op, input, output)
+
+	req.HTTPRequest.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	return
 }
@@ -140,10 +144,10 @@ func (c *STORAGEEBS) DeletePlacementGroupWithContext(ctx byteplus.Context, input
 }
 
 type DeletePlacementGroupInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" json:",omitempty"`
 
 	// Id is a required field
-	Id *string `type:"string" required:"true"`
+	Id *string `type:"string" json:",omitempty" required:"true"`
 }
 
 // String returns the string representation
@@ -176,7 +180,7 @@ func (s *DeletePlacementGroupInput) SetId(v string) *DeletePlacementGroupInput {
 }
 
 type DeletePlacementGroupOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" json:",omitempty"`
 
 	Metadata *response.ResponseMetadata
 }

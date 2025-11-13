@@ -32,7 +32,7 @@ const opModifyPlacementGroupCommon = "ModifyPlacementGroup"
 func (c *STORAGEEBS) ModifyPlacementGroupCommonRequest(input *map[string]interface{}) (req *request.Request, output *map[string]interface{}) {
 	op := &request.Operation{
 		Name:       opModifyPlacementGroupCommon,
-		HTTPMethod: "GET",
+		HTTPMethod: "POST",
 		HTTPPath:   "/",
 	}
 
@@ -42,6 +42,8 @@ func (c *STORAGEEBS) ModifyPlacementGroupCommonRequest(input *map[string]interfa
 
 	output = &map[string]interface{}{}
 	req = c.newRequest(op, input, output)
+
+	req.HTTPRequest.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	return
 }
@@ -97,7 +99,7 @@ const opModifyPlacementGroup = "ModifyPlacementGroup"
 func (c *STORAGEEBS) ModifyPlacementGroupRequest(input *ModifyPlacementGroupInput) (req *request.Request, output *ModifyPlacementGroupOutput) {
 	op := &request.Operation{
 		Name:       opModifyPlacementGroup,
-		HTTPMethod: "GET",
+		HTTPMethod: "POST",
 		HTTPPath:   "/",
 	}
 
@@ -107,6 +109,8 @@ func (c *STORAGEEBS) ModifyPlacementGroupRequest(input *ModifyPlacementGroupInpu
 
 	output = &ModifyPlacementGroupOutput{}
 	req = c.newRequest(op, input, output)
+
+	req.HTTPRequest.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	return
 }
@@ -140,14 +144,14 @@ func (c *STORAGEEBS) ModifyPlacementGroupWithContext(ctx byteplus.Context, input
 }
 
 type ModifyPlacementGroupInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" json:",omitempty"`
 
-	Description *string `type:"string"`
+	Description *string `type:"string" json:",omitempty"`
 
 	// Id is a required field
-	Id *string `type:"string" required:"true"`
+	Id *string `type:"string" json:",omitempty" required:"true"`
 
-	Name *string `type:"string"`
+	Name *string `type:"string" json:",omitempty"`
 }
 
 // String returns the string representation
@@ -192,7 +196,7 @@ func (s *ModifyPlacementGroupInput) SetName(v string) *ModifyPlacementGroupInput
 }
 
 type ModifyPlacementGroupOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" json:",omitempty"`
 
 	Metadata *response.ResponseMetadata
 }

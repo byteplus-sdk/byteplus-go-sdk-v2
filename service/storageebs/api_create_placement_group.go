@@ -32,7 +32,7 @@ const opCreatePlacementGroupCommon = "CreatePlacementGroup"
 func (c *STORAGEEBS) CreatePlacementGroupCommonRequest(input *map[string]interface{}) (req *request.Request, output *map[string]interface{}) {
 	op := &request.Operation{
 		Name:       opCreatePlacementGroupCommon,
-		HTTPMethod: "GET",
+		HTTPMethod: "POST",
 		HTTPPath:   "/",
 	}
 
@@ -42,6 +42,8 @@ func (c *STORAGEEBS) CreatePlacementGroupCommonRequest(input *map[string]interfa
 
 	output = &map[string]interface{}{}
 	req = c.newRequest(op, input, output)
+
+	req.HTTPRequest.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	return
 }
@@ -97,7 +99,7 @@ const opCreatePlacementGroup = "CreatePlacementGroup"
 func (c *STORAGEEBS) CreatePlacementGroupRequest(input *CreatePlacementGroupInput) (req *request.Request, output *CreatePlacementGroupOutput) {
 	op := &request.Operation{
 		Name:       opCreatePlacementGroup,
-		HTTPMethod: "GET",
+		HTTPMethod: "POST",
 		HTTPPath:   "/",
 	}
 
@@ -107,6 +109,8 @@ func (c *STORAGEEBS) CreatePlacementGroupRequest(input *CreatePlacementGroupInpu
 
 	output = &CreatePlacementGroupOutput{}
 	req = c.newRequest(op, input, output)
+
+	req.HTTPRequest.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	return
 }
@@ -140,20 +144,20 @@ func (c *STORAGEEBS) CreatePlacementGroupWithContext(ctx byteplus.Context, input
 }
 
 type CreatePlacementGroupInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" json:",omitempty"`
 
-	AutoAssign *bool `type:"boolean"`
+	AutoAssign *bool `type:"boolean" json:",omitempty"`
 
-	Description *string `type:"string"`
+	Description *string `type:"string" json:",omitempty"`
 
 	// Name is a required field
-	Name *string `type:"string" required:"true"`
+	Name *string `type:"string" json:",omitempty" required:"true"`
 
 	// SubgroupCount is a required field
-	SubgroupCount *int32 `type:"int32" required:"true"`
+	SubgroupCount *int32 `type:"int32" json:",omitempty" required:"true"`
 
 	// ZoneId is a required field
-	ZoneId *string `type:"string" required:"true"`
+	ZoneId *string `type:"string" json:",omitempty" required:"true"`
 }
 
 // String returns the string representation
@@ -216,11 +220,11 @@ func (s *CreatePlacementGroupInput) SetZoneId(v string) *CreatePlacementGroupInp
 }
 
 type CreatePlacementGroupOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" json:",omitempty"`
 
 	Metadata *response.ResponseMetadata
 
-	Id *string `type:"string"`
+	Id *string `type:"string" json:",omitempty"`
 }
 
 // String returns the string representation
