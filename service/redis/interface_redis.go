@@ -502,6 +502,14 @@ type REDISAPI interface {
 	ModifyBackupPlanWithContext(byteplus.Context, *ModifyBackupPlanInput, ...request.Option) (*ModifyBackupPlanOutput, error)
 	ModifyBackupPlanRequest(*ModifyBackupPlanInput) (*request.Request, *ModifyBackupPlanOutput)
 
+	ModifyBackupPointNameCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyBackupPointNameCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyBackupPointNameCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyBackupPointName(*ModifyBackupPointNameInput) (*ModifyBackupPointNameOutput, error)
+	ModifyBackupPointNameWithContext(byteplus.Context, *ModifyBackupPointNameInput, ...request.Option) (*ModifyBackupPointNameOutput, error)
+	ModifyBackupPointNameRequest(*ModifyBackupPointNameInput) (*request.Request, *ModifyBackupPointNameOutput)
+
 	ModifyCrossRegionBackupPolicyCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ModifyCrossRegionBackupPolicyCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	ModifyCrossRegionBackupPolicyCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
