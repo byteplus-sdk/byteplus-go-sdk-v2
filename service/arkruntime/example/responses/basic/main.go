@@ -24,6 +24,7 @@ func main() {
 	ctx := context.Background()
 
 	fmt.Println("----- round 1 message -----")
+	imageURL := "https://ark-doc.tos-ap-southeast-1.bytepluses.com/see_i2v.jpeg"
 	// round 1 message
 	inputMessage := &responses.ItemInputMessage{
 		Role: responses.MessageRole_user,
@@ -33,7 +34,7 @@ func main() {
 					Image: &responses.ContentItemImage{
 						Type:     responses.ContentItemType_input_image,
 						Detail:   responses.ContentItemImageDetail_auto.Enum(),
-						ImageUrl: "https://ark-doc.tos-ap-southeast-1.bytepluses.com/see_i2v.jpeg",
+						ImageUrl: &imageURL,
 					},
 				},
 			},
