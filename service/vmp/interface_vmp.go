@@ -19,7 +19,7 @@ import (
 //    // byteplus sdk func uses an SDK service client to make a request to
 //    // VMP.
 //    func myFunc(svc VMPAPI) bool {
-//        // Make svc.CreateAlertingRule request
+//        // Make svc.CreateAggregateWorkspace request
 //    }
 //
 //    func main() {
@@ -30,6 +30,14 @@ import (
 //    }
 //
 type VMPAPI interface {
+	CreateAggregateWorkspaceCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateAggregateWorkspaceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateAggregateWorkspaceCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateAggregateWorkspace(*CreateAggregateWorkspaceInput) (*CreateAggregateWorkspaceOutput, error)
+	CreateAggregateWorkspaceWithContext(byteplus.Context, *CreateAggregateWorkspaceInput, ...request.Option) (*CreateAggregateWorkspaceOutput, error)
+	CreateAggregateWorkspaceRequest(*CreateAggregateWorkspaceInput) (*request.Request, *CreateAggregateWorkspaceOutput)
+
 	CreateAlertingRuleCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	CreateAlertingRuleCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	CreateAlertingRuleCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -53,6 +61,14 @@ type VMPAPI interface {
 	CreateContactGroup(*CreateContactGroupInput) (*CreateContactGroupOutput, error)
 	CreateContactGroupWithContext(byteplus.Context, *CreateContactGroupInput, ...request.Option) (*CreateContactGroupOutput, error)
 	CreateContactGroupRequest(*CreateContactGroupInput) (*request.Request, *CreateContactGroupOutput)
+
+	CreateExternalPrometheusCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateExternalPrometheusCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateExternalPrometheusCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateExternalPrometheus(*CreateExternalPrometheusInput) (*CreateExternalPrometheusOutput, error)
+	CreateExternalPrometheusWithContext(byteplus.Context, *CreateExternalPrometheusInput, ...request.Option) (*CreateExternalPrometheusOutput, error)
+	CreateExternalPrometheusRequest(*CreateExternalPrometheusInput) (*request.Request, *CreateExternalPrometheusOutput)
 
 	CreateIntegrationTaskCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	CreateIntegrationTaskCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -110,6 +126,14 @@ type VMPAPI interface {
 	CreateWorkspaceWithContext(byteplus.Context, *CreateWorkspaceInput, ...request.Option) (*CreateWorkspaceOutput, error)
 	CreateWorkspaceRequest(*CreateWorkspaceInput) (*request.Request, *CreateWorkspaceOutput)
 
+	DeleteAggregateWorkspaceCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteAggregateWorkspaceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteAggregateWorkspaceCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteAggregateWorkspace(*DeleteAggregateWorkspaceInput) (*DeleteAggregateWorkspaceOutput, error)
+	DeleteAggregateWorkspaceWithContext(byteplus.Context, *DeleteAggregateWorkspaceInput, ...request.Option) (*DeleteAggregateWorkspaceOutput, error)
+	DeleteAggregateWorkspaceRequest(*DeleteAggregateWorkspaceInput) (*request.Request, *DeleteAggregateWorkspaceOutput)
+
 	DeleteAlertingRulesCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DeleteAlertingRulesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	DeleteAlertingRulesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -133,6 +157,14 @@ type VMPAPI interface {
 	DeleteContacts(*DeleteContactsInput) (*DeleteContactsOutput, error)
 	DeleteContactsWithContext(byteplus.Context, *DeleteContactsInput, ...request.Option) (*DeleteContactsOutput, error)
 	DeleteContactsRequest(*DeleteContactsInput) (*request.Request, *DeleteContactsOutput)
+
+	DeleteExternalPrometheusCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteExternalPrometheusCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteExternalPrometheusCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteExternalPrometheus(*DeleteExternalPrometheusInput) (*DeleteExternalPrometheusOutput, error)
+	DeleteExternalPrometheusWithContext(byteplus.Context, *DeleteExternalPrometheusInput, ...request.Option) (*DeleteExternalPrometheusOutput, error)
+	DeleteExternalPrometheusRequest(*DeleteExternalPrometheusInput) (*request.Request, *DeleteExternalPrometheusOutput)
 
 	DeleteIntegrationTaskCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DeleteIntegrationTaskCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -238,6 +270,14 @@ type VMPAPI interface {
 	EnableSilencePoliciesWithContext(byteplus.Context, *EnableSilencePoliciesInput, ...request.Option) (*EnableSilencePoliciesOutput, error)
 	EnableSilencePoliciesRequest(*EnableSilencePoliciesInput) (*request.Request, *EnableSilencePoliciesOutput)
 
+	GetAggregateWorkspaceCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	GetAggregateWorkspaceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	GetAggregateWorkspaceCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	GetAggregateWorkspace(*GetAggregateWorkspaceInput) (*GetAggregateWorkspaceOutput, error)
+	GetAggregateWorkspaceWithContext(byteplus.Context, *GetAggregateWorkspaceInput, ...request.Option) (*GetAggregateWorkspaceOutput, error)
+	GetAggregateWorkspaceRequest(*GetAggregateWorkspaceInput) (*request.Request, *GetAggregateWorkspaceOutput)
+
 	GetAlertCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	GetAlertCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	GetAlertCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -269,6 +309,14 @@ type VMPAPI interface {
 	GetContactGroup(*GetContactGroupInput) (*GetContactGroupOutput, error)
 	GetContactGroupWithContext(byteplus.Context, *GetContactGroupInput, ...request.Option) (*GetContactGroupOutput, error)
 	GetContactGroupRequest(*GetContactGroupInput) (*request.Request, *GetContactGroupOutput)
+
+	GetExternalPrometheusCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	GetExternalPrometheusCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	GetExternalPrometheusCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	GetExternalPrometheus(*GetExternalPrometheusInput) (*GetExternalPrometheusOutput, error)
+	GetExternalPrometheusWithContext(byteplus.Context, *GetExternalPrometheusInput, ...request.Option) (*GetExternalPrometheusOutput, error)
+	GetExternalPrometheusRequest(*GetExternalPrometheusInput) (*request.Request, *GetExternalPrometheusOutput)
 
 	GetIntegrationTaskCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	GetIntegrationTaskCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -494,6 +542,14 @@ type VMPAPI interface {
 	UntagResourcesWithContext(byteplus.Context, *UntagResourcesInput, ...request.Option) (*UntagResourcesOutput, error)
 	UntagResourcesRequest(*UntagResourcesInput) (*request.Request, *UntagResourcesOutput)
 
+	UpdateAggregateWorkspaceCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	UpdateAggregateWorkspaceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	UpdateAggregateWorkspaceCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	UpdateAggregateWorkspace(*UpdateAggregateWorkspaceInput) (*UpdateAggregateWorkspaceOutput, error)
+	UpdateAggregateWorkspaceWithContext(byteplus.Context, *UpdateAggregateWorkspaceInput, ...request.Option) (*UpdateAggregateWorkspaceOutput, error)
+	UpdateAggregateWorkspaceRequest(*UpdateAggregateWorkspaceInput) (*request.Request, *UpdateAggregateWorkspaceOutput)
+
 	UpdateAlertingRuleCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	UpdateAlertingRuleCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	UpdateAlertingRuleCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -517,6 +573,14 @@ type VMPAPI interface {
 	UpdateContactGroup(*UpdateContactGroupInput) (*UpdateContactGroupOutput, error)
 	UpdateContactGroupWithContext(byteplus.Context, *UpdateContactGroupInput, ...request.Option) (*UpdateContactGroupOutput, error)
 	UpdateContactGroupRequest(*UpdateContactGroupInput) (*request.Request, *UpdateContactGroupOutput)
+
+	UpdateExternalPrometheusCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	UpdateExternalPrometheusCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	UpdateExternalPrometheusCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	UpdateExternalPrometheus(*UpdateExternalPrometheusInput) (*UpdateExternalPrometheusOutput, error)
+	UpdateExternalPrometheusWithContext(byteplus.Context, *UpdateExternalPrometheusInput, ...request.Option) (*UpdateExternalPrometheusOutput, error)
+	UpdateExternalPrometheusRequest(*UpdateExternalPrometheusInput) (*request.Request, *UpdateExternalPrometheusOutput)
 
 	UpdateIntegrationTaskCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	UpdateIntegrationTaskCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
