@@ -23,15 +23,24 @@ func New(url string, ak string, sk string, region string, timeout time.Duration)
 	}
 }
 
-func NewProxy(url string, ak string, sk string, region string, timeout time.Duration, proxyAddr string) *Client {
-	proxyHandler, err := purl.Parse(proxyAddr)
-	if err != nil {
-		fmt.Printf("NewProxy Parse proxy addr error:%v\n", err)
-		return nil
+func NewAdvanced(url string, ak string, sk string, region string, timeout time.Duration, proxyAddr string, connMax int) *Client {
+	transport := &http.Transport{}
+
+	if len(proxyAddr) > 0 {
+		proxyHandler, err := purl.Parse(proxyAddr)
+		if err != nil {
+			fmt.Printf("NewProxy Parse proxy addr error:%v\n", err)
+			return nil
+		}
+
+		transport.Proxy = http.ProxyURL(proxyHandler)
 	}
 
-	transport := &http.Transport{
-		Proxy: http.ProxyURL(proxyHandler), // 使用指定的代理
+	// 设置最大连接数
+	if connMax > 0 {
+		transport.MaxIdleConns = connMax
+		transport.MaxConnsPerHost = connMax
+		transport.MaxIdleConnsPerHost = connMax
 	}
 
 	return &Client{
@@ -146,7 +155,7 @@ func (c *Client) ModerateStream(request *ModerateV2Request, session *ModerateV2S
 		session.currentSendWindow = LLM_STREAM_SEND_BASE_WINDOW_V2
 	}
 
-	if session.isNeedSend() != true {
+	if !session.isNeedSend() {
 		return session.DefaultBody, nil
 	} else {
 		session.StreamSendLen = 0
