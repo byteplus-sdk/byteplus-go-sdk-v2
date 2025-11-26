@@ -726,6 +726,22 @@ type REDISAPI interface {
 	SwitchOverWithContext(byteplus.Context, *SwitchOverInput, ...request.Option) (*SwitchOverOutput, error)
 	SwitchOverRequest(*SwitchOverInput) (*request.Request, *SwitchOverOutput)
 
+	TestFailoverDBInstanceZoneCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	TestFailoverDBInstanceZoneCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	TestFailoverDBInstanceZoneCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	TestFailoverDBInstanceZone(*TestFailoverDBInstanceZoneInput) (*TestFailoverDBInstanceZoneOutput, error)
+	TestFailoverDBInstanceZoneWithContext(byteplus.Context, *TestFailoverDBInstanceZoneInput, ...request.Option) (*TestFailoverDBInstanceZoneOutput, error)
+	TestFailoverDBInstanceZoneRequest(*TestFailoverDBInstanceZoneInput) (*request.Request, *TestFailoverDBInstanceZoneOutput)
+
+	TestShutDownDBInstanceNodesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	TestShutDownDBInstanceNodesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	TestShutDownDBInstanceNodesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	TestShutDownDBInstanceNodes(*TestShutDownDBInstanceNodesInput) (*TestShutDownDBInstanceNodesOutput, error)
+	TestShutDownDBInstanceNodesWithContext(byteplus.Context, *TestShutDownDBInstanceNodesInput, ...request.Option) (*TestShutDownDBInstanceNodesOutput, error)
+	TestShutDownDBInstanceNodesRequest(*TestShutDownDBInstanceNodesInput) (*request.Request, *TestShutDownDBInstanceNodesOutput)
+
 	UpgradeAllowListVersionCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	UpgradeAllowListVersionCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	UpgradeAllowListVersionCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
