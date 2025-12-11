@@ -53,52 +53,135 @@ func main() {
 
 	getRequest := model.GetContentGenerationTaskRequest{ID: taskID}
 
-	getResponse, err := client.GetContentGenerationTask(ctx, getRequest)
+	task, err := client.GetContentGenerationTask(ctx, getRequest)
 	if err != nil {
 		fmt.Printf("get content generation task error: %v\n", err)
 		return
 	}
+	fmt.Printf("----- GetContentGenerationTask content generation task service_tier :%v\n -----", *task.ServiceTier)
+	fmt.Printf("----- GetContentGenerationTask content generation task expire_time :%v\n -----", *task.ExecutionExpiresAfter)
 
-	fmt.Printf("Task ID: %s\n", getResponse.ID)
-	fmt.Printf("Model: %s\n", getResponse.Model)
-	fmt.Printf("Status: %s\n", getResponse.Status)
-	fmt.Printf("Video URL: %s\n", getResponse.Content.VideoURL)
-	fmt.Printf("Completion Tokens: %d\n", getResponse.Usage.CompletionTokens)
-	fmt.Printf("Created At: %d\n", getResponse.CreatedAt)
-	fmt.Printf("Updated At: %d\n", getResponse.UpdatedAt)
-	if getResponse.Error != nil {
-		fmt.Printf("Error Code: %s\n", getResponse.Error.Code)
-		fmt.Printf("Error Message: %s\n", getResponse.Error.Message)
-	}
+	fmt.Println("----- list default content generation tasks -----")
 
-	fmt.Println("----- list content generation task -----")
-
-	listRequest := model.ListContentGenerationTasksRequest{
+	listDefaultReq := model.ListContentGenerationTasksRequest{
 		PageNum:  byteplus.Int(1),
-		PageSize: byteplus.Int(10),
+		PageSize: byteplus.Int(2),
 		Filter: &model.ListContentGenerationTasksFilter{
-			Status: byteplus.String(model.StatusSucceeded),
-			//TaskIDs: byteplus.StringSlice([]string{"cgt-example-1", "cgt-example-2"}),
-			//Model:   byteplus.String(modelEp),
+			ServiceTier: byteplus.String("default"),
 		},
 	}
 
-	listResponse, err := client.ListContentGenerationTasks(ctx, listRequest)
+	listDefaultResp, err := client.ListContentGenerationTasks(ctx, listDefaultReq)
 	if err != nil {
-		fmt.Printf("failed to list content generation tasks: %v\n", err)
+		fmt.Printf("failed to list default content generation tasks: %v\n", err)
+	} else {
+		fmt.Printf("List default returned %v results\n", listDefaultResp.Total)
+		for _, item := range listDefaultResp.Items {
+			fmt.Printf("Item ID: %s\n", item.ID)
+			if item.ServiceTier != nil {
+				fmt.Printf("  Service Tier: %s\n", *item.ServiceTier)
+			}
+			if item.ExecutionExpiresAfter != nil {
+				fmt.Printf("  Execution Expires After: %d\n", *item.ExecutionExpiresAfter)
+			}
+		}
 	}
 
-	fmt.Printf("ListContentGenerationTasks returned %v results\n", listResponse.Total)
-
-	fmt.Println("----- delete content generation task -----")
+	fmt.Println("----- delete default content generation task -----")
 
 	deleteRequest := model.DeleteContentGenerationTaskRequest{ID: taskID}
 
 	err = client.DeleteContentGenerationTask(ctx, deleteRequest)
 	if err != nil {
-		fmt.Printf("delete content generation task error: %v\n", err)
+		fmt.Printf("delete default content generation task error: %v\n", err)
 	} else {
 		fmt.Println("successfully deleted task id: ", taskID)
 	}
 
+	fmt.Println("----- create flex content generation task -----")
+	createFlexReq := model.CreateContentGenerationTaskRequest{
+		Model: modelEp, // Replace with your endpoint ID
+		Content: []*model.CreateContentGenerationContentItem{
+			{
+				Type: model.ContentGenerationContentItemTypeText,
+				Text: byteplus.String("A cat is sleeping --ratio 1:1"),
+			},
+			{
+				Type: model.ContentGenerationContentItemTypeImage,
+				ImageURL: &model.ImageURL{
+					URL: "https://ark-project.tos-cn-beijing.volces.com/doc_image/see_i2v.jpeg", // Replace with URL
+				},
+			},
+		},
+		ServiceTier:           byteplus.String("flex"),
+		ExecutionExpiresAfter: byteplus.Int64(3600), // 单位秒，示例为10分钟
+	}
+
+	createFlexResp, err := client.CreateContentGenerationTask(ctx, createFlexReq)
+	if err != nil {
+		fmt.Printf("create flex content generation error: %v\n", err)
+		return
+	}
+	fmt.Printf("Flex Task Created with ID: %s\n", createFlexResp.ID)
+
+	fmt.Println("----- get flex content generation task -----")
+	flexTaskID := createFlexResp.ID
+
+	getFlexReq := model.GetContentGenerationTaskRequest{ID: flexTaskID}
+
+	getFlexResp, err := client.GetContentGenerationTask(ctx, getFlexReq)
+	if err != nil {
+		fmt.Printf("get flex content generation task error: %v\n", err)
+		return
+	}
+
+	fmt.Printf("Flex Task ID: %s\n", getFlexResp.ID)
+	if getFlexResp.ServiceTier != nil {
+		fmt.Printf("Service Tier: %s\n", *getFlexResp.ServiceTier)
+	}
+	if getFlexResp.ExecutionExpiresAfter != nil {
+		fmt.Printf("Execution Expires After: %d\n", *getFlexResp.ExecutionExpiresAfter)
+	}
+	if getFlexResp.Error != nil {
+		fmt.Printf("Error Code: %s\n", getFlexResp.Error.Code)
+		fmt.Printf("Error Message: %s\n", getFlexResp.Error.Message)
+	}
+
+	fmt.Println("----- list flex content generation tasks -----")
+
+	listFlexReq := model.ListContentGenerationTasksRequest{
+		PageNum:  byteplus.Int(1),
+		PageSize: byteplus.Int(2),
+		Filter: &model.ListContentGenerationTasksFilter{
+			ServiceTier: byteplus.String("flex"),
+		},
+	}
+
+	listFlexResp, err := client.ListContentGenerationTasks(ctx, listFlexReq)
+	if err != nil {
+		fmt.Printf("failed to list flex content generation tasks: %v\n", err)
+	}
+
+	fmt.Printf("List flex returned %v results\n", listFlexResp.Total)
+
+	for _, item := range listFlexResp.Items {
+		fmt.Printf("Item ID: %s\n", item.ID)
+		if item.ServiceTier != nil {
+			fmt.Printf("  Service Tier: %s\n", *item.ServiceTier)
+		}
+		if item.ExecutionExpiresAfter != nil {
+			fmt.Printf("  Execution Expires After: %d\n", *item.ExecutionExpiresAfter)
+		}
+	}
+
+	fmt.Println("----- delete flex content generation task -----")
+
+	deleteFlexReq := model.DeleteContentGenerationTaskRequest{ID: flexTaskID}
+
+	err = client.DeleteContentGenerationTask(ctx, deleteFlexReq)
+	if err != nil {
+		fmt.Printf("delete flex content generation task error: %v\n", err)
+	} else {
+		fmt.Println("successfully deleted flex task id: ", flexTaskID)
+	}
 }
