@@ -211,6 +211,9 @@ func (r *InputItem) MarshalJSON() ([]byte, error) {
 	if v := r.GetFunctionKnowledgeSearch(); v != nil {
 		return json.Marshal(v)
 	}
+	if v := r.GetFunctionDoubaoAppCall(); v != nil {
+		return json.Marshal(v)
+	}
 	return json.Marshal(nil)
 }
 
@@ -232,28 +235,55 @@ func (i *ResponseImageProcessArgs) MarshalJSON() ([]byte, error) {
 }
 
 // UnmarshalJSON ...
-func (i *ResponseImageProcessArgs) UnmarshalJSON(bytes []byte) error {
+func (i *ItemFunctionImageProcess) UnmarshalJSON(bytes []byte) error {
+	type Plain struct {
+		Type      ItemType_Enum               `protobuf:"varint,1,opt,name=type,proto3,enum=responses.ItemType_Enum" json:"type,omitempty"` // p2p: {"const": "image_process"}
+		Action    *ResponseImageProcessAction `protobuf:"bytes,2,opt,name=action,proto3" json:"action,omitempty"`
+		Arguments *ResponseImageProcessArgs   `protobuf:"bytes,3,opt,name=arguments,proto3" json:"arguments,omitempty"`
+		Status    ItemStatus_Enum             `protobuf:"varint,4,opt,name=status,proto3,enum=responses.ItemStatus_Enum" json:"status,omitempty"`
+		ID        string                      `protobuf:"bytes,5,opt,name=id,proto3" json:"id,omitempty"`
+		Error     *ResponseImageProcessError  `protobuf:"bytes,6,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	}
+	var plain Plain
+	if err := json.Unmarshal(bytes, &plain); err != nil {
+		return err
+	}
+	i.Type = plain.Type
+	i.Action = plain.Action
+	i.Status = plain.Status
+	i.Id = plain.ID
+	i.Error = plain.Error
+
+	// following parse arguments
+	i.Arguments = &ResponseImageProcessArgs{}
 	var err error
-	oneof1 := ResponseImageProcessArgs_PointArgs{}
-	if err = unmarshal(bytes, &oneof1.PointArgs); err == nil {
-		i.Union = &oneof1
-		return nil
+	switch i.GetAction().GetType() {
+	case ResponseImageProcessType_point.String():
+		oneof1 := ResponseImageProcessArgs_PointArgs{}
+		if err = unmarshal(bytes, &oneof1.PointArgs); err == nil {
+			i.Arguments.Union = &oneof1
+			return nil
+		}
+	case ResponseImageProcessType_grounding.String():
+		oneof2 := ResponseImageProcessArgs_GroundingArgs{}
+		if err = unmarshal(bytes, &oneof2.GroundingArgs); err == nil {
+			i.Arguments.Union = &oneof2
+			return nil
+		}
+	case ResponseImageProcessType_rotate.String():
+		oneof3 := ResponseImageProcessArgs_RotateArgs{}
+		if err = unmarshal(bytes, &oneof3.RotateArgs); err == nil {
+			i.Arguments.Union = &oneof3
+			return nil
+		}
+	case ResponseImageProcessType_zoom.String():
+		oneof4 := ResponseImageProcessArgs_ZoomArgs{}
+		if err = unmarshal(bytes, &oneof4.ZoomArgs); err == nil {
+			i.Arguments.Union = &oneof4
+			return nil
+		}
 	}
-	oneof2 := ResponseImageProcessArgs_GroundingArgs{}
-	if err = unmarshal(bytes, &oneof2.GroundingArgs); err == nil {
-		i.Union = &oneof2
-		return nil
-	}
-	oneof3 := ResponseImageProcessArgs_RotateArgs{}
-	if err = unmarshal(bytes, &oneof3.RotateArgs); err == nil {
-		i.Union = &oneof3
-		return nil
-	}
-	oneof4 := ResponseImageProcessArgs_ZoomArgs{}
-	if err = unmarshal(bytes, &oneof4.ZoomArgs); err == nil {
-		i.Union = &oneof4
-		return nil
-	}
+
 	return err
 }
 
@@ -319,6 +349,67 @@ func (r *McpRequireApproval) UnmarshalJSON(bytes []byte) error {
 		r.Union = &fc
 		return nil
 	}
+	return err
+}
+
+// MarshalJSON ...
+func (r *DoubaoAppCallBlock) MarshalJSON() ([]byte, error) {
+	if v := r.GetOutputText(); v != nil {
+		return json.Marshal(v)
+	}
+	if v := r.GetReasoningText(); v != nil {
+		return json.Marshal(v)
+	}
+	if v := r.GetReasoningSearch(); v != nil {
+		return json.Marshal(v)
+	}
+	if v := r.GetSearch(); v != nil {
+		return json.Marshal(v)
+	}
+	return json.Marshal(nil)
+}
+
+// UnmarshalJSON ...
+func (r *DoubaoAppCallBlock) UnmarshalJSON(bytes []byte) error {
+	var err error
+	var typeOnly struct {
+		Type *DoubaoAppBlockType_Enum `json:"type,omitempty"`
+	}
+	if err = json.Unmarshal(bytes, &typeOnly); err != nil {
+		return err
+	}
+
+	switch {
+	case typeOnly.Type == nil:
+		return nil
+	case *typeOnly.Type == DoubaoAppBlockType_output_text:
+		oneof := DoubaoAppCallBlock_OutputText{}
+		if err = unmarshal(bytes, &oneof.OutputText); err == nil {
+			r.Union = &oneof
+			return nil
+		}
+	case *typeOnly.Type == DoubaoAppBlockType_reasoning_text:
+		oneof := DoubaoAppCallBlock_ReasoningText{}
+		if err = unmarshal(bytes, &oneof.ReasoningText); err == nil {
+			r.Union = &oneof
+			return nil
+		}
+	case *typeOnly.Type == DoubaoAppBlockType_reasoning_search:
+		oneof := DoubaoAppCallBlock_ReasoningSearch{}
+		if err = unmarshal(bytes, &oneof.ReasoningSearch); err == nil {
+			r.Union = &oneof
+			return nil
+		}
+	case *typeOnly.Type == DoubaoAppBlockType_search:
+		oneof := DoubaoAppCallBlock_Search{}
+		if err = unmarshal(bytes, &oneof.Search); err == nil {
+			r.Union = &oneof
+			return nil
+		}
+	default:
+		return err
+	}
+
 	return err
 }
 
@@ -483,6 +574,15 @@ func (r *ResponsesToolChoice) MarshalJSON() ([]byte, error) {
 	if v := r.GetFunctionToolChoice(); v != nil {
 		return json.Marshal(v)
 	}
+	if v := r.GetWebSearchToolChoice(); v != nil {
+		return json.Marshal(v)
+	}
+	if v := r.GetKnowledgeSearchToolChoice(); v != nil {
+		return json.Marshal(v)
+	}
+	if v := r.GetMcpToolChoice(); v != nil {
+		return json.Marshal(v)
+	}
 	return json.Marshal(r.GetMode())
 }
 
@@ -526,6 +626,12 @@ func (r *ResponsesTool) UnmarshalJSON(bytes []byte) error {
 			r.Union = &ks
 			return nil
 		}
+	case ToolType_doubao_app:
+		ks := ResponsesTool_ToolDoubaoApp{}
+		if err = unmarshal(bytes, &ks.ToolDoubaoApp); err == nil {
+			r.Union = &ks
+			return nil
+		}
 	default:
 		err = &json.InvalidUnmarshalError{
 			Type: reflect.TypeOf(r),
@@ -549,6 +655,9 @@ func (r *ResponsesTool) MarshalJSON() ([]byte, error) {
 		return json.Marshal(v)
 	}
 	if v := r.GetToolKnowledgeSearch(); v != nil {
+		return json.Marshal(v)
+	}
+	if v := r.GetToolDoubaoApp(); v != nil {
 		return json.Marshal(v)
 	}
 	return json.Marshal(nil)
@@ -658,6 +767,12 @@ func (r *OutputItem) UnmarshalJSON(bytes []byte) error {
 			r.Union = &oneof
 			return nil
 		}
+	case ItemType_doubao_app_call:
+		oneof := OutputItem_FunctionDoubaoAppCall{}
+		if err = unmarshal(bytes, &oneof.FunctionDoubaoAppCall); err == nil {
+			r.Union = &oneof
+			return nil
+		}
 	default:
 		err = &json.InvalidUnmarshalError{
 			Type: reflect.TypeOf(r),
@@ -696,6 +811,9 @@ func (r *OutputItem) MarshalJSON() ([]byte, error) {
 		return json.Marshal(v)
 	}
 	if v := r.GetFunctionKnowledgeSearch(); v != nil {
+		return json.Marshal(v)
+	}
+	if v := r.GetFunctionDoubaoAppCall(); v != nil {
 		return json.Marshal(v)
 	}
 	return json.Marshal(nil)
@@ -824,6 +942,51 @@ func (e *Event) MarshalJSON() ([]byte, error) {
 		return json.Marshal(v)
 	}
 	if v := e.GetResponseKnowledgeSearchCallFailed(); v != nil {
+		return json.Marshal(v)
+	}
+	if v := e.GetResponseDoubaoAppCallInProgress(); v != nil {
+		return json.Marshal(v)
+	}
+	if v := e.GetResponseDoubaoAppCallCompleted(); v != nil {
+		return json.Marshal(v)
+	}
+	if v := e.GetResponseDoubaoAppCallFailed(); v != nil {
+		return json.Marshal(v)
+	}
+	if v := e.GetResponseDoubaoAppCallBlockAdded(); v != nil {
+		return json.Marshal(v)
+	}
+	if v := e.GetResponseDoubaoAppCallBlockDone(); v != nil {
+		return json.Marshal(v)
+	}
+	if v := e.GetResponseDoubaoAppCallOutputTextDelta(); v != nil {
+		return json.Marshal(v)
+	}
+	if v := e.GetResponseDoubaoAppCallOutputTextDone(); v != nil {
+		return json.Marshal(v)
+	}
+	if v := e.GetResponseDoubaoAppCallReasoningTextDelta(); v != nil {
+		return json.Marshal(v)
+	}
+	if v := e.GetResponseDoubaoAppCallReasoningTextDone(); v != nil {
+		return json.Marshal(v)
+	}
+	if v := e.GetResponseDoubaoAppCallReasoningSearchInProgress(); v != nil {
+		return json.Marshal(v)
+	}
+	if v := e.GetResponseDoubaoAppCallReasoningSearchSearching(); v != nil {
+		return json.Marshal(v)
+	}
+	if v := e.GetResponseDoubaoAppCallReasoningSearchCompleted(); v != nil {
+		return json.Marshal(v)
+	}
+	if v := e.GetResponseDoubaoAppCallSearchInProgress(); v != nil {
+		return json.Marshal(v)
+	}
+	if v := e.GetResponseDoubaoAppCallSearchSearching(); v != nil {
+		return json.Marshal(v)
+	}
+	if v := e.GetResponseDoubaoAppCallSearchCompleted(); v != nil {
 		return json.Marshal(v)
 	}
 	return json.Marshal(nil)
@@ -1046,6 +1209,96 @@ func (e *Event) UnmarshalJSON(bytes []byte) error {
 	case EventType_response_knowledge_search_call_failed:
 		oneof := Event_ResponseKnowledgeSearchCallFailed{}
 		if err := unmarshal(bytes, &oneof.ResponseKnowledgeSearchCallFailed); err != nil {
+			return err
+		}
+		e.Event = &oneof
+	case EventType_response_doubao_app_call_in_progress:
+		oneof := Event_ResponseDoubaoAppCallInProgress{}
+		if err := unmarshal(bytes, &oneof.ResponseDoubaoAppCallInProgress); err != nil {
+			return err
+		}
+		e.Event = &oneof
+	case EventType_response_doubao_app_call_completed:
+		oneof := Event_ResponseDoubaoAppCallCompleted{}
+		if err := unmarshal(bytes, &oneof.ResponseDoubaoAppCallCompleted); err != nil {
+			return err
+		}
+		e.Event = &oneof
+	case EventType_response_doubao_app_call_failed:
+		oneof := Event_ResponseDoubaoAppCallFailed{}
+		if err := unmarshal(bytes, &oneof.ResponseDoubaoAppCallFailed); err != nil {
+			return err
+		}
+		e.Event = &oneof
+	case EventType_response_doubao_app_call_output_text_delta:
+		oneof := Event_ResponseDoubaoAppCallOutputTextDelta{}
+		if err := unmarshal(bytes, &oneof.ResponseDoubaoAppCallOutputTextDelta); err != nil {
+			return err
+		}
+		e.Event = &oneof
+	case EventType_response_doubao_app_call_output_text_done:
+		oneof := Event_ResponseDoubaoAppCallOutputTextDone{}
+		if err := unmarshal(bytes, &oneof.ResponseDoubaoAppCallOutputTextDone); err != nil {
+			return err
+		}
+		e.Event = &oneof
+	case EventType_response_doubao_app_call_search_in_progress:
+		oneof := Event_ResponseDoubaoAppCallSearchInProgress{}
+		if err := unmarshal(bytes, &oneof.ResponseDoubaoAppCallSearchInProgress); err != nil {
+			return err
+		}
+		e.Event = &oneof
+	case EventType_response_doubao_app_call_search_searching:
+		oneof := Event_ResponseDoubaoAppCallSearchSearching{}
+		if err := unmarshal(bytes, &oneof.ResponseDoubaoAppCallSearchSearching); err != nil {
+			return err
+		}
+		e.Event = &oneof
+	case EventType_response_doubao_app_call_search_completed:
+		oneof := Event_ResponseDoubaoAppCallSearchCompleted{}
+		if err := unmarshal(bytes, &oneof.ResponseDoubaoAppCallSearchCompleted); err != nil {
+			return err
+		}
+		e.Event = &oneof
+	case EventType_response_doubao_app_call_reasoning_text_delta:
+		oneof := Event_ResponseDoubaoAppCallReasoningTextDelta{}
+		if err := unmarshal(bytes, &oneof.ResponseDoubaoAppCallReasoningTextDelta); err != nil {
+			return err
+		}
+		e.Event = &oneof
+	case EventType_response_doubao_app_call_reasoning_text_done:
+		oneof := Event_ResponseDoubaoAppCallReasoningTextDone{}
+		if err := unmarshal(bytes, &oneof.ResponseDoubaoAppCallReasoningTextDone); err != nil {
+			return err
+		}
+		e.Event = &oneof
+	case EventType_response_doubao_app_call_reasoning_search_in_progress:
+		oneof := Event_ResponseDoubaoAppCallReasoningSearchInProgress{}
+		if err := unmarshal(bytes, &oneof.ResponseDoubaoAppCallReasoningSearchInProgress); err != nil {
+			return err
+		}
+		e.Event = &oneof
+	case EventType_response_doubao_app_call_reasoning_search_searching:
+		oneof := Event_ResponseDoubaoAppCallReasoningSearchSearching{}
+		if err := unmarshal(bytes, &oneof.ResponseDoubaoAppCallReasoningSearchSearching); err != nil {
+			return err
+		}
+		e.Event = &oneof
+	case EventType_response_doubao_app_call_reasoning_search_completed:
+		oneof := Event_ResponseDoubaoAppCallReasoningSearchCompleted{}
+		if err := unmarshal(bytes, &oneof.ResponseDoubaoAppCallReasoningSearchCompleted); err != nil {
+			return err
+		}
+		e.Event = &oneof
+	case EventType_response_doubao_app_call_block_added:
+		oneof := Event_ResponseDoubaoAppCallBlockAdded{}
+		if err := unmarshal(bytes, &oneof.ResponseDoubaoAppCallBlockAdded); err != nil {
+			return err
+		}
+		e.Event = &oneof
+	case EventType_response_doubao_app_call_block_done:
+		oneof := Event_ResponseDoubaoAppCallBlockDone{}
+		if err := unmarshal(bytes, &oneof.ResponseDoubaoAppCallBlockDone); err != nil {
 			return err
 		}
 		e.Event = &oneof
