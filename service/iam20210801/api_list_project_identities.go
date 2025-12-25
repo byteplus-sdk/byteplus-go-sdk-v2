@@ -22,17 +22,17 @@ const opListProjectIdentitiesCommon = "ListProjectIdentities"
 // See ListProjectIdentitiesCommon for more information on using the ListProjectIdentitiesCommon
 // API call, and error handling.
 //
-//	// Example sending a request using the ListProjectIdentitiesCommonRequest method.
-//	req, resp := client.ListProjectIdentitiesCommonRequest(params)
+//    // Example sending a request using the ListProjectIdentitiesCommonRequest method.
+//    req, resp := client.ListProjectIdentitiesCommonRequest(params)
 //
-//	err := req.Send()
-//	if err == nil { // resp is now filled
-//	    fmt.Println(resp)
-//	}
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
 func (c *IAM20210801) ListProjectIdentitiesCommonRequest(input *map[string]interface{}) (req *request.Request, output *map[string]interface{}) {
 	op := &request.Operation{
 		Name:       opListProjectIdentitiesCommon,
-		HTTPMethod: "POST",
+		HTTPMethod: "GET",
 		HTTPPath:   "/",
 	}
 
@@ -87,17 +87,17 @@ const opListProjectIdentities = "ListProjectIdentities"
 // See ListProjectIdentities for more information on using the ListProjectIdentities
 // API call, and error handling.
 //
-//	// Example sending a request using the ListProjectIdentitiesRequest method.
-//	req, resp := client.ListProjectIdentitiesRequest(params)
+//    // Example sending a request using the ListProjectIdentitiesRequest method.
+//    req, resp := client.ListProjectIdentitiesRequest(params)
 //
-//	err := req.Send()
-//	if err == nil { // resp is now filled
-//	    fmt.Println(resp)
-//	}
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
 func (c *IAM20210801) ListProjectIdentitiesRequest(input *ListProjectIdentitiesInput) (req *request.Request, output *ListProjectIdentitiesOutput) {
 	op := &request.Operation{
 		Name:       opListProjectIdentities,
-		HTTPMethod: "POST",
+		HTTPMethod: "GET",
 		HTTPPath:   "/",
 	}
 
