@@ -22,17 +22,17 @@ const opListProjectsCommon = "ListProjects"
 // See ListProjectsCommon for more information on using the ListProjectsCommon
 // API call, and error handling.
 //
-//	// Example sending a request using the ListProjectsCommonRequest method.
-//	req, resp := client.ListProjectsCommonRequest(params)
+//    // Example sending a request using the ListProjectsCommonRequest method.
+//    req, resp := client.ListProjectsCommonRequest(params)
 //
-//	err := req.Send()
-//	if err == nil { // resp is now filled
-//	    fmt.Println(resp)
-//	}
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
 func (c *IAM20210801) ListProjectsCommonRequest(input *map[string]interface{}) (req *request.Request, output *map[string]interface{}) {
 	op := &request.Operation{
 		Name:       opListProjectsCommon,
-		HTTPMethod: "POST",
+		HTTPMethod: "GET",
 		HTTPPath:   "/",
 	}
 
@@ -87,17 +87,17 @@ const opListProjects = "ListProjects"
 // See ListProjects for more information on using the ListProjects
 // API call, and error handling.
 //
-//	// Example sending a request using the ListProjectsRequest method.
-//	req, resp := client.ListProjectsRequest(params)
+//    // Example sending a request using the ListProjectsRequest method.
+//    req, resp := client.ListProjectsRequest(params)
 //
-//	err := req.Send()
-//	if err == nil { // resp is now filled
-//	    fmt.Println(resp)
-//	}
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
 func (c *IAM20210801) ListProjectsRequest(input *ListProjectsInput) (req *request.Request, output *ListProjectsOutput) {
 	op := &request.Operation{
 		Name:       opListProjects,
-		HTTPMethod: "POST",
+		HTTPMethod: "GET",
 		HTTPPath:   "/",
 	}
 
