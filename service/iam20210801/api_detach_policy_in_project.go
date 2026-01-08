@@ -22,17 +22,17 @@ const opDetachPolicyInProjectCommon = "DetachPolicyInProject"
 // See DetachPolicyInProjectCommon for more information on using the DetachPolicyInProjectCommon
 // API call, and error handling.
 //
-//	// Example sending a request using the DetachPolicyInProjectCommonRequest method.
-//	req, resp := client.DetachPolicyInProjectCommonRequest(params)
+//    // Example sending a request using the DetachPolicyInProjectCommonRequest method.
+//    req, resp := client.DetachPolicyInProjectCommonRequest(params)
 //
-//	err := req.Send()
-//	if err == nil { // resp is now filled
-//	    fmt.Println(resp)
-//	}
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
 func (c *IAM20210801) DetachPolicyInProjectCommonRequest(input *map[string]interface{}) (req *request.Request, output *map[string]interface{}) {
 	op := &request.Operation{
 		Name:       opDetachPolicyInProjectCommon,
-		HTTPMethod: "POST",
+		HTTPMethod: "GET",
 		HTTPPath:   "/",
 	}
 
@@ -87,17 +87,17 @@ const opDetachPolicyInProject = "DetachPolicyInProject"
 // See DetachPolicyInProject for more information on using the DetachPolicyInProject
 // API call, and error handling.
 //
-//	// Example sending a request using the DetachPolicyInProjectRequest method.
-//	req, resp := client.DetachPolicyInProjectRequest(params)
+//    // Example sending a request using the DetachPolicyInProjectRequest method.
+//    req, resp := client.DetachPolicyInProjectRequest(params)
 //
-//	err := req.Send()
-//	if err == nil { // resp is now filled
-//	    fmt.Println(resp)
-//	}
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
 func (c *IAM20210801) DetachPolicyInProjectRequest(input *DetachPolicyInProjectInput) (req *request.Request, output *DetachPolicyInProjectOutput) {
 	op := &request.Operation{
 		Name:       opDetachPolicyInProject,
-		HTTPMethod: "POST",
+		HTTPMethod: "GET",
 		HTTPPath:   "/",
 	}
 

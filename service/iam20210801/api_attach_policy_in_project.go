@@ -22,17 +22,17 @@ const opAttachPolicyInProjectCommon = "AttachPolicyInProject"
 // See AttachPolicyInProjectCommon for more information on using the AttachPolicyInProjectCommon
 // API call, and error handling.
 //
-//	// Example sending a request using the AttachPolicyInProjectCommonRequest method.
-//	req, resp := client.AttachPolicyInProjectCommonRequest(params)
+//    // Example sending a request using the AttachPolicyInProjectCommonRequest method.
+//    req, resp := client.AttachPolicyInProjectCommonRequest(params)
 //
-//	err := req.Send()
-//	if err == nil { // resp is now filled
-//	    fmt.Println(resp)
-//	}
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
 func (c *IAM20210801) AttachPolicyInProjectCommonRequest(input *map[string]interface{}) (req *request.Request, output *map[string]interface{}) {
 	op := &request.Operation{
 		Name:       opAttachPolicyInProjectCommon,
-		HTTPMethod: "POST",
+		HTTPMethod: "GET",
 		HTTPPath:   "/",
 	}
 
@@ -87,17 +87,17 @@ const opAttachPolicyInProject = "AttachPolicyInProject"
 // See AttachPolicyInProject for more information on using the AttachPolicyInProject
 // API call, and error handling.
 //
-//	// Example sending a request using the AttachPolicyInProjectRequest method.
-//	req, resp := client.AttachPolicyInProjectRequest(params)
+//    // Example sending a request using the AttachPolicyInProjectRequest method.
+//    req, resp := client.AttachPolicyInProjectRequest(params)
 //
-//	err := req.Send()
-//	if err == nil { // resp is now filled
-//	    fmt.Println(resp)
-//	}
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
 func (c *IAM20210801) AttachPolicyInProjectRequest(input *AttachPolicyInProjectInput) (req *request.Request, output *AttachPolicyInProjectOutput) {
 	op := &request.Operation{
 		Name:       opAttachPolicyInProject,
-		HTTPMethod: "POST",
+		HTTPMethod: "GET",
 		HTTPPath:   "/",
 	}
 

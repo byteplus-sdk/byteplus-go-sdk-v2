@@ -22,17 +22,17 @@ const opDeleteProjectCommon = "DeleteProject"
 // See DeleteProjectCommon for more information on using the DeleteProjectCommon
 // API call, and error handling.
 //
-//	// Example sending a request using the DeleteProjectCommonRequest method.
-//	req, resp := client.DeleteProjectCommonRequest(params)
+//    // Example sending a request using the DeleteProjectCommonRequest method.
+//    req, resp := client.DeleteProjectCommonRequest(params)
 //
-//	err := req.Send()
-//	if err == nil { // resp is now filled
-//	    fmt.Println(resp)
-//	}
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
 func (c *IAM20210801) DeleteProjectCommonRequest(input *map[string]interface{}) (req *request.Request, output *map[string]interface{}) {
 	op := &request.Operation{
 		Name:       opDeleteProjectCommon,
-		HTTPMethod: "POST",
+		HTTPMethod: "GET",
 		HTTPPath:   "/",
 	}
 
@@ -87,17 +87,17 @@ const opDeleteProject = "DeleteProject"
 // See DeleteProject for more information on using the DeleteProject
 // API call, and error handling.
 //
-//	// Example sending a request using the DeleteProjectRequest method.
-//	req, resp := client.DeleteProjectRequest(params)
+//    // Example sending a request using the DeleteProjectRequest method.
+//    req, resp := client.DeleteProjectRequest(params)
 //
-//	err := req.Send()
-//	if err == nil { // resp is now filled
-//	    fmt.Println(resp)
-//	}
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
 func (c *IAM20210801) DeleteProjectRequest(input *DeleteProjectInput) (req *request.Request, output *DeleteProjectOutput) {
 	op := &request.Operation{
 		Name:       opDeleteProject,
-		HTTPMethod: "POST",
+		HTTPMethod: "GET",
 		HTTPPath:   "/",
 	}
 
