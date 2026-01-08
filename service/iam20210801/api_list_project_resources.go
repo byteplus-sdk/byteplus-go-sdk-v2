@@ -22,17 +22,17 @@ const opListProjectResourcesCommon = "ListProjectResources"
 // See ListProjectResourcesCommon for more information on using the ListProjectResourcesCommon
 // API call, and error handling.
 //
-//	// Example sending a request using the ListProjectResourcesCommonRequest method.
-//	req, resp := client.ListProjectResourcesCommonRequest(params)
+//    // Example sending a request using the ListProjectResourcesCommonRequest method.
+//    req, resp := client.ListProjectResourcesCommonRequest(params)
 //
-//	err := req.Send()
-//	if err == nil { // resp is now filled
-//	    fmt.Println(resp)
-//	}
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
 func (c *IAM20210801) ListProjectResourcesCommonRequest(input *map[string]interface{}) (req *request.Request, output *map[string]interface{}) {
 	op := &request.Operation{
 		Name:       opListProjectResourcesCommon,
-		HTTPMethod: "POST",
+		HTTPMethod: "GET",
 		HTTPPath:   "/",
 	}
 
@@ -87,17 +87,17 @@ const opListProjectResources = "ListProjectResources"
 // See ListProjectResources for more information on using the ListProjectResources
 // API call, and error handling.
 //
-//	// Example sending a request using the ListProjectResourcesRequest method.
-//	req, resp := client.ListProjectResourcesRequest(params)
+//    // Example sending a request using the ListProjectResourcesRequest method.
+//    req, resp := client.ListProjectResourcesRequest(params)
 //
-//	err := req.Send()
-//	if err == nil { // resp is now filled
-//	    fmt.Println(resp)
-//	}
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
 func (c *IAM20210801) ListProjectResourcesRequest(input *ListProjectResourcesInput) (req *request.Request, output *ListProjectResourcesOutput) {
 	op := &request.Operation{
 		Name:       opListProjectResources,
-		HTTPMethod: "POST",
+		HTTPMethod: "GET",
 		HTTPPath:   "/",
 	}
 

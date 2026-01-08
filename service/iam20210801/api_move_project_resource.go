@@ -22,17 +22,17 @@ const opMoveProjectResourceCommon = "MoveProjectResource"
 // See MoveProjectResourceCommon for more information on using the MoveProjectResourceCommon
 // API call, and error handling.
 //
-//	// Example sending a request using the MoveProjectResourceCommonRequest method.
-//	req, resp := client.MoveProjectResourceCommonRequest(params)
+//    // Example sending a request using the MoveProjectResourceCommonRequest method.
+//    req, resp := client.MoveProjectResourceCommonRequest(params)
 //
-//	err := req.Send()
-//	if err == nil { // resp is now filled
-//	    fmt.Println(resp)
-//	}
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
 func (c *IAM20210801) MoveProjectResourceCommonRequest(input *map[string]interface{}) (req *request.Request, output *map[string]interface{}) {
 	op := &request.Operation{
 		Name:       opMoveProjectResourceCommon,
-		HTTPMethod: "POST",
+		HTTPMethod: "GET",
 		HTTPPath:   "/",
 	}
 
@@ -87,17 +87,17 @@ const opMoveProjectResource = "MoveProjectResource"
 // See MoveProjectResource for more information on using the MoveProjectResource
 // API call, and error handling.
 //
-//	// Example sending a request using the MoveProjectResourceRequest method.
-//	req, resp := client.MoveProjectResourceRequest(params)
+//    // Example sending a request using the MoveProjectResourceRequest method.
+//    req, resp := client.MoveProjectResourceRequest(params)
 //
-//	err := req.Send()
-//	if err == nil { // resp is now filled
-//	    fmt.Println(resp)
-//	}
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
 func (c *IAM20210801) MoveProjectResourceRequest(input *MoveProjectResourceInput) (req *request.Request, output *MoveProjectResourceOutput) {
 	op := &request.Operation{
 		Name:       opMoveProjectResource,
-		HTTPMethod: "POST",
+		HTTPMethod: "GET",
 		HTTPPath:   "/",
 	}
 

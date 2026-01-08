@@ -54,6 +54,22 @@ type BILLINGAPI interface {
 	CleanUpFinancialRelationWithContext(byteplus.Context, *CleanUpFinancialRelationInput, ...request.Option) (*CleanUpFinancialRelationOutput, error)
 	CleanUpFinancialRelationRequest(*CleanUpFinancialRelationInput) (*request.Request, *CleanUpFinancialRelationOutput)
 
+	CommonBuyCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CommonBuyCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CommonBuyCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CommonBuy(*CommonBuyInput) (*CommonBuyOutput, error)
+	CommonBuyWithContext(byteplus.Context, *CommonBuyInput, ...request.Option) (*CommonBuyOutput, error)
+	CommonBuyRequest(*CommonBuyInput) (*request.Request, *CommonBuyOutput)
+
+	CreateBudgetCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateBudgetCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateBudgetCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateBudget(*CreateBudgetInput) (*CreateBudgetOutput, error)
+	CreateBudgetWithContext(byteplus.Context, *CreateBudgetInput, ...request.Option) (*CreateBudgetOutput, error)
+	CreateBudgetRequest(*CreateBudgetInput) (*request.Request, *CreateBudgetOutput)
+
 	CreateFinancialRelationCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	CreateFinancialRelationCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	CreateFinancialRelationCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -61,6 +77,14 @@ type BILLINGAPI interface {
 	CreateFinancialRelation(*CreateFinancialRelationInput) (*CreateFinancialRelationOutput, error)
 	CreateFinancialRelationWithContext(byteplus.Context, *CreateFinancialRelationInput, ...request.Option) (*CreateFinancialRelationOutput, error)
 	CreateFinancialRelationRequest(*CreateFinancialRelationInput) (*request.Request, *CreateFinancialRelationOutput)
+
+	DeleteBudgetCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteBudgetCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteBudgetCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteBudget(*DeleteBudgetInput) (*DeleteBudgetOutput, error)
+	DeleteBudgetWithContext(byteplus.Context, *DeleteBudgetInput, ...request.Option) (*DeleteBudgetOutput, error)
+	DeleteBudgetRequest(*DeleteBudgetInput) (*request.Request, *DeleteBudgetOutput)
 
 	DeleteFinancialRelationCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DeleteFinancialRelationCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -150,6 +174,110 @@ type BILLINGAPI interface {
 	ListBillOverviewByProdWithContext(byteplus.Context, *ListBillOverviewByProdInput, ...request.Option) (*ListBillOverviewByProdOutput, error)
 	ListBillOverviewByProdRequest(*ListBillOverviewByProdInput) (*request.Request, *ListBillOverviewByProdOutput)
 
+	ListBudgetCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListBudgetCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListBudgetCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListBudget(*ListBudgetInput) (*ListBudgetOutput, error)
+	ListBudgetWithContext(byteplus.Context, *ListBudgetInput, ...request.Option) (*ListBudgetOutput, error)
+	ListBudgetRequest(*ListBudgetInput) (*request.Request, *ListBudgetOutput)
+
+	ListBudgetAmountByBudgetIDCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListBudgetAmountByBudgetIDCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListBudgetAmountByBudgetIDCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListBudgetAmountByBudgetID(*ListBudgetAmountByBudgetIDInput) (*ListBudgetAmountByBudgetIDOutput, error)
+	ListBudgetAmountByBudgetIDWithContext(byteplus.Context, *ListBudgetAmountByBudgetIDInput, ...request.Option) (*ListBudgetAmountByBudgetIDOutput, error)
+	ListBudgetAmountByBudgetIDRequest(*ListBudgetAmountByBudgetIDInput) (*request.Request, *ListBudgetAmountByBudgetIDOutput)
+
+	ListBudgetFilterBillingModeCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListBudgetFilterBillingModeCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListBudgetFilterBillingModeCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListBudgetFilterBillingMode(*ListBudgetFilterBillingModeInput) (*ListBudgetFilterBillingModeOutput, error)
+	ListBudgetFilterBillingModeWithContext(byteplus.Context, *ListBudgetFilterBillingModeInput, ...request.Option) (*ListBudgetFilterBillingModeOutput, error)
+	ListBudgetFilterBillingModeRequest(*ListBudgetFilterBillingModeInput) (*request.Request, *ListBudgetFilterBillingModeOutput)
+
+	ListBudgetFilterOwnerIDCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListBudgetFilterOwnerIDCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListBudgetFilterOwnerIDCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListBudgetFilterOwnerID(*ListBudgetFilterOwnerIDInput) (*ListBudgetFilterOwnerIDOutput, error)
+	ListBudgetFilterOwnerIDWithContext(byteplus.Context, *ListBudgetFilterOwnerIDInput, ...request.Option) (*ListBudgetFilterOwnerIDOutput, error)
+	ListBudgetFilterOwnerIDRequest(*ListBudgetFilterOwnerIDInput) (*request.Request, *ListBudgetFilterOwnerIDOutput)
+
+	ListBudgetFilterPayerIDCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListBudgetFilterPayerIDCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListBudgetFilterPayerIDCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListBudgetFilterPayerID(*ListBudgetFilterPayerIDInput) (*ListBudgetFilterPayerIDOutput, error)
+	ListBudgetFilterPayerIDWithContext(byteplus.Context, *ListBudgetFilterPayerIDInput, ...request.Option) (*ListBudgetFilterPayerIDOutput, error)
+	ListBudgetFilterPayerIDRequest(*ListBudgetFilterPayerIDInput) (*request.Request, *ListBudgetFilterPayerIDOutput)
+
+	ListBudgetFilterProductCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListBudgetFilterProductCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListBudgetFilterProductCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListBudgetFilterProduct(*ListBudgetFilterProductInput) (*ListBudgetFilterProductOutput, error)
+	ListBudgetFilterProductWithContext(byteplus.Context, *ListBudgetFilterProductInput, ...request.Option) (*ListBudgetFilterProductOutput, error)
+	ListBudgetFilterProductRequest(*ListBudgetFilterProductInput) (*request.Request, *ListBudgetFilterProductOutput)
+
+	ListBudgetFilterProjectCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListBudgetFilterProjectCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListBudgetFilterProjectCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListBudgetFilterProject(*ListBudgetFilterProjectInput) (*ListBudgetFilterProjectOutput, error)
+	ListBudgetFilterProjectWithContext(byteplus.Context, *ListBudgetFilterProjectInput, ...request.Option) (*ListBudgetFilterProjectOutput, error)
+	ListBudgetFilterProjectRequest(*ListBudgetFilterProjectInput) (*request.Request, *ListBudgetFilterProjectOutput)
+
+	ListBudgetFilterRegionCodeCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListBudgetFilterRegionCodeCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListBudgetFilterRegionCodeCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListBudgetFilterRegionCode(*ListBudgetFilterRegionCodeInput) (*ListBudgetFilterRegionCodeOutput, error)
+	ListBudgetFilterRegionCodeWithContext(byteplus.Context, *ListBudgetFilterRegionCodeInput, ...request.Option) (*ListBudgetFilterRegionCodeOutput, error)
+	ListBudgetFilterRegionCodeRequest(*ListBudgetFilterRegionCodeInput) (*request.Request, *ListBudgetFilterRegionCodeOutput)
+
+	ListBudgetFilterSubjectInfoCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListBudgetFilterSubjectInfoCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListBudgetFilterSubjectInfoCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListBudgetFilterSubjectInfo(*ListBudgetFilterSubjectInfoInput) (*ListBudgetFilterSubjectInfoOutput, error)
+	ListBudgetFilterSubjectInfoWithContext(byteplus.Context, *ListBudgetFilterSubjectInfoInput, ...request.Option) (*ListBudgetFilterSubjectInfoOutput, error)
+	ListBudgetFilterSubjectInfoRequest(*ListBudgetFilterSubjectInfoInput) (*request.Request, *ListBudgetFilterSubjectInfoOutput)
+
+	ListBudgetFilterTagKeyCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListBudgetFilterTagKeyCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListBudgetFilterTagKeyCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListBudgetFilterTagKey(*ListBudgetFilterTagKeyInput) (*ListBudgetFilterTagKeyOutput, error)
+	ListBudgetFilterTagKeyWithContext(byteplus.Context, *ListBudgetFilterTagKeyInput, ...request.Option) (*ListBudgetFilterTagKeyOutput, error)
+	ListBudgetFilterTagKeyRequest(*ListBudgetFilterTagKeyInput) (*request.Request, *ListBudgetFilterTagKeyOutput)
+
+	ListBudgetFilterTagValueCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListBudgetFilterTagValueCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListBudgetFilterTagValueCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListBudgetFilterTagValue(*ListBudgetFilterTagValueInput) (*ListBudgetFilterTagValueOutput, error)
+	ListBudgetFilterTagValueWithContext(byteplus.Context, *ListBudgetFilterTagValueInput, ...request.Option) (*ListBudgetFilterTagValueOutput, error)
+	ListBudgetFilterTagValueRequest(*ListBudgetFilterTagValueInput) (*request.Request, *ListBudgetFilterTagValueOutput)
+
+	ListBudgetFilterZoneCodeCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListBudgetFilterZoneCodeCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListBudgetFilterZoneCodeCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListBudgetFilterZoneCode(*ListBudgetFilterZoneCodeInput) (*ListBudgetFilterZoneCodeOutput, error)
+	ListBudgetFilterZoneCodeWithContext(byteplus.Context, *ListBudgetFilterZoneCodeInput, ...request.Option) (*ListBudgetFilterZoneCodeOutput, error)
+	ListBudgetFilterZoneCodeRequest(*ListBudgetFilterZoneCodeInput) (*request.Request, *ListBudgetFilterZoneCodeOutput)
+
+	ListCostAnalysisCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListCostAnalysisCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListCostAnalysisCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListCostAnalysis(*ListCostAnalysisInput) (*ListCostAnalysisOutput, error)
+	ListCostAnalysisWithContext(byteplus.Context, *ListCostAnalysisInput, ...request.Option) (*ListCostAnalysisOutput, error)
+	ListCostAnalysisRequest(*ListCostAnalysisInput) (*request.Request, *ListCostAnalysisOutput)
+
 	ListCouponUsageRecordsCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ListCouponUsageRecordsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	ListCouponUsageRecordsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -206,6 +334,14 @@ type BILLINGAPI interface {
 	ListPackageUsageDetailsWithContext(byteplus.Context, *ListPackageUsageDetailsInput, ...request.Option) (*ListPackageUsageDetailsOutput, error)
 	ListPackageUsageDetailsRequest(*ListPackageUsageDetailsInput) (*request.Request, *ListPackageUsageDetailsOutput)
 
+	ListRecipientInformationCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListRecipientInformationCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListRecipientInformationCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListRecipientInformation(*ListRecipientInformationInput) (*ListRecipientInformationOutput, error)
+	ListRecipientInformationWithContext(byteplus.Context, *ListRecipientInformationInput, ...request.Option) (*ListRecipientInformationOutput, error)
+	ListRecipientInformationRequest(*ListRecipientInformationInput) (*request.Request, *ListRecipientInformationOutput)
+
 	ListResourcePackagesCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ListResourcePackagesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	ListResourcePackagesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -237,6 +373,14 @@ type BILLINGAPI interface {
 	QueryBalanceAcct(*QueryBalanceAcctInput) (*QueryBalanceAcctOutput, error)
 	QueryBalanceAcctWithContext(byteplus.Context, *QueryBalanceAcctInput, ...request.Option) (*QueryBalanceAcctOutput, error)
 	QueryBalanceAcctRequest(*QueryBalanceAcctInput) (*request.Request, *QueryBalanceAcctOutput)
+
+	QueryBudgetDetailCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	QueryBudgetDetailCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	QueryBudgetDetailCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	QueryBudgetDetail(*QueryBudgetDetailInput) (*QueryBudgetDetailOutput, error)
+	QueryBudgetDetailWithContext(byteplus.Context, *QueryBudgetDetailInput, ...request.Option) (*QueryBudgetDetailOutput, error)
+	QueryBudgetDetailRequest(*QueryBudgetDetailInput) (*request.Request, *QueryBudgetDetailOutput)
 
 	QueryPriceForPayAsYouGoCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	QueryPriceForPayAsYouGoCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -293,6 +437,14 @@ type BILLINGAPI interface {
 	UpdateAuth(*UpdateAuthInput) (*UpdateAuthOutput, error)
 	UpdateAuthWithContext(byteplus.Context, *UpdateAuthInput, ...request.Option) (*UpdateAuthOutput, error)
 	UpdateAuthRequest(*UpdateAuthInput) (*request.Request, *UpdateAuthOutput)
+
+	UpdateBudgetCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	UpdateBudgetCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	UpdateBudgetCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	UpdateBudget(*UpdateBudgetInput) (*UpdateBudgetOutput, error)
+	UpdateBudgetWithContext(byteplus.Context, *UpdateBudgetInput, ...request.Option) (*UpdateBudgetOutput, error)
+	UpdateBudgetRequest(*UpdateBudgetInput) (*request.Request, *UpdateBudgetOutput)
 }
 
 var _ BILLINGAPI = (*BILLING)(nil)
