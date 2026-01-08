@@ -16,51 +16,20 @@ import (
 // IAM20210801API provides an interface to enable mocking the
 // iam20210801.IAM20210801 service client's API operation,
 //
-//	// byteplus sdk func uses an SDK service client to make a request to
-//	// IAM20210801.
-//	func myFunc(svc IAM20210801API) bool {
-//	    // Make svc.GetProject request
-//	}
+//    // byteplus sdk func uses an SDK service client to make a request to
+//    // IAM20210801.
+//    func myFunc(svc IAM20210801API) bool {
+//        // Make svc.AttachPolicyInProject request
+//    }
 //
-//	func main() {
-//	    sess := session.New()
-//	    svc := iam20210801.New(sess)
+//    func main() {
+//        sess := session.New()
+//        svc := iam20210801.New(sess)
 //
-//	    myFunc(svc)
-//	}
+//        myFunc(svc)
+//    }
+//
 type IAM20210801API interface {
-	GetProjectCommon(*map[string]interface{}) (*map[string]interface{}, error)
-	GetProjectCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
-	GetProjectCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
-
-	GetProject(*GetProjectInput) (*GetProjectOutput, error)
-	GetProjectWithContext(byteplus.Context, *GetProjectInput, ...request.Option) (*GetProjectOutput, error)
-	GetProjectRequest(*GetProjectInput) (*request.Request, *GetProjectOutput)
-
-	ListProjectIdentitiesCommon(*map[string]interface{}) (*map[string]interface{}, error)
-	ListProjectIdentitiesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
-	ListProjectIdentitiesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
-
-	ListProjectIdentities(*ListProjectIdentitiesInput) (*ListProjectIdentitiesOutput, error)
-	ListProjectIdentitiesWithContext(byteplus.Context, *ListProjectIdentitiesInput, ...request.Option) (*ListProjectIdentitiesOutput, error)
-	ListProjectIdentitiesRequest(*ListProjectIdentitiesInput) (*request.Request, *ListProjectIdentitiesOutput)
-
-	ListProjectResourcesCommon(*map[string]interface{}) (*map[string]interface{}, error)
-	ListProjectResourcesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
-	ListProjectResourcesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
-
-	ListProjectResources(*ListProjectResourcesInput) (*ListProjectResourcesOutput, error)
-	ListProjectResourcesWithContext(byteplus.Context, *ListProjectResourcesInput, ...request.Option) (*ListProjectResourcesOutput, error)
-	ListProjectResourcesRequest(*ListProjectResourcesInput) (*request.Request, *ListProjectResourcesOutput)
-
-	ListProjectsCommon(*map[string]interface{}) (*map[string]interface{}, error)
-	ListProjectsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
-	ListProjectsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
-
-	ListProjects(*ListProjectsInput) (*ListProjectsOutput, error)
-	ListProjectsWithContext(byteplus.Context, *ListProjectsInput, ...request.Option) (*ListProjectsOutput, error)
-	ListProjectsRequest(*ListProjectsInput) (*request.Request, *ListProjectsOutput)
-
 	AttachPolicyInProjectCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	AttachPolicyInProjectCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	AttachPolicyInProjectCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -92,6 +61,38 @@ type IAM20210801API interface {
 	DetachPolicyInProject(*DetachPolicyInProjectInput) (*DetachPolicyInProjectOutput, error)
 	DetachPolicyInProjectWithContext(byteplus.Context, *DetachPolicyInProjectInput, ...request.Option) (*DetachPolicyInProjectOutput, error)
 	DetachPolicyInProjectRequest(*DetachPolicyInProjectInput) (*request.Request, *DetachPolicyInProjectOutput)
+
+	GetProjectCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	GetProjectCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	GetProjectCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	GetProject(*GetProjectInput) (*GetProjectOutput, error)
+	GetProjectWithContext(byteplus.Context, *GetProjectInput, ...request.Option) (*GetProjectOutput, error)
+	GetProjectRequest(*GetProjectInput) (*request.Request, *GetProjectOutput)
+
+	ListProjectIdentitiesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListProjectIdentitiesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListProjectIdentitiesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListProjectIdentities(*ListProjectIdentitiesInput) (*ListProjectIdentitiesOutput, error)
+	ListProjectIdentitiesWithContext(byteplus.Context, *ListProjectIdentitiesInput, ...request.Option) (*ListProjectIdentitiesOutput, error)
+	ListProjectIdentitiesRequest(*ListProjectIdentitiesInput) (*request.Request, *ListProjectIdentitiesOutput)
+
+	ListProjectResourcesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListProjectResourcesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListProjectResourcesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListProjectResources(*ListProjectResourcesInput) (*ListProjectResourcesOutput, error)
+	ListProjectResourcesWithContext(byteplus.Context, *ListProjectResourcesInput, ...request.Option) (*ListProjectResourcesOutput, error)
+	ListProjectResourcesRequest(*ListProjectResourcesInput) (*request.Request, *ListProjectResourcesOutput)
+
+	ListProjectsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListProjectsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListProjectsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListProjects(*ListProjectsInput) (*ListProjectsOutput, error)
+	ListProjectsWithContext(byteplus.Context, *ListProjectsInput, ...request.Option) (*ListProjectsOutput, error)
+	ListProjectsRequest(*ListProjectsInput) (*request.Request, *ListProjectsOutput)
 
 	MoveProjectResourceCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	MoveProjectResourceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
