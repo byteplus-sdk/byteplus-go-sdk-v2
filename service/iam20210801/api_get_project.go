@@ -22,17 +22,17 @@ const opGetProjectCommon = "GetProject"
 // See GetProjectCommon for more information on using the GetProjectCommon
 // API call, and error handling.
 //
-//	// Example sending a request using the GetProjectCommonRequest method.
-//	req, resp := client.GetProjectCommonRequest(params)
+//    // Example sending a request using the GetProjectCommonRequest method.
+//    req, resp := client.GetProjectCommonRequest(params)
 //
-//	err := req.Send()
-//	if err == nil { // resp is now filled
-//	    fmt.Println(resp)
-//	}
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
 func (c *IAM20210801) GetProjectCommonRequest(input *map[string]interface{}) (req *request.Request, output *map[string]interface{}) {
 	op := &request.Operation{
 		Name:       opGetProjectCommon,
-		HTTPMethod: "POST",
+		HTTPMethod: "GET",
 		HTTPPath:   "/",
 	}
 
@@ -87,17 +87,17 @@ const opGetProject = "GetProject"
 // See GetProject for more information on using the GetProject
 // API call, and error handling.
 //
-//	// Example sending a request using the GetProjectRequest method.
-//	req, resp := client.GetProjectRequest(params)
+//    // Example sending a request using the GetProjectRequest method.
+//    req, resp := client.GetProjectRequest(params)
 //
-//	err := req.Send()
-//	if err == nil { // resp is now filled
-//	    fmt.Println(resp)
-//	}
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
 func (c *IAM20210801) GetProjectRequest(input *GetProjectInput) (req *request.Request, output *GetProjectOutput) {
 	op := &request.Operation{
 		Name:       opGetProject,
-		HTTPMethod: "POST",
+		HTTPMethod: "GET",
 		HTTPPath:   "/",
 	}
 
