@@ -32,7 +32,7 @@ const opGetCustomerDetailsByUIDCommon = "GetCustomerDetailsByUID"
 func (c *ECOPARTNER) GetCustomerDetailsByUIDCommonRequest(input *map[string]interface{}) (req *request.Request, output *map[string]interface{}) {
 	op := &request.Operation{
 		Name:       opGetCustomerDetailsByUIDCommon,
-		HTTPMethod: "GET",
+		HTTPMethod: "POST",
 		HTTPPath:   "/",
 	}
 
@@ -42,6 +42,8 @@ func (c *ECOPARTNER) GetCustomerDetailsByUIDCommonRequest(input *map[string]inte
 
 	output = &map[string]interface{}{}
 	req = c.newRequest(op, input, output)
+
+	req.HTTPRequest.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	return
 }
@@ -97,7 +99,7 @@ const opGetCustomerDetailsByUID = "GetCustomerDetailsByUID"
 func (c *ECOPARTNER) GetCustomerDetailsByUIDRequest(input *GetCustomerDetailsByUIDInput) (req *request.Request, output *GetCustomerDetailsByUIDOutput) {
 	op := &request.Operation{
 		Name:       opGetCustomerDetailsByUID,
-		HTTPMethod: "GET",
+		HTTPMethod: "POST",
 		HTTPPath:   "/",
 	}
 
@@ -107,6 +109,8 @@ func (c *ECOPARTNER) GetCustomerDetailsByUIDRequest(input *GetCustomerDetailsByU
 
 	output = &GetCustomerDetailsByUIDOutput{}
 	req = c.newRequest(op, input, output)
+
+	req.HTTPRequest.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	return
 }
@@ -140,10 +144,10 @@ func (c *ECOPARTNER) GetCustomerDetailsByUIDWithContext(ctx byteplus.Context, in
 }
 
 type GetCustomerDetailsByUIDInput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" json:",omitempty"`
 
 	// Uid is a required field
-	Uid *int32 `min:"10" max:"10" type:"int32" required:"true"`
+	Uid *int64 `type:"int64" json:",omitempty" required:"true"`
 }
 
 // String returns the string representation
@@ -162,12 +166,6 @@ func (s *GetCustomerDetailsByUIDInput) Validate() error {
 	if s.Uid == nil {
 		invalidParams.Add(request.NewErrParamRequired("Uid"))
 	}
-	if s.Uid != nil && *s.Uid < 10 {
-		invalidParams.Add(request.NewErrParamMinValue("Uid", 10))
-	}
-	if s.Uid != nil && *s.Uid > 10 {
-		invalidParams.Add(request.NewErrParamMaxValue("Uid", 10))
-	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -176,51 +174,51 @@ func (s *GetCustomerDetailsByUIDInput) Validate() error {
 }
 
 // SetUid sets the Uid field's value.
-func (s *GetCustomerDetailsByUIDInput) SetUid(v int32) *GetCustomerDetailsByUIDInput {
+func (s *GetCustomerDetailsByUIDInput) SetUid(v int64) *GetCustomerDetailsByUIDInput {
 	s.Uid = &v
 	return s
 }
 
 type GetCustomerDetailsByUIDOutput struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" json:",omitempty"`
 
 	Metadata *response.ResponseMetadata
 
-	AccountType *string `type:"string"`
+	AccountType *string `type:"string" json:",omitempty"`
 
-	AccountUsername *string `type:"string"`
+	AccountUsername *string `type:"string" json:",omitempty"`
 
-	AssociationSuccessTime *string `type:"string"`
+	AssociationSuccessTime *string `type:"string" json:",omitempty"`
 
-	CustomerAccountVerified *bool `type:"boolean"`
+	CustomerAccountVerified *bool `type:"boolean" json:",omitempty"`
 
-	CustomerBd *string `type:"string"`
+	CustomerBd *string `type:"string" json:",omitempty"`
 
-	Email *string `type:"string"`
+	Email *string `type:"string" json:",omitempty"`
 
-	Mobile *string `type:"string"`
+	Mobile *string `type:"string" json:",omitempty"`
 
-	OutstandingAmount *float64 `type:"float"`
+	OutstandingAmount *float64 `type:"float" json:",omitempty"`
 
-	ParentOrganizationName *string `type:"string"`
+	ParentOrganizationName *string `type:"string" json:",omitempty"`
 
-	ParentPartnerUid *int32 `type:"int32"`
+	ParentPartnerUid *int64 `type:"int64" json:",omitempty"`
 
-	ParentPartnerUsername *string `type:"string"`
+	ParentPartnerUsername *string `type:"string" json:",omitempty"`
 
-	QuotaAllocated *float64 `type:"float"`
+	QuotaAllocated *float64 `type:"float" json:",omitempty"`
 
-	QuotaBalance *float64 `type:"float"`
+	QuotaBalance *float64 `type:"float" json:",omitempty"`
 
-	QuotaUnit *string `type:"string"`
+	QuotaUnit *string `type:"string" json:",omitempty"`
 
-	RegisterCountryCode *string `type:"string"`
+	RegisterCountryCode *string `type:"string" json:",omitempty"`
 
-	Remark *string `type:"string"`
+	Remark *string `type:"string" json:",omitempty"`
 
-	SuspensionPolicy *string `type:"string"`
+	SuspensionPolicy *string `type:"string" json:",omitempty"`
 
-	Uid *int32 `type:"int32"`
+	Uid *int64 `type:"int64" json:",omitempty"`
 }
 
 // String returns the string representation
@@ -288,7 +286,7 @@ func (s *GetCustomerDetailsByUIDOutput) SetParentOrganizationName(v string) *Get
 }
 
 // SetParentPartnerUid sets the ParentPartnerUid field's value.
-func (s *GetCustomerDetailsByUIDOutput) SetParentPartnerUid(v int32) *GetCustomerDetailsByUIDOutput {
+func (s *GetCustomerDetailsByUIDOutput) SetParentPartnerUid(v int64) *GetCustomerDetailsByUIDOutput {
 	s.ParentPartnerUid = &v
 	return s
 }
@@ -336,7 +334,7 @@ func (s *GetCustomerDetailsByUIDOutput) SetSuspensionPolicy(v string) *GetCustom
 }
 
 // SetUid sets the Uid field's value.
-func (s *GetCustomerDetailsByUIDOutput) SetUid(v int32) *GetCustomerDetailsByUIDOutput {
+func (s *GetCustomerDetailsByUIDOutput) SetUid(v int64) *GetCustomerDetailsByUIDOutput {
 	s.Uid = &v
 	return s
 }
