@@ -270,14 +270,6 @@ type BILLINGAPI interface {
 	ListBudgetFilterZoneCodeWithContext(byteplus.Context, *ListBudgetFilterZoneCodeInput, ...request.Option) (*ListBudgetFilterZoneCodeOutput, error)
 	ListBudgetFilterZoneCodeRequest(*ListBudgetFilterZoneCodeInput) (*request.Request, *ListBudgetFilterZoneCodeOutput)
 
-	ListCostAnalysisCommon(*map[string]interface{}) (*map[string]interface{}, error)
-	ListCostAnalysisCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
-	ListCostAnalysisCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
-
-	ListCostAnalysis(*ListCostAnalysisInput) (*ListCostAnalysisOutput, error)
-	ListCostAnalysisWithContext(byteplus.Context, *ListCostAnalysisInput, ...request.Option) (*ListCostAnalysisOutput, error)
-	ListCostAnalysisRequest(*ListCostAnalysisInput) (*request.Request, *ListCostAnalysisOutput)
-
 	ListCouponUsageRecordsCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ListCouponUsageRecordsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	ListCouponUsageRecordsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
