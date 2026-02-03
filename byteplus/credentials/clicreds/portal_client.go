@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -19,9 +18,8 @@ const (
 	defaultPortalTimeout = 30 * time.Second
 	// defaultPortalPageSize 为分页查询的默认页大小。
 	defaultPortalPageSize = 50
-	// portalBaseURLTemplate 为 Portal 服务基础地址模板（已固定为 BOE 环境）。
-	// portalBaseURLTemplate     = "https://cloudidentity-portal.%s.volces.com"
-	portalBaseURLTemplate = "https://cloudidentity-portal-boe.bytedance.net"
+	// portalBaseURLTemplate 为 Portal 服务基础地址模板
+	portalBaseURLTemplate = "https://cloudidentity-portal-stable.%s.bytedance.com"
 	// Portal API 的路径常量。
 	portalGetRoleCredentials = "/federation/credentials"
 	// portalAccessTokenHeader 为 Portal 访问令牌在请求头中的名称。
@@ -108,13 +106,12 @@ type GetRoleCredentialsResponse struct {
 
 // NewPortalClient 根据配置创建 PortalClient，包含默认值和可选覆盖项。
 func NewPortalClient(cfg *PortalClientConfig) *PortalClient {
-	/*region := defaultPortalRegion
+	region := defaultPortalRegion
 	if cfg != nil && strings.TrimSpace(cfg.Region) != "" {
 		region = strings.TrimSpace(cfg.Region)
-	}*/
+	}
 
-	//base := fmt.Sprintf(portalBaseURLTemplate, region)
-	base := portalBaseURLTemplate
+	base := fmt.Sprintf(portalBaseURLTemplate, region)
 	if cfg != nil && strings.TrimSpace(cfg.BaseURL) != "" {
 		base = strings.TrimRight(cfg.BaseURL, "/")
 	}
@@ -185,6 +182,22 @@ func (c *PortalClient) GetRoleCredentials(ctx context.Context, req *GetRoleCrede
 
 // doPortalGet 封装 Portal GET 请求：构造请求头、发起请求并处理非 2xx 错误。
 func (c *PortalClient) doPortalGet(ctx context.Context, token string, fullURL string) ([]byte, error) {
+	var result []byte
+	err := doWithRetry(ctx, retryOptions{maxAttempts: 3}, func() error {
+		body, err := c.doPortalGetOnce(ctx, token, fullURL)
+		if err != nil {
+			return err
+		}
+		result = body
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+func (c *PortalClient) doPortalGetOnce(ctx context.Context, token string, fullURL string) ([]byte, error) {
 	if ctx == nil {
 		ctx = context.Background()
 	}
@@ -195,18 +208,12 @@ func (c *PortalClient) doPortalGet(ctx context.Context, token string, fullURL st
 	}
 	req.Header.Set("Accept", portalDefaultAcceptHeader)
 	req.Header.Set(portalAccessTokenHeader, token)
-	req.Header.Set("x-tt-env", "boe_ci_cli")
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("request failed: %w", err)
 	}
-	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if err != nil {
-			fmt.Printf("failed to close response body: %v", err)
-		}
-	}(resp.Body)
+	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {

@@ -13,7 +13,7 @@ import (
 
 // OAuthClientConfig 用于配置 OAuth 客户端的可选项。
 type OAuthClientConfig struct {
-	// Region 控制使用的区域（默认：cn-beijing）。
+	// Region 控制使用的区域（默认：ap-southeast-1）。
 	Region string
 	// HTTPClient 允许注入自定义 HTTP 客户端（例如代理、超时）。
 	HTTPClient *http.Client
@@ -21,16 +21,15 @@ type OAuthClientConfig struct {
 
 const (
 	// defaultOAuthRegion 为默认区域标识（当前未启用拼接区域模板的逻辑）。
-	defaultOAuthRegion = "cn-beijing"
+	defaultOAuthRegion = "ap-southeast-1"
 	// OAuth API 各路径常量。
 	defaultTokenPath = "/token"
 	// defaultRequestTimeout 为默认请求超时。
 	defaultRequestTimeout = 10 * time.Second
 	// deviceCodeGrantType 为设备码授权的 grant_type 标识。
 	deviceCodeGrantType = "urn:ietf:params:oauth:grant-type:device_code"
-	// oAuthBaseURLTemplate  = "https://cloudidentity-ssoauth-%s.volces.com"
-	// oAuthBaseURLTemplate 为 OAuth 服务基础地址（已固定为 BOE 环境）。
-	oAuthBaseURLTemplate = "https://cloudidentity-oauth.bytedance.net"
+	// oAuthBaseURLTemplate 为 OAuth 服务基础地址。
+	oAuthBaseURLTemplate = "https://cloudidentity-oauth-stable.%s.bytedance.com"
 )
 
 // OAuthClient 缓存拼好的 URL 和 HTTP 客户端，避免每次调用重新计算。
@@ -96,14 +95,12 @@ func (e *OAuthAPIError) Error() string {
 
 // NewOAuthClient 根据配置创建 OAuthClient，包含默认值和可选覆盖项。
 func NewOAuthClient(cfg *OAuthClientConfig) *OAuthClient {
-	/**
 	region := defaultOAuthRegion
 	if cfg != nil && strings.TrimSpace(cfg.Region) != "" {
 		region = strings.TrimSpace(cfg.Region)
-	}**/
+	}
 
-	// base := fmt.Sprintf(oAuthBaseURLTemplate, region)
-	base := oAuthBaseURLTemplate
+	base := fmt.Sprintf(oAuthBaseURLTemplate, region)
 	client := &http.Client{Timeout: defaultRequestTimeout}
 	if cfg != nil && cfg.HTTPClient != nil {
 		client = cfg.HTTPClient
@@ -157,49 +154,55 @@ func doOAuthPost(ctx context.Context, client *http.Client, url string, payload i
 		return fmt.Errorf("failed to marshal request: %w", err)
 	}
 
-	httpReq, err := http.NewRequestWithContext(ctx, http.MethodPost, url, bytes.NewReader(body))
-	if err != nil {
-		return fmt.Errorf("failed to build request: %w", err)
-	}
-	httpReq.Header.Set("Content-Type", "application/json")
-	httpReq.Header.Set("x-tt-env", "boe_cli_cli")
+	attempts := 3
 
-	resp, err := client.Do(httpReq)
-	if err != nil {
-		return fmt.Errorf("request failed: %w", err)
-	}
-	defer resp.Body.Close()
+	return doWithRetry(ctx, retryOptions{maxAttempts: attempts}, func() error {
+		httpReq, err := http.NewRequestWithContext(ctx, http.MethodPost, url, bytes.NewReader(body))
+		if err != nil {
+			return fmt.Errorf("failed to build request: %w", err)
+		}
+		httpReq.Header.Set("Content-Type", "application/json")
 
-	respBytes, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return fmt.Errorf("failed to read response: %w", err)
-	}
+		resp, err := client.Do(httpReq)
+		if err != nil {
+			return fmt.Errorf("request failed: %w", err)
+		}
+		defer resp.Body.Close()
 
-	if resp.StatusCode/100 != 2 {
-		var errResp oauthErrorResponse
-		if len(respBytes) > 0 && json.Unmarshal(respBytes, &errResp) == nil && (errResp.Error != "" || errResp.ErrorDescription != "") {
+		respBytes, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			return fmt.Errorf("failed to read response: %w", err)
+		}
+
+		if resp.StatusCode/100 != 2 {
+			requestId := resp.Header.Get("X-Tt-Logid")
+			fmt.Printf("requestId: %s\n", requestId)
+			var errResp oauthErrorResponse
+			if len(respBytes) > 0 && json.Unmarshal(respBytes, &errResp) == nil && (errResp.Error != "" || errResp.ErrorDescription != "") {
+				errResp.ErrorDescription = fmt.Sprintf("%s, (requestId: %s)", errResp.ErrorDescription, requestId)
+				return &OAuthAPIError{
+					StatusCode: resp.StatusCode,
+					Response:   errResp,
+					RawBody:    string(respBytes),
+				}
+			}
+			if len(respBytes) == 0 {
+				return &OAuthAPIError{
+					StatusCode: resp.StatusCode,
+				}
+			}
 			return &OAuthAPIError{
 				StatusCode: resp.StatusCode,
-				Response:   errResp,
 				RawBody:    string(respBytes),
 			}
 		}
-		if len(respBytes) == 0 {
-			return &OAuthAPIError{
-				StatusCode: resp.StatusCode,
+
+		if len(respBytes) > 0 && out != nil {
+			if err := json.Unmarshal(respBytes, out); err != nil {
+				return fmt.Errorf("failed to decode response (status %d): %w", resp.StatusCode, err)
 			}
 		}
-		return &OAuthAPIError{
-			StatusCode: resp.StatusCode,
-			RawBody:    string(respBytes),
-		}
-	}
 
-	if len(respBytes) > 0 && out != nil {
-		if err := json.Unmarshal(respBytes, out); err != nil {
-			return fmt.Errorf("failed to decode response (status %d): %w", resp.StatusCode, err)
-		}
-	}
-
-	return nil
+		return nil
+	})
 }
