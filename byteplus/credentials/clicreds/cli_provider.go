@@ -92,10 +92,10 @@ func NewCliCredentials(configPath, profile string) *credentials.Credentials {
 		home := shareddefaults.UserHomeDir()
 		if home != "" {
 			configPath = filepath.Join(home, ".volcengine", "config.json")
-			cacheDir = filepath.Join(home, ".volcengine", "cache")
+			cacheDir = filepath.Join(home, ".volcengine", "sso", "cache")
 		}
 	} else {
-		cacheDir = filepath.Join(filepath.Dir(configPath), "cache")
+		cacheDir = filepath.Join(filepath.Dir(configPath), "sso", "cache")
 	}
 	return credentials.NewExpireAbleCredentials(&CliProvider{
 		configPath: configPath,
