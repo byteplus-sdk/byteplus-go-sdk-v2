@@ -19,7 +19,7 @@ import (
 //    // byteplus sdk func uses an SDK service client to make a request to
 //    // RDS_MSSQL.
 //    func myFunc(svc RDSMSSQLAPI) bool {
-//        // Make svc.CreateBackup request
+//        // Make svc.AssociateAllowList request
 //    }
 //
 //    func main() {
@@ -30,6 +30,22 @@ import (
 //    }
 //
 type RDSMSSQLAPI interface {
+	AssociateAllowListCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	AssociateAllowListCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	AssociateAllowListCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	AssociateAllowList(*AssociateAllowListInput) (*AssociateAllowListOutput, error)
+	AssociateAllowListWithContext(byteplus.Context, *AssociateAllowListInput, ...request.Option) (*AssociateAllowListOutput, error)
+	AssociateAllowListRequest(*AssociateAllowListInput) (*request.Request, *AssociateAllowListOutput)
+
+	CreateAllowListCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateAllowListCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateAllowListCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateAllowList(*CreateAllowListInput) (*CreateAllowListOutput, error)
+	CreateAllowListWithContext(byteplus.Context, *CreateAllowListInput, ...request.Option) (*CreateAllowListOutput, error)
+	CreateAllowListRequest(*CreateAllowListInput) (*request.Request, *CreateAllowListOutput)
+
 	CreateBackupCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	CreateBackupCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	CreateBackupCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -54,6 +70,14 @@ type RDSMSSQLAPI interface {
 	CreateTosRestoreWithContext(byteplus.Context, *CreateTosRestoreInput, ...request.Option) (*CreateTosRestoreOutput, error)
 	CreateTosRestoreRequest(*CreateTosRestoreInput) (*request.Request, *CreateTosRestoreOutput)
 
+	DeleteAllowListCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteAllowListCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteAllowListCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteAllowList(*DeleteAllowListInput) (*DeleteAllowListOutput, error)
+	DeleteAllowListWithContext(byteplus.Context, *DeleteAllowListInput, ...request.Option) (*DeleteAllowListOutput, error)
+	DeleteAllowListRequest(*DeleteAllowListInput) (*request.Request, *DeleteAllowListOutput)
+
 	DeleteBackupCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DeleteBackupCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	DeleteBackupCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -69,6 +93,22 @@ type RDSMSSQLAPI interface {
 	DeleteDBInstance(*DeleteDBInstanceInput) (*DeleteDBInstanceOutput, error)
 	DeleteDBInstanceWithContext(byteplus.Context, *DeleteDBInstanceInput, ...request.Option) (*DeleteDBInstanceOutput, error)
 	DeleteDBInstanceRequest(*DeleteDBInstanceInput) (*request.Request, *DeleteDBInstanceOutput)
+
+	DescribeAllowListDetailCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeAllowListDetailCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeAllowListDetailCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeAllowListDetail(*DescribeAllowListDetailInput) (*DescribeAllowListDetailOutput, error)
+	DescribeAllowListDetailWithContext(byteplus.Context, *DescribeAllowListDetailInput, ...request.Option) (*DescribeAllowListDetailOutput, error)
+	DescribeAllowListDetailRequest(*DescribeAllowListDetailInput) (*request.Request, *DescribeAllowListDetailOutput)
+
+	DescribeAllowListsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeAllowListsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeAllowListsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeAllowLists(*DescribeAllowListsInput) (*DescribeAllowListsOutput, error)
+	DescribeAllowListsWithContext(byteplus.Context, *DescribeAllowListsInput, ...request.Option) (*DescribeAllowListsOutput, error)
+	DescribeAllowListsRequest(*DescribeAllowListsInput) (*request.Request, *DescribeAllowListsOutput)
 
 	DescribeAvailabilityZonesCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DescribeAvailabilityZonesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -142,6 +182,14 @@ type RDSMSSQLAPI interface {
 	DescribeDBInstancesWithContext(byteplus.Context, *DescribeDBInstancesInput, ...request.Option) (*DescribeDBInstancesOutput, error)
 	DescribeDBInstancesRequest(*DescribeDBInstancesInput) (*request.Request, *DescribeDBInstancesOutput)
 
+	DescribeInstanceAllowListsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeInstanceAllowListsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeInstanceAllowListsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeInstanceAllowLists(*DescribeInstanceAllowListsInput) (*DescribeInstanceAllowListsOutput, error)
+	DescribeInstanceAllowListsWithContext(byteplus.Context, *DescribeInstanceAllowListsInput, ...request.Option) (*DescribeInstanceAllowListsOutput, error)
+	DescribeInstanceAllowListsRequest(*DescribeInstanceAllowListsInput) (*request.Request, *DescribeInstanceAllowListsOutput)
+
 	DescribeRegionsCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DescribeRegionsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	DescribeRegionsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -166,6 +214,14 @@ type RDSMSSQLAPI interface {
 	DescribeTosRestoreTasksWithContext(byteplus.Context, *DescribeTosRestoreTasksInput, ...request.Option) (*DescribeTosRestoreTasksOutput, error)
 	DescribeTosRestoreTasksRequest(*DescribeTosRestoreTasksInput) (*request.Request, *DescribeTosRestoreTasksOutput)
 
+	DisassociateAllowListCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DisassociateAllowListCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DisassociateAllowListCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DisassociateAllowList(*DisassociateAllowListInput) (*DisassociateAllowListOutput, error)
+	DisassociateAllowListWithContext(byteplus.Context, *DisassociateAllowListInput, ...request.Option) (*DisassociateAllowListOutput, error)
+	DisassociateAllowListRequest(*DisassociateAllowListInput) (*request.Request, *DisassociateAllowListOutput)
+
 	DownloadBackupCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DownloadBackupCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	DownloadBackupCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -173,6 +229,14 @@ type RDSMSSQLAPI interface {
 	DownloadBackup(*DownloadBackupInput) (*DownloadBackupOutput, error)
 	DownloadBackupWithContext(byteplus.Context, *DownloadBackupInput, ...request.Option) (*DownloadBackupOutput, error)
 	DownloadBackupRequest(*DownloadBackupInput) (*request.Request, *DownloadBackupOutput)
+
+	ModifyAllowListCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyAllowListCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyAllowListCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyAllowList(*ModifyAllowListInput) (*ModifyAllowListOutput, error)
+	ModifyAllowListWithContext(byteplus.Context, *ModifyAllowListInput, ...request.Option) (*ModifyAllowListOutput, error)
+	ModifyAllowListRequest(*ModifyAllowListInput) (*request.Request, *ModifyAllowListOutput)
 
 	ModifyBackupPolicyCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ModifyBackupPolicyCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
