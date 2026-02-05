@@ -5,14 +5,15 @@ import (
 	"crypto/sha1"
 	"encoding/json"
 	"fmt"
-	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/bytepluserr"
-	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
-	"github.com/byteplus-sdk/byteplus-go-sdk-v2/internal/shareddefaults"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/bytepluserr"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/internal/shareddefaults"
 )
 
 const (
@@ -26,7 +27,7 @@ const (
 type cliConfigure struct {
 	Current     string                 `json:"current"`
 	Profiles    map[string]*cliProfile `json:"profiles"`
-	SsoSessions map[string]*SsoSession `json:"sso-sessions"`
+	SsoSessions map[string]*SsoSession `json:"sso-session"`
 }
 
 type cliProfile struct {
