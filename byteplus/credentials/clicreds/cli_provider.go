@@ -21,7 +21,7 @@ const (
 	CliProviderName = "CliProvider"
 	modeSSO         = "sso"
 	modeAK          = "ak"
-	defaultRegion   = "cn-beijing"
+	defaultRegion   = "ap-southeast-1"
 )
 
 type cliConfigure struct {
@@ -61,15 +61,15 @@ type SsoTokenCache struct {
 	Region                string `json:"region"`
 }
 
-// CliProvider retrieves credentials from volcengine-cli's config file
-// (~/.volcengine/config.json).
+// CliProvider retrieves credentials from byteplus-cli's config file
+// (~/.byteplus/config.json).
 //
 // It supports reading access-key/secret-key/session-token, and will treat
 // sts-expiration (Unix timestamp in seconds or milliseconds) as the credential's expiration time if present.
 type CliProvider struct {
 	credentials.Expiry
 
-	// filePath is path to ~/.volcengine/config.json. If empty, it will use the
+	// filePath is path to ~/.byteplus/config.json. If empty, it will use the
 	// default path derived from the current user's home directory.
 	configPath string
 
@@ -85,14 +85,14 @@ type CliProvider struct {
 }
 
 // NewCliCredentials returns a pointer to a new Credentials object wrapping the
-// volcengine-cli config provider.
+// byteplus-cli config provider.
 func NewCliCredentials(configPath, profile string) *credentials.Credentials {
 	cacheDir := ""
 	if configPath == "" {
 		home := shareddefaults.UserHomeDir()
 		if home != "" {
-			configPath = filepath.Join(home, ".volcengine", "config.json")
-			cacheDir = filepath.Join(home, ".volcengine", "sso", "cache")
+			configPath = filepath.Join(home, ".byteplus", "config.json")
+			cacheDir = filepath.Join(home, ".byteplus", "sso", "cache")
 		}
 	} else {
 		cacheDir = filepath.Join(filepath.Dir(configPath), "sso", "cache")
@@ -570,7 +570,7 @@ func (p *CliProvider) getConfigPath() (string, error) {
 		return p.configPath, nil
 	}
 
-	if env := os.Getenv("VOLCENGINE_CLI_CONFIG_FILE"); env != "" {
+	if env := os.Getenv("BYTEPLUS_CLI_CONFIG_FILE"); env != "" {
 		p.configPath = env
 		return p.configPath, nil
 	}
@@ -580,13 +580,13 @@ func (p *CliProvider) getConfigPath() (string, error) {
 		return "", credentials.ErrSharedCredentialsHomeNotFound
 	}
 
-	p.configPath = filepath.Join(home, ".volcengine", "config.json")
+	p.configPath = filepath.Join(home, ".byteplus", "config.json")
 	return p.configPath, nil
 }
 
 func (p *CliProvider) getProfile(cfg *cliConfigure) string {
 	if p.profile == "" {
-		p.profile = os.Getenv("VOLCENGINE_CLI_PROFILE")
+		p.profile = os.Getenv("BYTEPLUS_CLI_PROFILE")
 	}
 	if p.profile == "" && cfg != nil && cfg.Current != "" {
 		p.profile = cfg.Current
