@@ -62,6 +62,14 @@ type REDISAPI interface {
 	CreateBackupWithContext(byteplus.Context, *CreateBackupInput, ...request.Option) (*CreateBackupOutput, error)
 	CreateBackupRequest(*CreateBackupInput) (*request.Request, *CreateBackupOutput)
 
+	CreateBlueGreenDeploymentCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateBlueGreenDeploymentCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateBlueGreenDeploymentCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateBlueGreenDeployment(*CreateBlueGreenDeploymentInput) (*CreateBlueGreenDeploymentOutput, error)
+	CreateBlueGreenDeploymentWithContext(byteplus.Context, *CreateBlueGreenDeploymentInput, ...request.Option) (*CreateBlueGreenDeploymentOutput, error)
+	CreateBlueGreenDeploymentRequest(*CreateBlueGreenDeploymentInput) (*request.Request, *CreateBlueGreenDeploymentOutput)
+
 	CreateDBAccountCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	CreateDBAccountCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	CreateDBAccountCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -126,6 +134,14 @@ type REDISAPI interface {
 	DecreaseDBInstanceNodeNumberWithContext(byteplus.Context, *DecreaseDBInstanceNodeNumberInput, ...request.Option) (*DecreaseDBInstanceNodeNumberOutput, error)
 	DecreaseDBInstanceNodeNumberRequest(*DecreaseDBInstanceNodeNumberInput) (*request.Request, *DecreaseDBInstanceNodeNumberOutput)
 
+	DeleteAllClientSessionCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteAllClientSessionCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteAllClientSessionCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteAllClientSession(*DeleteAllClientSessionInput) (*DeleteAllClientSessionOutput, error)
+	DeleteAllClientSessionWithContext(byteplus.Context, *DeleteAllClientSessionInput, ...request.Option) (*DeleteAllClientSessionOutput, error)
+	DeleteAllClientSessionRequest(*DeleteAllClientSessionInput) (*request.Request, *DeleteAllClientSessionOutput)
+
 	DeleteAllowListCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DeleteAllowListCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	DeleteAllowListCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -133,6 +149,14 @@ type REDISAPI interface {
 	DeleteAllowList(*DeleteAllowListInput) (*DeleteAllowListOutput, error)
 	DeleteAllowListWithContext(byteplus.Context, *DeleteAllowListInput, ...request.Option) (*DeleteAllowListOutput, error)
 	DeleteAllowListRequest(*DeleteAllowListInput) (*request.Request, *DeleteAllowListOutput)
+
+	DeleteBlueGreenDeploymentCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteBlueGreenDeploymentCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteBlueGreenDeploymentCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteBlueGreenDeployment(*DeleteBlueGreenDeploymentInput) (*DeleteBlueGreenDeploymentOutput, error)
+	DeleteBlueGreenDeploymentWithContext(byteplus.Context, *DeleteBlueGreenDeploymentInput, ...request.Option) (*DeleteBlueGreenDeploymentOutput, error)
+	DeleteBlueGreenDeploymentRequest(*DeleteBlueGreenDeploymentInput) (*request.Request, *DeleteBlueGreenDeploymentOutput)
 
 	DeleteDBAccountCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DeleteDBAccountCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -237,6 +261,14 @@ type REDISAPI interface {
 	DescribeBigKeys(*DescribeBigKeysInput) (*DescribeBigKeysOutput, error)
 	DescribeBigKeysWithContext(byteplus.Context, *DescribeBigKeysInput, ...request.Option) (*DescribeBigKeysOutput, error)
 	DescribeBigKeysRequest(*DescribeBigKeysInput) (*request.Request, *DescribeBigKeysOutput)
+
+	DescribeBlueGreenDeploymentsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeBlueGreenDeploymentsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeBlueGreenDeploymentsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeBlueGreenDeployments(*DescribeBlueGreenDeploymentsInput) (*DescribeBlueGreenDeploymentsOutput, error)
+	DescribeBlueGreenDeploymentsWithContext(byteplus.Context, *DescribeBlueGreenDeploymentsInput, ...request.Option) (*DescribeBlueGreenDeploymentsOutput, error)
+	DescribeBlueGreenDeploymentsRequest(*DescribeBlueGreenDeploymentsInput) (*request.Request, *DescribeBlueGreenDeploymentsOutput)
 
 	DescribeCrossRegionBackupPolicyCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DescribeCrossRegionBackupPolicyCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -477,6 +509,14 @@ type REDISAPI interface {
 	IncreaseDBInstanceNodeNumber(*IncreaseDBInstanceNodeNumberInput) (*IncreaseDBInstanceNodeNumberOutput, error)
 	IncreaseDBInstanceNodeNumberWithContext(byteplus.Context, *IncreaseDBInstanceNodeNumberInput, ...request.Option) (*IncreaseDBInstanceNodeNumberOutput, error)
 	IncreaseDBInstanceNodeNumberRequest(*IncreaseDBInstanceNodeNumberInput) (*request.Request, *IncreaseDBInstanceNodeNumberOutput)
+
+	InterruptKeyScanJobCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	InterruptKeyScanJobCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	InterruptKeyScanJobCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	InterruptKeyScanJob(*InterruptKeyScanJobInput) (*InterruptKeyScanJobOutput, error)
+	InterruptKeyScanJobWithContext(byteplus.Context, *InterruptKeyScanJobInput, ...request.Option) (*InterruptKeyScanJobOutput, error)
+	InterruptKeyScanJobRequest(*InterruptKeyScanJobInput) (*request.Request, *InterruptKeyScanJobOutput)
 
 	ListDBAccountCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ListDBAccountCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -725,6 +765,14 @@ type REDISAPI interface {
 	SwitchOver(*SwitchOverInput) (*SwitchOverOutput, error)
 	SwitchOverWithContext(byteplus.Context, *SwitchOverInput, ...request.Option) (*SwitchOverOutput, error)
 	SwitchOverRequest(*SwitchOverInput) (*request.Request, *SwitchOverOutput)
+
+	SwitchoverBlueGreenDeploymentCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	SwitchoverBlueGreenDeploymentCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	SwitchoverBlueGreenDeploymentCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	SwitchoverBlueGreenDeployment(*SwitchoverBlueGreenDeploymentInput) (*SwitchoverBlueGreenDeploymentOutput, error)
+	SwitchoverBlueGreenDeploymentWithContext(byteplus.Context, *SwitchoverBlueGreenDeploymentInput, ...request.Option) (*SwitchoverBlueGreenDeploymentOutput, error)
+	SwitchoverBlueGreenDeploymentRequest(*SwitchoverBlueGreenDeploymentInput) (*request.Request, *SwitchoverBlueGreenDeploymentOutput)
 
 	TestFailoverDBInstanceZoneCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	TestFailoverDBInstanceZoneCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
