@@ -54,6 +54,14 @@ type RDSMSSQLAPI interface {
 	CreateBackupWithContext(byteplus.Context, *CreateBackupInput, ...request.Option) (*CreateBackupOutput, error)
 	CreateBackupRequest(*CreateBackupInput) (*request.Request, *CreateBackupOutput)
 
+	CreateDBAccountCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateDBAccountCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateDBAccountCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateDBAccount(*CreateDBAccountInput) (*CreateDBAccountOutput, error)
+	CreateDBAccountWithContext(byteplus.Context, *CreateDBAccountInput, ...request.Option) (*CreateDBAccountOutput, error)
+	CreateDBAccountRequest(*CreateDBAccountInput) (*request.Request, *CreateDBAccountOutput)
+
 	CreateDBInstanceCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	CreateDBInstanceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	CreateDBInstanceCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -85,6 +93,14 @@ type RDSMSSQLAPI interface {
 	DeleteBackup(*DeleteBackupInput) (*DeleteBackupOutput, error)
 	DeleteBackupWithContext(byteplus.Context, *DeleteBackupInput, ...request.Option) (*DeleteBackupOutput, error)
 	DeleteBackupRequest(*DeleteBackupInput) (*request.Request, *DeleteBackupOutput)
+
+	DeleteDBAccountCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteDBAccountCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteDBAccountCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteDBAccount(*DeleteDBAccountInput) (*DeleteDBAccountOutput, error)
+	DeleteDBAccountWithContext(byteplus.Context, *DeleteDBAccountInput, ...request.Option) (*DeleteDBAccountOutput, error)
+	DeleteDBAccountRequest(*DeleteDBAccountInput) (*request.Request, *DeleteDBAccountOutput)
 
 	DeleteDBInstanceCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DeleteDBInstanceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -149,6 +165,14 @@ type RDSMSSQLAPI interface {
 	DescribeCrossBackupPolicy(*DescribeCrossBackupPolicyInput) (*DescribeCrossBackupPolicyOutput, error)
 	DescribeCrossBackupPolicyWithContext(byteplus.Context, *DescribeCrossBackupPolicyInput, ...request.Option) (*DescribeCrossBackupPolicyOutput, error)
 	DescribeCrossBackupPolicyRequest(*DescribeCrossBackupPolicyInput) (*request.Request, *DescribeCrossBackupPolicyOutput)
+
+	DescribeDBAccountsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeDBAccountsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeDBAccountsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeDBAccounts(*DescribeDBAccountsInput) (*DescribeDBAccountsOutput, error)
+	DescribeDBAccountsWithContext(byteplus.Context, *DescribeDBAccountsInput, ...request.Option) (*DescribeDBAccountsOutput, error)
+	DescribeDBAccountsRequest(*DescribeDBAccountsInput) (*request.Request, *DescribeDBAccountsOutput)
 
 	DescribeDBInstanceDetailCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DescribeDBInstanceDetailCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -230,6 +254,14 @@ type RDSMSSQLAPI interface {
 	DownloadBackupWithContext(byteplus.Context, *DownloadBackupInput, ...request.Option) (*DownloadBackupOutput, error)
 	DownloadBackupRequest(*DownloadBackupInput) (*request.Request, *DownloadBackupOutput)
 
+	GrantDBAccountPrivilegeCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	GrantDBAccountPrivilegeCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	GrantDBAccountPrivilegeCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	GrantDBAccountPrivilege(*GrantDBAccountPrivilegeInput) (*GrantDBAccountPrivilegeOutput, error)
+	GrantDBAccountPrivilegeWithContext(byteplus.Context, *GrantDBAccountPrivilegeInput, ...request.Option) (*GrantDBAccountPrivilegeOutput, error)
+	GrantDBAccountPrivilegeRequest(*GrantDBAccountPrivilegeInput) (*request.Request, *GrantDBAccountPrivilegeOutput)
+
 	ModifyAllowListCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ModifyAllowListCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	ModifyAllowListCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -253,6 +285,14 @@ type RDSMSSQLAPI interface {
 	ModifyCrossBackupPolicy(*ModifyCrossBackupPolicyInput) (*ModifyCrossBackupPolicyOutput, error)
 	ModifyCrossBackupPolicyWithContext(byteplus.Context, *ModifyCrossBackupPolicyInput, ...request.Option) (*ModifyCrossBackupPolicyOutput, error)
 	ModifyCrossBackupPolicyRequest(*ModifyCrossBackupPolicyInput) (*request.Request, *ModifyCrossBackupPolicyOutput)
+
+	ModifyDBAccountStatusCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyDBAccountStatusCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyDBAccountStatusCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyDBAccountStatus(*ModifyDBAccountStatusInput) (*ModifyDBAccountStatusOutput, error)
+	ModifyDBAccountStatusWithContext(byteplus.Context, *ModifyDBAccountStatusInput, ...request.Option) (*ModifyDBAccountStatusOutput, error)
+	ModifyDBAccountStatusRequest(*ModifyDBAccountStatusInput) (*request.Request, *ModifyDBAccountStatusOutput)
 
 	ModifyDBFailoverCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ModifyDBFailoverCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -278,6 +318,14 @@ type RDSMSSQLAPI interface {
 	ModifyInstanceAdvancedFeaturesWithContext(byteplus.Context, *ModifyInstanceAdvancedFeaturesInput, ...request.Option) (*ModifyInstanceAdvancedFeaturesOutput, error)
 	ModifyInstanceAdvancedFeaturesRequest(*ModifyInstanceAdvancedFeaturesInput) (*request.Request, *ModifyInstanceAdvancedFeaturesOutput)
 
+	ResetDBAccountCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ResetDBAccountCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ResetDBAccountCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ResetDBAccount(*ResetDBAccountInput) (*ResetDBAccountOutput, error)
+	ResetDBAccountWithContext(byteplus.Context, *ResetDBAccountInput, ...request.Option) (*ResetDBAccountOutput, error)
+	ResetDBAccountRequest(*ResetDBAccountInput) (*request.Request, *ResetDBAccountOutput)
+
 	RestartDBInstanceCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	RestartDBInstanceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	RestartDBInstanceCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -293,6 +341,14 @@ type RDSMSSQLAPI interface {
 	RestoreToExistedInstance(*RestoreToExistedInstanceInput) (*RestoreToExistedInstanceOutput, error)
 	RestoreToExistedInstanceWithContext(byteplus.Context, *RestoreToExistedInstanceInput, ...request.Option) (*RestoreToExistedInstanceOutput, error)
 	RestoreToExistedInstanceRequest(*RestoreToExistedInstanceInput) (*request.Request, *RestoreToExistedInstanceOutput)
+
+	RevokeDBAccountPrivilegeCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	RevokeDBAccountPrivilegeCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	RevokeDBAccountPrivilegeCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	RevokeDBAccountPrivilege(*RevokeDBAccountPrivilegeInput) (*RevokeDBAccountPrivilegeOutput, error)
+	RevokeDBAccountPrivilegeWithContext(byteplus.Context, *RevokeDBAccountPrivilegeInput, ...request.Option) (*RevokeDBAccountPrivilegeOutput, error)
+	RevokeDBAccountPrivilegeRequest(*RevokeDBAccountPrivilegeInput) (*request.Request, *RevokeDBAccountPrivilegeOutput)
 }
 
 var _ RDSMSSQLAPI = (*RDSMSSQL)(nil)
