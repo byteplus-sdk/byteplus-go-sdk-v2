@@ -786,6 +786,8 @@ func (s *OutputForGetExecutionOutput) SetType(v string) *OutputForGetExecutionOu
 type TargetForGetExecutionOutput struct {
 	_ struct{} `type:"structure"`
 
+	Bitrate *int32 `type:"int32"`
+
 	Fps *float64 `type:"float"`
 
 	Res *string `type:"string"`
@@ -803,6 +805,12 @@ func (s TargetForGetExecutionOutput) String() string {
 // GoString returns the string representation
 func (s TargetForGetExecutionOutput) GoString() string {
 	return s.String()
+}
+
+// SetBitrate sets the Bitrate field's value.
+func (s *TargetForGetExecutionOutput) SetBitrate(v int32) *TargetForGetExecutionOutput {
+	s.Bitrate = &v
+	return s
 }
 
 // SetFps sets the Fps field's value.
