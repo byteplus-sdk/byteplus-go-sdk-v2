@@ -62,6 +62,14 @@ type VEPFSAPI interface {
 	ConfigDataFlowBandwidthWithContext(byteplus.Context, *ConfigDataFlowBandwidthInput, ...request.Option) (*ConfigDataFlowBandwidthOutput, error)
 	ConfigDataFlowBandwidthRequest(*ConfigDataFlowBandwidthInput) (*request.Request, *ConfigDataFlowBandwidthOutput)
 
+	CreateAuditCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateAuditCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateAuditCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateAudit(*CreateAuditInput) (*CreateAuditOutput, error)
+	CreateAuditWithContext(byteplus.Context, *CreateAuditInput, ...request.Option) (*CreateAuditOutput, error)
+	CreateAuditRequest(*CreateAuditInput) (*request.Request, *CreateAuditOutput)
+
 	CreateDataFlowTaskCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	CreateDataFlowTaskCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	CreateDataFlowTaskCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -118,6 +126,14 @@ type VEPFSAPI interface {
 	CreatePreSignedUrlWithContext(byteplus.Context, *CreatePreSignedUrlInput, ...request.Option) (*CreatePreSignedUrlOutput, error)
 	CreatePreSignedUrlRequest(*CreatePreSignedUrlInput) (*request.Request, *CreatePreSignedUrlOutput)
 
+	DeleteAuditCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteAuditCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteAuditCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteAudit(*DeleteAuditInput) (*DeleteAuditOutput, error)
+	DeleteAuditWithContext(byteplus.Context, *DeleteAuditInput, ...request.Option) (*DeleteAuditOutput, error)
+	DeleteAuditRequest(*DeleteAuditInput) (*request.Request, *DeleteAuditOutput)
+
 	DeleteDataFlowTaskCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DeleteDataFlowTaskCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	DeleteDataFlowTaskCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -165,6 +181,14 @@ type VEPFSAPI interface {
 	DeleteMountService(*DeleteMountServiceInput) (*DeleteMountServiceOutput, error)
 	DeleteMountServiceWithContext(byteplus.Context, *DeleteMountServiceInput, ...request.Option) (*DeleteMountServiceOutput, error)
 	DeleteMountServiceRequest(*DeleteMountServiceInput) (*request.Request, *DeleteMountServiceOutput)
+
+	DescribeAuditsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeAuditsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeAuditsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeAudits(*DescribeAuditsInput) (*DescribeAuditsOutput, error)
+	DescribeAuditsWithContext(byteplus.Context, *DescribeAuditsInput, ...request.Option) (*DescribeAuditsOutput, error)
+	DescribeAuditsRequest(*DescribeAuditsInput) (*request.Request, *DescribeAuditsOutput)
 
 	DescribeDataFlowBandwidthCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DescribeDataFlowBandwidthCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -310,6 +334,14 @@ type VEPFSAPI interface {
 	SetFilesetQuotaWithContext(byteplus.Context, *SetFilesetQuotaInput, ...request.Option) (*SetFilesetQuotaOutput, error)
 	SetFilesetQuotaRequest(*SetFilesetQuotaInput) (*request.Request, *SetFilesetQuotaOutput)
 
+	StartAuditCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	StartAuditCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	StartAuditCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	StartAudit(*StartAuditInput) (*StartAuditOutput, error)
+	StartAuditWithContext(byteplus.Context, *StartAuditInput, ...request.Option) (*StartAuditOutput, error)
+	StartAuditRequest(*StartAuditInput) (*request.Request, *StartAuditOutput)
+
 	StartLensServiceCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	StartLensServiceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	StartLensServiceCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -317,6 +349,14 @@ type VEPFSAPI interface {
 	StartLensService(*StartLensServiceInput) (*StartLensServiceOutput, error)
 	StartLensServiceWithContext(byteplus.Context, *StartLensServiceInput, ...request.Option) (*StartLensServiceOutput, error)
 	StartLensServiceRequest(*StartLensServiceInput) (*request.Request, *StartLensServiceOutput)
+
+	StopAuditCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	StopAuditCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	StopAuditCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	StopAudit(*StopAuditInput) (*StopAuditOutput, error)
+	StopAuditWithContext(byteplus.Context, *StopAuditInput, ...request.Option) (*StopAuditOutput, error)
+	StopAuditRequest(*StopAuditInput) (*request.Request, *StopAuditOutput)
 
 	StopLensServiceCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	StopLensServiceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -341,6 +381,14 @@ type VEPFSAPI interface {
 	UntagResources(*UntagResourcesInput) (*UntagResourcesOutput, error)
 	UntagResourcesWithContext(byteplus.Context, *UntagResourcesInput, ...request.Option) (*UntagResourcesOutput, error)
 	UntagResourcesRequest(*UntagResourcesInput) (*request.Request, *UntagResourcesOutput)
+
+	UpdateAuditCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	UpdateAuditCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	UpdateAuditCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	UpdateAudit(*UpdateAuditInput) (*UpdateAuditOutput, error)
+	UpdateAuditWithContext(byteplus.Context, *UpdateAuditInput, ...request.Option) (*UpdateAuditOutput, error)
+	UpdateAuditRequest(*UpdateAuditInput) (*request.Request, *UpdateAuditOutput)
 
 	UpdateFileSystemCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	UpdateFileSystemCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
