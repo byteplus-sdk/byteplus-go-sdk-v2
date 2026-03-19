@@ -148,6 +148,8 @@ type AutoStorageScalingConfigForRestoreToNewInstanceInput struct {
 
 	EnableStorageAutoScale *bool `type:"boolean" json:",omitempty"`
 
+	ScalingDetectNode *string `type:"string" json:",omitempty"`
+
 	StorageThreshold *int32 `type:"int32" json:",omitempty"`
 
 	StorageUpperBound *int32 `type:"int32" json:",omitempty"`
@@ -166,6 +168,12 @@ func (s AutoStorageScalingConfigForRestoreToNewInstanceInput) GoString() string 
 // SetEnableStorageAutoScale sets the EnableStorageAutoScale field's value.
 func (s *AutoStorageScalingConfigForRestoreToNewInstanceInput) SetEnableStorageAutoScale(v bool) *AutoStorageScalingConfigForRestoreToNewInstanceInput {
 	s.EnableStorageAutoScale = &v
+	return s
+}
+
+// SetScalingDetectNode sets the ScalingDetectNode field's value.
+func (s *AutoStorageScalingConfigForRestoreToNewInstanceInput) SetScalingDetectNode(v string) *AutoStorageScalingConfigForRestoreToNewInstanceInput {
+	s.ScalingDetectNode = &v
 	return s
 }
 
@@ -356,6 +364,8 @@ type RestoreToNewInstanceInput struct {
 
 	DeletionProtection *string `type:"string" json:",omitempty"`
 
+	EnableExternalReplication *bool `type:"boolean" json:",omitempty"`
+
 	InstanceName *string `type:"string" json:",omitempty"`
 
 	InstanceTags []*InstanceTagForRestoreToNewInstanceInput `type:"list" json:",omitempty"`
@@ -363,6 +373,8 @@ type RestoreToNewInstanceInput struct {
 	NodeInfo []*NodeInfoForRestoreToNewInstanceInput `type:"list" json:",omitempty"`
 
 	Port *int32 `type:"int32" json:",omitempty"`
+
+	PrivateIpAddress *string `type:"string" json:",omitempty"`
 
 	ProjectName *string `type:"string" json:",omitempty"`
 
@@ -453,6 +465,12 @@ func (s *RestoreToNewInstanceInput) SetDeletionProtection(v string) *RestoreToNe
 	return s
 }
 
+// SetEnableExternalReplication sets the EnableExternalReplication field's value.
+func (s *RestoreToNewInstanceInput) SetEnableExternalReplication(v bool) *RestoreToNewInstanceInput {
+	s.EnableExternalReplication = &v
+	return s
+}
+
 // SetInstanceName sets the InstanceName field's value.
 func (s *RestoreToNewInstanceInput) SetInstanceName(v string) *RestoreToNewInstanceInput {
 	s.InstanceName = &v
@@ -474,6 +492,12 @@ func (s *RestoreToNewInstanceInput) SetNodeInfo(v []*NodeInfoForRestoreToNewInst
 // SetPort sets the Port field's value.
 func (s *RestoreToNewInstanceInput) SetPort(v int32) *RestoreToNewInstanceInput {
 	s.Port = &v
+	return s
+}
+
+// SetPrivateIpAddress sets the PrivateIpAddress field's value.
+func (s *RestoreToNewInstanceInput) SetPrivateIpAddress(v string) *RestoreToNewInstanceInput {
+	s.PrivateIpAddress = &v
 	return s
 }
 

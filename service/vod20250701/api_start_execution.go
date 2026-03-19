@@ -404,6 +404,8 @@ func (s *StartExecutionOutput) SetRunId(v string) *StartExecutionOutput {
 type TargetForStartExecutionInput struct {
 	_ struct{} `type:"structure" json:",omitempty"`
 
+	Bitrate *int32 `type:"int32" json:",omitempty"`
+
 	Fps *float64 `type:"float" json:",omitempty"`
 
 	Res *string `type:"string" json:",omitempty"`
@@ -421,6 +423,12 @@ func (s TargetForStartExecutionInput) String() string {
 // GoString returns the string representation
 func (s TargetForStartExecutionInput) GoString() string {
 	return s.String()
+}
+
+// SetBitrate sets the Bitrate field's value.
+func (s *TargetForStartExecutionInput) SetBitrate(v int32) *TargetForStartExecutionInput {
+	s.Bitrate = &v
+	return s
 }
 
 // SetFps sets the Fps field's value.
