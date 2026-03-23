@@ -38,6 +38,14 @@ type RDSMYSQLV2API interface {
 	AddDiagnosticsEntityWithContext(byteplus.Context, *AddDiagnosticsEntityInput, ...request.Option) (*AddDiagnosticsEntityOutput, error)
 	AddDiagnosticsEntityRequest(*AddDiagnosticsEntityInput) (*request.Request, *AddDiagnosticsEntityOutput)
 
+	AddTagFromUserBackupInfoCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	AddTagFromUserBackupInfoCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	AddTagFromUserBackupInfoCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	AddTagFromUserBackupInfo(*AddTagFromUserBackupInfoInput) (*AddTagFromUserBackupInfoOutput, error)
+	AddTagFromUserBackupInfoWithContext(byteplus.Context, *AddTagFromUserBackupInfoInput, ...request.Option) (*AddTagFromUserBackupInfoOutput, error)
+	AddTagFromUserBackupInfoRequest(*AddTagFromUserBackupInfoInput) (*request.Request, *AddTagFromUserBackupInfoOutput)
+
 	AddTagsToResourceCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	AddTagsToResourceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	AddTagsToResourceCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -53,6 +61,30 @@ type RDSMYSQLV2API interface {
 	AssociateAllowList(*AssociateAllowListInput) (*AssociateAllowListOutput, error)
 	AssociateAllowListWithContext(byteplus.Context, *AssociateAllowListInput, ...request.Option) (*AssociateAllowListOutput, error)
 	AssociateAllowListRequest(*AssociateAllowListInput) (*request.Request, *AssociateAllowListOutput)
+
+	AssociateUserBackupCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	AssociateUserBackupCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	AssociateUserBackupCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	AssociateUserBackup(*AssociateUserBackupInput) (*AssociateUserBackupOutput, error)
+	AssociateUserBackupWithContext(byteplus.Context, *AssociateUserBackupInput, ...request.Option) (*AssociateUserBackupOutput, error)
+	AssociateUserBackupRequest(*AssociateUserBackupInput) (*request.Request, *AssociateUserBackupOutput)
+
+	CheckUserUploadBackupCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CheckUserUploadBackupCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CheckUserUploadBackupCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CheckUserUploadBackup(*CheckUserUploadBackupInput) (*CheckUserUploadBackupOutput, error)
+	CheckUserUploadBackupWithContext(byteplus.Context, *CheckUserUploadBackupInput, ...request.Option) (*CheckUserUploadBackupOutput, error)
+	CheckUserUploadBackupRequest(*CheckUserUploadBackupInput) (*request.Request, *CheckUserUploadBackupOutput)
+
+	CleanNonWhiteSessionCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CleanNonWhiteSessionCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CleanNonWhiteSessionCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CleanNonWhiteSession(*CleanNonWhiteSessionInput) (*CleanNonWhiteSessionOutput, error)
+	CleanNonWhiteSessionWithContext(byteplus.Context, *CleanNonWhiteSessionInput, ...request.Option) (*CleanNonWhiteSessionOutput, error)
+	CleanNonWhiteSessionRequest(*CleanNonWhiteSessionInput) (*request.Request, *CleanNonWhiteSessionOutput)
 
 	CopyParameterTemplateCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	CopyParameterTemplateCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -93,6 +125,14 @@ type RDSMYSQLV2API interface {
 	CreateDBAccount(*CreateDBAccountInput) (*CreateDBAccountOutput, error)
 	CreateDBAccountWithContext(byteplus.Context, *CreateDBAccountInput, ...request.Option) (*CreateDBAccountOutput, error)
 	CreateDBAccountRequest(*CreateDBAccountInput) (*request.Request, *CreateDBAccountOutput)
+
+	CreateDBBlueGreenInstanceCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateDBBlueGreenInstanceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateDBBlueGreenInstanceCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateDBBlueGreenInstance(*CreateDBBlueGreenInstanceInput) (*CreateDBBlueGreenInstanceOutput, error)
+	CreateDBBlueGreenInstanceWithContext(byteplus.Context, *CreateDBBlueGreenInstanceInput, ...request.Option) (*CreateDBBlueGreenInstanceOutput, error)
+	CreateDBBlueGreenInstanceRequest(*CreateDBBlueGreenInstanceInput) (*request.Request, *CreateDBBlueGreenInstanceOutput)
 
 	CreateDBEndpointCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	CreateDBEndpointCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -158,6 +198,14 @@ type RDSMYSQLV2API interface {
 	CreateParameterTemplateWithContext(byteplus.Context, *CreateParameterTemplateInput, ...request.Option) (*CreateParameterTemplateOutput, error)
 	CreateParameterTemplateRequest(*CreateParameterTemplateInput) (*request.Request, *CreateParameterTemplateOutput)
 
+	CreateResourcePackageCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateResourcePackageCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateResourcePackageCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateResourcePackage(*CreateResourcePackageInput) (*CreateResourcePackageOutput, error)
+	CreateResourcePackageWithContext(byteplus.Context, *CreateResourcePackageInput, ...request.Option) (*CreateResourcePackageOutput, error)
+	CreateResourcePackageRequest(*CreateResourcePackageInput) (*request.Request, *CreateResourcePackageOutput)
+
 	DeleteAllowListCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DeleteAllowListCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	DeleteAllowListCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -173,6 +221,14 @@ type RDSMYSQLV2API interface {
 	DeleteDBAccount(*DeleteDBAccountInput) (*DeleteDBAccountOutput, error)
 	DeleteDBAccountWithContext(byteplus.Context, *DeleteDBAccountInput, ...request.Option) (*DeleteDBAccountOutput, error)
 	DeleteDBAccountRequest(*DeleteDBAccountInput) (*request.Request, *DeleteDBAccountOutput)
+
+	DeleteDBBlueGreenRelationCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteDBBlueGreenRelationCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteDBBlueGreenRelationCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteDBBlueGreenRelation(*DeleteDBBlueGreenRelationInput) (*DeleteDBBlueGreenRelationOutput, error)
+	DeleteDBBlueGreenRelationWithContext(byteplus.Context, *DeleteDBBlueGreenRelationInput, ...request.Option) (*DeleteDBBlueGreenRelationOutput, error)
+	DeleteDBBlueGreenRelationRequest(*DeleteDBBlueGreenRelationInput) (*request.Request, *DeleteDBBlueGreenRelationOutput)
 
 	DeleteDBEndpointCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DeleteDBEndpointCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -230,6 +286,14 @@ type RDSMYSQLV2API interface {
 	DeleteParameterTemplateWithContext(byteplus.Context, *DeleteParameterTemplateInput, ...request.Option) (*DeleteParameterTemplateOutput, error)
 	DeleteParameterTemplateRequest(*DeleteParameterTemplateInput) (*request.Request, *DeleteParameterTemplateOutput)
 
+	DeleteUserUploadBackupCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteUserUploadBackupCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteUserUploadBackupCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteUserUploadBackup(*DeleteUserUploadBackupInput) (*DeleteUserUploadBackupOutput, error)
+	DeleteUserUploadBackupWithContext(byteplus.Context, *DeleteUserUploadBackupInput, ...request.Option) (*DeleteUserUploadBackupOutput, error)
+	DeleteUserUploadBackupRequest(*DeleteUserUploadBackupInput) (*request.Request, *DeleteUserUploadBackupOutput)
+
 	DescribeAllowListDetailCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DescribeAllowListDetailCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	DescribeAllowListDetailCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -261,6 +325,14 @@ type RDSMYSQLV2API interface {
 	DescribeAvailabilityZones(*DescribeAvailabilityZonesInput) (*DescribeAvailabilityZonesOutput, error)
 	DescribeAvailabilityZonesWithContext(byteplus.Context, *DescribeAvailabilityZonesInput, ...request.Option) (*DescribeAvailabilityZonesOutput, error)
 	DescribeAvailabilityZonesRequest(*DescribeAvailabilityZonesInput) (*request.Request, *DescribeAvailabilityZonesOutput)
+
+	DescribeAvailableCrossRegionCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeAvailableCrossRegionCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeAvailableCrossRegionCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeAvailableCrossRegion(*DescribeAvailableCrossRegionInput) (*DescribeAvailableCrossRegionOutput, error)
+	DescribeAvailableCrossRegionWithContext(byteplus.Context, *DescribeAvailableCrossRegionInput, ...request.Option) (*DescribeAvailableCrossRegionOutput, error)
+	DescribeAvailableCrossRegionRequest(*DescribeAvailableCrossRegionInput) (*request.Request, *DescribeAvailableCrossRegionOutput)
 
 	DescribeBackupDecryptionKeyCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DescribeBackupDecryptionKeyCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -310,6 +382,22 @@ type RDSMYSQLV2API interface {
 	DescribeBinlogFilesWithContext(byteplus.Context, *DescribeBinlogFilesInput, ...request.Option) (*DescribeBinlogFilesOutput, error)
 	DescribeBinlogFilesRequest(*DescribeBinlogFilesInput) (*request.Request, *DescribeBinlogFilesOutput)
 
+	DescribeCrossBackupPolicyCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeCrossBackupPolicyCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeCrossBackupPolicyCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeCrossBackupPolicy(*DescribeCrossBackupPolicyInput) (*DescribeCrossBackupPolicyOutput, error)
+	DescribeCrossBackupPolicyWithContext(byteplus.Context, *DescribeCrossBackupPolicyInput, ...request.Option) (*DescribeCrossBackupPolicyOutput, error)
+	DescribeCrossBackupPolicyRequest(*DescribeCrossBackupPolicyInput) (*request.Request, *DescribeCrossBackupPolicyOutput)
+
+	DescribeCrossRegionBackupDBInstancesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeCrossRegionBackupDBInstancesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeCrossRegionBackupDBInstancesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeCrossRegionBackupDBInstances(*DescribeCrossRegionBackupDBInstancesInput) (*DescribeCrossRegionBackupDBInstancesOutput, error)
+	DescribeCrossRegionBackupDBInstancesWithContext(byteplus.Context, *DescribeCrossRegionBackupDBInstancesInput, ...request.Option) (*DescribeCrossRegionBackupDBInstancesOutput, error)
+	DescribeCrossRegionBackupDBInstancesRequest(*DescribeCrossRegionBackupDBInstancesInput) (*request.Request, *DescribeCrossRegionBackupDBInstancesOutput)
+
 	DescribeDBAccountsCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DescribeDBAccountsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	DescribeDBAccountsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -317,6 +405,22 @@ type RDSMYSQLV2API interface {
 	DescribeDBAccounts(*DescribeDBAccountsInput) (*DescribeDBAccountsOutput, error)
 	DescribeDBAccountsWithContext(byteplus.Context, *DescribeDBAccountsInput, ...request.Option) (*DescribeDBAccountsOutput, error)
 	DescribeDBAccountsRequest(*DescribeDBAccountsInput) (*request.Request, *DescribeDBAccountsOutput)
+
+	DescribeDBBlueGreenDifferencesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeDBBlueGreenDifferencesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeDBBlueGreenDifferencesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeDBBlueGreenDifferences(*DescribeDBBlueGreenDifferencesInput) (*DescribeDBBlueGreenDifferencesOutput, error)
+	DescribeDBBlueGreenDifferencesWithContext(byteplus.Context, *DescribeDBBlueGreenDifferencesInput, ...request.Option) (*DescribeDBBlueGreenDifferencesOutput, error)
+	DescribeDBBlueGreenDifferencesRequest(*DescribeDBBlueGreenDifferencesInput) (*request.Request, *DescribeDBBlueGreenDifferencesOutput)
+
+	DescribeDBBlueGreenInstanceCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeDBBlueGreenInstanceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeDBBlueGreenInstanceCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeDBBlueGreenInstance(*DescribeDBBlueGreenInstanceInput) (*DescribeDBBlueGreenInstanceOutput, error)
+	DescribeDBBlueGreenInstanceWithContext(byteplus.Context, *DescribeDBBlueGreenInstanceInput, ...request.Option) (*DescribeDBBlueGreenInstanceOutput, error)
+	DescribeDBBlueGreenInstanceRequest(*DescribeDBBlueGreenInstanceInput) (*request.Request, *DescribeDBBlueGreenInstanceOutput)
 
 	DescribeDBDisasterRecoveryInstancesCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DescribeDBDisasterRecoveryInstancesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -470,6 +574,14 @@ type RDSMYSQLV2API interface {
 	DescribeDBProxyPriceDetailWithContext(byteplus.Context, *DescribeDBProxyPriceDetailInput, ...request.Option) (*DescribeDBProxyPriceDetailOutput, error)
 	DescribeDBProxyPriceDetailRequest(*DescribeDBProxyPriceDetailInput) (*request.Request, *DescribeDBProxyPriceDetailOutput)
 
+	DescribeDBSwitchBlueGreenPrecheckCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeDBSwitchBlueGreenPrecheckCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeDBSwitchBlueGreenPrecheckCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeDBSwitchBlueGreenPrecheck(*DescribeDBSwitchBlueGreenPrecheckInput) (*DescribeDBSwitchBlueGreenPrecheckOutput, error)
+	DescribeDBSwitchBlueGreenPrecheckWithContext(byteplus.Context, *DescribeDBSwitchBlueGreenPrecheckInput, ...request.Option) (*DescribeDBSwitchBlueGreenPrecheckOutput, error)
+	DescribeDBSwitchBlueGreenPrecheckRequest(*DescribeDBSwitchBlueGreenPrecheckInput) (*request.Request, *DescribeDBSwitchBlueGreenPrecheckOutput)
+
 	DescribeDatabasesCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DescribeDatabasesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	DescribeDatabasesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -518,6 +630,14 @@ type RDSMYSQLV2API interface {
 	DescribeFailoverLogsWithContext(byteplus.Context, *DescribeFailoverLogsInput, ...request.Option) (*DescribeFailoverLogsOutput, error)
 	DescribeFailoverLogsRequest(*DescribeFailoverLogsInput) (*request.Request, *DescribeFailoverLogsOutput)
 
+	DescribeNonWhiteSessionListCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeNonWhiteSessionListCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeNonWhiteSessionListCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeNonWhiteSessionList(*DescribeNonWhiteSessionListInput) (*DescribeNonWhiteSessionListOutput, error)
+	DescribeNonWhiteSessionListWithContext(byteplus.Context, *DescribeNonWhiteSessionListInput, ...request.Option) (*DescribeNonWhiteSessionListOutput, error)
+	DescribeNonWhiteSessionListRequest(*DescribeNonWhiteSessionListInput) (*request.Request, *DescribeNonWhiteSessionListOutput)
+
 	DescribeParameterTemplateCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DescribeParameterTemplateCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	DescribeParameterTemplateCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -558,6 +678,30 @@ type RDSMYSQLV2API interface {
 	DescribeRegionsWithContext(byteplus.Context, *DescribeRegionsInput, ...request.Option) (*DescribeRegionsOutput, error)
 	DescribeRegionsRequest(*DescribeRegionsInput) (*request.Request, *DescribeRegionsOutput)
 
+	DescribeResourcePackageDetailCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeResourcePackageDetailCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeResourcePackageDetailCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeResourcePackageDetail(*DescribeResourcePackageDetailInput) (*DescribeResourcePackageDetailOutput, error)
+	DescribeResourcePackageDetailWithContext(byteplus.Context, *DescribeResourcePackageDetailInput, ...request.Option) (*DescribeResourcePackageDetailOutput, error)
+	DescribeResourcePackageDetailRequest(*DescribeResourcePackageDetailInput) (*request.Request, *DescribeResourcePackageDetailOutput)
+
+	DescribeResourcePackagePriceCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeResourcePackagePriceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeResourcePackagePriceCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeResourcePackagePrice(*DescribeResourcePackagePriceInput) (*DescribeResourcePackagePriceOutput, error)
+	DescribeResourcePackagePriceWithContext(byteplus.Context, *DescribeResourcePackagePriceInput, ...request.Option) (*DescribeResourcePackagePriceOutput, error)
+	DescribeResourcePackagePriceRequest(*DescribeResourcePackagePriceInput) (*request.Request, *DescribeResourcePackagePriceOutput)
+
+	DescribeResourcePackageSpecCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeResourcePackageSpecCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeResourcePackageSpecCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeResourcePackageSpec(*DescribeResourcePackageSpecInput) (*DescribeResourcePackageSpecOutput, error)
+	DescribeResourcePackageSpecWithContext(byteplus.Context, *DescribeResourcePackageSpecInput, ...request.Option) (*DescribeResourcePackageSpecOutput, error)
+	DescribeResourcePackageSpecRequest(*DescribeResourcePackageSpecInput) (*request.Request, *DescribeResourcePackageSpecOutput)
+
 	DescribeResourceUsageCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DescribeResourceUsageCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	DescribeResourceUsageCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -589,6 +733,30 @@ type RDSMYSQLV2API interface {
 	DescribeTasks(*DescribeTasksInput) (*DescribeTasksOutput, error)
 	DescribeTasksWithContext(byteplus.Context, *DescribeTasksInput, ...request.Option) (*DescribeTasksOutput, error)
 	DescribeTasksRequest(*DescribeTasksInput) (*request.Request, *DescribeTasksOutput)
+
+	DescribeUpgradeEngineMajorVersionPrecheckResultCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeUpgradeEngineMajorVersionPrecheckResultCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeUpgradeEngineMajorVersionPrecheckResultCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeUpgradeEngineMajorVersionPrecheckResult(*DescribeUpgradeEngineMajorVersionPrecheckResultInput) (*DescribeUpgradeEngineMajorVersionPrecheckResultOutput, error)
+	DescribeUpgradeEngineMajorVersionPrecheckResultWithContext(byteplus.Context, *DescribeUpgradeEngineMajorVersionPrecheckResultInput, ...request.Option) (*DescribeUpgradeEngineMajorVersionPrecheckResultOutput, error)
+	DescribeUpgradeEngineMajorVersionPrecheckResultRequest(*DescribeUpgradeEngineMajorVersionPrecheckResultInput) (*request.Request, *DescribeUpgradeEngineMajorVersionPrecheckResultOutput)
+
+	DescribeUserTosBackupAssociateCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeUserTosBackupAssociateCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeUserTosBackupAssociateCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeUserTosBackupAssociate(*DescribeUserTosBackupAssociateInput) (*DescribeUserTosBackupAssociateOutput, error)
+	DescribeUserTosBackupAssociateWithContext(byteplus.Context, *DescribeUserTosBackupAssociateInput, ...request.Option) (*DescribeUserTosBackupAssociateOutput, error)
+	DescribeUserTosBackupAssociateRequest(*DescribeUserTosBackupAssociateInput) (*request.Request, *DescribeUserTosBackupAssociateOutput)
+
+	DescribeUserUploadBackupsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeUserUploadBackupsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeUserUploadBackupsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeUserUploadBackups(*DescribeUserUploadBackupsInput) (*DescribeUserUploadBackupsOutput, error)
+	DescribeUserUploadBackupsWithContext(byteplus.Context, *DescribeUserUploadBackupsInput, ...request.Option) (*DescribeUserUploadBackupsOutput, error)
+	DescribeUserUploadBackupsRequest(*DescribeUserUploadBackupsInput) (*request.Request, *DescribeUserUploadBackupsOutput)
 
 	DisassociateAllowListCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DisassociateAllowListCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -646,6 +814,14 @@ type RDSMYSQLV2API interface {
 	ListParameterTemplatesWithContext(byteplus.Context, *ListParameterTemplatesInput, ...request.Option) (*ListParameterTemplatesOutput, error)
 	ListParameterTemplatesRequest(*ListParameterTemplatesInput) (*request.Request, *ListParameterTemplatesOutput)
 
+	ListResourcePackagesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListResourcePackagesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListResourcePackagesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListResourcePackages(*ListResourcePackagesInput) (*ListResourcePackagesOutput, error)
+	ListResourcePackagesWithContext(byteplus.Context, *ListResourcePackagesInput, ...request.Option) (*ListResourcePackagesOutput, error)
+	ListResourcePackagesRequest(*ListResourcePackagesInput) (*request.Request, *ListResourcePackagesOutput)
+
 	MigrateToOtherZoneCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	MigrateToOtherZoneCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	MigrateToOtherZoneCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -685,6 +861,14 @@ type RDSMYSQLV2API interface {
 	ModifyBackupPublicAccessPolicy(*ModifyBackupPublicAccessPolicyInput) (*ModifyBackupPublicAccessPolicyOutput, error)
 	ModifyBackupPublicAccessPolicyWithContext(byteplus.Context, *ModifyBackupPublicAccessPolicyInput, ...request.Option) (*ModifyBackupPublicAccessPolicyOutput, error)
 	ModifyBackupPublicAccessPolicyRequest(*ModifyBackupPublicAccessPolicyInput) (*request.Request, *ModifyBackupPublicAccessPolicyOutput)
+
+	ModifyCrossBackupPolicyCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyCrossBackupPolicyCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyCrossBackupPolicyCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyCrossBackupPolicy(*ModifyCrossBackupPolicyInput) (*ModifyCrossBackupPolicyOutput, error)
+	ModifyCrossBackupPolicyWithContext(byteplus.Context, *ModifyCrossBackupPolicyInput, ...request.Option) (*ModifyCrossBackupPolicyOutput, error)
+	ModifyCrossBackupPolicyRequest(*ModifyCrossBackupPolicyInput) (*request.Request, *ModifyCrossBackupPolicyOutput)
 
 	ModifyDBAccountDescriptionCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ModifyDBAccountDescriptionCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -934,6 +1118,14 @@ type RDSMYSQLV2API interface {
 	RemoveDiagnosticsEntityWithContext(byteplus.Context, *RemoveDiagnosticsEntityInput, ...request.Option) (*RemoveDiagnosticsEntityOutput, error)
 	RemoveDiagnosticsEntityRequest(*RemoveDiagnosticsEntityInput) (*request.Request, *RemoveDiagnosticsEntityOutput)
 
+	RemoveTagFromUserBackupInfoCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	RemoveTagFromUserBackupInfoCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	RemoveTagFromUserBackupInfoCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	RemoveTagFromUserBackupInfo(*RemoveTagFromUserBackupInfoInput) (*RemoveTagFromUserBackupInfoOutput, error)
+	RemoveTagFromUserBackupInfoWithContext(byteplus.Context, *RemoveTagFromUserBackupInfoInput, ...request.Option) (*RemoveTagFromUserBackupInfoOutput, error)
+	RemoveTagFromUserBackupInfoRequest(*RemoveTagFromUserBackupInfoInput) (*request.Request, *RemoveTagFromUserBackupInfoOutput)
+
 	RemoveTagsFromResourceCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	RemoveTagsFromResourceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	RemoveTagsFromResourceCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -958,6 +1150,14 @@ type RDSMYSQLV2API interface {
 	RestartDBInstanceWithContext(byteplus.Context, *RestartDBInstanceInput, ...request.Option) (*RestartDBInstanceOutput, error)
 	RestartDBInstanceRequest(*RestartDBInstanceInput) (*request.Request, *RestartDBInstanceOutput)
 
+	RestoreToCrossRegionInstanceCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	RestoreToCrossRegionInstanceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	RestoreToCrossRegionInstanceCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	RestoreToCrossRegionInstance(*RestoreToCrossRegionInstanceInput) (*RestoreToCrossRegionInstanceOutput, error)
+	RestoreToCrossRegionInstanceWithContext(byteplus.Context, *RestoreToCrossRegionInstanceInput, ...request.Option) (*RestoreToCrossRegionInstanceOutput, error)
+	RestoreToCrossRegionInstanceRequest(*RestoreToCrossRegionInstanceInput) (*request.Request, *RestoreToCrossRegionInstanceOutput)
+
 	RestoreToExistedInstanceCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	RestoreToExistedInstanceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	RestoreToExistedInstanceCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -973,6 +1173,14 @@ type RDSMYSQLV2API interface {
 	RestoreToNewInstance(*RestoreToNewInstanceInput) (*RestoreToNewInstanceOutput, error)
 	RestoreToNewInstanceWithContext(byteplus.Context, *RestoreToNewInstanceInput, ...request.Option) (*RestoreToNewInstanceOutput, error)
 	RestoreToNewInstanceRequest(*RestoreToNewInstanceInput) (*request.Request, *RestoreToNewInstanceOutput)
+
+	RestoreToNewInstanceFromUserTosCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	RestoreToNewInstanceFromUserTosCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	RestoreToNewInstanceFromUserTosCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	RestoreToNewInstanceFromUserTos(*RestoreToNewInstanceFromUserTosInput) (*RestoreToNewInstanceFromUserTosOutput, error)
+	RestoreToNewInstanceFromUserTosWithContext(byteplus.Context, *RestoreToNewInstanceFromUserTosInput, ...request.Option) (*RestoreToNewInstanceFromUserTosOutput, error)
+	RestoreToNewInstanceFromUserTosRequest(*RestoreToNewInstanceFromUserTosInput) (*request.Request, *RestoreToNewInstanceFromUserTosOutput)
 
 	RevokeDBAccountPrivilegeCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	RevokeDBAccountPrivilegeCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -1014,6 +1222,14 @@ type RDSMYSQLV2API interface {
 	StopDBInstanceWithContext(byteplus.Context, *StopDBInstanceInput, ...request.Option) (*StopDBInstanceOutput, error)
 	StopDBInstanceRequest(*StopDBInstanceInput) (*request.Request, *StopDBInstanceOutput)
 
+	SwitchDBBlueGreenCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	SwitchDBBlueGreenCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	SwitchDBBlueGreenCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	SwitchDBBlueGreen(*SwitchDBBlueGreenInput) (*SwitchDBBlueGreenOutput, error)
+	SwitchDBBlueGreenWithContext(byteplus.Context, *SwitchDBBlueGreenInput, ...request.Option) (*SwitchDBBlueGreenOutput, error)
+	SwitchDBBlueGreenRequest(*SwitchDBBlueGreenInput) (*request.Request, *SwitchDBBlueGreenOutput)
+
 	SwitchDBInstanceHACommon(*map[string]interface{}) (*map[string]interface{}, error)
 	SwitchDBInstanceHACommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	SwitchDBInstanceHACommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -1021,6 +1237,14 @@ type RDSMYSQLV2API interface {
 	SwitchDBInstanceHA(*SwitchDBInstanceHAInput) (*SwitchDBInstanceHAOutput, error)
 	SwitchDBInstanceHAWithContext(byteplus.Context, *SwitchDBInstanceHAInput, ...request.Option) (*SwitchDBInstanceHAOutput, error)
 	SwitchDBInstanceHARequest(*SwitchDBInstanceHAInput) (*request.Request, *SwitchDBInstanceHAOutput)
+
+	SwitchDBPrecheckBlueGreenCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	SwitchDBPrecheckBlueGreenCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	SwitchDBPrecheckBlueGreenCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	SwitchDBPrecheckBlueGreen(*SwitchDBPrecheckBlueGreenInput) (*SwitchDBPrecheckBlueGreenOutput, error)
+	SwitchDBPrecheckBlueGreenWithContext(byteplus.Context, *SwitchDBPrecheckBlueGreenInput, ...request.Option) (*SwitchDBPrecheckBlueGreenOutput, error)
+	SwitchDBPrecheckBlueGreenRequest(*SwitchDBPrecheckBlueGreenInput) (*request.Request, *SwitchDBPrecheckBlueGreenOutput)
 
 	SwitchDrInstanceToMasterCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	SwitchDrInstanceToMasterCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -1045,6 +1269,22 @@ type RDSMYSQLV2API interface {
 	UpgradeAllowListVersion(*UpgradeAllowListVersionInput) (*UpgradeAllowListVersionOutput, error)
 	UpgradeAllowListVersionWithContext(byteplus.Context, *UpgradeAllowListVersionInput, ...request.Option) (*UpgradeAllowListVersionOutput, error)
 	UpgradeAllowListVersionRequest(*UpgradeAllowListVersionInput) (*request.Request, *UpgradeAllowListVersionOutput)
+
+	UpgradeDBInstanceEngineMajorVersionCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	UpgradeDBInstanceEngineMajorVersionCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	UpgradeDBInstanceEngineMajorVersionCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	UpgradeDBInstanceEngineMajorVersion(*UpgradeDBInstanceEngineMajorVersionInput) (*UpgradeDBInstanceEngineMajorVersionOutput, error)
+	UpgradeDBInstanceEngineMajorVersionWithContext(byteplus.Context, *UpgradeDBInstanceEngineMajorVersionInput, ...request.Option) (*UpgradeDBInstanceEngineMajorVersionOutput, error)
+	UpgradeDBInstanceEngineMajorVersionRequest(*UpgradeDBInstanceEngineMajorVersionInput) (*request.Request, *UpgradeDBInstanceEngineMajorVersionOutput)
+
+	UpgradeDBInstanceEngineMajorVersionPrecheckCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	UpgradeDBInstanceEngineMajorVersionPrecheckCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	UpgradeDBInstanceEngineMajorVersionPrecheckCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	UpgradeDBInstanceEngineMajorVersionPrecheck(*UpgradeDBInstanceEngineMajorVersionPrecheckInput) (*UpgradeDBInstanceEngineMajorVersionPrecheckOutput, error)
+	UpgradeDBInstanceEngineMajorVersionPrecheckWithContext(byteplus.Context, *UpgradeDBInstanceEngineMajorVersionPrecheckInput, ...request.Option) (*UpgradeDBInstanceEngineMajorVersionPrecheckOutput, error)
+	UpgradeDBInstanceEngineMajorVersionPrecheckRequest(*UpgradeDBInstanceEngineMajorVersionPrecheckInput) (*request.Request, *UpgradeDBInstanceEngineMajorVersionPrecheckOutput)
 
 	UpgradeDBInstanceEngineMinorVersionCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	UpgradeDBInstanceEngineMinorVersionCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)

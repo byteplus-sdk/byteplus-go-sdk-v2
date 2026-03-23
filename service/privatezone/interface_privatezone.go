@@ -110,6 +110,14 @@ type PRIVATEZONEAPI interface {
 	CreateResolverRuleWithContext(byteplus.Context, *CreateResolverRuleInput, ...request.Option) (*CreateResolverRuleOutput, error)
 	CreateResolverRuleRequest(*CreateResolverRuleInput) (*request.Request, *CreateResolverRuleOutput)
 
+	CreateResourceAssociationAuthorizationCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateResourceAssociationAuthorizationCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateResourceAssociationAuthorizationCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateResourceAssociationAuthorization(*CreateResourceAssociationAuthorizationInput) (*CreateResourceAssociationAuthorizationOutput, error)
+	CreateResourceAssociationAuthorizationWithContext(byteplus.Context, *CreateResourceAssociationAuthorizationInput, ...request.Option) (*CreateResourceAssociationAuthorizationOutput, error)
+	CreateResourceAssociationAuthorizationRequest(*CreateResourceAssociationAuthorizationInput) (*request.Request, *CreateResourceAssociationAuthorizationOutput)
+
 	DeleteAuthorizedUserCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DeleteAuthorizedUserCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	DeleteAuthorizedUserCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -149,6 +157,14 @@ type PRIVATEZONEAPI interface {
 	DeleteResolverRule(*DeleteResolverRuleInput) (*DeleteResolverRuleOutput, error)
 	DeleteResolverRuleWithContext(byteplus.Context, *DeleteResolverRuleInput, ...request.Option) (*DeleteResolverRuleOutput, error)
 	DeleteResolverRuleRequest(*DeleteResolverRuleInput) (*request.Request, *DeleteResolverRuleOutput)
+
+	DeleteResourceAssociationAuthorizationCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteResourceAssociationAuthorizationCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteResourceAssociationAuthorizationCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteResourceAssociationAuthorization(*DeleteResourceAssociationAuthorizationInput) (*DeleteResourceAssociationAuthorizationOutput, error)
+	DeleteResourceAssociationAuthorizationWithContext(byteplus.Context, *DeleteResourceAssociationAuthorizationInput, ...request.Option) (*DeleteResourceAssociationAuthorizationOutput, error)
+	DeleteResourceAssociationAuthorizationRequest(*DeleteResourceAssociationAuthorizationInput) (*request.Request, *DeleteResourceAssociationAuthorizationOutput)
 
 	IncBindVPCCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	IncBindVPCCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -230,6 +246,14 @@ type PRIVATEZONEAPI interface {
 	ListResolverRulesWithContext(byteplus.Context, *ListResolverRulesInput, ...request.Option) (*ListResolverRulesOutput, error)
 	ListResolverRulesRequest(*ListResolverRulesInput) (*request.Request, *ListResolverRulesOutput)
 
+	ListResourceAssociationAuthorizationsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListResourceAssociationAuthorizationsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListResourceAssociationAuthorizationsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListResourceAssociationAuthorizations(*ListResourceAssociationAuthorizationsInput) (*ListResourceAssociationAuthorizationsOutput, error)
+	ListResourceAssociationAuthorizationsWithContext(byteplus.Context, *ListResourceAssociationAuthorizationsInput, ...request.Option) (*ListResourceAssociationAuthorizationsOutput, error)
+	ListResourceAssociationAuthorizationsRequest(*ListResourceAssociationAuthorizationsInput) (*request.Request, *ListResourceAssociationAuthorizationsOutput)
+
 	ListTagsForResourcesCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ListTagsForResourcesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	ListTagsForResourcesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -245,6 +269,14 @@ type PRIVATEZONEAPI interface {
 	ListUserVPC(*ListUserVPCInput) (*ListUserVPCOutput, error)
 	ListUserVPCWithContext(byteplus.Context, *ListUserVPCInput, ...request.Option) (*ListUserVPCOutput, error)
 	ListUserVPCRequest(*ListUserVPCInput) (*request.Request, *ListUserVPCOutput)
+
+	ListZonesByVPCCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListZonesByVPCCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListZonesByVPCCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListZonesByVPC(*ListZonesByVPCInput) (*ListZonesByVPCOutput, error)
+	ListZonesByVPCWithContext(byteplus.Context, *ListZonesByVPCInput, ...request.Option) (*ListZonesByVPCOutput, error)
+	ListZonesByVPCRequest(*ListZonesByVPCInput) (*request.Request, *ListZonesByVPCOutput)
 
 	QueryEcsHostSyncTaskCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	QueryEcsHostSyncTaskCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
