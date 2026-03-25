@@ -78,7 +78,7 @@ jobs:
 
           PAYLOAD=$(cat <<EOF
           {
-            "action": "go",
+            "action": "go_byteplus",
             "workflow_run": {
               "id": ${{ github.run_id }},
               "name": "${{ github.workflow }}",
