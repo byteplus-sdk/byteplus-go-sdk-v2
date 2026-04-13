@@ -38,14 +38,6 @@ type RDSMYSQLV2API interface {
 	AddDiagnosticsEntityWithContext(byteplus.Context, *AddDiagnosticsEntityInput, ...request.Option) (*AddDiagnosticsEntityOutput, error)
 	AddDiagnosticsEntityRequest(*AddDiagnosticsEntityInput) (*request.Request, *AddDiagnosticsEntityOutput)
 
-	AddTagFromUserBackupInfoCommon(*map[string]interface{}) (*map[string]interface{}, error)
-	AddTagFromUserBackupInfoCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
-	AddTagFromUserBackupInfoCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
-
-	AddTagFromUserBackupInfo(*AddTagFromUserBackupInfoInput) (*AddTagFromUserBackupInfoOutput, error)
-	AddTagFromUserBackupInfoWithContext(byteplus.Context, *AddTagFromUserBackupInfoInput, ...request.Option) (*AddTagFromUserBackupInfoOutput, error)
-	AddTagFromUserBackupInfoRequest(*AddTagFromUserBackupInfoInput) (*request.Request, *AddTagFromUserBackupInfoOutput)
-
 	AddTagsToResourceCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	AddTagsToResourceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	AddTagsToResourceCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -61,22 +53,6 @@ type RDSMYSQLV2API interface {
 	AssociateAllowList(*AssociateAllowListInput) (*AssociateAllowListOutput, error)
 	AssociateAllowListWithContext(byteplus.Context, *AssociateAllowListInput, ...request.Option) (*AssociateAllowListOutput, error)
 	AssociateAllowListRequest(*AssociateAllowListInput) (*request.Request, *AssociateAllowListOutput)
-
-	AssociateUserBackupCommon(*map[string]interface{}) (*map[string]interface{}, error)
-	AssociateUserBackupCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
-	AssociateUserBackupCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
-
-	AssociateUserBackup(*AssociateUserBackupInput) (*AssociateUserBackupOutput, error)
-	AssociateUserBackupWithContext(byteplus.Context, *AssociateUserBackupInput, ...request.Option) (*AssociateUserBackupOutput, error)
-	AssociateUserBackupRequest(*AssociateUserBackupInput) (*request.Request, *AssociateUserBackupOutput)
-
-	CheckUserUploadBackupCommon(*map[string]interface{}) (*map[string]interface{}, error)
-	CheckUserUploadBackupCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
-	CheckUserUploadBackupCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
-
-	CheckUserUploadBackup(*CheckUserUploadBackupInput) (*CheckUserUploadBackupOutput, error)
-	CheckUserUploadBackupWithContext(byteplus.Context, *CheckUserUploadBackupInput, ...request.Option) (*CheckUserUploadBackupOutput, error)
-	CheckUserUploadBackupRequest(*CheckUserUploadBackupInput) (*request.Request, *CheckUserUploadBackupOutput)
 
 	CleanNonWhiteSessionCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	CleanNonWhiteSessionCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -285,14 +261,6 @@ type RDSMYSQLV2API interface {
 	DeleteParameterTemplate(*DeleteParameterTemplateInput) (*DeleteParameterTemplateOutput, error)
 	DeleteParameterTemplateWithContext(byteplus.Context, *DeleteParameterTemplateInput, ...request.Option) (*DeleteParameterTemplateOutput, error)
 	DeleteParameterTemplateRequest(*DeleteParameterTemplateInput) (*request.Request, *DeleteParameterTemplateOutput)
-
-	DeleteUserUploadBackupCommon(*map[string]interface{}) (*map[string]interface{}, error)
-	DeleteUserUploadBackupCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
-	DeleteUserUploadBackupCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
-
-	DeleteUserUploadBackup(*DeleteUserUploadBackupInput) (*DeleteUserUploadBackupOutput, error)
-	DeleteUserUploadBackupWithContext(byteplus.Context, *DeleteUserUploadBackupInput, ...request.Option) (*DeleteUserUploadBackupOutput, error)
-	DeleteUserUploadBackupRequest(*DeleteUserUploadBackupInput) (*request.Request, *DeleteUserUploadBackupOutput)
 
 	DescribeAllowListDetailCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DescribeAllowListDetailCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -742,22 +710,6 @@ type RDSMYSQLV2API interface {
 	DescribeUpgradeEngineMajorVersionPrecheckResultWithContext(byteplus.Context, *DescribeUpgradeEngineMajorVersionPrecheckResultInput, ...request.Option) (*DescribeUpgradeEngineMajorVersionPrecheckResultOutput, error)
 	DescribeUpgradeEngineMajorVersionPrecheckResultRequest(*DescribeUpgradeEngineMajorVersionPrecheckResultInput) (*request.Request, *DescribeUpgradeEngineMajorVersionPrecheckResultOutput)
 
-	DescribeUserTosBackupAssociateCommon(*map[string]interface{}) (*map[string]interface{}, error)
-	DescribeUserTosBackupAssociateCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
-	DescribeUserTosBackupAssociateCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
-
-	DescribeUserTosBackupAssociate(*DescribeUserTosBackupAssociateInput) (*DescribeUserTosBackupAssociateOutput, error)
-	DescribeUserTosBackupAssociateWithContext(byteplus.Context, *DescribeUserTosBackupAssociateInput, ...request.Option) (*DescribeUserTosBackupAssociateOutput, error)
-	DescribeUserTosBackupAssociateRequest(*DescribeUserTosBackupAssociateInput) (*request.Request, *DescribeUserTosBackupAssociateOutput)
-
-	DescribeUserUploadBackupsCommon(*map[string]interface{}) (*map[string]interface{}, error)
-	DescribeUserUploadBackupsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
-	DescribeUserUploadBackupsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
-
-	DescribeUserUploadBackups(*DescribeUserUploadBackupsInput) (*DescribeUserUploadBackupsOutput, error)
-	DescribeUserUploadBackupsWithContext(byteplus.Context, *DescribeUserUploadBackupsInput, ...request.Option) (*DescribeUserUploadBackupsOutput, error)
-	DescribeUserUploadBackupsRequest(*DescribeUserUploadBackupsInput) (*request.Request, *DescribeUserUploadBackupsOutput)
-
 	DisassociateAllowListCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DisassociateAllowListCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	DisassociateAllowListCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -845,6 +797,14 @@ type RDSMYSQLV2API interface {
 	ModifyBackupEncryptionPolicy(*ModifyBackupEncryptionPolicyInput) (*ModifyBackupEncryptionPolicyOutput, error)
 	ModifyBackupEncryptionPolicyWithContext(byteplus.Context, *ModifyBackupEncryptionPolicyInput, ...request.Option) (*ModifyBackupEncryptionPolicyOutput, error)
 	ModifyBackupEncryptionPolicyRequest(*ModifyBackupEncryptionPolicyInput) (*request.Request, *ModifyBackupEncryptionPolicyOutput)
+
+	ModifyBackupNameCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyBackupNameCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyBackupNameCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyBackupName(*ModifyBackupNameInput) (*ModifyBackupNameOutput, error)
+	ModifyBackupNameWithContext(byteplus.Context, *ModifyBackupNameInput, ...request.Option) (*ModifyBackupNameOutput, error)
+	ModifyBackupNameRequest(*ModifyBackupNameInput) (*request.Request, *ModifyBackupNameOutput)
 
 	ModifyBackupPolicyCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ModifyBackupPolicyCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -1094,6 +1054,14 @@ type RDSMYSQLV2API interface {
 	ModifyTaskWithContext(byteplus.Context, *ModifyTaskInput, ...request.Option) (*ModifyTaskOutput, error)
 	ModifyTaskRequest(*ModifyTaskInput) (*request.Request, *ModifyTaskOutput)
 
+	RebuildDBGreenInstanceCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	RebuildDBGreenInstanceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	RebuildDBGreenInstanceCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	RebuildDBGreenInstance(*RebuildDBGreenInstanceInput) (*RebuildDBGreenInstanceOutput, error)
+	RebuildDBGreenInstanceWithContext(byteplus.Context, *RebuildDBGreenInstanceInput, ...request.Option) (*RebuildDBGreenInstanceOutput, error)
+	RebuildDBGreenInstanceRequest(*RebuildDBGreenInstanceInput) (*request.Request, *RebuildDBGreenInstanceOutput)
+
 	RebuildDBInstanceCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	RebuildDBInstanceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	RebuildDBInstanceCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -1117,14 +1085,6 @@ type RDSMYSQLV2API interface {
 	RemoveDiagnosticsEntity(*RemoveDiagnosticsEntityInput) (*RemoveDiagnosticsEntityOutput, error)
 	RemoveDiagnosticsEntityWithContext(byteplus.Context, *RemoveDiagnosticsEntityInput, ...request.Option) (*RemoveDiagnosticsEntityOutput, error)
 	RemoveDiagnosticsEntityRequest(*RemoveDiagnosticsEntityInput) (*request.Request, *RemoveDiagnosticsEntityOutput)
-
-	RemoveTagFromUserBackupInfoCommon(*map[string]interface{}) (*map[string]interface{}, error)
-	RemoveTagFromUserBackupInfoCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
-	RemoveTagFromUserBackupInfoCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
-
-	RemoveTagFromUserBackupInfo(*RemoveTagFromUserBackupInfoInput) (*RemoveTagFromUserBackupInfoOutput, error)
-	RemoveTagFromUserBackupInfoWithContext(byteplus.Context, *RemoveTagFromUserBackupInfoInput, ...request.Option) (*RemoveTagFromUserBackupInfoOutput, error)
-	RemoveTagFromUserBackupInfoRequest(*RemoveTagFromUserBackupInfoInput) (*request.Request, *RemoveTagFromUserBackupInfoOutput)
 
 	RemoveTagsFromResourceCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	RemoveTagsFromResourceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -1173,14 +1133,6 @@ type RDSMYSQLV2API interface {
 	RestoreToNewInstance(*RestoreToNewInstanceInput) (*RestoreToNewInstanceOutput, error)
 	RestoreToNewInstanceWithContext(byteplus.Context, *RestoreToNewInstanceInput, ...request.Option) (*RestoreToNewInstanceOutput, error)
 	RestoreToNewInstanceRequest(*RestoreToNewInstanceInput) (*request.Request, *RestoreToNewInstanceOutput)
-
-	RestoreToNewInstanceFromUserTosCommon(*map[string]interface{}) (*map[string]interface{}, error)
-	RestoreToNewInstanceFromUserTosCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
-	RestoreToNewInstanceFromUserTosCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
-
-	RestoreToNewInstanceFromUserTos(*RestoreToNewInstanceFromUserTosInput) (*RestoreToNewInstanceFromUserTosOutput, error)
-	RestoreToNewInstanceFromUserTosWithContext(byteplus.Context, *RestoreToNewInstanceFromUserTosInput, ...request.Option) (*RestoreToNewInstanceFromUserTosOutput, error)
-	RestoreToNewInstanceFromUserTosRequest(*RestoreToNewInstanceFromUserTosInput) (*request.Request, *RestoreToNewInstanceFromUserTosOutput)
 
 	RevokeDBAccountPrivilegeCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	RevokeDBAccountPrivilegeCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
