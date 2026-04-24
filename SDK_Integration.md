@@ -131,14 +131,17 @@ setx BYTEPLUS_SESSION_TOKEN yourSessionToken /M
 
 # Credentials
 
-BytePlus SDK supports three mainstream authentication methods:
+BytePlus SDK supports the following authentication methods:
 
-
-| Method         | Typical Scenario                                    |
+| Method | Typical Scenario |
 | -------------- | --------------------------------------------------- |
-| **AK / SK**    | Long-term server workloads.                         |
-| **STS Token**  | Short-lived access, e.g. mobile or browser clients. |
-| **AssumeRole** | Cross-account or fine-grained delegated access.     |
+| **AK / SK** | Long-term server workloads. |
+| **STS Token** | Short-lived access, e.g. mobile or browser clients. |
+| **AssumeRole** | Cross-account or fine-grained delegated access. |
+| **AssumeRoleWithOIDC** | OIDC federation with temporary credentials. |
+| **CLI Profile** | Reuse byteplus-cli login and profile configuration. |
+| **ECS Role** | Obtain instance role credentials from IMDS. |
+| **Default Credential Chain** | Let the SDK resolve credentials automatically. |
 
 Environment-variable loading is described in [Environment Variables](#environment-variables).
 
@@ -219,6 +222,125 @@ func main() {
 
     sess, err := session.NewSession(cfg)
     if err != nil { panic(err) }
+}
+```
+
+## AssumeRoleWithOIDC
+
+Use OIDC federation to exchange an OIDC token file for temporary credentials.
+
+Required environment variables:
+
+- `BYTEPLUS_OIDC_TOKEN_FILE`
+- `BYTEPLUS_OIDC_ROLE_TRN`
+
+Optional environment variables:
+
+- `BYTEPLUS_OIDC_ROLE_SESSION_NAME`
+- `BYTEPLUS_OIDC_ROLE_POLICY`
+- `BYTEPLUS_OIDC_STS_ENDPOINT`
+
+```go
+func main() {
+    cfg := byteplus.NewConfig().
+        WithRegion("ap-southeast-1").
+        WithCredentials(credentials.NewCredentials(credentials.NewOIDCCredentialsProviderFromEnv()))
+
+    sess, err := session.NewSession(cfg)
+    if err != nil { panic(err) }
+    _ = sess
+}
+```
+
+## CLI Profile
+
+`CliProvider` reads credentials from the byteplus-cli config file (`~/.byteplus/config.json`).
+
+Priority order:
+
+- Config path: constructor param > `BYTEPLUS_CLI_CONFIG_FILE` > `~/.byteplus/config.json`
+- Profile: constructor param > `BYTEPLUS_CLI_PROFILE` > `BYTEPLUS_PROFILE` > `current` > `default`
+
+Supported profile modes:
+
+| Mode | Description |
+| --- | --- |
+| `ak` | Static AK/SK from CLI profile |
+| `ststoken` | Temporary AK/SK/SessionToken from CLI profile |
+| `sso` | SSO login via device authorization |
+| `ramrolearn` | Assume role using CLI profile AK/SK |
+| `oidc` | STS AssumeRoleWithOIDC via CLI profile |
+| `ecsrole` | ECS IMDS via CLI profile |
+
+```go
+func main() {
+    cfg := byteplus.NewConfig().
+        WithRegion("ap-southeast-1").
+        WithCredentials(clicreds.NewCliCredentials("", ""))
+
+    sess, err := session.NewSession(cfg)
+    if err != nil { panic(err) }
+    _ = sess
+}
+```
+
+## ECS Role
+
+`EcsRoleProvider` retrieves temporary credentials from the ECS Instance Metadata Service (IMDSv2).
+
+Role name resolution order:
+
+1. Constructor argument
+2. `BYTEPLUS_ECS_METADATA`
+3. Auto-detected from IMDS
+
+To disable IMDS retrieval, set `BYTEPLUS_ECS_METADATA_DISABLED=true`.
+
+```go
+func main() {
+    cfg := byteplus.NewConfig().
+        WithRegion("ap-southeast-1").
+        WithCredentials(credentials.NewEcsRoleCredentials("your-ecs-role-name"))
+
+    sess, err := session.NewSession(cfg)
+    if err != nil { panic(err) }
+    _ = sess
+}
+```
+
+## Default Credential Chain
+
+When you do not configure credentials explicitly, the SDK uses this default chain:
+
+1. `EnvProvider` — environment variables
+2. `OIDCCredentialsProvider` — OIDC from env vars
+3. `CliProvider` — CLI config file
+4. `EcsRoleProvider` — ECS IMDS
+
+Implicit usage:
+
+```go
+func main() {
+    cfg := byteplus.NewConfig().WithRegion("ap-southeast-1")
+    sess, err := session.NewSession(cfg)
+    if err != nil { panic(err) }
+    _ = sess
+}
+```
+
+Explicit usage with options:
+
+```go
+func main() {
+    cfg := byteplus.NewConfig().
+        WithRegion("ap-southeast-1").
+        WithCredentials(defaults.NewDefaultCredentialProvider(func(o *credentials.DefaultCredentialProviderOptions) {
+            o.RoleName = "your-ecs-role-name"
+        }))
+
+    sess, err := session.NewSession(cfg)
+    if err != nil { panic(err) }
+    _ = sess
 }
 ```
 

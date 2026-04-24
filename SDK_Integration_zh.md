@@ -106,7 +106,7 @@ setx BYTEPLUS_SESSION_TOKEN yourSessionToken /M
 
 # 访问凭据
 
-为保障资源访问安全，Byteplus SDK 支持三种主流的认证方式：**AK/SK**、**STS 临时凭证** 和 **AssumeRole**。不同认证方式适用于不同场景，开发者可根据业务需求选择合适的方式接入。
+为保障资源访问安全，Byteplus SDK 支持以下认证方式：**AK/SK**、**STS 临时凭证**、**AssumeRole**、**AssumeRoleWithOIDC**、**CLI Profile**、**ECS Role** 和 **默认凭证链**。开发者可根据业务需求选择合适的方式接入。
 
 环境变量设置可以参考这里:[**环境变量设置**](#环境变量设置)
 
@@ -194,6 +194,135 @@ func main() {
     if err != nil {
         panic(err)
     }
+}
+```
+
+## AssumeRoleWithOIDC
+
+通过 OIDC Token 文件换取临时访问凭证。
+
+必填环境变量：
+
+- `BYTEPLUS_OIDC_TOKEN_FILE`
+- `BYTEPLUS_OIDC_ROLE_TRN`
+
+可选环境变量：
+
+- `BYTEPLUS_OIDC_ROLE_SESSION_NAME`
+- `BYTEPLUS_OIDC_ROLE_POLICY`
+- `BYTEPLUS_OIDC_STS_ENDPOINT`
+
+```go
+func main() {
+    config := byteplus.NewConfig().
+        WithRegion("ap-southeast-1").
+        WithCredentials(credentials.NewCredentials(credentials.NewOIDCCredentialsProviderFromEnv()))
+
+    sess, err := session.NewSession(config)
+    if err != nil {
+        panic(err)
+    }
+    _ = sess
+}
+```
+
+## CLI Profile
+
+`CliProvider` 从 byteplus-cli 配置文件 `~/.byteplus/config.json` 读取凭证。
+
+优先级：
+
+- 配置文件路径：构造参数 > `BYTEPLUS_CLI_CONFIG_FILE` > `~/.byteplus/config.json`
+- Profile：构造参数 > `BYTEPLUS_CLI_PROFILE` > `BYTEPLUS_PROFILE` > `current` > `default`
+
+支持的 mode：
+
+| mode | 说明 |
+| --- | --- |
+| `ak` | 从 CLI profile 读取 AK/SK |
+| `ststoken` | 从 CLI profile 读取临时 AK/SK/SessionToken |
+| `sso` | 使用设备授权登录的 SSO |
+| `ramrolearn` | 使用 CLI profile 中的 AK/SK 扮演角色 |
+| `oidc` | 通过 CLI profile 使用 AssumeRoleWithOIDC |
+| `ecsrole` | 通过 CLI profile 使用 ECS IMDS |
+
+```go
+func main() {
+    config := byteplus.NewConfig().
+        WithRegion("ap-southeast-1").
+        WithCredentials(clicreds.NewCliCredentials("", ""))
+
+    sess, err := session.NewSession(config)
+    if err != nil {
+        panic(err)
+    }
+    _ = sess
+}
+```
+
+## ECS Role
+
+`EcsRoleProvider` 通过 ECS 实例元数据服务 (IMDSv2) 获取临时凭证。
+
+角色名解析顺序：
+
+1. 构造参数
+2. `BYTEPLUS_ECS_METADATA`
+3. 从 IMDS 自动探测
+
+如需禁用 IMDS 获取，设置 `BYTEPLUS_ECS_METADATA_DISABLED=true`。
+
+```go
+func main() {
+    config := byteplus.NewConfig().
+        WithRegion("ap-southeast-1").
+        WithCredentials(credentials.NewEcsRoleCredentials("your-ecs-role-name"))
+
+    sess, err := session.NewSession(config)
+    if err != nil {
+        panic(err)
+    }
+    _ = sess
+}
+```
+
+## 默认凭证链
+
+当未显式配置凭证时，SDK 默认按如下顺序解析：
+
+1. `EnvProvider` —— 环境变量
+2. `OIDCCredentialsProvider` —— OIDC 环境变量
+3. `CliProvider` —— CLI 配置文件
+4. `EcsRoleProvider` —— ECS IMDS
+
+隐式使用：
+
+```go
+func main() {
+    config := byteplus.NewConfig().WithRegion("ap-southeast-1")
+    sess, err := session.NewSession(config)
+    if err != nil {
+        panic(err)
+    }
+    _ = sess
+}
+```
+
+显式使用（例如指定 ECS 角色名）：
+
+```go
+func main() {
+    config := byteplus.NewConfig().
+        WithRegion("ap-southeast-1").
+        WithCredentials(defaults.NewDefaultCredentialProvider(func(o *credentials.DefaultCredentialProviderOptions) {
+            o.RoleName = "your-ecs-role-name"
+        }))
+
+    sess, err := session.NewSession(config)
+    if err != nil {
+        panic(err)
+    }
+    _ = sess
 }
 ```
 

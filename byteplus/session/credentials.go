@@ -4,12 +4,10 @@ package session
 // May have been modified by Byteplus.
 
 import (
-	"fmt"
-
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
-	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/bytepluserr"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials/processcreds"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/defaults"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/request"
 )
 
@@ -65,22 +63,7 @@ func resolveCredsFromProfile(cfg *byteplus.Config,
 		)
 
 	default:
-		// Fallback to default credentials provider, include mock errors for
-		// the credential chain so user can identify why credentials failed to
-		// be retrieved.
-		creds = credentials.NewCredentials(&credentials.ChainProvider{
-			VerboseErrors: byteplus.BoolValue(cfg.CredentialsChainVerboseErrors),
-			Providers: []credentials.Provider{
-				&credProviderError{
-					Err: bytepluserr.New("EnvAccessKeyNotFound",
-						"failed to find credentials in the environment.", nil),
-				},
-				&credProviderError{
-					Err: bytepluserr.New("SharedCredsLoad",
-						fmt.Sprintf("failed to load profile, %s.", envCfg.Profile), nil),
-				},
-			},
-		})
+		creds = defaults.NewDefaultCredentialProvider()
 	}
 	if err != nil {
 		return nil, err

@@ -21,6 +21,10 @@ const (
 	CliProviderName = "CliProvider"
 	modeSSO         = "sso"
 	modeAK          = "ak"
+	modeStsToken    = "ststoken"
+	modeRamRoleArn  = "ramrolearn"
+	modeOIDC        = "oidc"
+	modeEcsRole     = "ecsrole"
 	defaultRegion   = "ap-southeast-1"
 )
 
@@ -39,6 +43,11 @@ type cliProfile struct {
 	SsoSessionName string `json:"sso-session-name"`
 	AccountId      string `json:"account-id"`
 	RoleName       string `json:"role-name"`
+	OIDCTokenFile  string `json:"oidc-token-file"`
+	RoleTrn        string `json:"role-trn"`
+	Region         string `json:"region"`
+	Endpoint       string `json:"endpoint"`
+	DisableSSL     bool   `json:"disable-ssl"`
 }
 
 type SsoSession struct {
@@ -69,19 +78,35 @@ type SsoTokenCache struct {
 type CliProvider struct {
 	credentials.Expiry
 
-	// filePath is path to ~/.byteplus/config.json. If empty, it will use the
-	// default path derived from the current user's home directory.
 	configPath string
-
-	// Directory for caching SSO token information
-	cacheDir string
-
-	// Profile is the profile name in the config. If empty, it will first try
-	// VOLCSTACK_PROFILE, then use config.current.
-	profile string
+	cacheDir   string
+	profile    string
+	delegate   credentials.Provider
 
 	retrieved     bool
 	hasExpiration bool
+}
+
+// NewCliProvider returns a raw *CliProvider for use in the default credential
+// chain. Unlike NewCliCredentials, it does not wrap in a Credentials object,
+// allowing the chain to manage expiration and caching uniformly.
+func NewCliProvider(configPath, profile string) *CliProvider {
+	if configPath == "" {
+		home := shareddefaults.UserHomeDir()
+		if home != "" {
+			configPath = filepath.Join(home, ".byteplus", "config.json")
+		}
+	}
+	cacheDir := ""
+	if configPath != "" {
+		cacheDir = filepath.Join(filepath.Dir(configPath), "sso", "cache")
+	}
+	return &CliProvider{
+		configPath: configPath,
+		cacheDir:   cacheDir,
+		profile:    profile,
+		Expiry:     credentials.Expiry{},
+	}
 }
 
 // NewCliCredentials returns a pointer to a new Credentials object wrapping the
@@ -106,13 +131,28 @@ func NewCliCredentials(configPath, profile string) *credentials.Credentials {
 }
 
 func (p *CliProvider) Retrieve() (credentials.Value, error) {
+	if p.delegate != nil && !p.delegate.IsExpired() {
+		return p.delegate.Retrieve()
+	}
+
 	p.retrieved = false
 	p.hasExpiration = false
+	p.delegate = nil
 	p.SetExpiration(time.Time{}, 0)
 
-	configPath, err := p.getConfigPath()
-	if err != nil {
-		return credentials.Value{ProviderName: CliProviderName}, err
+	configPath := p.configPath
+	if configPath == "" {
+		if env := credentials.GetEnvWithFallback("BYTEPLUS_CLI_CONFIG_FILE"); env != "" {
+			configPath = env
+			p.configPath = configPath
+		} else {
+			home := shareddefaults.UserHomeDir()
+			if home == "" {
+				return credentials.Value{ProviderName: CliProviderName}, credentials.ErrSharedCredentialsHomeNotFound
+			}
+			configPath = filepath.Join(home, ".byteplus", "config.json")
+			p.configPath = configPath
+		}
 	}
 
 	b, err := ioutil.ReadFile(configPath)
@@ -157,8 +197,16 @@ func (p *CliProvider) Retrieve() (credentials.Value, error) {
 	switch mode {
 	case "", modeAK:
 		return p.retrieveAK(profile, profileName, configPath)
+	case modeStsToken:
+		return p.retrieveStsToken(profile, profileName, configPath)
 	case modeSSO:
 		return p.retrieveSSO(profile, profileName, configPath, cfg)
+	case modeRamRoleArn:
+		return p.retrieveRamRoleArn(profile, profileName, configPath)
+	case modeOIDC:
+		return p.retrieveOIDC(profile, profileName, configPath)
+	case modeEcsRole:
+		return p.retrieveEcsRole(profile, profileName, configPath)
 	default:
 		return credentials.Value{ProviderName: CliProviderName}, bytepluserr.New(
 			"CliConfigModeInvalid",
@@ -180,6 +228,38 @@ func (p *CliProvider) retrieveAK(profile *cliProfile, profileName, configPath st
 		return credentials.Value{ProviderName: CliProviderName}, bytepluserr.New(
 			"CliConfigSecretKey",
 			fmt.Sprintf("cli config profile %s in %s did not contain secret-key", profileName, configPath),
+			nil,
+		)
+	}
+
+	p.retrieved = true
+	return credentials.Value{
+		AccessKeyID:     profile.AccessKey,
+		SecretAccessKey: profile.SecretKey,
+		SessionToken:    profile.SessionToken,
+		ProviderName:    CliProviderName,
+	}, nil
+}
+
+func (p *CliProvider) retrieveStsToken(profile *cliProfile, profileName, configPath string) (credentials.Value, error) {
+	if len(profile.AccessKey) == 0 {
+		return credentials.Value{ProviderName: CliProviderName}, bytepluserr.New(
+			"CliConfigAccessKey",
+			fmt.Sprintf("cli config profile %s in %s did not contain access-key (required for StsToken mode)", profileName, configPath),
+			nil,
+		)
+	}
+	if len(profile.SecretKey) == 0 {
+		return credentials.Value{ProviderName: CliProviderName}, bytepluserr.New(
+			"CliConfigSecretKey",
+			fmt.Sprintf("cli config profile %s in %s did not contain secret-key (required for StsToken mode)", profileName, configPath),
+			nil,
+		)
+	}
+	if len(profile.SessionToken) == 0 {
+		return credentials.Value{ProviderName: CliProviderName}, bytepluserr.New(
+			"CliConfigSessionToken",
+			fmt.Sprintf("cli config profile %s in %s did not contain session-token (required for StsToken mode)", profileName, configPath),
 			nil,
 		)
 	}
@@ -318,6 +398,9 @@ func (p *CliProvider) resolveSsoSession(profile *cliProfile, profileName, config
 	}
 
 	region := strings.TrimSpace(session.Region)
+	if region == "" {
+		region = strings.TrimSpace(profile.Region)
+	}
 	if region == "" {
 		region = defaultRegion
 	}
@@ -478,6 +561,108 @@ func (p *CliProvider) getRoleCredentials(accessToken string, profile *cliProfile
 	}, nil
 }
 
+func (p *CliProvider) retrieveRamRoleArn(profile *cliProfile, profileName, configPath string) (credentials.Value, error) {
+	if p.delegate == nil {
+		if len(profile.AccessKey) == 0 {
+			return credentials.Value{ProviderName: CliProviderName}, bytepluserr.New(
+				"CliConfigAccessKey",
+				fmt.Sprintf("cli config profile %s in %s did not contain access-key (required for RamRoleArn mode)", profileName, configPath),
+				nil,
+			)
+		}
+		if len(profile.SecretKey) == 0 {
+			return credentials.Value{ProviderName: CliProviderName}, bytepluserr.New(
+				"CliConfigSecretKey",
+				fmt.Sprintf("cli config profile %s in %s did not contain secret-key (required for RamRoleArn mode)", profileName, configPath),
+				nil,
+			)
+		}
+		if len(strings.TrimSpace(profile.RoleName)) == 0 {
+			return credentials.Value{ProviderName: CliProviderName}, bytepluserr.New(
+				"CliConfigRoleNameMissing",
+				fmt.Sprintf("cli config profile %s in %s did not contain role-name (required for RamRoleArn mode)", profileName, configPath),
+				nil,
+			)
+		}
+		if len(strings.TrimSpace(profile.AccountId)) == 0 {
+			return credentials.Value{ProviderName: CliProviderName}, bytepluserr.New(
+				"CliConfigAccountIDMissing",
+				fmt.Sprintf("cli config profile %s in %s did not contain account-id (required for RamRoleArn mode)", profileName, configPath),
+				nil,
+			)
+		}
+		region := strings.TrimSpace(profile.Region)
+		if region == "" {
+			region = defaultRegion
+		}
+		schema := "https"
+		if profile.DisableSSL {
+			schema = "http"
+		}
+		host := credentials.DefaultEndpoint
+		if strings.TrimSpace(profile.Endpoint) != "" {
+			host = strings.TrimSpace(profile.Endpoint)
+		}
+		stsProvider := &credentials.StsProvider{
+			StsValue: credentials.StsValue{
+				AccessKey:       profile.AccessKey,
+				SecurityKey:     profile.SecretKey,
+				RoleName:        profile.RoleName,
+				AccountId:       profile.AccountId,
+				Region:          region,
+				Schema:          schema,
+				Host:            host,
+				Timeout:         5 * time.Second,
+				DurationSeconds: 3600,
+			},
+		}
+		p.delegate = stsProvider
+	}
+	return p.delegate.Retrieve()
+}
+
+func (p *CliProvider) retrieveOIDC(profile *cliProfile, profileName, configPath string) (credentials.Value, error) {
+	if p.delegate == nil {
+		tokenFile := strings.TrimSpace(profile.OIDCTokenFile)
+		if tokenFile == "" {
+			return credentials.Value{ProviderName: CliProviderName}, bytepluserr.New(
+				"CliConfigOIDCTokenFileMissing",
+				fmt.Sprintf("cli config profile %s in %s did not contain oidc-token-file", profileName, configPath),
+				nil,
+			)
+		}
+		roleTrn := strings.TrimSpace(profile.RoleTrn)
+		if roleTrn == "" {
+			return credentials.Value{ProviderName: CliProviderName}, bytepluserr.New(
+				"CliConfigOIDCRoleTrnMissing",
+				fmt.Sprintf("cli config profile %s in %s did not contain role-trn", profileName, configPath),
+				nil,
+			)
+		}
+		p.delegate = &credentials.OIDCCredentialsProvider{
+			OIDCTokenFilePath: tokenFile,
+			RoleTrn:           roleTrn,
+			DurationSeconds:   3600,
+		}
+	}
+	return p.delegate.Retrieve()
+}
+
+func (p *CliProvider) retrieveEcsRole(profile *cliProfile, profileName, configPath string) (credentials.Value, error) {
+	if p.delegate == nil {
+		roleName := strings.TrimSpace(profile.RoleName)
+		if roleName == "" {
+			return credentials.Value{ProviderName: CliProviderName}, bytepluserr.New(
+				"CliConfigRoleNameMissing",
+				fmt.Sprintf("cli config profile %s in %s did not contain role-name (required for EcsRole mode)", profileName, configPath),
+				nil,
+			)
+		}
+		p.delegate = credentials.NewEcsRoleProvider(roleName)
+	}
+	return p.delegate.Retrieve()
+}
+
 func loadSsoTokenCache(path string) (*SsoTokenCache, error) {
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
@@ -556,6 +741,9 @@ func isRefreshTokenExpired(cache *SsoTokenCache) (bool, error) {
 }
 
 func (p *CliProvider) IsExpired() bool {
+	if p.delegate != nil {
+		return p.delegate.IsExpired()
+	}
 	if !p.retrieved {
 		return true
 	}
@@ -565,28 +753,9 @@ func (p *CliProvider) IsExpired() bool {
 	return false
 }
 
-func (p *CliProvider) getConfigPath() (string, error) {
-	if len(p.configPath) != 0 {
-		return p.configPath, nil
-	}
-
-	if env := os.Getenv("BYTEPLUS_CLI_CONFIG_FILE"); env != "" {
-		p.configPath = env
-		return p.configPath, nil
-	}
-
-	home := shareddefaults.UserHomeDir()
-	if len(home) == 0 {
-		return "", credentials.ErrSharedCredentialsHomeNotFound
-	}
-
-	p.configPath = filepath.Join(home, ".byteplus", "config.json")
-	return p.configPath, nil
-}
-
 func (p *CliProvider) getProfile(cfg *cliConfigure) string {
 	if p.profile == "" {
-		p.profile = os.Getenv("BYTEPLUS_CLI_PROFILE")
+		p.profile = credentials.GetEnvWithFallback("BYTEPLUS_PROFILE", "BYTEPLUS_CLI_PROFILE")
 	}
 	if p.profile == "" && cfg != nil && cfg.Current != "" {
 		p.profile = cfg.Current
@@ -599,15 +768,15 @@ func (p *CliProvider) getProfile(cfg *cliConfigure) string {
 
 func UnixTimestampToTime(ts int64) time.Time {
 	switch {
-	case ts >= 1e18: // 纳秒
+	case ts >= 1e18:
 		return time.Unix(0, ts)
-	case ts >= 1e15: // 微秒
+	case ts >= 1e15:
 		return time.Unix(0, ts*int64(time.Microsecond))
-	case ts >= 1e12: // 毫秒
+	case ts >= 1e12:
 		sec := ts / 1000
 		nsec := (ts % 1000) * int64(time.Millisecond)
 		return time.Unix(sec, nsec)
-	default: // 秒
+	default:
 		return time.Unix(ts, 0)
 	}
 }
@@ -629,7 +798,6 @@ func tokenCacheFileName(startURL, sessionName string) string {
 	return fmt.Sprintf("%x.json", hash)
 }
 
-// 使用临时文件写入后原子替换，避免中断导致缓存损坏。
 func writeJSONFileAtomic(path string, perm os.FileMode, payload interface{}) (retErr error) {
 	dir := filepath.Dir(path)
 	tempFile, err := os.CreateTemp(dir, ".tmp-*")

@@ -27,9 +27,9 @@ var (
 //
 // Environment variables used:
 //
-// * Access Key ID:     BYTEPLUS_ACCESS_KEY_ID or BYTEPLUS_ACCESS_KEY
+// * Access Key ID:     BYTEPLUS_ACCESS_KEY_ID > BYTEPLUS_ACCESS_KEY
 //
-// * Secret Access Key: BYTEPLUS_SECRET_ACCESS_KEY or BYTEPLUS_SECRET_KEY
+// * Secret Access Key: BYTEPLUS_SECRET_ACCESS_KEY > BYTEPLUS_SECRET_KEY
 type EnvProvider struct {
 	retrieved bool
 }
@@ -44,15 +44,8 @@ func NewEnvCredentials() *Credentials {
 func (e *EnvProvider) Retrieve() (Value, error) {
 	e.retrieved = false
 
-	id := os.Getenv("BYTEPLUS_ACCESS_KEY_ID")
-	if id == "" {
-		id = os.Getenv("BYTEPLUS_ACCESS_KEY")
-	}
-
-	secret := os.Getenv("BYTEPLUS_SECRET_ACCESS_KEY")
-	if secret == "" {
-		secret = os.Getenv("BYTEPLUS_SECRET_KEY")
-	}
+	id := getEnvWithFallback("BYTEPLUS_ACCESS_KEY", "BYTEPLUS_ACCESS_KEY_ID")
+	secret := getEnvWithFallback("BYTEPLUS_SECRET_KEY", "BYTEPLUS_SECRET_ACCESS_KEY")
 
 	if id == "" {
 		return Value{ProviderName: EnvProviderName}, ErrAccessKeyIDNotFound
@@ -66,9 +59,23 @@ func (e *EnvProvider) Retrieve() (Value, error) {
 	return Value{
 		AccessKeyID:     id,
 		SecretAccessKey: secret,
-		SessionToken:    os.Getenv("BYTEPLUS_SESSION_TOKEN"),
+		SessionToken:    getEnvWithFallback("BYTEPLUS_SESSION_TOKEN"),
 		ProviderName:    EnvProviderName,
 	}, nil
+}
+
+func getEnvWithFallback(names ...string) string {
+	for _, name := range names {
+		if v := os.Getenv(name); v != "" {
+			return v
+		}
+	}
+	return ""
+}
+
+// GetEnvWithFallback returns the first non-empty environment variable value from the given list of names.
+func GetEnvWithFallback(names ...string) string {
+	return getEnvWithFallback(names...)
 }
 
 // IsExpired returns if the credentials have been retrieved.
