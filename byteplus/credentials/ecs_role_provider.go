@@ -19,8 +19,8 @@ const EcsRoleProviderName = "EcsRoleProvider"
 const (
 	// IMDSv2 endpoint and paths
 	imdsEndpoint      = "http://100.96.0.96"
-	imdsRoleCredsPath = "/volcstack/latest/iam/security_credentials/%s"        // POST
-	imdsRoleNamePath  = "/volcstack/latest/iam/security_credentials?type=user" // GET
+	imdsRoleCredsPath = "/volcstack/latest/iam/security_credentials/%s"        // GET
+	imdsRoleNamePath  = "/volcstack/latest/iam/security_credentials?fetchuserrole=true" // GET
 	imdsTokenPath     = "/latest/api/token"                                    // GET
 
 	// IMDSv2 headers
@@ -47,7 +47,7 @@ type imdsCredentialResponse struct {
 // Flow:
 //  1. GET IMDSv2 token (fresh every time, not cached)
 //  2. Resolve roleName: param > env > auto-detect from IMDS
-//  3. POST to get STS credentials with token header
+//  3. GET STS credentials with token header
 type EcsRoleProvider struct {
 	Expiry
 
@@ -127,7 +127,7 @@ func (p *EcsRoleProvider) Retrieve() (Value, error) {
 		return Value{ProviderName: EcsRoleProviderName}, err
 	}
 
-	// Step 3: POST to get credentials
+	// Step 3: GET to get credentials
 	creds, err := p.getCredentials(roleName, token)
 	if err != nil {
 		return Value{ProviderName: EcsRoleProviderName}, err
@@ -219,11 +219,11 @@ func (p *EcsRoleProvider) autoDetectRoleName(imdsToken string) (string, error) {
 	return roles[0], nil
 }
 
-// getCredentials POSTs to IMDS to get STS credentials for the given role.
+// getCredentials GET to IMDS to get STS credentials for the given role.
 func (p *EcsRoleProvider) getCredentials(roleName, imdsToken string) (*imdsCredentialResponse, error) {
 	url := fmt.Sprintf("%s"+imdsRoleCredsPath, imdsEndpoint, neturl.PathEscape(roleName))
 	headers := map[string]string{imdsTokenHeader: imdsToken}
-	body, err := p.doRequestWithRetry(url, "POST", headers)
+	body, err := p.doRequestWithRetry(url, "GET", headers)
 	if err != nil {
 		return nil, bytepluserr.New("EcsRoleCredentialsFailed",
 			fmt.Sprintf("failed to get credentials for role %s from IMDS", roleName), err)
