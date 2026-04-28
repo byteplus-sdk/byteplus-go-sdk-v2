@@ -15,11 +15,11 @@ const EnvProviderName = "EnvProvider"
 var (
 	// ErrAccessKeyIDNotFound is returned when the byteplus Access Key ID can't be
 	// found in the process's environment.
-	ErrAccessKeyIDNotFound = bytepluserr.New("EnvAccessKeyNotFound", "BYTEPLUS_ACCESS_KEY_ID or BYTEPLUS_ACCESS_KEY not found in environment", nil)
+	ErrAccessKeyIDNotFound = bytepluserr.New("EnvAccessKeyNotFound", "BYTEPLUS_ACCESS_KEY not found in environment", nil)
 
 	// ErrSecretAccessKeyNotFound is returned when the byteplus Secret Access Key
 	// can't be found in the process's environment.
-	ErrSecretAccessKeyNotFound = bytepluserr.New("EnvSecretNotFound", "BYTEPLUS_SECRET_ACCESS_KEY or BYTEPLUS_SECRET_KEY not found in environment", nil)
+	ErrSecretAccessKeyNotFound = bytepluserr.New("EnvSecretNotFound", "BYTEPLUS_SECRET_KEY not found in environment", nil)
 )
 
 // A EnvProvider retrieves credentials from the environment variables of the
