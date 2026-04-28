@@ -31,6 +31,10 @@ func (o *DefaultCredentialProviderOptions) IsReuseEnabled() bool {
 	return *o.ReuseLastProviderEnabled
 }
 
+// providerHolder wraps a Provider so that atomic.Value can store a nil Provider
+// without triggering "store of nil value into Value" panic.
+type providerHolder struct{ p Provider }
+
 // DefaultCredentialProvider implements Provider and walks through a chain of
 // credential providers. When reuseLastProviderEnabled is true (default), after
 // the first successful resolution the chain remembers the provider and reuses
@@ -38,7 +42,7 @@ func (o *DefaultCredentialProviderOptions) IsReuseEnabled() bool {
 // later fails.
 type DefaultCredentialProvider struct {
 	Providers    []Provider
-	lastProvider atomic.Value // stores Provider
+	lastProvider atomic.Value // stores providerHolder
 	reuseEnabled bool
 }
 
@@ -56,11 +60,13 @@ func NewDefaultCredentialProviderFromProviders(providers []Provider, reuseEnable
 // Retrieve walks the chain and returns the first successful credentials.
 func (d *DefaultCredentialProvider) Retrieve() (Value, error) {
 	if d.reuseEnabled {
-		if last, ok := d.lastProvider.Load().(Provider); ok && last != nil {
-			creds, err := last.Retrieve()
+		if h, ok := d.lastProvider.Load().(providerHolder); ok && h.p != nil {
+			creds, err := h.p.Retrieve()
 			if err == nil {
 				return creds, nil
 			}
+			// Clear cached provider and fall through to full traversal.
+			d.lastProvider.Store(providerHolder{})
 		}
 	}
 
@@ -69,7 +75,7 @@ func (d *DefaultCredentialProvider) Retrieve() (Value, error) {
 		creds, err := p.Retrieve()
 		if err == nil {
 			if d.reuseEnabled {
-				d.lastProvider.Store(p)
+				d.lastProvider.Store(providerHolder{p})
 			}
 			return creds, nil
 		}
@@ -87,8 +93,8 @@ func (d *DefaultCredentialProvider) Retrieve() (Value, error) {
 // If no provider has been cached yet, returns true to force a Retrieve.
 func (d *DefaultCredentialProvider) IsExpired() bool {
 	if d.reuseEnabled {
-		if last, ok := d.lastProvider.Load().(Provider); ok && last != nil {
-			return last.IsExpired()
+		if h, ok := d.lastProvider.Load().(providerHolder); ok && h.p != nil {
+			return h.p.IsExpired()
 		}
 	}
 	return true
