@@ -21,7 +21,7 @@ const (
 	imdsEndpoint      = "http://100.96.0.96"
 	imdsRoleCredsPath = "/volcstack/latest/iam/security_credentials/%s"        // GET
 	imdsRoleNamePath  = "/volcstack/latest/iam/security_credentials?fetchuserrole=true" // GET
-	imdsTokenPath     = "/latest/api/token"                                    // GET
+	imdsTokenPath     = "/latest/api/token"                                    // PUT
 
 	// IMDSv2 headers
 	imdsTokenTTLHeader  = "X-volc-ecs-metadata-token-ttl-seconds"
@@ -45,7 +45,7 @@ type imdsCredentialResponse struct {
 // EcsRoleProvider retrieves credentials from the ECS Instance Metadata Service (IMDSv2).
 //
 // Flow:
-//  1. GET IMDSv2 token (fresh every time, not cached)
+//  1. PUT to get IMDSv2 token (fresh every time)
 //  2. Resolve roleName: param > env > auto-detect from IMDS
 //  3. GET STS credentials with token header
 type EcsRoleProvider struct {
@@ -160,11 +160,11 @@ func isIMDSDisabled() bool {
 	return strings.EqualFold(v, "true")
 }
 
-// getIMDSv2Token fetches a fresh IMDSv2 token. Not cached.
+// getIMDSv2Token fetches a fresh IMDSv2 token via PUT.
 func (p *EcsRoleProvider) getIMDSv2Token() (string, error) {
 	url := imdsEndpoint + imdsTokenPath
 	headers := map[string]string{imdsTokenTTLHeader: imdsTokenTTLSeconds}
-	body, err := p.doRequestWithRetry(url, "GET", headers)
+	body, err := p.doRequestWithRetry(url, "PUT", headers)
 	if err != nil {
 		return "", bytepluserr.New("EcsRoleTokenFailed",
 			"failed to get IMDSv2 token", err)
