@@ -568,6 +568,7 @@ func (p *CliProvider) retrieveRamRoleArn(profile *cliProfile, profileName, confi
 			StsValue: credentials.StsValue{
 				AccessKey:       profile.AccessKey,
 				SecurityKey:     profile.SecretKey,
+				SessionToken:    profile.SessionToken,
 				RoleName:        profile.RoleName,
 				AccountId:       profile.AccountId,
 				Region:          region,

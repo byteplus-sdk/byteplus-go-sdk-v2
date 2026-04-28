@@ -4,11 +4,14 @@ package session
 // May have been modified by Byteplus.
 
 import (
+	"fmt"
+
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials/processcreds"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/defaults"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/request"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/bytepluserr"
 )
 
 func resolveCredentials(cfg *byteplus.Config,
@@ -63,7 +66,17 @@ func resolveCredsFromProfile(cfg *byteplus.Config,
 		)
 
 	default:
-		creds = defaults.NewDefaultCredentialProvider()
+		if len(sessOpts.Profile) != 0 {
+			creds = credentials.NewCredentials(&credProviderError{
+				Err: bytepluserr.New(
+					"SharedCredsLoad",
+					fmt.Sprintf("failed to load profile, %s.", sessOpts.Profile),
+					nil,
+				),
+			})
+		} else {
+			creds = defaults.CredChain(cfg, handlers)
+		}
 	}
 	if err != nil {
 		return nil, err
