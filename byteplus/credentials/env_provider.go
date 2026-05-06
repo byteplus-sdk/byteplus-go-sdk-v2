@@ -27,9 +27,9 @@ var (
 //
 // Environment variables used:
 //
-// * Access Key ID:     BYTEPLUS_ACCESS_KEY_ID > BYTEPLUS_ACCESS_KEY
+// * Access Key ID:     BYTEPLUS_ACCESS_KEY > BYTEPLUS_ACCESS_KEY_ID
 //
-// * Secret Access Key: BYTEPLUS_SECRET_ACCESS_KEY > BYTEPLUS_SECRET_KEY
+// * Secret Access Key: BYTEPLUS_SECRET_KEY > BYTEPLUS_SECRET_ACCESS_KEY
 type EnvProvider struct {
 	retrieved bool
 }

@@ -42,10 +42,12 @@ type cliProfile struct {
 	SsoSessionName string `json:"sso-session-name"`
 	AccountId      string `json:"account-id"`
 	RoleName       string `json:"role-name"`
-	OIDCTokenFile  string `json:"oidc-token-file"`
-	RoleTrn        string `json:"role-trn"`
-	Region         string `json:"region"`
-	DisableSSL     bool   `json:"disable-ssl"`
+	OIDCTokenFile    string `json:"oidc-token-file"`
+	RoleTrn          string `json:"role-trn"`
+	Region           string `json:"region"`
+	DisableSSL       bool   `json:"disable-ssl"`
+	EndpointResolver string `json:"endpoint-resolver,omitempty"`
+	UseDualStack     *bool  `json:"use-dual-stack,omitempty"`
 }
 
 type SsoSession struct {

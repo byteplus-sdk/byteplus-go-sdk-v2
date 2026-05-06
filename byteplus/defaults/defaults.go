@@ -121,6 +121,14 @@ func CredProviders(cfg *byteplus.Config, handlers request.Handlers) []credential
 // NewDefaultCredentialProvider creates a default credential chain with the
 // given options. This is the primary entry point for users who want to
 // customize the default chain (e.g., specify an ECS role name).
+//
+// Example:
+//
+//	creds := defaults.NewDefaultCredentialProvider(
+//	    func(o *credentials.DefaultCredentialProviderOptions) {
+//	        o.RoleName = "my-ecs-role"
+//	    },
+//	)
 func NewDefaultCredentialProvider(optFns ...func(*credentials.DefaultCredentialProviderOptions)) *credentials.Credentials {
 	opts := credentials.DefaultCredentialProviderOptions{}
 	for _, fn := range optFns {
