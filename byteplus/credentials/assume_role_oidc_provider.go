@@ -14,7 +14,7 @@ import (
 
 var _ Provider = &OIDCCredentialsProvider{}
 
-const DefaultEndpoint = "open.byteplusapi.com"
+const DefaultEndpoint = "sts.ap-southeast-1.byteplusapi.com"
 
 const (
 	defaultSessionName = "byteplus-go-sdk-oidc-session"
@@ -25,11 +25,11 @@ type HttpOptions struct {
 }
 
 type OIDCCredentials struct {
-	CurrentTime    string `json:"CurrentTime,omitempty"`
-	Expiration     string `json:"Expiration,omitempty"`
-	AccessKeyId    string `json:"AccessKeyId,omitempty"`
+	CurrentTime     string `json:"CurrentTime,omitempty"`
+	Expiration      string `json:"Expiration,omitempty"`
+	AccessKeyId     string `json:"AccessKeyId,omitempty"`
 	SecretAccessKey string `json:"SecretAccessKey,omitempty"`
-	SessionToken   string `json:"SessionToken,omitempty"`
+	SessionToken    string `json:"SessionToken,omitempty"`
 }
 
 type OIDCTokenInfo struct {
