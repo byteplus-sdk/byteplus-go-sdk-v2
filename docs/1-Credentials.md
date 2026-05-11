@@ -1,12 +1,12 @@
-[← Overview](0-Overview.md) | Credentials | [Endpoint →](2-Endpoint.md)
+[← Overview](0-Overview.md) | Credentials[(中文)](1-Credentials-zh.md) | [Endpoint →](2-Endpoint.md)
 
 ---
 
-# Credentials
+## Credentials
 
 BytePlus Go SDK supports multiple authentication mechanisms. Choose the one that best matches your scenario.
 
-## Credential Providers Overview
+### Credential Providers Overview
 
 | Provider | Purpose | Refresh Support | Typical Scenario |
 | --- | --- | --- | --- |
@@ -19,13 +19,13 @@ BytePlus Go SDK supports multiple authentication mechanisms. Choose the one that
 | `EcsRoleProvider` | Read from ECS IMDS (IMDSv2) | Yes | ECS instance role credentials |
 | `DefaultCredentialProvider` | 4-step chain wrapper | Depends on delegated provider | No AK/SK in application code |
 
-You can refer to: [Environment Variables](EnvironmentVariables.md)
+You can refer to: [Environment Variable Setup](0-Overview.md)
 
-## AK/SK
+### AK/SK
 
 AK/SK is a pair of permanent access keys created in the BytePlus console. The SDK signs each request to authenticate.
 
-> ⚠️ Notes
+> ⚠️ **Notes**
 >
 > 1. Do not embed or expose AK/SK in client-side applications.
 > 2. Use a configuration center or environment variables.
@@ -33,153 +33,157 @@ AK/SK is a pair of permanent access keys created in the BytePlus console. The SD
 
 ```go
 func main() {
-    ak, sk, region := "Your AK", "Your SK", "ap-southeast-1"
-    config := byteplus.NewConfig().
-       WithRegion(region).
-       // 1. credentials.NewStaticCredentials takes static AK/SK and may leak credentials; not recommended in production.
-       WithCredentials(credentials.NewStaticCredentials(ak, sk, ""))
-       // 2. credentials.NewEnvCredentials() reads from env vars:
-       //    BYTEPLUS_ACCESS_KEY, BYTEPLUS_SECRET_KEY, BYTEPLUS_SESSION_TOKEN. Recommended in production.
-       // WithCredentials(credentials.NewEnvCredentials())
+	ak, sk, region := "Your AK", "Your SK", "ap-southeast-1"
+	config := byteplus.NewConfig().
+		WithRegion(region).
+		// 1. credentials.NewStaticCredentials takes static AK/SK and may leak credentials; not recommended in production.
+		WithCredentials(credentials.NewStaticCredentials(ak, sk, ""))
+		// 2. credentials.NewEnvCredentials() takes no arguments and reads from env vars:
+		//    BYTEPLUS_ACCESS_KEY, BYTEPLUS_SECRET_KEY, BYTEPLUS_SESSION_TOKEN. Recommended in production.
+		// WithCredentials(credentials.NewEnvCredentials())
 
-    sess, err := session.NewSession(config)
-    if err != nil {
-       panic(err)
-    }
+	sess, err := session.NewSession(config)
+	if err != nil {
+		panic(err)
+	}
 }
 ```
 
-## STS Token
+### STS Token
 
 STS (Security Token Service) provides temporary credentials (temporary AK/SK and Token). You can configure validity duration. It is recommended for high-security scenarios.
 
-> ⚠️ Notes
+> ⚠️ **Notes**
 >
 > 1. Least privilege: only grant required permissions.
 > 2. Use a reasonable TTL. Shorter is safer; avoid exceeding 1 hour.
 
 ```go
 func main() {
-    ak, sk, token, region := "Your AK", "Your SK", "Your token", "ap-southeast-1"
-    config := byteplus.NewConfig().
-       WithRegion(region).
-       WithCredentials(credentials.NewStaticCredentials(ak, sk, token))
-       // Or load from environment variables:
-       // WithCredentials(credentials.NewEnvCredentials())
-    sess, err := session.NewSession(config)
-    if err != nil {
-       panic(err)
-    }
+	ak, sk, token, region := "Your AK", "Your SK", "Your token", "ap-southeast-1"
+	config := byteplus.NewConfig().
+		WithRegion(region).
+		// 1. credentials.NewStaticCredentials takes static AK/SK(/Token) and may leak credentials; not recommended in production.
+		WithCredentials(credentials.NewStaticCredentials(ak, sk, token))
+		// 2. credentials.NewEnvCredentials() takes no arguments and reads from env vars:
+		//    BYTEPLUS_ACCESS_KEY, BYTEPLUS_SECRET_KEY, BYTEPLUS_SESSION_TOKEN. Recommended in production.
+		// WithCredentials(credentials.NewEnvCredentials())
+	sess, err := session.NewSession(config)
+	if err != nil {
+		panic(err)
+	}
 }
 ```
 
-## AssumeRole
+### AssumeRole
 
 AssumeRole supports dynamic credentials with automatic refresh. The SDK refreshes before STS token expiry (buffer 60s) to avoid failures at the boundary.
 
-> ⚠️ Notes
+> ⚠️ **Notes**
 >
 > 1. Least privilege.
 > 2. Choose a reasonable TTL; maximum is 12 hours.
 > 3. Use fine-grained roles and policies.
 
-**Option 1: Using WithOptions (recommended)**
+#### Option 1: Using WithOptions (recommended)
 
 ```go
 package main
 
 import (
-    "os"
-    "time"
-    "github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
-    "github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
-    "github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/session"
+	"os"
+
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/session"
 )
 
 func main() {
-    config := byteplus.NewConfig().
-        WithRegion("ap-southeast-1").
-        WithCredentials(credentials.NewStsCredentialsWithOptions(
-            os.Getenv("BYTEPLUS_ACCESS_KEY"),  // Sub-account AK (required)
-            os.Getenv("BYTEPLUS_SECRET_KEY"),  // Sub-account SK (required)
-            "RoleName",                        // Name of the role to assume (required)
-            "123456",                          // Main account ID (required)
-            // All options below are optional; omit the func to use defaults
-            // func(o *credentials.StsAssumeRoleOptions) {
-            //     o.Host = "open.byteplusapi.com"   // STS host
-            //     o.Region = "ap-southeast-1"       // STS region
-            //     o.Schema = "https"                // STS schema
-            //     o.Timeout = 5 * time.Second       // Request timeout
-            //     o.DurationSeconds = 900           // TTL in seconds, default 3600
-            //     o.Policy = `{"Statement":[...]}`  // Session policy JSON
-            //     o.MaxRetries = 3                  // Retry attempts; 0 disables
-            //     o.RetryInterval = 1 * time.Second // Sleep between retries; <= 0 falls back to 1s
-            // },
-        ))
+	config := byteplus.NewConfig().
+		WithRegion("ap-southeast-1").
+		WithCredentials(credentials.NewStsCredentialsWithOptions(
+			os.Getenv("BYTEPLUS_ACCESS_KEY"),  // Sub-account AK (required)
+			os.Getenv("BYTEPLUS_SECRET_KEY"),  // Sub-account SK (required)
+			"RoleName",                        // Name of the role to assume (required)
+			"123456",                          // Main account ID (required)
+			// All options below are optional; omit the func to use defaults
+			// func(o *credentials.StsAssumeRoleOptions) {
+			//     o.Host = "open.byteplusapi.com"   // STS host
+			//     o.Region = "ap-southeast-1"       // STS region
+			//     o.Schema = "https"                // STS schema
+			//     o.Timeout = 5 * time.Second       // Request timeout
+			//     o.DurationSeconds = 900           // TTL in seconds, default 3600
+			//     o.Policy = `{"Statement":[...]}`  // Session policy JSON
+			//     o.MaxRetries = 3                  // Retry attempts; <= 0 uses the default 3
+			//     o.RetryInterval = 1 * time.Second // Sleep between retries; <= 0 falls back to 1s
+			// },
+		))
 
-    sess, err := session.NewSession(config)
-    if err != nil {
-        panic(err)
-    }
-    _ = sess
+	sess, err := session.NewSession(config)
+	if err != nil {
+		panic(err)
+	}
 }
 ```
 
-**Option 2: Using StsValue struct**
+#### Option 2: Using StsValue struct
 
 ```go
 package main
 
 import (
-    "time"
-    "github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
-    "github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
-    "github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/session"
+	"time"
+
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/session"
 )
 
 func main() {
-    ak, sk, region := "Your AK", "Your SK", "ap-southeast-1"
-    config := byteplus.NewConfig().
-        WithRegion(region).
-        WithCredentials(credentials.NewStsCredentials(credentials.StsValue{
-            AccessKey:       ak,               // Sub-account AK, preferably read from env: os.Getenv("BYTEPLUS_ACCESS_KEY")
-            SecurityKey:     sk,               // Sub-account SK, preferably read from env: os.Getenv("BYTEPLUS_SECRET_KEY")
-            RoleName:        "RoleName",       // Name of the role to assume
-            Host:            "Host",           // STS host
-            Region:          "Region",         // STS region
-            AccountId:       "123456",         // Main account ID that owns the role
-            Schema:          "Schema",         // STS schema (http/https)
-            Timeout:         5 * time.Second,  // STS request timeout
-            DurationSeconds: 900,              // TTL of the temporary credentials, in seconds
-            // Policy:        optional session policy JSON
-            // MaxRetries:    3,                // optional extra retry attempts; 0 disables retries
-            // RetryInterval: 1 * time.Second,  // optional sleep between retries; <= 0 falls back to 1s
-        }))
+	ak, sk, region := "Your AK", "Your SK", "ap-southeast-1"
+	config := byteplus.NewConfig().
+		WithRegion(region).
+		WithCredentials(credentials.NewStsCredentials(credentials.StsValue{
+			AccessKey:       ak,               // Sub-account AK, preferably read from env: os.Getenv("BYTEPLUS_ACCESS_KEY")
+			SecurityKey:     sk,               // Sub-account SK, preferably read from env: os.Getenv("BYTEPLUS_SECRET_KEY")
+			RoleName:        "RoleName",       // Name of the role to assume
+			Host:            "Host",           // STS host
+			Region:          "Region",         // STS region
+			AccountId:       "123456",         // Main account ID that owns the role
+			Schema:          "Schema",         // STS schema (http/https)
+			Timeout:         5 * time.Second,  // STS request timeout
+			DurationSeconds: 900,              // TTL of the temporary credentials, in seconds
+			// Policy: optional session policy JSON, e.g. `{"Statement":[{"Effect":"Allow","Action":["vpc:DescribeVpcs"],"Resource":["*"]}]}`
+			MaxRetries:   3,                   // optional extra retry attempts; <= 0 uses the default 3
+			RetryInterval: 1 * time.Second,    // optional sleep between retries; <= 0 falls back to 1s
+		}))
 
-    sess, err := session.NewSession(config)
-    if err != nil {
-        panic(err)
-    }
-    _ = sess
+	sess, err := session.NewSession(config)
+	if err != nil {
+		panic(err)
+	}
 }
 ```
 
-## AssumeRoleWithOIDC
+### STS AssumeRoleWithOIDC Example
 
-Use an OIDC token file to exchange for temporary credentials via STS AssumeRoleWithOIDC.
+STS AssumeRoleOIDC (Security Token Service) is a temporary access credential mechanism provided by Byteplus. Developers use an `oidc_token` to call the STS interface on the server side to obtain temporary credentials (temporary AK, SK, and Token). The validity period is configurable, making it suitable for scenarios with high security requirements.
 
-> ⚠️ Notes
+> ⚠️ **Notes**
 >
-> 1. **Least Privilege**: Grant only the minimum permissions required.
-> 2. **Reasonable Validity Period**: Shorter periods are safer; recommended not to exceed 1 hour.
+> 1. **Least Privilege**: Grant only the minimum permissions required for the caller to access resources, avoiding the use of `*` wildcards to grant full resource and operation permissions.
+> 2. **Reasonable Validity Period**: Set a reasonable validity period based on actual conditions. Shorter periods are safer; it is recommended not to exceed 1 hour.
 > 3. **OIDC Token Storage**: In the Go SDK, the OIDC Token must be stored in a file.
 
-**Option 1: Using WithOptions (recommended)**
+#### Option 1: Using WithOptions (recommended)
 
 ```go
 package main
 
 import (
+	"fmt"
+
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/service/vpc"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/session"
@@ -187,8 +191,8 @@ import (
 
 func main() {
 	p := credentials.NewOIDCCredentialsProviderWithOptions(
-		"/path/to/oidc_token_file",              // OIDC Token file path (required)
-		"Your Role Trn",                         // Role TRN (required)
+		"/path/to/oidc_token_file", // OIDC Token file path (required)
+		"Your Role Trn",            // Role TRN (required)
 		func(o *credentials.OIDCProviderOptions) {
 			// o.RoleSessionName = ""                         // env: BYTEPLUS_OIDC_ROLE_SESSION_NAME (optional)
 			// o.Policy = ""                                  // env: BYTEPLUS_OIDC_ROLE_POLICY (optional)
@@ -207,13 +211,108 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	_ = sess
+
+	svc := vpc.New(sess)
+	resp, err := svc.DescribeVpcs(&vpc.DescribeVpcsInput{})
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(resp)
 }
 ```
 
 > Tip: `credentials.NewOIDCCredentialsProviderFromEnv()` builds the provider from environment variables without any arguments.
 
-**Option 2: Using struct literal**
+#### Option 2: Using struct literal
+
+```go
+package main
+
+import (
+	"fmt"
+	"time"
+
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/service/vpc"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/session"
+)
+
+func main() {
+	p := &credentials.OIDCCredentialsProvider{
+		OIDCTokenFilePath: "/path/to/oidc_token_file", // env: BYTEPLUS_OIDC_TOKEN_FILE (required)
+		RoleTrn:           "Your Role Trn",            // env: BYTEPLUS_OIDC_ROLE_TRN  (required)
+		RoleSessionName:   "",                         // env: BYTEPLUS_OIDC_ROLE_SESSION_NAME (optional)
+		Policy:            "",                         // env: BYTEPLUS_OIDC_ROLE_POLICY (optional)
+		Endpoint:          "",                         // env: BYTEPLUS_OIDC_STS_ENDPOINT (optional)
+		DurationSeconds:   3600,                       // Validity period
+		MaxRetries:        byteplus.Int(3),            // optional extra retry attempts; nil defaults to 3, 0 disables retries
+		RetryInterval:     1 * time.Second,            // optional sleep between retries; <= 0 falls back to 1s
+	}
+
+	config := byteplus.NewConfig().
+		WithRegion("ap-southeast-1").
+		WithCredentials(credentials.NewCredentials(p))
+
+	sess, err := session.NewSession(config)
+	if err != nil {
+		panic(err)
+	}
+
+	svc := vpc.New(sess)
+	resp, err := svc.DescribeVpcs(&vpc.DescribeVpcsInput{})
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(resp)
+}
+```
+
+### STS AssumeRoleWithSAML Example
+
+`SAMLCredentialsProvider` exchanges a SAML assertion (returned by your SAML 2.0 IdP) for temporary STS credentials via `AssumeRoleWithSAML`. Credentials are auto-refreshed before expiration.
+
+> ⚠️ **Notes**
+>
+> 1. **Least Privilege**: Grant only the minimum permissions required.
+> 2. **Reasonable Validity Period**: Recommended not to exceed 1 hour.
+> 3. The `SAMLAssertion` is the base64-encoded SAML Response returned by your IdP.
+
+#### Option 1: Using WithOptions (recommended)
+
+```go
+package main
+
+import (
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/session"
+)
+
+func main() {
+	p := credentials.NewSAMLCredentialsProviderWithOptions(
+		"trn:iam::1234567890:role/saml-role",      // Role TRN (required)
+		"trn:iam::1234567890:saml-provider/MyIdp", // SAML provider TRN (required)
+		"BASE64_ENCODED_SAML_RESPONSE_FROM_IDP",   // SAML assertion (required)
+		func(o *credentials.SAMLProviderOptions) {
+			// o.DurationSeconds = 3600               // Validity period, default 3600
+			// o.MaxRetries = byteplus.Int(3)         // optional: retry attempts; nil defaults to 3, 0 disables
+			// o.RetryInterval = 1 * time.Second      // optional: sleep between retries; <= 0 falls back to 1s
+		},
+	)
+
+	config := byteplus.NewConfig().
+		WithRegion("ap-southeast-1").
+		WithCredentials(credentials.NewCredentials(p))
+
+	sess, err := session.NewSession(config)
+	if err != nil {
+		panic(err)
+	}
+}
+```
+
+#### Option 2: Using convenience constructor
 
 ```go
 package main
@@ -227,16 +326,14 @@ import (
 )
 
 func main() {
-	p := &credentials.OIDCCredentialsProvider{
-		OIDCTokenFilePath: "/path/to/oidc_token_file", // env: BYTEPLUS_OIDC_TOKEN_FILE (required)
-		RoleTrn:           "Your Role Trn",            // env: BYTEPLUS_OIDC_ROLE_TRN  (required)
-		RoleSessionName:   "",              // env: BYTEPLUS_OIDC_ROLE_SESSION_NAME (optional)
-		Policy:            "",              // env: BYTEPLUS_OIDC_ROLE_POLICY (optional)
-		Endpoint:          "",              // env: BYTEPLUS_OIDC_STS_ENDPOINT (optional)
-		DurationSeconds:   3600,            // Validity period
-		MaxRetries:        byteplus.Int(3), // optional extra retry attempts; nil defaults to 3, 0 disables retries
-		RetryInterval:     1 * time.Second, // optional sleep between retries; <= 0 falls back to 1s
-	}
+	p := credentials.NewSAMLCredentialsProvider(
+		"trn:iam::1234567890:role/saml-role",      // RoleTrn
+		"trn:iam::1234567890:saml-provider/MyIdp", // SAMLProviderTrn
+		"BASE64_ENCODED_SAML_RESPONSE_FROM_IDP",   // SAMLAssertion
+	)
+	p.DurationSeconds = 3600
+	p.MaxRetries = byteplus.Int(3)    // optional extra retry attempts; nil defaults to 3, 0 disables retries
+	p.RetryInterval = 1 * time.Second // optional sleep between retries; <= 0 falls back to 1s
 
 	config := byteplus.NewConfig().
 		WithRegion("ap-southeast-1").
@@ -246,102 +343,10 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	_ = sess
 }
 ```
 
-Required environment variables:
-
-- `BYTEPLUS_OIDC_TOKEN_FILE`
-- `BYTEPLUS_OIDC_ROLE_TRN`
-
-Optional environment variables:
-
-- `BYTEPLUS_OIDC_ROLE_SESSION_NAME`
-- `BYTEPLUS_OIDC_ROLE_POLICY`
-- `BYTEPLUS_OIDC_STS_ENDPOINT`
-
-## AssumeRoleWithSAML
-
-`SAMLCredentialsProvider` exchanges a SAML assertion (returned by your SAML 2.0 IdP) for temporary STS credentials via `AssumeRoleWithSAML`. Credentials are auto-refreshed before expiration.
-
-> ⚠️ Notes
->
-> 1. **Least Privilege**: Grant only the minimum permissions required.
-> 2. **Reasonable Validity Period**: Recommended not to exceed 1 hour.
-> 3. The `SAMLAssertion` is the base64-encoded SAML Response returned by your IdP.
-
-**Option 1: Using WithOptions (recommended)**
-
-```go
-package main
-
-import (
-    "github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
-    "github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
-    "github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/session"
-)
-
-func main() {
-    p := credentials.NewSAMLCredentialsProviderWithOptions(
-        "trn:iam::1234567890:role/saml-role",                // Role TRN (required)
-        "trn:iam::1234567890:saml-provider/MyIdp",           // SAML provider TRN (required)
-        "BASE64_ENCODED_SAML_RESPONSE_FROM_IDP",             // SAML assertion (required)
-        func(o *credentials.SAMLProviderOptions) {
-            // o.DurationSeconds = 3600                       // Validity period, default 3600
-            // o.MaxRetries = byteplus.Int(3)                 // optional: retry attempts; nil defaults to 3, 0 disables
-            // o.RetryInterval = 1 * time.Second              // optional: sleep between retries; <= 0 falls back to 1s
-        },
-    )
-
-    config := byteplus.NewConfig().
-        WithRegion("ap-southeast-1").
-        WithCredentials(credentials.NewCredentials(p))
-
-    sess, err := session.NewSession(config)
-    if err != nil {
-        panic(err)
-    }
-    _ = sess
-}
-```
-
-**Option 2: Using convenience constructor**
-
-```go
-package main
-
-import (
-    "time"
-
-    "github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
-    "github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
-    "github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/session"
-)
-
-func main() {
-    p := credentials.NewSAMLCredentialsProvider(
-        "trn:iam::1234567890:role/saml-role",                // RoleTrn
-        "trn:iam::1234567890:saml-provider/MyIdp",           // SAMLProviderTrn
-        "BASE64_ENCODED_SAML_RESPONSE_FROM_IDP",             // SAMLAssertion
-    )
-    p.DurationSeconds = 3600
-    p.MaxRetries = byteplus.Int(3)         // optional extra retry attempts; nil defaults to 3, 0 disables retries
-    p.RetryInterval = 1 * time.Second      // optional sleep between retries; <= 0 falls back to 1s
-
-    config := byteplus.NewConfig().
-        WithRegion("ap-southeast-1").
-        WithCredentials(credentials.NewCredentials(p))
-
-    sess, err := session.NewSession(config)
-    if err != nil {
-        panic(err)
-    }
-    _ = sess
-}
-```
-
-## Environment Variable Credential Provider
+### Environment Variable Credential Provider
 
 `EnvProvider` reads credentials from environment variables. Priority order:
 
@@ -367,11 +372,10 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	_ = sess
 }
 ```
 
-## CLI Config Credential Provider
+### CLI Config Credential Provider
 
 `CliProvider` reads credentials from the byteplus-cli config file (`~/.byteplus/config.json`).
 
@@ -410,11 +414,14 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	_ = sess
 }
 ```
 
-## ECS Role Credential Provider
+### ECS Role Credential Provider
+
+> 🚨 **Current version limitation**
+>
+> **Auto-detection of the role name from IMDS is not yet supported in the current release.** You must pass the role name explicitly via the constructor argument or the `BYTEPLUS_ECS_METADATA` environment variable. Auto-detection will be supported in a future version — please watch the release notes.
 
 `EcsRoleProvider` retrieves temporary credentials from the ECS Instance Metadata Service (IMDSv2).
 
@@ -423,12 +430,12 @@ func main() {
 - IMDS endpoint: `http://100.96.0.96` (IMDSv2 with token-based authentication)
 - Credentials are automatically refreshed before expiration (5-minute buffer)
 
-> ⚠️ Notes
+> ⚠️ **Notes**
 >
 > 1. Only works on ECS instances with an IAM role attached.
 > 2. Auto-detection queries the IMDS role list and uses the first role found.
 
-**Option 1: Using WithOptions (recommended, supports custom retry config)**
+#### Option 1: Using WithOptions (recommended, supports custom retry config)
 
 ```go
 package main
@@ -456,11 +463,10 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	_ = sess
 }
 ```
 
-**Option 2: Using convenience constructor**
+#### Option 2: Using convenience constructor
 
 ```go
 package main
@@ -484,11 +490,10 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	_ = sess
 }
 ```
 
-## Default Credential Provider (Credential Chain)
+### Default Credential Provider (Credential Chain)
 
 When no credentials are explicitly configured, the SDK automatically uses `DefaultCredentialProvider` — a 4-step chain that tries each provider in order until one succeeds:
 
@@ -518,7 +523,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	_ = sess
 }
 ```
 
@@ -547,11 +551,10 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	_ = sess
 }
 ```
 
-## Shared credentials file (Deprecated)
+### Shared credentials file (Deprecated)
 
 > ⚠️ **This mechanism is deprecated and may be removed in a future release.** It is kept only for backward compatibility. New code should use one of the following instead:
 > 1. **Environment variables**: `BYTEPLUS_ACCESS_KEY` / `BYTEPLUS_SECRET_KEY` (see [EnvironmentVariables.md](EnvironmentVariables.md))
@@ -588,7 +591,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	_ = sess
 }
 ```
 
@@ -599,4 +601,4 @@ Loading behavior:
 
 ---
 
-[← Overview](0-Overview.md) | Credentials | [Endpoint →](2-Endpoint.md)
+[← Overview](0-Overview.md) | Credentials[(中文)](1-Credentials-zh.md) | [Endpoint →](2-Endpoint.md)

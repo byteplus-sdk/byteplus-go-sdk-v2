@@ -1,33 +1,33 @@
-[← Error Handling](6-ErrorHandling.md) | Debugging | [SDK Integration →](../SDK_Integration.md)
+[← Error Handling](6-ErrorHandling.md) | Debugging[(中文)](7-Debugging-zh.md) | [Overview →](0-Overview.md)
 
 ---
 
-# Debugging
+## Debugging
 
-## Enable Debug Mode
+### Enable Debug Mode
 
 Debug logs are disabled by default. Enable via `WithDebug(true)`.
 
 ```go
 config := byteplus.NewConfig().
-    WithRegion(region).
-    WithDebug(true).
-    WithCredentials(credentials.NewEnvCredentials())
+	WithRegion(region).
+	WithDebug(true).
+	WithCredentials(credentials.NewEnvCredentials())
 ```
 
-## Log Output
+### Log Output
 
 By default, logs are written to `os.Stdout`. Use `WithLogWriter` to write to a file or other writer.
 
 ```go
 file, _ := os.Create("sdk.log")
 config := byteplus.NewConfig().
-  WithRegion(region).
-  WithDebug(true).
-  WithLogWriter(file).
-  WithCredentials(credentials.NewEnvCredentials())
+	WithRegion(region).
+	WithDebug(true).
+	WithLogWriter(file).
+	WithCredentials(credentials.NewEnvCredentials())
 ```
 
 ---
 
-[← Error Handling](6-ErrorHandling.md) | Debugging | [SDK Integration →](../SDK_Integration.md)
+[← Error Handling](6-ErrorHandling.md) | Debugging[(中文)](7-Debugging-zh.md) | [Overview →](0-Overview.md)

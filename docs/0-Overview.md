@@ -1,18 +1,18 @@
-[Credentials →](1-Credentials.md)
+Overview[(中文)](0-Overview-zh.md) | [Credentials →](1-Credentials.md)
 
 ---
 
-# SDK Integration
+## SDK Integration
 
-When calling APIs, it is recommended to integrate the SDK in your project. Using the SDK simplifies development, speeds up integration, and reduces long-term maintenance costs. BytePlus SDK integration typically includes three steps: importing the SDK, configuring access credentials, and writing API call code.
+When calling APIs, it is recommended to integrate the SDK in your project. Using the SDK simplifies development, speeds up integration, and reduces long-term maintenance costs. Byteplus SDK integration typically includes three steps: importing the SDK, configuring access credentials, and writing API call code.
 
-# Requirements
+## Requirements
 
 1. Go version **>= 1.14**.
-2. If you use Ark service (`service/arkruntime`), Go version **>= 1.18** is required.
+2. If you use ModelArk service (`service/arkruntime`), Go version **>= 1.18** is required.
 3. It is recommended to use `go mod` for dependency management.
 
-# Table of Contents
+## Table of Contents
 
 1. [Credentials](1-Credentials.md) — AK/SK, STS, AssumeRole, OIDC, SAML, ECS Role, Default Chain
 2. [Endpoint Configuration](2-Endpoint.md) — Custom Endpoint, RegionId, Automatic Resolution
@@ -21,3 +21,7 @@ When calling APIs, it is recommended to integrate the SDK in your project. Using
 5. [Retry](5-Retry.md) — Retry Strategy
 6. [Error Handling](6-ErrorHandling.md) — Exception Handling
 7. [Debugging](7-Debugging.md) — Debug Mode, Log Output
+
+---
+
+English | [中文](0-Overview-zh.md)

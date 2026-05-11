@@ -1,178 +1,185 @@
-[← Endpoint](2-Endpoint.md) | Transport | [Timeout →](4-Timeout.md)
+[← Endpoint](2-Endpoint.md) | Transport[(中文)](3-Transport-zh.md) | [Timeout →](4-Timeout.md)
 
 ---
 
-# HTTP Connection Pool
+## HTTP Connection Pool
 
-> - **Default**
->   - `MaxIdleConns`: 100
->   - `IdleConnTimeout`: 90s
->   - `MaxIdleConnsPerHost`: 2
+> **Default**
+>
+> - `MaxIdleConns`: 100
+> - `IdleConnTimeout`: 90s
+> - `MaxIdleConnsPerHost`: 2
 
 You can customize an `http.Client` to adjust these settings.
 
 ```go
 func main() {
-    region := "ap-southeast-1"
-    transport := &http.Transport{
-       Proxy: http.ProxyFromEnvironment,
-       DialContext: (&net.Dialer{
-          Timeout:   30 * time.Second,
-          KeepAlive: 30 * time.Second,
-          DualStack: true,
-       }).DialContext,
-       MaxIdleConns:          100,
-       IdleConnTimeout:       90 * time.Second,
-       MaxIdleConnsPerHost:   10,
-       TLSHandshakeTimeout:   10 * time.Second,
-       ExpectContinueTimeout: 1 * time.Second,
-    }
+	region := "ap-southeast-1"
+	transport := &http.Transport{
+		Proxy: http.ProxyFromEnvironment,
+		DialContext: (&net.Dialer{
+			Timeout:   30 * time.Second,
+			KeepAlive: 30 * time.Second,
+			DualStack: true,
+		}).DialContext,
+		MaxIdleConns:          100,
+		IdleConnTimeout:       90 * time.Second,
+		MaxIdleConnsPerHost:   10,
+		TLSHandshakeTimeout:   10 * time.Second,
+		ExpectContinueTimeout: 1 * time.Second,
+	}
 
-    client := &http.Client{
-       Transport: transport,
-       Timeout:   60 * time.Second,
-    }
-    config := byteplus.NewConfig().
-       WithRegion(region).
-       WithHTTPClient(client).
-       WithCredentials(credentials.NewEnvCredentials())
+	client := &http.Client{
+		Transport: transport,
+		Timeout:   60 * time.Second,
+	}
+	config := byteplus.NewConfig().
+		WithRegion(region).
+		WithHTTPClient(client).
+		WithCredentials(credentials.NewEnvCredentials())
 
-    sess, err := session.NewSession(config)
-    if err != nil {
-       panic(err)
-    }
-    _ = sess
+	sess, err := session.NewSession(config)
+	if err != nil {
+		panic(err)
+	}
+	svc := ecs.New(sess)
 }
 ```
 
-# HTTPS Request Configuration
+## HTTPS Request Configuration
 
-## Specify Scheme
+### Specify Scheme
 
-> - **Default**: `https`
+> **Default**
+>
+> - `https`
 
 In the SDK, `disableSSL=true` means using `http`, and `disableSSL=false` means using `https`.
 
 ```go
 func main() {
-    region := "ap-southeast-1"
-    config := byteplus.NewConfig().
-       WithRegion(region).
-       WithDisableSSL(true).
-       WithCredentials(credentials.NewEnvCredentials())
+	region := "ap-southeast-1"
+	config := byteplus.NewConfig().
+		WithRegion(region).
+		WithDisableSSL(true).
+		WithCredentials(credentials.NewEnvCredentials())
 
-    sess, err := session.NewSession(config)
-    if err != nil {
-       panic(err)
-    }
-    _ = sess
+	sess, err := session.NewSession(config)
+	if err != nil {
+		panic(err)
+	}
+	svc := ecs.New(sess)
 }
 ```
 
-## Ignore SSL Verification
+### Ignore SSL Verification
 
 You can customize `http.Client` to skip certificate verification.
 
 ```go
 func main() {
-    region :=  "ap-southeast-1"
-    transport := &http.Transport{
-       Proxy: http.ProxyFromEnvironment,
-       DialContext: (&net.Dialer{
-          Timeout:   30 * time.Second,
-          KeepAlive: 30 * time.Second,
-          DualStack: true,
-       }).DialContext,
-       MaxIdleConns:          100,
-       IdleConnTimeout:       90 * time.Second,
-       MaxIdleConnsPerHost:   10,
-       TLSHandshakeTimeout:   10 * time.Second,
-       ExpectContinueTimeout: 1 * time.Second,
-       TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-    }
+	region :=  "ap-southeast-1"
+	transport := &http.Transport{
+		Proxy: http.ProxyFromEnvironment,
+		DialContext: (&net.Dialer{
+			Timeout:   30 * time.Second,
+			KeepAlive: 30 * time.Second,
+			DualStack: true,
+		}).DialContext,
+		MaxIdleConns:          100,
+		IdleConnTimeout:       90 * time.Second,
+		MaxIdleConnsPerHost:   10,
+		TLSHandshakeTimeout:   10 * time.Second,
+		ExpectContinueTimeout: 1 * time.Second,
+		TLSClientConfig:       &tls.Config{InsecureSkipVerify: true},
+	}
 
-    client := &http.Client{
-       Transport: transport,
-       Timeout:   60 * time.Second,
-    }
-    config := byteplus.NewConfig().
-       WithRegion(region).
-       WithHTTPClient(client).
-       WithCredentials(credentials.NewEnvCredentials())
+	client := &http.Client{
+		Transport: transport,
+		Timeout:   60 * time.Second,
+	}
+	config := byteplus.NewConfig().
+		WithRegion(region).
+		WithHTTPClient(client).
+		WithCredentials(credentials.NewEnvCredentials())
 
-    sess, err := session.NewSession(config)
-    if err != nil {
-       panic(err)
-    }
-    _ = sess
+	sess, err := session.NewSession(config)
+	if err != nil {
+		panic(err)
+	}
+	svc := ecs.New(sess)
 }
 ```
 
-## Specify TLS Version
+### Specify TLS Version
 
 You can customize TLS min/max versions via `TLSClientConfig`.
 
 ```go
 func main() {
-    region := "ap-southeast-1"
-    transport := &http.Transport{
-       Proxy: http.ProxyFromEnvironment,
-       DialContext: (&net.Dialer{
-          Timeout:   30 * time.Second,
-          KeepAlive: 30 * time.Second,
-          DualStack: true,
-       }).DialContext,
-       MaxIdleConns:          100,
-       IdleConnTimeout:       90 * time.Second,
-       MaxIdleConnsPerHost:   10,
-       TLSHandshakeTimeout:   10 * time.Second,
-       ExpectContinueTimeout: 1 * time.Second,
-       TLSClientConfig: &tls.Config{
-           MinVersion: tls.VersionTLS12,
-           MaxVersion: tls.VersionTLS13,
-       },
-    }
+	region := "ap-southeast-1"
+	transport := &http.Transport{
+		Proxy: http.ProxyFromEnvironment,
+		DialContext: (&net.Dialer{
+			Timeout:   30 * time.Second,
+			KeepAlive: 30 * time.Second,
+			DualStack: true,
+		}).DialContext,
+		MaxIdleConns:          100,
+		IdleConnTimeout:       90 * time.Second,
+		MaxIdleConnsPerHost:   10,
+		TLSHandshakeTimeout:   10 * time.Second,
+		ExpectContinueTimeout: 1 * time.Second,
+		TLSClientConfig: &tls.Config{
+			MinVersion: tls.VersionTLS12,
+			MaxVersion: tls.VersionTLS13,
+		},
+	}
 
-    client := &http.Client{
-       Transport: transport,
-       Timeout:   60 * time.Second,
-    }
-    config := byteplus.NewConfig().
-       WithRegion(region).
-       WithHTTPClient(client).
-       WithCredentials(credentials.NewEnvCredentials())
+	client := &http.Client{
+		Transport: transport,
+		Timeout:   60 * time.Second,
+	}
+	config := byteplus.NewConfig().
+		WithRegion(region).
+		WithHTTPClient(client).
+		WithCredentials(credentials.NewEnvCredentials())
 
-    sess, err := session.NewSession(config)
-    if err != nil {
-       panic(err)
-    }
-    _ = sess
+	sess, err := session.NewSession(config)
+	if err != nil {
+		panic(err)
+	}
+	svc := ecs.New(sess)
 }
 ```
 
-# HTTP(S) Proxy
+## HTTP(S) Proxy
 
-> - **Default**: no proxy
+> **Default**
+>
+> - No proxy
 
-## Configure HTTP(S) Proxy
+### Configure HTTP(S) Proxy
 
 ```go
 var ak, sk, region string
 config = byteplus.NewConfig().
-    WithCredentials(credentials.NewStaticCredentials(ak, sk, "")).
-    WithRegion(region).WithHTTPProxy("http://your_proxy:8080").WithHTTPSProxy("http://your_proxy:8080")
+	WithCredentials(credentials.NewStaticCredentials(ak, sk, "")).
+	WithRegion(region).WithHTTPProxy("http://your_proxy:8080").WithHTTPSProxy("http://your_proxy:8080")
 
 sess, _ = session.NewSession(config)
+client = ecs.New(sess)
 ```
 
-## Notes
+### Notes
 
 Supported environment variables:
 
-- `http_proxy`/`HTTP_PROXY`, `https_proxy`/`HTTPS_PROXY`
+- `http_proxy` / `HTTP_PROXY`
+- `https_proxy` / `HTTPS_PROXY`
 
 Priority: code > environment variables.
 
 ---
 
-[← Endpoint](2-Endpoint.md) | Transport | [Timeout →](4-Timeout.md)
+[← Endpoint](2-Endpoint.md) | Transport[(中文)](3-Transport-zh.md) | [Timeout →](4-Timeout.md)
