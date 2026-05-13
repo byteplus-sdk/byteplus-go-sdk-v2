@@ -164,6 +164,8 @@ type ListForListSplitBillDetailOutput struct {
 
 	BusinessMode *string `type:"string" json:",omitempty"`
 
+	ChargeItemCode *string `type:"string" json:",omitempty"`
+
 	ConfigName *string `type:"string" json:",omitempty"`
 
 	ConfigurationCode *string `type:"string" json:",omitempty"`
@@ -205,6 +207,8 @@ type ListForListSplitBillDetailOutput struct {
 	ExchangeRate *string `type:"string" json:",omitempty"`
 
 	ExpandField *string `type:"string" json:",omitempty"`
+
+	ExpenseDate *string `type:"string" json:",omitempty"`
 
 	ExpenseTime *string `type:"string" json:",omitempty"`
 
@@ -279,6 +283,8 @@ type ListForListSplitBillDetailOutput struct {
 	RoundAmount *string `type:"string" json:",omitempty"`
 
 	SavingPlanDeductionDiscountAmount *string `type:"string" json:",omitempty"`
+
+	SavingPlanDeductionDiscountTotalAmount *string `type:"string" json:",omitempty"`
 
 	SavingPlanDeductionSpID *string `type:"string" json:",omitempty"`
 
@@ -407,6 +413,12 @@ func (s *ListForListSplitBillDetailOutput) SetBusinessMode(v string) *ListForLis
 	return s
 }
 
+// SetChargeItemCode sets the ChargeItemCode field's value.
+func (s *ListForListSplitBillDetailOutput) SetChargeItemCode(v string) *ListForListSplitBillDetailOutput {
+	s.ChargeItemCode = &v
+	return s
+}
+
 // SetConfigName sets the ConfigName field's value.
 func (s *ListForListSplitBillDetailOutput) SetConfigName(v string) *ListForListSplitBillDetailOutput {
 	s.ConfigName = &v
@@ -530,6 +542,12 @@ func (s *ListForListSplitBillDetailOutput) SetExchangeRate(v string) *ListForLis
 // SetExpandField sets the ExpandField field's value.
 func (s *ListForListSplitBillDetailOutput) SetExpandField(v string) *ListForListSplitBillDetailOutput {
 	s.ExpandField = &v
+	return s
+}
+
+// SetExpenseDate sets the ExpenseDate field's value.
+func (s *ListForListSplitBillDetailOutput) SetExpenseDate(v string) *ListForListSplitBillDetailOutput {
+	s.ExpenseDate = &v
 	return s
 }
 
@@ -752,6 +770,12 @@ func (s *ListForListSplitBillDetailOutput) SetRoundAmount(v string) *ListForList
 // SetSavingPlanDeductionDiscountAmount sets the SavingPlanDeductionDiscountAmount field's value.
 func (s *ListForListSplitBillDetailOutput) SetSavingPlanDeductionDiscountAmount(v string) *ListForListSplitBillDetailOutput {
 	s.SavingPlanDeductionDiscountAmount = &v
+	return s
+}
+
+// SetSavingPlanDeductionDiscountTotalAmount sets the SavingPlanDeductionDiscountTotalAmount field's value.
+func (s *ListForListSplitBillDetailOutput) SetSavingPlanDeductionDiscountTotalAmount(v string) *ListForListSplitBillDetailOutput {
+	s.SavingPlanDeductionDiscountTotalAmount = &v
 	return s
 }
 
