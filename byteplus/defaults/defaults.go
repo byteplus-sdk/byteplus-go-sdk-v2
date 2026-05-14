@@ -23,6 +23,7 @@ import (
 
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/corehandlers"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials/clicreds"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials/endpointcreds"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/request"
 )
@@ -88,25 +89,64 @@ func Handlers() request.Handlers {
 // Generally you shouldn't need to use this method directly, but
 // is available if you need to reset the credentials of an
 // existing service client or session's Config.
+//
+// The chain honors cfg.CredentialsChainVerboseErrors: when true the failure
+// error includes per-provider details; otherwise (default) the stable
+// credentials.ErrNoValidProvidersFoundInChain is returned.
 func CredChain(cfg *byteplus.Config, handlers request.Handlers) *credentials.Credentials {
-	return credentials.NewCredentials(&credentials.ChainProvider{
-		VerboseErrors: byteplus.BoolValue(cfg.CredentialsChainVerboseErrors),
-		Providers:     CredProviders(cfg, handlers),
-	})
+	return credentials.NewDefaultCredentialProviderFromProviders(
+		CredProviders(cfg, handlers),
+		true, // reuseLastProviderEnabled
+		byteplus.BoolValue(cfg.CredentialsChainVerboseErrors),
+	)
 }
 
 // CredProviders returns the slice of providers used in
 // the default credential chain.
 //
-// For applications that need to use some other provider (for example use
-// different  environment variables for legacy reasons) but still fall back
-// on the default chain of providers. This allows that default chaint to be
-// automatically updated
+// The default chain:
+//  1. EnvProvider (AK/SK/STS from environment variables)
+//  2. OIDCCredentialsProvider (from environment variables)
+//  3. CliProvider (from ~/.byteplus/config.json)
+//  4. EcsRoleProvider (from IMDS)
 func CredProviders(cfg *byteplus.Config, handlers request.Handlers) []credentials.Provider {
 	return []credentials.Provider{
 		&credentials.EnvProvider{},
-		&credentials.SharedCredentialsProvider{Filename: "", Profile: ""},
+		credentials.NewOIDCCredentialsProviderFromEnv(),
+		clicreds.NewCliProvider("", ""),
+		credentials.NewEcsRoleProvider(""),
 	}
+}
+
+// NewDefaultCredentialProvider creates a default credential chain with the
+// given options. This is the primary entry point for users who want to
+// customize the default chain (e.g., specify an ECS role name).
+//
+// Example:
+//
+//	creds := defaults.NewDefaultCredentialProvider(
+//	    func(o *credentials.DefaultCredentialProviderOptions) {
+//	        o.RoleName = "my-ecs-role"
+//	    },
+//	)
+func NewDefaultCredentialProvider(optFns ...func(*credentials.DefaultCredentialProviderOptions)) *credentials.Credentials {
+	opts := credentials.DefaultCredentialProviderOptions{}
+	for _, fn := range optFns {
+		fn(&opts)
+	}
+
+	providers := []credentials.Provider{
+		&credentials.EnvProvider{},
+		credentials.NewOIDCCredentialsProviderFromEnv(),
+		clicreds.NewCliProvider("", ""),
+		credentials.NewEcsRoleProvider(opts.RoleName),
+	}
+
+	return credentials.NewDefaultCredentialProviderFromProviders(
+		providers,
+		opts.IsReuseEnabled(),
+		false, // verbose flag is honored only via byteplus.Config.WithCredentialsChainVerboseErrors
+	)
 }
 
 const (

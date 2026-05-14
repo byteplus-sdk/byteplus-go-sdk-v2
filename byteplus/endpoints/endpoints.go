@@ -50,7 +50,7 @@ type Options struct {
 	// This option is ignored if StrictMatching is enabled.
 	ResolveUnknownService bool
 
-	// Site is the site of the endpoint, which should be Volcengine in this SDK.
+	// Site is the site of the endpoint, which should be Byteplus in this SDK.
 	// If the Site is set, the endpoint will be resolved based on the site.
 	// If the Site is not set, the endpoint will be resolved based on the region.
 	Site string
