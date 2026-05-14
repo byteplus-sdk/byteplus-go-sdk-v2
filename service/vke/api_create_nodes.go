@@ -155,6 +155,8 @@ type CreateNodesInput struct {
 
 	ContainerStoragePath *string `type:"string" json:",omitempty"`
 
+	GpuDriverVersion *string `type:"string" json:",omitempty"`
+
 	ImageId *string `type:"string" json:",omitempty"`
 
 	InitializeScript *string `type:"string" json:",omitempty"`
@@ -166,6 +168,10 @@ type CreateNodesInput struct {
 	KubernetesConfig *KubernetesConfigForCreateNodesInput `type:"structure" json:",omitempty"`
 
 	NodePoolId *string `type:"string" json:",omitempty"`
+
+	PreScript *string `type:"string" json:",omitempty"`
+
+	SkipReplaceSystem *bool `type:"boolean" json:",omitempty"`
 }
 
 // String returns the string representation
@@ -215,6 +221,12 @@ func (s *CreateNodesInput) SetContainerStoragePath(v string) *CreateNodesInput {
 	return s
 }
 
+// SetGpuDriverVersion sets the GpuDriverVersion field's value.
+func (s *CreateNodesInput) SetGpuDriverVersion(v string) *CreateNodesInput {
+	s.GpuDriverVersion = &v
+	return s
+}
+
 // SetImageId sets the ImageId field's value.
 func (s *CreateNodesInput) SetImageId(v string) *CreateNodesInput {
 	s.ImageId = &v
@@ -248,6 +260,18 @@ func (s *CreateNodesInput) SetKubernetesConfig(v *KubernetesConfigForCreateNodes
 // SetNodePoolId sets the NodePoolId field's value.
 func (s *CreateNodesInput) SetNodePoolId(v string) *CreateNodesInput {
 	s.NodePoolId = &v
+	return s
+}
+
+// SetPreScript sets the PreScript field's value.
+func (s *CreateNodesInput) SetPreScript(v string) *CreateNodesInput {
+	s.PreScript = &v
+	return s
+}
+
+// SetSkipReplaceSystem sets the SkipReplaceSystem field's value.
+func (s *CreateNodesInput) SetSkipReplaceSystem(v bool) *CreateNodesInput {
+	s.SkipReplaceSystem = &v
 	return s
 }
 

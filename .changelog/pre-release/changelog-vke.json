@@ -1,0 +1,5 @@
+{
+  "description": "VKE: added CreateSnapshot, DeleteSnapshot, DescribeContainerImageCommitments, DescribeSnapshots, ListSupportedGpuDriverVersions；modified ListClusters, ListNodePools, ListRemedyConfigs, UpdateNodePoolConfig, CreateDefaultNodePool, CreateNodePool, ExecContainerImageCommitment, ListSupportedImages, UpdateClusterConfig, ListNodes, CreateNodes, DeleteNodes",
+  "modules": "service/vke",
+  "type": "breaking-change"
+}
