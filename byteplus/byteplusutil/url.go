@@ -111,6 +111,11 @@ var defaultEndpoint = map[string]*ServiceEndpointInfo{
 		IsGlobal:        false,
 		DefaultEndpoint: endpoint,
 	},
+	"vepfs": {
+		Service:         "vepfs",
+		IsGlobal:        false,
+		DefaultEndpoint: endpoint,
+	},
 }
 
 func standardizeDomainServiceCode(serviceCode string) string {
