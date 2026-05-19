@@ -24,6 +24,7 @@ const (
 	modeRamRoleArn  = "ramrolearn"
 	modeOIDC        = "oidc"
 	modeEcsRole     = "ecsrole"
+	modeConsoleLogin = "console-login"
 	defaultRegion   = "ap-southeast-1"
 )
 
@@ -48,6 +49,7 @@ type cliProfile struct {
 	DisableSSL       bool   `json:"disable-ssl"`
 	EndpointResolver string `json:"endpoint-resolver,omitempty"`
 	UseDualStack     *bool  `json:"use-dual-stack,omitempty"`
+	LoginSession     string `json:"login-session,omitempty"`
 }
 
 type SsoSession struct {
@@ -205,6 +207,8 @@ func (p *CliProvider) Retrieve() (credentials.Value, error) {
 		return p.retrieveOIDC(profile, profileName, configPath)
 	case modeEcsRole:
 		return p.retrieveEcsRole(profile, profileName, configPath)
+	case modeConsoleLogin:
+		return p.retrieveConsoleLogin(profile, profileName, configPath)
 	default:
 		return credentials.Value{ProviderName: CliProviderName}, bytepluserr.New(
 			"CliConfigModeInvalid",
