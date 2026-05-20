@@ -2,6 +2,7 @@ package byteplussign
 
 import (
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
+	v2base "github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/base"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/request"
 	"github.com/byteplus-sdk/byteplus-sdk-golang/base"
@@ -58,6 +59,18 @@ func SignSDKRequest(req *request.Request) {
 		return
 	}
 
-	r := c1.Sign(req.HTTPRequest)
-	req.HTTPRequest.Header = r.Header
+	if req.IsPresigned() {
+		newCreds := v2base.Credentials{
+			AccessKeyID:     c1.AccessKeyID,
+			SecretAccessKey: c1.SecretAccessKey,
+			Service:         c1.Service,
+			Region:          c1.Region,
+			SessionToken:    c1.SessionToken,
+		}
+		signedQuery := newCreds.SignUrl(req.HTTPRequest)
+		req.HTTPRequest.URL.RawQuery = signedQuery
+	} else {
+		r := c1.Sign(req.HTTPRequest)
+		req.HTTPRequest.Header = r.Header
+	}
 }
