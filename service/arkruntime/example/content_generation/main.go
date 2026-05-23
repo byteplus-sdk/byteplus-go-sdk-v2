@@ -39,6 +39,7 @@ func main() {
 			},
 		},
 		// CallbackUrl: byteplus.String("CALLBACK_URL"),
+		Priority: byteplus.Int32(0),
 	}
 
 	createResponse, err := client.CreateContentGenerationTask(ctx, createReq)
@@ -60,6 +61,9 @@ func main() {
 	}
 	fmt.Printf("----- GetContentGenerationTask content generation task service_tier :%v\n -----", *task.ServiceTier)
 	fmt.Printf("----- GetContentGenerationTask content generation task expire_time :%v\n -----", *task.ExecutionExpiresAfter)
+	if task.Priority != nil {
+		fmt.Printf("----- GetContentGenerationTask content generation task priority :%v\n -----", *task.Priority)
+	}
 
 	fmt.Println("----- list default content generation tasks -----")
 
@@ -83,6 +87,9 @@ func main() {
 			}
 			if item.ExecutionExpiresAfter != nil {
 				fmt.Printf("  Execution Expires After: %d\n", *item.ExecutionExpiresAfter)
+			}
+			if item.Priority != nil {
+				fmt.Printf("  Priority: %d\n", *item.Priority)
 			}
 		}
 	}
@@ -115,6 +122,7 @@ func main() {
 		},
 		ServiceTier:           byteplus.String("flex"),
 		ExecutionExpiresAfter: byteplus.Int64(3600), // 单位秒，示例为10分钟
+		Priority:              byteplus.Int32(0),
 	}
 
 	createFlexResp, err := client.CreateContentGenerationTask(ctx, createFlexReq)
@@ -141,6 +149,9 @@ func main() {
 	}
 	if getFlexResp.ExecutionExpiresAfter != nil {
 		fmt.Printf("Execution Expires After: %d\n", *getFlexResp.ExecutionExpiresAfter)
+	}
+	if getFlexResp.Priority != nil {
+		fmt.Printf("Priority: %d\n", *getFlexResp.Priority)
 	}
 	if getFlexResp.Error != nil {
 		fmt.Printf("Error Code: %s\n", getFlexResp.Error.Code)
@@ -171,6 +182,9 @@ func main() {
 		}
 		if item.ExecutionExpiresAfter != nil {
 			fmt.Printf("  Execution Expires After: %d\n", *item.ExecutionExpiresAfter)
+		}
+		if item.Priority != nil {
+			fmt.Printf("  Priority: %d\n", *item.Priority)
 		}
 	}
 
