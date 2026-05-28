@@ -319,3 +319,22 @@ func (c *Credentials) GetBase(region string, service string) (base.Credentials, 
 		Region:          region,
 	}, nil
 }
+
+const (
+	// DefaultRetryerMaxNumRetries is the shared fallback retry count used by
+	// credential providers when they opt into the default retry policy.
+	DefaultRetryerMaxNumRetries = 3
+	// DefaultRetryerRetryDelay is the shared fallback retry interval used by
+	// credential providers when retry interval is unset or invalid.
+	DefaultRetryerRetryDelay = 1 * time.Second
+)
+
+func resolveCredentialMaxRetries(maxRetries *int) int {
+	if maxRetries == nil {
+		return DefaultRetryerMaxNumRetries
+	}
+	if *maxRetries < 0 {
+		return DefaultRetryerMaxNumRetries
+	}
+	return *maxRetries
+}
