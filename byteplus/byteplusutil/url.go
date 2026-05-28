@@ -111,6 +111,11 @@ var defaultEndpoint = map[string]*ServiceEndpointInfo{
 		IsGlobal:        false,
 		DefaultEndpoint: endpoint,
 	},
+	"cpaas": {
+		Service:         "cpaas",
+		IsGlobal:        true,
+		DefaultEndpoint: endpoint,
+	},
 	"vepfs": {
 		Service:         "vepfs",
 		IsGlobal:        false,
