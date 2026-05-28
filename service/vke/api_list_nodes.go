@@ -146,7 +146,7 @@ func (c *VKE) ListNodesWithContext(ctx byteplus.Context, input *ListNodesInput, 
 type ConditionForListNodesOutput struct {
 	_ struct{} `type:"structure" json:",omitempty"`
 
-	Type *string `type:"string" json:",omitempty"`
+	Type *string `type:"string" json:",omitempty" enum:"EnumOfTypeForListNodesOutput"`
 }
 
 // String returns the string representation
@@ -168,6 +168,8 @@ func (s *ConditionForListNodesOutput) SetType(v string) *ConditionForListNodesOu
 type FilterForListNodesInput struct {
 	_ struct{} `type:"structure" json:",omitempty"`
 
+	AffinityGroupIds []*string `type:"list" json:",omitempty"`
+
 	ClusterIds []*string `type:"list" json:",omitempty"`
 
 	CreateClientToken *string `type:"string" json:",omitempty"`
@@ -175,6 +177,8 @@ type FilterForListNodesInput struct {
 	Ids []*string `type:"list" json:",omitempty"`
 
 	InstanceIds []*string `type:"list" json:",omitempty"`
+
+	MetadataName *string `type:"string" json:",omitempty"`
 
 	Name *string `type:"string" json:",omitempty"`
 
@@ -193,6 +197,12 @@ func (s FilterForListNodesInput) String() string {
 // GoString returns the string representation
 func (s FilterForListNodesInput) GoString() string {
 	return s.String()
+}
+
+// SetAffinityGroupIds sets the AffinityGroupIds field's value.
+func (s *FilterForListNodesInput) SetAffinityGroupIds(v []*string) *FilterForListNodesInput {
+	s.AffinityGroupIds = v
+	return s
 }
 
 // SetClusterIds sets the ClusterIds field's value.
@@ -216,6 +226,12 @@ func (s *FilterForListNodesInput) SetIds(v []*string) *FilterForListNodesInput {
 // SetInstanceIds sets the InstanceIds field's value.
 func (s *FilterForListNodesInput) SetInstanceIds(v []*string) *FilterForListNodesInput {
 	s.InstanceIds = v
+	return s
+}
+
+// SetMetadataName sets the MetadataName field's value.
+func (s *FilterForListNodesInput) SetMetadataName(v string) *FilterForListNodesInput {
+	s.MetadataName = &v
 	return s
 }
 
@@ -248,6 +264,8 @@ type ItemForListNodesOutput struct {
 
 	AdditionalContainerStorageEnabled *bool `type:"boolean" json:",omitempty"`
 
+	AffinityGroupId *string `type:"string" json:",omitempty"`
+
 	ClusterId *string `type:"string" json:",omitempty"`
 
 	ContainerStoragePath *string `type:"string" json:",omitempty"`
@@ -255,6 +273,8 @@ type ItemForListNodesOutput struct {
 	CreateClientToken *string `type:"string" json:",omitempty"`
 
 	CreateTime *string `type:"string" json:",omitempty"`
+
+	GpuDriverVersion *string `type:"string" json:",omitempty"`
 
 	Id *string `type:"string" json:",omitempty"`
 
@@ -268,9 +288,13 @@ type ItemForListNodesOutput struct {
 
 	KubernetesConfig *KubernetesConfigForListNodesOutput `type:"structure" json:",omitempty"`
 
+	MetadataName *string `type:"string" json:",omitempty"`
+
 	Name *string `type:"string" json:",omitempty"`
 
 	NodePoolId *string `type:"string" json:",omitempty"`
+
+	PreScript *string `type:"string" json:",omitempty"`
 
 	Roles []*string `type:"list" json:",omitempty"`
 
@@ -297,6 +321,12 @@ func (s *ItemForListNodesOutput) SetAdditionalContainerStorageEnabled(v bool) *I
 	return s
 }
 
+// SetAffinityGroupId sets the AffinityGroupId field's value.
+func (s *ItemForListNodesOutput) SetAffinityGroupId(v string) *ItemForListNodesOutput {
+	s.AffinityGroupId = &v
+	return s
+}
+
 // SetClusterId sets the ClusterId field's value.
 func (s *ItemForListNodesOutput) SetClusterId(v string) *ItemForListNodesOutput {
 	s.ClusterId = &v
@@ -318,6 +348,12 @@ func (s *ItemForListNodesOutput) SetCreateClientToken(v string) *ItemForListNode
 // SetCreateTime sets the CreateTime field's value.
 func (s *ItemForListNodesOutput) SetCreateTime(v string) *ItemForListNodesOutput {
 	s.CreateTime = &v
+	return s
+}
+
+// SetGpuDriverVersion sets the GpuDriverVersion field's value.
+func (s *ItemForListNodesOutput) SetGpuDriverVersion(v string) *ItemForListNodesOutput {
+	s.GpuDriverVersion = &v
 	return s
 }
 
@@ -357,6 +393,12 @@ func (s *ItemForListNodesOutput) SetKubernetesConfig(v *KubernetesConfigForListN
 	return s
 }
 
+// SetMetadataName sets the MetadataName field's value.
+func (s *ItemForListNodesOutput) SetMetadataName(v string) *ItemForListNodesOutput {
+	s.MetadataName = &v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *ItemForListNodesOutput) SetName(v string) *ItemForListNodesOutput {
 	s.Name = &v
@@ -366,6 +408,12 @@ func (s *ItemForListNodesOutput) SetName(v string) *ItemForListNodesOutput {
 // SetNodePoolId sets the NodePoolId field's value.
 func (s *ItemForListNodesOutput) SetNodePoolId(v string) *ItemForListNodesOutput {
 	s.NodePoolId = &v
+	return s
+}
+
+// SetPreScript sets the PreScript field's value.
+func (s *ItemForListNodesOutput) SetPreScript(v string) *ItemForListNodesOutput {
+	s.PreScript = &v
 	return s
 }
 
@@ -582,7 +630,7 @@ type StatusForListNodesOutput struct {
 
 	Conditions []*ConditionForListNodesOutput `type:"list" json:",omitempty"`
 
-	Phase *string `type:"string" json:",omitempty"`
+	Phase *string `type:"string" json:",omitempty" enum:"EnumOfPhaseForListNodesOutput"`
 }
 
 // String returns the string representation
@@ -672,6 +720,9 @@ const (
 
 	// EnumOfConditionsTypeForListNodesInputProgressing is a EnumOfConditionsTypeForListNodesInput enum value
 	EnumOfConditionsTypeForListNodesInputProgressing = "Progressing"
+
+	// EnumOfConditionsTypeForListNodesInputClusterVersionUpgrading is a EnumOfConditionsTypeForListNodesInput enum value
+	EnumOfConditionsTypeForListNodesInputClusterVersionUpgrading = "ClusterVersionUpgrading"
 )
 
 const (
@@ -700,13 +751,64 @@ const (
 
 	// EnumOfPhaseForListNodesInputFailed is a EnumOfPhaseForListNodesInput enum value
 	EnumOfPhaseForListNodesInputFailed = "Failed"
+)
 
-	// EnumOfPhaseForListNodesInputStarting is a EnumOfPhaseForListNodesInput enum value
-	EnumOfPhaseForListNodesInputStarting = "Starting"
+const (
+	// EnumOfPhaseForListNodesOutputCreating is a EnumOfPhaseForListNodesOutput enum value
+	EnumOfPhaseForListNodesOutputCreating = "Creating"
 
-	// EnumOfPhaseForListNodesInputStopping is a EnumOfPhaseForListNodesInput enum value
-	EnumOfPhaseForListNodesInputStopping = "Stopping"
+	// EnumOfPhaseForListNodesOutputRunning is a EnumOfPhaseForListNodesOutput enum value
+	EnumOfPhaseForListNodesOutputRunning = "Running"
 
-	// EnumOfPhaseForListNodesInputStopped is a EnumOfPhaseForListNodesInput enum value
-	EnumOfPhaseForListNodesInputStopped = "Stopped"
+	// EnumOfPhaseForListNodesOutputDeleting is a EnumOfPhaseForListNodesOutput enum value
+	EnumOfPhaseForListNodesOutputDeleting = "Deleting"
+
+	// EnumOfPhaseForListNodesOutputUpdating is a EnumOfPhaseForListNodesOutput enum value
+	EnumOfPhaseForListNodesOutputUpdating = "Updating"
+
+	// EnumOfPhaseForListNodesOutputFailed is a EnumOfPhaseForListNodesOutput enum value
+	EnumOfPhaseForListNodesOutputFailed = "Failed"
+)
+
+const (
+	// EnumOfRoleListForListNodesOutputMaster is a EnumOfRoleListForListNodesOutput enum value
+	EnumOfRoleListForListNodesOutputMaster = "Master"
+
+	// EnumOfRoleListForListNodesOutputEtcd is a EnumOfRoleListForListNodesOutput enum value
+	EnumOfRoleListForListNodesOutputEtcd = "Etcd"
+
+	// EnumOfRoleListForListNodesOutputWorker is a EnumOfRoleListForListNodesOutput enum value
+	EnumOfRoleListForListNodesOutputWorker = "Worker"
+)
+
+const (
+	// EnumOfTypeForListNodesOutputOk is a EnumOfTypeForListNodesOutput enum value
+	EnumOfTypeForListNodesOutputOk = "Ok"
+
+	// EnumOfTypeForListNodesOutputUnschedulable is a EnumOfTypeForListNodesOutput enum value
+	EnumOfTypeForListNodesOutputUnschedulable = "Unschedulable"
+
+	// EnumOfTypeForListNodesOutputNotReady is a EnumOfTypeForListNodesOutput enum value
+	EnumOfTypeForListNodesOutputNotReady = "NotReady"
+
+	// EnumOfTypeForListNodesOutputInitializeFailed is a EnumOfTypeForListNodesOutput enum value
+	EnumOfTypeForListNodesOutputInitializeFailed = "InitializeFailed"
+
+	// EnumOfTypeForListNodesOutputResourceCleanupFailed is a EnumOfTypeForListNodesOutput enum value
+	EnumOfTypeForListNodesOutputResourceCleanupFailed = "ResourceCleanupFailed"
+
+	// EnumOfTypeForListNodesOutputSecurity is a EnumOfTypeForListNodesOutput enum value
+	EnumOfTypeForListNodesOutputSecurity = "Security"
+
+	// EnumOfTypeForListNodesOutputBalance is a EnumOfTypeForListNodesOutput enum value
+	EnumOfTypeForListNodesOutputBalance = "Balance"
+
+	// EnumOfTypeForListNodesOutputUnknown is a EnumOfTypeForListNodesOutput enum value
+	EnumOfTypeForListNodesOutputUnknown = "Unknown"
+
+	// EnumOfTypeForListNodesOutputProgressing is a EnumOfTypeForListNodesOutput enum value
+	EnumOfTypeForListNodesOutputProgressing = "Progressing"
+
+	// EnumOfTypeForListNodesOutputClusterVersionUpgrading is a EnumOfTypeForListNodesOutput enum value
+	EnumOfTypeForListNodesOutputClusterVersionUpgrading = "ClusterVersionUpgrading"
 )

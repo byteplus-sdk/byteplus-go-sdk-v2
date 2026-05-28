@@ -172,6 +172,10 @@ type ClusterConfigForUpdateClusterConfigInput struct {
 
 	ApiServerPublicAccessEnabled *bool `type:"boolean" json:",omitempty"`
 
+	ClusterConnectorConfigRequest *ClusterConnectorConfigRequestForUpdateClusterConfigInput `type:"structure" json:",omitempty"`
+
+	ResourcePublicAccessDefaultEnabled *bool `type:"boolean" json:",omitempty"`
+
 	SubnetIds []*string `type:"list" json:",omitempty"`
 }
 
@@ -197,9 +201,67 @@ func (s *ClusterConfigForUpdateClusterConfigInput) SetApiServerPublicAccessEnabl
 	return s
 }
 
+// SetClusterConnectorConfigRequest sets the ClusterConnectorConfigRequest field's value.
+func (s *ClusterConfigForUpdateClusterConfigInput) SetClusterConnectorConfigRequest(v *ClusterConnectorConfigRequestForUpdateClusterConfigInput) *ClusterConfigForUpdateClusterConfigInput {
+	s.ClusterConnectorConfigRequest = v
+	return s
+}
+
+// SetResourcePublicAccessDefaultEnabled sets the ResourcePublicAccessDefaultEnabled field's value.
+func (s *ClusterConfigForUpdateClusterConfigInput) SetResourcePublicAccessDefaultEnabled(v bool) *ClusterConfigForUpdateClusterConfigInput {
+	s.ResourcePublicAccessDefaultEnabled = &v
+	return s
+}
+
 // SetSubnetIds sets the SubnetIds field's value.
 func (s *ClusterConfigForUpdateClusterConfigInput) SetSubnetIds(v []*string) *ClusterConfigForUpdateClusterConfigInput {
 	s.SubnetIds = v
+	return s
+}
+
+type ClusterConnectorConfigRequestForUpdateClusterConfigInput struct {
+	_ struct{} `type:"structure" json:",omitempty"`
+
+	Provider *string `type:"string" json:",omitempty" enum:"EnumOfProviderForUpdateClusterConfigInput"`
+
+	ProxyConfig *ProxyConfigForUpdateClusterConfigInput `type:"structure" json:",omitempty"`
+
+	TargetKubeConfig *string `type:"string" json:",omitempty"`
+
+	Type *string `type:"string" json:",omitempty" enum:"EnumOfTypeForUpdateClusterConfigInput"`
+}
+
+// String returns the string representation
+func (s ClusterConnectorConfigRequestForUpdateClusterConfigInput) String() string {
+	return byteplusutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ClusterConnectorConfigRequestForUpdateClusterConfigInput) GoString() string {
+	return s.String()
+}
+
+// SetProvider sets the Provider field's value.
+func (s *ClusterConnectorConfigRequestForUpdateClusterConfigInput) SetProvider(v string) *ClusterConnectorConfigRequestForUpdateClusterConfigInput {
+	s.Provider = &v
+	return s
+}
+
+// SetProxyConfig sets the ProxyConfig field's value.
+func (s *ClusterConnectorConfigRequestForUpdateClusterConfigInput) SetProxyConfig(v *ProxyConfigForUpdateClusterConfigInput) *ClusterConnectorConfigRequestForUpdateClusterConfigInput {
+	s.ProxyConfig = v
+	return s
+}
+
+// SetTargetKubeConfig sets the TargetKubeConfig field's value.
+func (s *ClusterConnectorConfigRequestForUpdateClusterConfigInput) SetTargetKubeConfig(v string) *ClusterConnectorConfigRequestForUpdateClusterConfigInput {
+	s.TargetKubeConfig = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *ClusterConnectorConfigRequestForUpdateClusterConfigInput) SetType(v string) *ClusterConnectorConfigRequestForUpdateClusterConfigInput {
+	s.Type = &v
 	return s
 }
 
@@ -230,6 +292,28 @@ func (s *ComponentConfigForUpdateClusterConfigInput) SetEnabled(v bool) *Compone
 // SetName sets the Name field's value.
 func (s *ComponentConfigForUpdateClusterConfigInput) SetName(v string) *ComponentConfigForUpdateClusterConfigInput {
 	s.Name = &v
+	return s
+}
+
+type FlannelConfigForUpdateClusterConfigInput struct {
+	_ struct{} `type:"structure" json:",omitempty"`
+
+	SubnetIds []*string `type:"list" json:",omitempty"`
+}
+
+// String returns the string representation
+func (s FlannelConfigForUpdateClusterConfigInput) String() string {
+	return byteplusutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s FlannelConfigForUpdateClusterConfigInput) GoString() string {
+	return s.String()
+}
+
+// SetSubnetIds sets the SubnetIds field's value.
+func (s *FlannelConfigForUpdateClusterConfigInput) SetSubnetIds(v []*string) *FlannelConfigForUpdateClusterConfigInput {
+	s.SubnetIds = v
 	return s
 }
 
@@ -306,6 +390,8 @@ type MonitoringConfigForUpdateClusterConfigInput struct {
 
 	ComponentConfigs []*ComponentConfigForUpdateClusterConfigInput `type:"list" json:",omitempty"`
 
+	EnableMetricsExternalCollection *bool `type:"boolean" json:",omitempty"`
+
 	WorkspaceId *string `type:"string" json:",omitempty"`
 }
 
@@ -325,6 +411,12 @@ func (s *MonitoringConfigForUpdateClusterConfigInput) SetComponentConfigs(v []*C
 	return s
 }
 
+// SetEnableMetricsExternalCollection sets the EnableMetricsExternalCollection field's value.
+func (s *MonitoringConfigForUpdateClusterConfigInput) SetEnableMetricsExternalCollection(v bool) *MonitoringConfigForUpdateClusterConfigInput {
+	s.EnableMetricsExternalCollection = &v
+	return s
+}
+
 // SetWorkspaceId sets the WorkspaceId field's value.
 func (s *MonitoringConfigForUpdateClusterConfigInput) SetWorkspaceId(v string) *MonitoringConfigForUpdateClusterConfigInput {
 	s.WorkspaceId = &v
@@ -333,6 +425,8 @@ func (s *MonitoringConfigForUpdateClusterConfigInput) SetWorkspaceId(v string) *
 
 type PodsConfigForUpdateClusterConfigInput struct {
 	_ struct{} `type:"structure" json:",omitempty"`
+
+	FlannelConfig *FlannelConfigForUpdateClusterConfigInput `type:"structure" json:",omitempty"`
 
 	VpcCniConfig *VpcCniConfigForUpdateClusterConfigInput `type:"structure" json:",omitempty"`
 }
@@ -347,9 +441,69 @@ func (s PodsConfigForUpdateClusterConfigInput) GoString() string {
 	return s.String()
 }
 
+// SetFlannelConfig sets the FlannelConfig field's value.
+func (s *PodsConfigForUpdateClusterConfigInput) SetFlannelConfig(v *FlannelConfigForUpdateClusterConfigInput) *PodsConfigForUpdateClusterConfigInput {
+	s.FlannelConfig = v
+	return s
+}
+
 // SetVpcCniConfig sets the VpcCniConfig field's value.
 func (s *PodsConfigForUpdateClusterConfigInput) SetVpcCniConfig(v *VpcCniConfigForUpdateClusterConfigInput) *PodsConfigForUpdateClusterConfigInput {
 	s.VpcCniConfig = v
+	return s
+}
+
+type ProxyConfigForUpdateClusterConfigInput struct {
+	_ struct{} `type:"structure" json:",omitempty"`
+
+	AclEnabled *bool `type:"boolean" json:",omitempty"`
+
+	AclIpWhitelist []*string `type:"list" json:",omitempty"`
+
+	ApiServerPublicAccessConfig *ApiServerPublicAccessConfigForUpdateClusterConfigInput `type:"structure" json:",omitempty"`
+
+	ApiServerPublicAccessEnabled *bool `type:"boolean" json:",omitempty"`
+
+	SubnetIds []*string `type:"list" json:",omitempty"`
+}
+
+// String returns the string representation
+func (s ProxyConfigForUpdateClusterConfigInput) String() string {
+	return byteplusutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ProxyConfigForUpdateClusterConfigInput) GoString() string {
+	return s.String()
+}
+
+// SetAclEnabled sets the AclEnabled field's value.
+func (s *ProxyConfigForUpdateClusterConfigInput) SetAclEnabled(v bool) *ProxyConfigForUpdateClusterConfigInput {
+	s.AclEnabled = &v
+	return s
+}
+
+// SetAclIpWhitelist sets the AclIpWhitelist field's value.
+func (s *ProxyConfigForUpdateClusterConfigInput) SetAclIpWhitelist(v []*string) *ProxyConfigForUpdateClusterConfigInput {
+	s.AclIpWhitelist = v
+	return s
+}
+
+// SetApiServerPublicAccessConfig sets the ApiServerPublicAccessConfig field's value.
+func (s *ProxyConfigForUpdateClusterConfigInput) SetApiServerPublicAccessConfig(v *ApiServerPublicAccessConfigForUpdateClusterConfigInput) *ProxyConfigForUpdateClusterConfigInput {
+	s.ApiServerPublicAccessConfig = v
+	return s
+}
+
+// SetApiServerPublicAccessEnabled sets the ApiServerPublicAccessEnabled field's value.
+func (s *ProxyConfigForUpdateClusterConfigInput) SetApiServerPublicAccessEnabled(v bool) *ProxyConfigForUpdateClusterConfigInput {
+	s.ApiServerPublicAccessEnabled = &v
+	return s
+}
+
+// SetSubnetIds sets the SubnetIds field's value.
+func (s *ProxyConfigForUpdateClusterConfigInput) SetSubnetIds(v []*string) *ProxyConfigForUpdateClusterConfigInput {
+	s.SubnetIds = v
 	return s
 }
 
@@ -443,6 +597,8 @@ type UpdateClusterConfigInput struct {
 	// Id is a required field
 	Id *string `type:"string" json:",omitempty" required:"true"`
 
+	IrsaEnabled *bool `type:"boolean" json:",omitempty"`
+
 	LoggingConfig *LoggingConfigForUpdateClusterConfigInput `type:"structure" json:",omitempty"`
 
 	MonitoringConfig *MonitoringConfigForUpdateClusterConfigInput `type:"structure" json:",omitempty"`
@@ -509,6 +665,12 @@ func (s *UpdateClusterConfigInput) SetId(v string) *UpdateClusterConfigInput {
 	return s
 }
 
+// SetIrsaEnabled sets the IrsaEnabled field's value.
+func (s *UpdateClusterConfigInput) SetIrsaEnabled(v bool) *UpdateClusterConfigInput {
+	s.IrsaEnabled = &v
+	return s
+}
+
 // SetLoggingConfig sets the LoggingConfig field's value.
 func (s *UpdateClusterConfigInput) SetLoggingConfig(v *LoggingConfigForUpdateClusterConfigInput) *UpdateClusterConfigInput {
 	s.LoggingConfig = v
@@ -565,6 +727,8 @@ type VpcCniConfigForUpdateClusterConfigInput struct {
 	_ struct{} `type:"structure" json:",omitempty"`
 
 	SubnetIds []*string `type:"list" json:",omitempty"`
+
+	VciSubnetIds []*string `type:"list" json:",omitempty"`
 }
 
 // String returns the string representation
@@ -583,6 +747,12 @@ func (s *VpcCniConfigForUpdateClusterConfigInput) SetSubnetIds(v []*string) *Vpc
 	return s
 }
 
+// SetVciSubnetIds sets the VciSubnetIds field's value.
+func (s *VpcCniConfigForUpdateClusterConfigInput) SetVciSubnetIds(v []*string) *VpcCniConfigForUpdateClusterConfigInput {
+	s.VciSubnetIds = v
+	return s
+}
+
 const (
 	// EnumOfIspForUpdateClusterConfigInputBgp is a EnumOfIspForUpdateClusterConfigInput enum value
 	EnumOfIspForUpdateClusterConfigInputBgp = "BGP"
@@ -590,11 +760,29 @@ const (
 	// EnumOfIspForUpdateClusterConfigInputChinaMobile is a EnumOfIspForUpdateClusterConfigInput enum value
 	EnumOfIspForUpdateClusterConfigInputChinaMobile = "ChinaMobile"
 
+	// EnumOfIspForUpdateClusterConfigInputChinaUnicom is a EnumOfIspForUpdateClusterConfigInput enum value
+	EnumOfIspForUpdateClusterConfigInputChinaUnicom = "ChinaUnicom"
+
 	// EnumOfIspForUpdateClusterConfigInputChinaTelecom is a EnumOfIspForUpdateClusterConfigInput enum value
 	EnumOfIspForUpdateClusterConfigInputChinaTelecom = "ChinaTelecom"
 
-	// EnumOfIspForUpdateClusterConfigInputChinaUnicom is a EnumOfIspForUpdateClusterConfigInput enum value
-	EnumOfIspForUpdateClusterConfigInputChinaUnicom = "ChinaUnicom"
+	// EnumOfIspForUpdateClusterConfigInputSingleLineBgp is a EnumOfIspForUpdateClusterConfigInput enum value
+	EnumOfIspForUpdateClusterConfigInputSingleLineBgp = "SingleLine_BGP"
+
+	// EnumOfIspForUpdateClusterConfigInputFusionBgp is a EnumOfIspForUpdateClusterConfigInput enum value
+	EnumOfIspForUpdateClusterConfigInputFusionBgp = "Fusion_BGP"
+
+	// EnumOfIspForUpdateClusterConfigInputStaticBgp is a EnumOfIspForUpdateClusterConfigInput enum value
+	EnumOfIspForUpdateClusterConfigInputStaticBgp = "Static_BGP"
+
+	// EnumOfIspForUpdateClusterConfigInputChinaMobileValue is a EnumOfIspForUpdateClusterConfigInput enum value
+	EnumOfIspForUpdateClusterConfigInputChinaMobileValue = "ChinaMobile_Value"
+
+	// EnumOfIspForUpdateClusterConfigInputChinaUnicomValue is a EnumOfIspForUpdateClusterConfigInput enum value
+	EnumOfIspForUpdateClusterConfigInputChinaUnicomValue = "ChinaUnicom_Value"
+
+	// EnumOfIspForUpdateClusterConfigInputChinaTelecomValue is a EnumOfIspForUpdateClusterConfigInput enum value
+	EnumOfIspForUpdateClusterConfigInputChinaTelecomValue = "ChinaTelecom_Value"
 )
 
 const (
@@ -615,6 +803,9 @@ const (
 
 	// EnumOfLogTypeForUpdateClusterConfigInputEtcd is a EnumOfLogTypeForUpdateClusterConfigInput enum value
 	EnumOfLogTypeForUpdateClusterConfigInputEtcd = "Etcd"
+
+	// EnumOfLogTypeForUpdateClusterConfigInputClusterAutoscaler is a EnumOfLogTypeForUpdateClusterConfigInput enum value
+	EnumOfLogTypeForUpdateClusterConfigInputClusterAutoscaler = "ClusterAutoscaler"
 )
 
 const (
@@ -647,4 +838,44 @@ const (
 
 	// EnumOfNameForUpdateClusterConfigInputGodelBinder is a EnumOfNameForUpdateClusterConfigInput enum value
 	EnumOfNameForUpdateClusterConfigInputGodelBinder = "GodelBinder"
+)
+
+const (
+	// EnumOfProviderForUpdateClusterConfigInputVeStack is a EnumOfProviderForUpdateClusterConfigInput enum value
+	EnumOfProviderForUpdateClusterConfigInputVeStack = "VeStack"
+
+	// EnumOfProviderForUpdateClusterConfigInputVke is a EnumOfProviderForUpdateClusterConfigInput enum value
+	EnumOfProviderForUpdateClusterConfigInputVke = "Vke"
+
+	// EnumOfProviderForUpdateClusterConfigInputAck is a EnumOfProviderForUpdateClusterConfigInput enum value
+	EnumOfProviderForUpdateClusterConfigInputAck = "Ack"
+
+	// EnumOfProviderForUpdateClusterConfigInputTke is a EnumOfProviderForUpdateClusterConfigInput enum value
+	EnumOfProviderForUpdateClusterConfigInputTke = "Tke"
+
+	// EnumOfProviderForUpdateClusterConfigInputCce is a EnumOfProviderForUpdateClusterConfigInput enum value
+	EnumOfProviderForUpdateClusterConfigInputCce = "Cce"
+
+	// EnumOfProviderForUpdateClusterConfigInputNone is a EnumOfProviderForUpdateClusterConfigInput enum value
+	EnumOfProviderForUpdateClusterConfigInputNone = "None"
+
+	// EnumOfProviderForUpdateClusterConfigInputBaiduCce is a EnumOfProviderForUpdateClusterConfigInput enum value
+	EnumOfProviderForUpdateClusterConfigInputBaiduCce = "BaiduCce"
+
+	// EnumOfProviderForUpdateClusterConfigInputGke is a EnumOfProviderForUpdateClusterConfigInput enum value
+	EnumOfProviderForUpdateClusterConfigInputGke = "Gke"
+
+	// EnumOfProviderForUpdateClusterConfigInputEks is a EnumOfProviderForUpdateClusterConfigInput enum value
+	EnumOfProviderForUpdateClusterConfigInputEks = "Eks"
+)
+
+const (
+	// EnumOfTypeForUpdateClusterConfigInputDirect is a EnumOfTypeForUpdateClusterConfigInput enum value
+	EnumOfTypeForUpdateClusterConfigInputDirect = "Direct"
+
+	// EnumOfTypeForUpdateClusterConfigInputProxy is a EnumOfTypeForUpdateClusterConfigInput enum value
+	EnumOfTypeForUpdateClusterConfigInputProxy = "Proxy"
+
+	// EnumOfTypeForUpdateClusterConfigInputAgent is a EnumOfTypeForUpdateClusterConfigInput enum value
+	EnumOfTypeForUpdateClusterConfigInputAgent = "Agent"
 )

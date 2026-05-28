@@ -185,6 +185,7 @@ var ServiceInfos = map[string]ServiceInfo{
 	"eco_partner":                 {Service: "eco_partner", IsGlobal: true},
 	"smc":                         {Service: "smc", IsGlobal: true},
 	"cpaas":                       {Service: "cpaas", IsGlobal: true},
+	"kickart":                     {Service: "kickart", IsGlobal: true},
 }
 
 type RegionInfo struct{}

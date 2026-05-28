@@ -116,6 +116,26 @@ var defaultEndpoint = map[string]*ServiceEndpointInfo{
 		IsGlobal:        true,
 		DefaultEndpoint: endpoint,
 	},
+	"vepfs": {
+		Service:         "vepfs",
+		IsGlobal:        false,
+		DefaultEndpoint: endpoint,
+	},
+	"vke": {
+		Service:         "vke",
+		IsGlobal:        false,
+		DefaultEndpoint: endpoint,
+	},
+	"kickart": {
+		Service:         "kickart",
+		IsGlobal:        true,
+		DefaultEndpoint: endpoint,
+	},
+	"rds_mssql": {
+		Service:         "rds_mssql",
+		IsGlobal:        false,
+		DefaultEndpoint: endpoint,
+	},
 }
 
 func standardizeDomainServiceCode(serviceCode string) string {
