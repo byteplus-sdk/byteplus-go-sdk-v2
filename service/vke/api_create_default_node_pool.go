@@ -143,6 +143,36 @@ func (c *VKE) CreateDefaultNodePoolWithContext(ctx byteplus.Context, input *Crea
 	return out, req.Send()
 }
 
+type ContainerdConfigForCreateDefaultNodePoolInput struct {
+	_ struct{} `type:"structure" json:",omitempty"`
+
+	InsecureRegistries []*string `type:"list" json:",omitempty"`
+
+	RegistryProxyConfigs []*RegistryProxyConfigForCreateDefaultNodePoolInput `type:"list" json:",omitempty"`
+}
+
+// String returns the string representation
+func (s ContainerdConfigForCreateDefaultNodePoolInput) String() string {
+	return byteplusutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ContainerdConfigForCreateDefaultNodePoolInput) GoString() string {
+	return s.String()
+}
+
+// SetInsecureRegistries sets the InsecureRegistries field's value.
+func (s *ContainerdConfigForCreateDefaultNodePoolInput) SetInsecureRegistries(v []*string) *ContainerdConfigForCreateDefaultNodePoolInput {
+	s.InsecureRegistries = v
+	return s
+}
+
+// SetRegistryProxyConfigs sets the RegistryProxyConfigs field's value.
+func (s *ContainerdConfigForCreateDefaultNodePoolInput) SetRegistryProxyConfigs(v []*RegistryProxyConfigForCreateDefaultNodePoolInput) *ContainerdConfigForCreateDefaultNodePoolInput {
+	s.RegistryProxyConfigs = v
+	return s
+}
+
 type CreateDefaultNodePoolInput struct {
 	_ struct{} `type:"structure" json:",omitempty"`
 
@@ -173,11 +203,6 @@ func (s *CreateDefaultNodePoolInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateDefaultNodePoolInput"}
 	if s.ClusterId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ClusterId"))
-	}
-	if s.KubernetesConfig != nil {
-		if err := s.KubernetesConfig.Validate(); err != nil {
-			invalidParams.AddNested("KubernetesConfig", err.(request.ErrInvalidParams))
-		}
 	}
 
 	if invalidParams.Len() > 0 {
@@ -242,6 +267,10 @@ func (s *CreateDefaultNodePoolOutput) SetId(v string) *CreateDefaultNodePoolOutp
 
 type EvictionHardForCreateDefaultNodePoolInput struct {
 	_ struct{} `type:"structure" json:",omitempty"`
+
+	Key *string `type:"string" json:",omitempty" enum:"EnumOfKeyForCreateDefaultNodePoolInput"`
+
+	Value *string `type:"string" json:",omitempty"`
 }
 
 // String returns the string representation
@@ -252,6 +281,18 @@ func (s EvictionHardForCreateDefaultNodePoolInput) String() string {
 // GoString returns the string representation
 func (s EvictionHardForCreateDefaultNodePoolInput) GoString() string {
 	return s.String()
+}
+
+// SetKey sets the Key field's value.
+func (s *EvictionHardForCreateDefaultNodePoolInput) SetKey(v string) *EvictionHardForCreateDefaultNodePoolInput {
+	s.Key = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *EvictionHardForCreateDefaultNodePoolInput) SetValue(v string) *EvictionHardForCreateDefaultNodePoolInput {
+	s.Value = &v
+	return s
 }
 
 type FeatureGatesForCreateDefaultNodePoolInput struct {
@@ -287,7 +328,7 @@ func (s *FeatureGatesForCreateDefaultNodePoolInput) SetQoSResourceManager(v bool
 type KubeReservedForCreateDefaultNodePoolInput struct {
 	_ struct{} `type:"structure" json:",omitempty"`
 
-	Name *string `type:"string" json:",omitempty"`
+	Name *string `type:"string" json:",omitempty" enum:"EnumOfNameForCreateDefaultNodePoolInput"`
 
 	Quantity *string `type:"string" json:",omitempty"`
 }
@@ -317,23 +358,23 @@ func (s *KubeReservedForCreateDefaultNodePoolInput) SetQuantity(v string) *KubeR
 type KubeletConfigForCreateDefaultNodePoolInput struct {
 	_ struct{} `type:"structure" json:",omitempty"`
 
-	CpuManagerPolicy *string `type:"string" json:",omitempty"`
+	CpuManagerPolicy *string `type:"string" json:",omitempty" enum:"EnumOfCpuManagerPolicyForCreateDefaultNodePoolInput"`
 
 	EvictionHard []*EvictionHardForCreateDefaultNodePoolInput `type:"list" json:",omitempty"`
 
 	FeatureGates *FeatureGatesForCreateDefaultNodePoolInput `type:"structure" json:",omitempty"`
 
-	KubeApiBurst *int32 `min:"1" max:"100" type:"int32" json:",omitempty"`
+	KubeApiBurst *int32 `type:"int32" json:",omitempty"`
 
-	KubeApiQps *int32 `min:"1" max:"50" type:"int32" json:",omitempty"`
+	KubeApiQps *int32 `type:"int32" json:",omitempty"`
 
 	KubeReserved []*KubeReservedForCreateDefaultNodePoolInput `type:"list" json:",omitempty"`
 
 	MaxPods *int32 `type:"int32" json:",omitempty"`
 
-	RegistryBurst *int32 `min:"1" max:"100" type:"int32" json:",omitempty"`
+	RegistryBurst *int32 `type:"int32" json:",omitempty"`
 
-	RegistryPullQps *int32 `min:"1" max:"50" type:"int32" json:",omitempty"`
+	RegistryPullQps *int32 `type:"int32" json:",omitempty"`
 
 	SerializeImagePulls *bool `type:"boolean" json:",omitempty"`
 
@@ -352,40 +393,6 @@ func (s KubeletConfigForCreateDefaultNodePoolInput) String() string {
 // GoString returns the string representation
 func (s KubeletConfigForCreateDefaultNodePoolInput) GoString() string {
 	return s.String()
-}
-
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *KubeletConfigForCreateDefaultNodePoolInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "KubeletConfigForCreateDefaultNodePoolInput"}
-	if s.KubeApiBurst != nil && *s.KubeApiBurst < 1 {
-		invalidParams.Add(request.NewErrParamMinValue("KubeApiBurst", 1))
-	}
-	if s.KubeApiBurst != nil && *s.KubeApiBurst > 100 {
-		invalidParams.Add(request.NewErrParamMaxValue("KubeApiBurst", 100))
-	}
-	if s.KubeApiQps != nil && *s.KubeApiQps < 1 {
-		invalidParams.Add(request.NewErrParamMinValue("KubeApiQps", 1))
-	}
-	if s.KubeApiQps != nil && *s.KubeApiQps > 50 {
-		invalidParams.Add(request.NewErrParamMaxValue("KubeApiQps", 50))
-	}
-	if s.RegistryBurst != nil && *s.RegistryBurst < 1 {
-		invalidParams.Add(request.NewErrParamMinValue("RegistryBurst", 1))
-	}
-	if s.RegistryBurst != nil && *s.RegistryBurst > 100 {
-		invalidParams.Add(request.NewErrParamMaxValue("RegistryBurst", 100))
-	}
-	if s.RegistryPullQps != nil && *s.RegistryPullQps < 1 {
-		invalidParams.Add(request.NewErrParamMinValue("RegistryPullQps", 1))
-	}
-	if s.RegistryPullQps != nil && *s.RegistryPullQps > 50 {
-		invalidParams.Add(request.NewErrParamMaxValue("RegistryPullQps", 50))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
 }
 
 // SetCpuManagerPolicy sets the CpuManagerPolicy field's value.
@@ -471,6 +478,8 @@ type KubernetesConfigForCreateDefaultNodePoolInput struct {
 
 	AutoSyncDisabled *bool `type:"boolean" json:",omitempty"`
 
+	ContainerdConfig *ContainerdConfigForCreateDefaultNodePoolInput `type:"structure" json:",omitempty"`
+
 	Cordon *bool `type:"boolean" json:",omitempty"`
 
 	KubeletConfig *KubeletConfigForCreateDefaultNodePoolInput `type:"structure" json:",omitempty"`
@@ -478,6 +487,12 @@ type KubernetesConfigForCreateDefaultNodePoolInput struct {
 	Labels []*LabelForCreateDefaultNodePoolInput `type:"list" json:",omitempty"`
 
 	NamePrefix *string `type:"string" json:",omitempty"`
+
+	NameSuffix *string `type:"string" json:",omitempty"`
+
+	NameUseHostname *bool `type:"boolean" json:",omitempty"`
+
+	Runtime *RuntimeForCreateDefaultNodePoolInput `type:"structure" json:",omitempty"`
 
 	Taints []*TaintForCreateDefaultNodePoolInput `type:"list" json:",omitempty"`
 }
@@ -492,24 +507,15 @@ func (s KubernetesConfigForCreateDefaultNodePoolInput) GoString() string {
 	return s.String()
 }
 
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *KubernetesConfigForCreateDefaultNodePoolInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "KubernetesConfigForCreateDefaultNodePoolInput"}
-	if s.KubeletConfig != nil {
-		if err := s.KubeletConfig.Validate(); err != nil {
-			invalidParams.AddNested("KubeletConfig", err.(request.ErrInvalidParams))
-		}
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
-}
-
 // SetAutoSyncDisabled sets the AutoSyncDisabled field's value.
 func (s *KubernetesConfigForCreateDefaultNodePoolInput) SetAutoSyncDisabled(v bool) *KubernetesConfigForCreateDefaultNodePoolInput {
 	s.AutoSyncDisabled = &v
+	return s
+}
+
+// SetContainerdConfig sets the ContainerdConfig field's value.
+func (s *KubernetesConfigForCreateDefaultNodePoolInput) SetContainerdConfig(v *ContainerdConfigForCreateDefaultNodePoolInput) *KubernetesConfigForCreateDefaultNodePoolInput {
+	s.ContainerdConfig = v
 	return s
 }
 
@@ -534,6 +540,24 @@ func (s *KubernetesConfigForCreateDefaultNodePoolInput) SetLabels(v []*LabelForC
 // SetNamePrefix sets the NamePrefix field's value.
 func (s *KubernetesConfigForCreateDefaultNodePoolInput) SetNamePrefix(v string) *KubernetesConfigForCreateDefaultNodePoolInput {
 	s.NamePrefix = &v
+	return s
+}
+
+// SetNameSuffix sets the NameSuffix field's value.
+func (s *KubernetesConfigForCreateDefaultNodePoolInput) SetNameSuffix(v string) *KubernetesConfigForCreateDefaultNodePoolInput {
+	s.NameSuffix = &v
+	return s
+}
+
+// SetNameUseHostname sets the NameUseHostname field's value.
+func (s *KubernetesConfigForCreateDefaultNodePoolInput) SetNameUseHostname(v bool) *KubernetesConfigForCreateDefaultNodePoolInput {
+	s.NameUseHostname = &v
+	return s
+}
+
+// SetRuntime sets the Runtime field's value.
+func (s *KubernetesConfigForCreateDefaultNodePoolInput) SetRuntime(v *RuntimeForCreateDefaultNodePoolInput) *KubernetesConfigForCreateDefaultNodePoolInput {
+	s.Runtime = v
 	return s
 }
 
@@ -610,6 +634,8 @@ type NodeConfigForCreateDefaultNodePoolInput struct {
 
 	NamePrefix *string `type:"string" json:",omitempty"`
 
+	PreScript *string `type:"string" json:",omitempty"`
+
 	Security *SecurityForCreateDefaultNodePoolInput `type:"structure" json:",omitempty"`
 
 	Tags []*TagForCreateDefaultNodePoolInput `type:"list" json:",omitempty"`
@@ -637,6 +663,12 @@ func (s *NodeConfigForCreateDefaultNodePoolInput) SetNamePrefix(v string) *NodeC
 	return s
 }
 
+// SetPreScript sets the PreScript field's value.
+func (s *NodeConfigForCreateDefaultNodePoolInput) SetPreScript(v string) *NodeConfigForCreateDefaultNodePoolInput {
+	s.PreScript = &v
+	return s
+}
+
 // SetSecurity sets the Security field's value.
 func (s *NodeConfigForCreateDefaultNodePoolInput) SetSecurity(v *SecurityForCreateDefaultNodePoolInput) *NodeConfigForCreateDefaultNodePoolInput {
 	s.Security = v
@@ -646,6 +678,66 @@ func (s *NodeConfigForCreateDefaultNodePoolInput) SetSecurity(v *SecurityForCrea
 // SetTags sets the Tags field's value.
 func (s *NodeConfigForCreateDefaultNodePoolInput) SetTags(v []*TagForCreateDefaultNodePoolInput) *NodeConfigForCreateDefaultNodePoolInput {
 	s.Tags = v
+	return s
+}
+
+type RegistryProxyConfigForCreateDefaultNodePoolInput struct {
+	_ struct{} `type:"structure" json:",omitempty"`
+
+	ProxyEndpoints []*string `type:"list" json:",omitempty"`
+
+	Registry *string `type:"string" json:",omitempty"`
+}
+
+// String returns the string representation
+func (s RegistryProxyConfigForCreateDefaultNodePoolInput) String() string {
+	return byteplusutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RegistryProxyConfigForCreateDefaultNodePoolInput) GoString() string {
+	return s.String()
+}
+
+// SetProxyEndpoints sets the ProxyEndpoints field's value.
+func (s *RegistryProxyConfigForCreateDefaultNodePoolInput) SetProxyEndpoints(v []*string) *RegistryProxyConfigForCreateDefaultNodePoolInput {
+	s.ProxyEndpoints = v
+	return s
+}
+
+// SetRegistry sets the Registry field's value.
+func (s *RegistryProxyConfigForCreateDefaultNodePoolInput) SetRegistry(v string) *RegistryProxyConfigForCreateDefaultNodePoolInput {
+	s.Registry = &v
+	return s
+}
+
+type RuntimeForCreateDefaultNodePoolInput struct {
+	_ struct{} `type:"structure" json:",omitempty"`
+
+	Type *string `type:"string" json:",omitempty" enum:"EnumOfTypeForCreateDefaultNodePoolInput"`
+
+	Version *string `type:"string" json:",omitempty"`
+}
+
+// String returns the string representation
+func (s RuntimeForCreateDefaultNodePoolInput) String() string {
+	return byteplusutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RuntimeForCreateDefaultNodePoolInput) GoString() string {
+	return s.String()
+}
+
+// SetType sets the Type field's value.
+func (s *RuntimeForCreateDefaultNodePoolInput) SetType(v string) *RuntimeForCreateDefaultNodePoolInput {
+	s.Type = &v
+	return s
+}
+
+// SetVersion sets the Version field's value.
+func (s *RuntimeForCreateDefaultNodePoolInput) SetVersion(v string) *RuntimeForCreateDefaultNodePoolInput {
+	s.Version = &v
 	return s
 }
 
@@ -690,7 +782,7 @@ func (s *SecurityForCreateDefaultNodePoolInput) SetSecurityStrategies(v []*strin
 type SystemReservedForCreateDefaultNodePoolInput struct {
 	_ struct{} `type:"structure" json:",omitempty"`
 
-	Name *string `type:"string" json:",omitempty"`
+	Name *string `type:"string" json:",omitempty" enum:"EnumOfNameForCreateDefaultNodePoolInput"`
 
 	Quantity *string `type:"string" json:",omitempty"`
 }
@@ -786,6 +878,14 @@ func (s *TaintForCreateDefaultNodePoolInput) SetValue(v string) *TaintForCreateD
 }
 
 const (
+	// EnumOfCpuManagerPolicyForCreateDefaultNodePoolInputNone is a EnumOfCpuManagerPolicyForCreateDefaultNodePoolInput enum value
+	EnumOfCpuManagerPolicyForCreateDefaultNodePoolInputNone = "none"
+
+	// EnumOfCpuManagerPolicyForCreateDefaultNodePoolInputStatic is a EnumOfCpuManagerPolicyForCreateDefaultNodePoolInput enum value
+	EnumOfCpuManagerPolicyForCreateDefaultNodePoolInputStatic = "static"
+)
+
+const (
 	// EnumOfEffectForCreateDefaultNodePoolInputNoSchedule is a EnumOfEffectForCreateDefaultNodePoolInput enum value
 	EnumOfEffectForCreateDefaultNodePoolInputNoSchedule = "NoSchedule"
 
@@ -794,6 +894,37 @@ const (
 
 	// EnumOfEffectForCreateDefaultNodePoolInputNoExecute is a EnumOfEffectForCreateDefaultNodePoolInput enum value
 	EnumOfEffectForCreateDefaultNodePoolInputNoExecute = "NoExecute"
+)
+
+const (
+	// EnumOfKeyForCreateDefaultNodePoolInputMemoryAvailable is a EnumOfKeyForCreateDefaultNodePoolInput enum value
+	EnumOfKeyForCreateDefaultNodePoolInputMemoryAvailable = "memory.available"
+
+	// EnumOfKeyForCreateDefaultNodePoolInputNodefsAvailable is a EnumOfKeyForCreateDefaultNodePoolInput enum value
+	EnumOfKeyForCreateDefaultNodePoolInputNodefsAvailable = "nodefs.available"
+
+	// EnumOfKeyForCreateDefaultNodePoolInputNodefsInodesFree is a EnumOfKeyForCreateDefaultNodePoolInput enum value
+	EnumOfKeyForCreateDefaultNodePoolInputNodefsInodesFree = "nodefs.inodesFree"
+
+	// EnumOfKeyForCreateDefaultNodePoolInputImagefsAvailable is a EnumOfKeyForCreateDefaultNodePoolInput enum value
+	EnumOfKeyForCreateDefaultNodePoolInputImagefsAvailable = "imagefs.available"
+
+	// EnumOfKeyForCreateDefaultNodePoolInputImagefsInodesFree is a EnumOfKeyForCreateDefaultNodePoolInput enum value
+	EnumOfKeyForCreateDefaultNodePoolInputImagefsInodesFree = "imagefs.inodesFree"
+
+	// EnumOfKeyForCreateDefaultNodePoolInputAllocatableMemoryAvailable is a EnumOfKeyForCreateDefaultNodePoolInput enum value
+	EnumOfKeyForCreateDefaultNodePoolInputAllocatableMemoryAvailable = "allocatableMemory.available"
+
+	// EnumOfKeyForCreateDefaultNodePoolInputPidAvailable is a EnumOfKeyForCreateDefaultNodePoolInput enum value
+	EnumOfKeyForCreateDefaultNodePoolInputPidAvailable = "pid.available"
+)
+
+const (
+	// EnumOfNameForCreateDefaultNodePoolInputCpu is a EnumOfNameForCreateDefaultNodePoolInput enum value
+	EnumOfNameForCreateDefaultNodePoolInputCpu = "cpu"
+
+	// EnumOfNameForCreateDefaultNodePoolInputMemory is a EnumOfNameForCreateDefaultNodePoolInput enum value
+	EnumOfNameForCreateDefaultNodePoolInputMemory = "memory"
 )
 
 const (
@@ -821,4 +952,9 @@ const (
 
 	// EnumOfTopologyManagerScopeForCreateDefaultNodePoolInputContainer is a EnumOfTopologyManagerScopeForCreateDefaultNodePoolInput enum value
 	EnumOfTopologyManagerScopeForCreateDefaultNodePoolInputContainer = "container"
+)
+
+const (
+	// EnumOfTypeForCreateDefaultNodePoolInputContainerd is a EnumOfTypeForCreateDefaultNodePoolInput enum value
+	EnumOfTypeForCreateDefaultNodePoolInputContainerd = "containerd"
 )

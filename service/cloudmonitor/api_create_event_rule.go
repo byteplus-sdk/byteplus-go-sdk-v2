@@ -164,12 +164,14 @@ type CreateEventRuleInput struct {
 
 	EventType []*string `type:"list" json:",omitempty"`
 
-	FilterPattern map[string]*interface{} `type:"map" json:",omitempty"`
+	FilterPattern map[string]interface{} `type:"map" json:",omitempty"`
 
 	// Level is a required field
 	Level *string `type:"string" json:",omitempty" required:"true"`
 
 	MessageQueue []*MessageQueueForCreateEventRuleInput `type:"list" json:",omitempty"`
+
+	NotificationId *string `type:"string" json:",omitempty"`
 
 	NotifyTemplates []*NotifyTemplateForCreateEventRuleInput `type:"list" json:",omitempty"`
 
@@ -276,7 +278,7 @@ func (s *CreateEventRuleInput) SetEventType(v []*string) *CreateEventRuleInput {
 }
 
 // SetFilterPattern sets the FilterPattern field's value.
-func (s *CreateEventRuleInput) SetFilterPattern(v map[string]*interface{}) *CreateEventRuleInput {
+func (s *CreateEventRuleInput) SetFilterPattern(v map[string]interface{}) *CreateEventRuleInput {
 	s.FilterPattern = v
 	return s
 }
@@ -290,6 +292,12 @@ func (s *CreateEventRuleInput) SetLevel(v string) *CreateEventRuleInput {
 // SetMessageQueue sets the MessageQueue field's value.
 func (s *CreateEventRuleInput) SetMessageQueue(v []*MessageQueueForCreateEventRuleInput) *CreateEventRuleInput {
 	s.MessageQueue = v
+	return s
+}
+
+// SetNotificationId sets the NotificationId field's value.
+func (s *CreateEventRuleInput) SetNotificationId(v string) *CreateEventRuleInput {
+	s.NotificationId = &v
 	return s
 }
 

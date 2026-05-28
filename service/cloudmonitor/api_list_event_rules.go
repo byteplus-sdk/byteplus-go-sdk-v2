@@ -168,11 +168,13 @@ type DataForListEventRulesOutput struct {
 
 	EventType []*string `type:"list" json:",omitempty"`
 
-	FilterPattern map[string]*interface{} `type:"map" json:",omitempty"`
+	FilterPattern map[string]interface{} `type:"map" json:",omitempty"`
 
 	Level *string `type:"string" json:",omitempty"`
 
-	MessageQueue *MessageQueueForListEventRulesOutput `type:"structure" json:",omitempty"`
+	MessageQueue []*MessageQueueForListEventRulesOutput `type:"list" json:",omitempty"`
+
+	NotificationId *string `type:"string" json:",omitempty"`
 
 	NotifyTemplates []*NotifyTemplateForListEventRulesOutput `type:"list" json:",omitempty"`
 
@@ -268,7 +270,7 @@ func (s *DataForListEventRulesOutput) SetEventType(v []*string) *DataForListEven
 }
 
 // SetFilterPattern sets the FilterPattern field's value.
-func (s *DataForListEventRulesOutput) SetFilterPattern(v map[string]*interface{}) *DataForListEventRulesOutput {
+func (s *DataForListEventRulesOutput) SetFilterPattern(v map[string]interface{}) *DataForListEventRulesOutput {
 	s.FilterPattern = v
 	return s
 }
@@ -280,8 +282,14 @@ func (s *DataForListEventRulesOutput) SetLevel(v string) *DataForListEventRulesO
 }
 
 // SetMessageQueue sets the MessageQueue field's value.
-func (s *DataForListEventRulesOutput) SetMessageQueue(v *MessageQueueForListEventRulesOutput) *DataForListEventRulesOutput {
+func (s *DataForListEventRulesOutput) SetMessageQueue(v []*MessageQueueForListEventRulesOutput) *DataForListEventRulesOutput {
 	s.MessageQueue = v
+	return s
+}
+
+// SetNotificationId sets the NotificationId field's value.
+func (s *DataForListEventRulesOutput) SetNotificationId(v string) *DataForListEventRulesOutput {
+	s.NotificationId = &v
 	return s
 }
 

@@ -19,7 +19,7 @@ import (
 //    // byteplus sdk func uses an SDK service client to make a request to
 //    // VKE.
 //    func myFunc(svc VKEAPI) bool {
-//        // Make svc.CreateAddon request
+//        // Make svc.BindingRemedyConfig request
 //    }
 //
 //    func main() {
@@ -30,6 +30,14 @@ import (
 //    }
 //
 type VKEAPI interface {
+	BindingRemedyConfigCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	BindingRemedyConfigCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	BindingRemedyConfigCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	BindingRemedyConfig(*BindingRemedyConfigInput) (*BindingRemedyConfigOutput, error)
+	BindingRemedyConfigWithContext(byteplus.Context, *BindingRemedyConfigInput, ...request.Option) (*BindingRemedyConfigOutput, error)
+	BindingRemedyConfigRequest(*BindingRemedyConfigInput) (*request.Request, *BindingRemedyConfigOutput)
+
 	CreateAddonCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	CreateAddonCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	CreateAddonCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -86,6 +94,14 @@ type VKEAPI interface {
 	CreateScalingPolicyWithContext(byteplus.Context, *CreateScalingPolicyInput, ...request.Option) (*CreateScalingPolicyOutput, error)
 	CreateScalingPolicyRequest(*CreateScalingPolicyInput) (*request.Request, *CreateScalingPolicyOutput)
 
+	CreateSnapshotCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateSnapshotCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateSnapshotCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateSnapshot(*CreateSnapshotInput) (*CreateSnapshotOutput, error)
+	CreateSnapshotWithContext(byteplus.Context, *CreateSnapshotInput, ...request.Option) (*CreateSnapshotOutput, error)
+	CreateSnapshotRequest(*CreateSnapshotInput) (*request.Request, *CreateSnapshotOutput)
+
 	DeleteAddonCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DeleteAddonCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	DeleteAddonCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -133,6 +149,30 @@ type VKEAPI interface {
 	DeleteScalingPolicies(*DeleteScalingPoliciesInput) (*DeleteScalingPoliciesOutput, error)
 	DeleteScalingPoliciesWithContext(byteplus.Context, *DeleteScalingPoliciesInput, ...request.Option) (*DeleteScalingPoliciesOutput, error)
 	DeleteScalingPoliciesRequest(*DeleteScalingPoliciesInput) (*request.Request, *DeleteScalingPoliciesOutput)
+
+	DeleteSnapshotCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteSnapshotCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteSnapshotCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteSnapshot(*DeleteSnapshotInput) (*DeleteSnapshotOutput, error)
+	DeleteSnapshotWithContext(byteplus.Context, *DeleteSnapshotInput, ...request.Option) (*DeleteSnapshotOutput, error)
+	DeleteSnapshotRequest(*DeleteSnapshotInput) (*request.Request, *DeleteSnapshotOutput)
+
+	DescribeContainerImageCommitmentsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeContainerImageCommitmentsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeContainerImageCommitmentsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeContainerImageCommitments(*DescribeContainerImageCommitmentsInput) (*DescribeContainerImageCommitmentsOutput, error)
+	DescribeContainerImageCommitmentsWithContext(byteplus.Context, *DescribeContainerImageCommitmentsInput, ...request.Option) (*DescribeContainerImageCommitmentsOutput, error)
+	DescribeContainerImageCommitmentsRequest(*DescribeContainerImageCommitmentsInput) (*request.Request, *DescribeContainerImageCommitmentsOutput)
+
+	DescribeSnapshotsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeSnapshotsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeSnapshotsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeSnapshots(*DescribeSnapshotsInput) (*DescribeSnapshotsOutput, error)
+	DescribeSnapshotsWithContext(byteplus.Context, *DescribeSnapshotsInput, ...request.Option) (*DescribeSnapshotsOutput, error)
+	DescribeSnapshotsRequest(*DescribeSnapshotsInput) (*request.Request, *DescribeSnapshotsOutput)
 
 	ExecContainerImageCommitmentCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ExecContainerImageCommitmentCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -182,6 +222,14 @@ type VKEAPI interface {
 	ListClustersWithContext(byteplus.Context, *ListClustersInput, ...request.Option) (*ListClustersOutput, error)
 	ListClustersRequest(*ListClustersInput) (*request.Request, *ListClustersOutput)
 
+	ListInstanceTypeLabelsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListInstanceTypeLabelsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListInstanceTypeLabelsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListInstanceTypeLabels(*ListInstanceTypeLabelsInput) (*ListInstanceTypeLabelsOutput, error)
+	ListInstanceTypeLabelsWithContext(byteplus.Context, *ListInstanceTypeLabelsInput, ...request.Option) (*ListInstanceTypeLabelsOutput, error)
+	ListInstanceTypeLabelsRequest(*ListInstanceTypeLabelsInput) (*request.Request, *ListInstanceTypeLabelsOutput)
+
 	ListKubeconfigsCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ListKubeconfigsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	ListKubeconfigsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -214,6 +262,14 @@ type VKEAPI interface {
 	ListPermissionsWithContext(byteplus.Context, *ListPermissionsInput, ...request.Option) (*ListPermissionsOutput, error)
 	ListPermissionsRequest(*ListPermissionsInput) (*request.Request, *ListPermissionsOutput)
 
+	ListRemedyConfigsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListRemedyConfigsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListRemedyConfigsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListRemedyConfigs(*ListRemedyConfigsInput) (*ListRemedyConfigsOutput, error)
+	ListRemedyConfigsWithContext(byteplus.Context, *ListRemedyConfigsInput, ...request.Option) (*ListRemedyConfigsOutput, error)
+	ListRemedyConfigsRequest(*ListRemedyConfigsInput) (*request.Request, *ListRemedyConfigsOutput)
+
 	ListScalingEventsCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ListScalingEventsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	ListScalingEventsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -230,6 +286,14 @@ type VKEAPI interface {
 	ListScalingPoliciesWithContext(byteplus.Context, *ListScalingPoliciesInput, ...request.Option) (*ListScalingPoliciesOutput, error)
 	ListScalingPoliciesRequest(*ListScalingPoliciesInput) (*request.Request, *ListScalingPoliciesOutput)
 
+	ListSupportedAddInstanceTypesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListSupportedAddInstanceTypesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListSupportedAddInstanceTypesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListSupportedAddInstanceTypes(*ListSupportedAddInstanceTypesInput) (*ListSupportedAddInstanceTypesOutput, error)
+	ListSupportedAddInstanceTypesWithContext(byteplus.Context, *ListSupportedAddInstanceTypesInput, ...request.Option) (*ListSupportedAddInstanceTypesOutput, error)
+	ListSupportedAddInstanceTypesRequest(*ListSupportedAddInstanceTypesInput) (*request.Request, *ListSupportedAddInstanceTypesOutput)
+
 	ListSupportedAddonsCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ListSupportedAddonsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	ListSupportedAddonsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -237,6 +301,22 @@ type VKEAPI interface {
 	ListSupportedAddons(*ListSupportedAddonsInput) (*ListSupportedAddonsOutput, error)
 	ListSupportedAddonsWithContext(byteplus.Context, *ListSupportedAddonsInput, ...request.Option) (*ListSupportedAddonsOutput, error)
 	ListSupportedAddonsRequest(*ListSupportedAddonsInput) (*request.Request, *ListSupportedAddonsOutput)
+
+	ListSupportedGpuDriverVersionsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListSupportedGpuDriverVersionsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListSupportedGpuDriverVersionsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListSupportedGpuDriverVersions(*ListSupportedGpuDriverVersionsInput) (*ListSupportedGpuDriverVersionsOutput, error)
+	ListSupportedGpuDriverVersionsWithContext(byteplus.Context, *ListSupportedGpuDriverVersionsInput, ...request.Option) (*ListSupportedGpuDriverVersionsOutput, error)
+	ListSupportedGpuDriverVersionsRequest(*ListSupportedGpuDriverVersionsInput) (*request.Request, *ListSupportedGpuDriverVersionsOutput)
+
+	ListSupportedImagesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListSupportedImagesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListSupportedImagesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListSupportedImages(*ListSupportedImagesInput) (*ListSupportedImagesOutput, error)
+	ListSupportedImagesWithContext(byteplus.Context, *ListSupportedImagesInput, ...request.Option) (*ListSupportedImagesOutput, error)
+	ListSupportedImagesRequest(*ListSupportedImagesInput) (*request.Request, *ListSupportedImagesOutput)
 
 	ListSupportedResourceTypesCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ListSupportedResourceTypesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -277,6 +357,14 @@ type VKEAPI interface {
 	TagResources(*TagResourcesInput) (*TagResourcesOutput, error)
 	TagResourcesWithContext(byteplus.Context, *TagResourcesInput, ...request.Option) (*TagResourcesOutput, error)
 	TagResourcesRequest(*TagResourcesInput) (*request.Request, *TagResourcesOutput)
+
+	UnbindingRemedyConfigCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	UnbindingRemedyConfigCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	UnbindingRemedyConfigCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	UnbindingRemedyConfig(*UnbindingRemedyConfigInput) (*UnbindingRemedyConfigOutput, error)
+	UnbindingRemedyConfigWithContext(byteplus.Context, *UnbindingRemedyConfigInput, ...request.Option) (*UnbindingRemedyConfigOutput, error)
+	UnbindingRemedyConfigRequest(*UnbindingRemedyConfigInput) (*request.Request, *UnbindingRemedyConfigOutput)
 
 	UntagResourcesCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	UntagResourcesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)

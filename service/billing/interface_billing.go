@@ -94,6 +94,14 @@ type BILLINGAPI interface {
 	DeleteFinancialRelationWithContext(byteplus.Context, *DeleteFinancialRelationInput, ...request.Option) (*DeleteFinancialRelationOutput, error)
 	DeleteFinancialRelationRequest(*DeleteFinancialRelationInput) (*request.Request, *DeleteFinancialRelationOutput)
 
+	GetFilterInfoForCostAnalysisCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	GetFilterInfoForCostAnalysisCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	GetFilterInfoForCostAnalysisCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	GetFilterInfoForCostAnalysis(*GetFilterInfoForCostAnalysisInput) (*GetFilterInfoForCostAnalysisOutput, error)
+	GetFilterInfoForCostAnalysisWithContext(byteplus.Context, *GetFilterInfoForCostAnalysisInput, ...request.Option) (*GetFilterInfoForCostAnalysisOutput, error)
+	GetFilterInfoForCostAnalysisRequest(*GetFilterInfoForCostAnalysisInput) (*request.Request, *GetFilterInfoForCostAnalysisOutput)
+
 	GetOrderCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	GetOrderCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	GetOrderCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -270,6 +278,14 @@ type BILLINGAPI interface {
 	ListBudgetFilterZoneCodeWithContext(byteplus.Context, *ListBudgetFilterZoneCodeInput, ...request.Option) (*ListBudgetFilterZoneCodeOutput, error)
 	ListBudgetFilterZoneCodeRequest(*ListBudgetFilterZoneCodeInput) (*request.Request, *ListBudgetFilterZoneCodeOutput)
 
+	ListCostAnalysisOpenApiCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListCostAnalysisOpenApiCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListCostAnalysisOpenApiCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListCostAnalysisOpenApi(*ListCostAnalysisOpenApiInput) (*ListCostAnalysisOpenApiOutput, error)
+	ListCostAnalysisOpenApiWithContext(byteplus.Context, *ListCostAnalysisOpenApiInput, ...request.Option) (*ListCostAnalysisOpenApiOutput, error)
+	ListCostAnalysisOpenApiRequest(*ListCostAnalysisOpenApiInput) (*request.Request, *ListCostAnalysisOpenApiOutput)
+
 	ListCouponUsageRecordsCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ListCouponUsageRecordsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	ListCouponUsageRecordsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -397,6 +413,14 @@ type BILLINGAPI interface {
 	QueryPriceForSubscription(*QueryPriceForSubscriptionInput) (*QueryPriceForSubscriptionOutput, error)
 	QueryPriceForSubscriptionWithContext(byteplus.Context, *QueryPriceForSubscriptionInput, ...request.Option) (*QueryPriceForSubscriptionOutput, error)
 	QueryPriceForSubscriptionRequest(*QueryPriceForSubscriptionInput) (*request.Request, *QueryPriceForSubscriptionOutput)
+
+	QueryTagValueByTagKeyCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	QueryTagValueByTagKeyCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	QueryTagValueByTagKeyCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	QueryTagValueByTagKey(*QueryTagValueByTagKeyInput) (*QueryTagValueByTagKeyOutput, error)
+	QueryTagValueByTagKeyWithContext(byteplus.Context, *QueryTagValueByTagKeyInput, ...request.Option) (*QueryTagValueByTagKeyOutput, error)
+	QueryTagValueByTagKeyRequest(*QueryTagValueByTagKeyInput) (*request.Request, *QueryTagValueByTagKeyOutput)
 
 	RenewInstanceCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	RenewInstanceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
