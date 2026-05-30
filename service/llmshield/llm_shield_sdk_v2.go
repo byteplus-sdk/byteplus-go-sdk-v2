@@ -250,6 +250,9 @@ func (c *Client) ModerateStream(request *ModerateV2Request, ssn interface{}) (*M
 
 	var startErr error
 	isFirstCall := false
+	if request == nil && !session.Started {
+		return nil, fmt.Errorf("ModerateStream request cannot be nil")
+	}
 	session.once.Do(func() {
 		isFirstCall = true
 		session.Started = true
@@ -297,12 +300,19 @@ func (c *Client) ModerateStream(request *ModerateV2Request, ssn interface{}) (*M
 		// 将发送请求的操作放在独立协程中，确保不阻塞主流程
 		go func() {
 			if c.httpClient == nil {
-				startErr = fmt.Errorf("ModerateStream httpClient is nil")
+				session.RspDataChan <- &ModerateV2Response{
+					ResponseMetadata: ResponseMetadata{
+						Error: &Error{
+							Code:    "SDK_CONFIG_ERROR",
+							Message: "ModerateStream httpClient is nil",
+						},
+					},
+				}
+				close(session.RspDataChan)
 				return
 			}
 			resp, err := c.httpClient.Do(req)
 			if err != nil {
-				startErr = fmt.Errorf("ModerateStream httpClient.Do: %v\n", err)
 				session.RspDataChan <- &ModerateV2Response{
 					ResponseMetadata: ResponseMetadata{
 						Error: &Error{
@@ -319,7 +329,15 @@ func (c *Client) ModerateStream(request *ModerateV2Request, ssn interface{}) (*M
 
 			if resp.StatusCode != http.StatusOK {
 				body, _ := io.ReadAll(resp.Body)
-				startErr = fmt.Errorf("ModerateStream Server RespCode:%d,error:%v\n", resp.StatusCode, string(body))
+				session.RspDataChan <- &ModerateV2Response{
+					ResponseMetadata: ResponseMetadata{
+						HTTPCode: resp.StatusCode,
+						Error: &Error{
+							Code:    "SDK_HTTP_ERROR",
+							Message: fmt.Sprintf("ModerateStream Server RespCode:%d,error:%v", resp.StatusCode, string(body)),
+						},
+					},
+				}
 				return
 			}
 
@@ -329,13 +347,19 @@ func (c *Client) ModerateStream(request *ModerateV2Request, ssn interface{}) (*M
 				response := &ModerateV2Response{}
 				if err := decoder.Decode(response); err != nil {
 					if err == io.EOF {
-						fmt.Printf("ModerateStream response stream parsing finished (EOF)\n")
 						break
 					}
-					fmt.Printf("ModerateStream JSON parsing exception: %v\n", err)
+					session.RspDataChan <- &ModerateV2Response{
+						ResponseMetadata: ResponseMetadata{
+							HTTPCode: resp.StatusCode,
+							Error: &Error{
+								Code:    "SDK_JSON_ERROR",
+								Message: err.Error(),
+							},
+						},
+					}
 					break
 				}
-
 				if response.ResponseMetadata.HTTPCode == 0 {
 					response.ResponseMetadata.HTTPCode = resp.StatusCode
 				}
@@ -553,6 +577,9 @@ func (sr *streamReader) Send(data []byte) {
 	}
 	ch := sr.dataChan
 	sr.mu.Unlock()
+	defer func() {
+		_ = recover()
+	}()
 	ch <- data
 }
 
