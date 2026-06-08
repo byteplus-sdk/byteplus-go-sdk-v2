@@ -65,6 +65,7 @@ func NewConsoleOAuthClient(cfg *ConsoleOAuthClientConfig) *ConsoleOAuthClient {
 type ConsoleTokenRequest struct {
 	GrantType    string
 	ClientID     string
+	Scope        string
 	Code         string
 	CodeVerifier string
 	RedirectURI  string
@@ -85,11 +86,11 @@ type ConsoleTokenResponse struct {
 // STSCredentials contains the BytePlus STS credentials embedded in the
 // console access token JSON payload.
 type STSCredentials struct {
-	AccessKeyID     string `json:"AccessKeyId"`
-	SecretAccessKey string `json:"SecretAccessKey"`
-	SessionToken    string `json:"SessionToken"`
-	CurrentTime     string `json:"CurrentTime"`
-	ExpiredTime     string `json:"ExpiredTime"`
+	AccessKeyID     string `json:"access_key_id"`
+	SecretAccessKey string `json:"secret_access_key"`
+	SessionToken    string `json:"session_token"`
+	CurrentTime     string `json:"current_time,omitempty"`
+	ExpiredTime     string `json:"expired_time,omitempty"`
 }
 
 // ConsoleOAuthAPIError represents a non-2xx response from the console OAuth
@@ -161,6 +162,9 @@ func (c *ConsoleOAuthClient) ExchangeToken(ctx context.Context, req *ConsoleToke
 	form := url.Values{}
 	form.Set("grant_type", req.GrantType)
 	form.Set("client_id", req.ClientID)
+	if req.Scope != "" {
+		form.Set("scope", req.Scope)
+	}
 	if req.Code != "" {
 		form.Set("code", req.Code)
 	}
@@ -225,8 +229,37 @@ func ParseSTSCredentials(accessToken string) (*STSCredentials, error) {
 	if err := json.Unmarshal([]byte(s), &creds); err != nil {
 		return nil, fmt.Errorf("failed to parse console sts credentials: %w", err)
 	}
+	if strings.TrimSpace(creds.AccessKeyID) == "" || strings.TrimSpace(creds.SecretAccessKey) == "" || strings.TrimSpace(creds.SessionToken) == "" {
+		var legacy struct {
+			AccessKeyID     string `json:"AccessKeyId"`
+			SecretAccessKey string `json:"SecretAccessKey"`
+			SessionToken    string `json:"SessionToken"`
+			CurrentTime     string `json:"CurrentTime"`
+			ExpiredTime     string `json:"ExpiredTime"`
+		}
+		if err := json.Unmarshal([]byte(s), &legacy); err == nil {
+			if creds.AccessKeyID == "" {
+				creds.AccessKeyID = legacy.AccessKeyID
+			}
+			if creds.SecretAccessKey == "" {
+				creds.SecretAccessKey = legacy.SecretAccessKey
+			}
+			if creds.SessionToken == "" {
+				creds.SessionToken = legacy.SessionToken
+			}
+			if creds.CurrentTime == "" {
+				creds.CurrentTime = legacy.CurrentTime
+			}
+			if creds.ExpiredTime == "" {
+				creds.ExpiredTime = legacy.ExpiredTime
+			}
+		}
+	}
 	if strings.TrimSpace(creds.AccessKeyID) == "" || strings.TrimSpace(creds.SecretAccessKey) == "" {
 		return nil, fmt.Errorf("console sts credentials missing access key or secret key")
+	}
+	if strings.TrimSpace(creds.SessionToken) == "" {
+		return nil, fmt.Errorf("console sts credentials missing session token")
 	}
 	return &creds, nil
 }
