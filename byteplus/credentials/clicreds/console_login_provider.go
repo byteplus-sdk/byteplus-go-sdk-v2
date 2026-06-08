@@ -19,7 +19,6 @@ import (
 )
 
 const (
-	defaultConsoleLoginRegion        = "ap-southeast-1"
 	consoleLoginCacheDirEnv          = "BYTEPLUS_LOGIN_CACHE_DIRECTORY"
 	consoleLoginCacheDirRelativePath = "login/cache"
 )
@@ -37,12 +36,6 @@ type LoginTokenCache struct {
 	IssuedAt     string          `json:"issued_at"`
 	ExpiresIn    int             `json:"expires_in"`
 	TokenType    string          `json:"token_type"`
-
-	// 兼容早期 SDK 分支误写出的字段；读取时作为兜底，刷新后继续保留额外字段不影响 CLI。
-	ExpiresAt        string `json:"expires_at,omitempty"`
-	RefreshExpiresAt string `json:"refresh_expires_at,omitempty"`
-	Endpoint         string `json:"endpoint,omitempty"`
-	Region           string `json:"region,omitempty"`
 }
 
 func (p *CliProvider) retrieveConsoleLogin(profile *cliProfile, profileName, configPath string) (credentials.Value, error) {
@@ -189,7 +182,7 @@ func (p *ConsoleLoginRefreshableProvider) refreshTokenWithCachedRT(ctx context.C
 		)
 	}
 
-	client := p.oauthClientFactory(consoleLoginCacheEndpointURL(p.cached))
+	client := p.oauthClientFactory(p.cached.EndpointURL)
 	resp, err := client.ExchangeToken(ctx, &ConsoleTokenRequest{
 		GrantType:    "refresh_token",
 		ClientID:     p.cached.ClientID,
@@ -364,37 +357,14 @@ func consoleLoginCacheExpiration(cache *LoginTokenCache) (time.Time, bool) {
 	if cache == nil {
 		return time.Time{}, false
 	}
-	if exp, ok, err := consoleLoginIssuedExpiration(cache); err == nil && ok {
-		return exp, true
-	}
-	if s := strings.TrimSpace(cache.ExpiresAt); s != "" {
-		if exp, err := parseTokenExpiration(s); err == nil {
-			return exp, true
-		}
-	}
-	if payload, err := consoleAccessTokenPayload(cache.AccessToken); err == nil {
-		creds, err := ParseSTSCredentials(payload)
-		if err != nil {
-			return time.Time{}, false
-		}
-		if s := strings.TrimSpace(creds.ExpiredTime); s != "" {
-			if exp, err := parseTokenExpiration(s); err == nil {
-				return exp, true
-			}
-		}
-	}
-	return time.Time{}, false
-}
-
-func consoleLoginIssuedExpiration(cache *LoginTokenCache) (time.Time, bool, error) {
-	if cache == nil || strings.TrimSpace(cache.IssuedAt) == "" || cache.ExpiresIn <= 0 {
-		return time.Time{}, false, nil
+	if strings.TrimSpace(cache.IssuedAt) == "" || cache.ExpiresIn <= 0 {
+		return time.Time{}, false
 	}
 	issuedAt, err := parseTokenExpiration(cache.IssuedAt)
 	if err != nil {
-		return time.Time{}, true, err
+		return time.Time{}, false
 	}
-	return issuedAt.Add(time.Duration(cache.ExpiresIn) * time.Second), true, nil
+	return issuedAt.Add(time.Duration(cache.ExpiresIn) * time.Second), true
 }
 
 func tryParseConsoleLoginAccessTokenAndExpiration(cache *LoginTokenCache) (time.Time, bool) {
@@ -409,16 +379,6 @@ func tryParseConsoleLoginAccessTokenAndExpiration(cache *LoginTokenCache) (time.
 		return time.Time{}, false
 	}
 	return exp, true
-}
-
-func consoleLoginCacheEndpointURL(cache *LoginTokenCache) string {
-	if cache == nil {
-		return ""
-	}
-	if endpoint := strings.TrimSpace(cache.EndpointURL); endpoint != "" {
-		return endpoint
-	}
-	return strings.TrimSpace(cache.Endpoint)
 }
 
 func isConsoleRefreshTokenInvalidErr(err error) bool {
