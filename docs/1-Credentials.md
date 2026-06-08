@@ -388,9 +388,18 @@ Supported modes in profile (case-insensitive):
 | --- | --- |
 | `ak` / empty | Static AK/SK from profile |
 | `sso` | SSO login via OIDC Device Authorization |
+| `console-login` | Console login cache written by `bp login` |
 | `ramrolearn` | STS AssumeRole (delegates to `StsProvider`) |
 | `oidc` | STS AssumeRoleWithOIDC (delegates to `OIDCCredentialsProvider`) |
 | `ecsrole` | ECS IMDS (delegates to `EcsRoleProvider`) |
+
+For `console-login`, run `bp login` first. The CLI profile must contain
+`mode: "console-login"` and `login-session`. `CliProvider` reads the token cache
+from `<cli-config-dir>/login/cache/<sha1(login_session)>.json` (default
+`~/.byteplus/login/cache/`, or `BYTEPLUS_LOGIN_CACHE_DIRECTORY` when set),
+parses the embedded STS credentials from `access_token`, and refreshes the cache
+through the OAuth `refresh_token` grant when the cached token has expired. If the
+refresh token is missing or expired, run `bp login` again.
 
 ```go
 package main
