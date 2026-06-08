@@ -1,7 +1,9 @@
 package clicreds
 
 import (
+	"crypto/sha1"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -9,6 +11,11 @@ import (
 	"strings"
 	"testing"
 	"time"
+)
+
+const (
+	consoleLoginTestClientID = "trn:signin:::devtools/same-device"
+	consoleLoginTestScope    = "Console:All:All"
 )
 
 func writeConsoleLoginConfig(t *testing.T, dir, profile string, profileBody map[string]interface{}) string {
@@ -32,10 +39,7 @@ func writeConsoleLoginConfig(t *testing.T, dir, profile string, profileBody map[
 
 func writeConsoleLoginCache(t *testing.T, configPath, loginSession string, cache *LoginTokenCache) string {
 	t.Helper()
-	cachePath, err := consoleLoginCacheFilePath(loginSession, configPath)
-	if err != nil {
-		t.Fatalf("compute cache path: %v", err)
-	}
+	cachePath := filepath.Join(resolveLoginCacheDir(configPath), fmt.Sprintf("%x.json", sha1.Sum([]byte(loginSession))))
 	if err := os.MkdirAll(filepath.Dir(cachePath), 0700); err != nil {
 		t.Fatalf("mkdir cache: %v", err)
 	}
@@ -49,6 +53,17 @@ func writeConsoleLoginCache(t *testing.T, configPath, loginSession string, cache
 	return cachePath
 }
 
+func consoleAccessTokenString(creds *consoleLoginStsCredentials) (string, error) {
+	if creds == nil {
+		return "", fmt.Errorf("sts credentials are nil")
+	}
+	data, err := json.Marshal(creds)
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
+}
+
 func TestConsoleLoginUsesCachedCredentials(t *testing.T) {
 	dir := t.TempDir()
 	configPath := writeConsoleLoginConfig(t, dir, "default", map[string]interface{}{
@@ -56,7 +71,7 @@ func TestConsoleLoginUsesCachedCredentials(t *testing.T) {
 		"login-session": "sess-123",
 	})
 
-	sts := &STSCredentials{
+	sts := &consoleLoginStsCredentials{
 		AccessKeyID:     "AKIA",
 		SecretAccessKey: "SECRET",
 		SessionToken:    "TOKEN",
@@ -69,8 +84,8 @@ func TestConsoleLoginUsesCachedCredentials(t *testing.T) {
 	writeConsoleLoginCache(t, configPath, "sess-123", &LoginTokenCache{
 		LoginSession: "sess-123",
 		AccessToken:  json.RawMessage(accessToken),
-		Scope:        consoleScopeAllAll,
-		ClientID:     consoleClientIDSameDevice,
+		Scope:        consoleLoginTestScope,
+		ClientID:     consoleLoginTestClientID,
 		IssuedAt:     time.Now().UTC().Format(time.RFC3339),
 		ExpiresIn:    3600,
 		TokenType:    "urn:ietf:params:oauth:token-type:access_token_sts",
@@ -109,7 +124,7 @@ func TestConsoleLoginExpiredCacheWithoutRefreshToken(t *testing.T) {
 		"login-session": "sess-456",
 	})
 
-	sts := &STSCredentials{
+	sts := &consoleLoginStsCredentials{
 		AccessKeyID:     "AKIA",
 		SecretAccessKey: "SECRET",
 		SessionToken:    "TOKEN",
@@ -121,8 +136,8 @@ func TestConsoleLoginExpiredCacheWithoutRefreshToken(t *testing.T) {
 	writeConsoleLoginCache(t, configPath, "sess-456", &LoginTokenCache{
 		LoginSession: "sess-456",
 		AccessToken:  json.RawMessage(accessToken),
-		Scope:        consoleScopeAllAll,
-		ClientID:     consoleClientIDSameDevice,
+		Scope:        consoleLoginTestScope,
+		ClientID:     consoleLoginTestClientID,
 		IssuedAt:     time.Now().Add(-time.Hour).UTC().Format(time.RFC3339),
 		ExpiresIn:    1,
 		TokenType:    "urn:ietf:params:oauth:token-type:access_token_sts",
@@ -139,14 +154,14 @@ func TestConsoleLoginExpiredCacheWithoutRefreshToken(t *testing.T) {
 }
 
 func TestConsoleAccessTokenJSONString(t *testing.T) {
-	creds := &STSCredentials{AccessKeyID: "AK", SecretAccessKey: "SK", SessionToken: "TK"}
+	creds := &consoleLoginStsCredentials{AccessKeyID: "AK", SecretAccessKey: "SK", SessionToken: "TK"}
 	s, err := consoleAccessTokenString(creds)
 	if err != nil {
 		t.Fatalf("consoleAccessTokenString: %v", err)
 	}
-	parsed, err := ParseSTSCredentials(s)
+	parsed, err := parseConsoleLoginAccessToken(json.RawMessage(s))
 	if err != nil {
-		t.Fatalf("ParseSTSCredentials: %v", err)
+		t.Fatalf("parseConsoleLoginAccessToken: %v", err)
 	}
 	if parsed.AccessKeyID != creds.AccessKeyID || parsed.SecretAccessKey != creds.SecretAccessKey || parsed.SessionToken != creds.SessionToken {
 		t.Fatalf("round-trip mismatch: %+v vs %+v", parsed, creds)
@@ -160,14 +175,14 @@ func TestConsoleLoginRefreshesExpiredCLICache(t *testing.T) {
 		"login-session": "sess-refresh",
 	})
 
-	newSTS := &STSCredentials{AccessKeyID: "NEWAK", SecretAccessKey: "NEWSK", SessionToken: "NEWTOKEN"}
+	newSTS := &consoleLoginStsCredentials{AccessKeyID: "NEWAK", SecretAccessKey: "NEWSK", SessionToken: "NEWTOKEN"}
 	newAccessToken, err := consoleAccessTokenString(newSTS)
 	if err != nil {
 		t.Fatalf("build refreshed access token: %v", err)
 	}
 
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != consoleTokenPath {
+		if r.URL.Path != consoleLoginTokenPath {
 			t.Fatalf("unexpected path: %s", r.URL.Path)
 		}
 		if got := r.Header.Get("Content-Type"); !strings.Contains(got, "application/x-www-form-urlencoded") {
@@ -179,10 +194,10 @@ func TestConsoleLoginRefreshesExpiredCLICache(t *testing.T) {
 		if r.Form.Get("grant_type") != "refresh_token" {
 			t.Fatalf("grant_type = %q", r.Form.Get("grant_type"))
 		}
-		if r.Form.Get("client_id") != consoleClientIDSameDevice {
+		if r.Form.Get("client_id") != consoleLoginTestClientID {
 			t.Fatalf("client_id = %q", r.Form.Get("client_id"))
 		}
-		if r.Form.Get("scope") != consoleScopeAllAll {
+		if r.Form.Get("scope") != consoleLoginTestScope {
 			t.Fatalf("scope = %q", r.Form.Get("scope"))
 		}
 		if r.Form.Get("refresh_token") != "old-refresh" {
@@ -195,14 +210,14 @@ func TestConsoleLoginRefreshesExpiredCLICache(t *testing.T) {
 			"id_token":      "new-id-token",
 			"token_type":    "urn:ietf:params:oauth:token-type:access_token_sts",
 			"expires_in":    900,
-			"scope":         consoleScopeAllAll,
+			"scope":         consoleLoginTestScope,
 		}); err != nil {
 			t.Fatalf("encode response: %v", err)
 		}
 	}))
 	defer server.Close()
 
-	oldSTS := &STSCredentials{AccessKeyID: "OLD", SecretAccessKey: "OLD", SessionToken: "OLD"}
+	oldSTS := &consoleLoginStsCredentials{AccessKeyID: "OLD", SecretAccessKey: "OLD", SessionToken: "OLD"}
 	oldAccessToken, err := consoleAccessTokenString(oldSTS)
 	if err != nil {
 		t.Fatalf("build old access token: %v", err)
@@ -212,8 +227,8 @@ func TestConsoleLoginRefreshesExpiredCLICache(t *testing.T) {
 		LoginSession: "sess-refresh",
 		AccessToken:  json.RawMessage(oldAccessToken),
 		RefreshToken: "old-refresh",
-		Scope:        consoleScopeAllAll,
-		ClientID:     consoleClientIDSameDevice,
+		Scope:        consoleLoginTestScope,
+		ClientID:     consoleLoginTestClientID,
 		EndpointURL:  server.URL,
 		IssuedAt:     time.Now().Add(-time.Hour).UTC().Format(time.RFC3339),
 		ExpiresIn:    1,
@@ -249,12 +264,12 @@ func TestConsoleLoginInvalidGrantReloadsDiskCache(t *testing.T) {
 		"login-session": "sess-invalid-grant",
 	})
 
-	oldSTS := &STSCredentials{AccessKeyID: "OLD", SecretAccessKey: "OLD", SessionToken: "OLD"}
+	oldSTS := &consoleLoginStsCredentials{AccessKeyID: "OLD", SecretAccessKey: "OLD", SessionToken: "OLD"}
 	oldAccessToken, err := consoleAccessTokenString(oldSTS)
 	if err != nil {
 		t.Fatalf("build old access token: %v", err)
 	}
-	newSTS := &STSCredentials{AccessKeyID: "FALLBACKAK", SecretAccessKey: "FALLBACKSK", SessionToken: "FALLBACKTOKEN"}
+	newSTS := &consoleLoginStsCredentials{AccessKeyID: "FALLBACKAK", SecretAccessKey: "FALLBACKSK", SessionToken: "FALLBACKTOKEN"}
 	newAccessToken, err := consoleAccessTokenString(newSTS)
 	if err != nil {
 		t.Fatalf("build refreshed access token: %v", err)
@@ -264,7 +279,7 @@ func TestConsoleLoginInvalidGrantReloadsDiskCache(t *testing.T) {
 	requests := 0
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		requests++
-		if r.URL.Path != consoleTokenPath {
+		if r.URL.Path != consoleLoginTokenPath {
 			t.Fatalf("unexpected path: %s", r.URL.Path)
 		}
 		if err := r.ParseForm(); err != nil {
@@ -276,8 +291,8 @@ func TestConsoleLoginInvalidGrantReloadsDiskCache(t *testing.T) {
 				LoginSession: "sess-invalid-grant",
 				AccessToken:  json.RawMessage(oldAccessToken),
 				RefreshToken: "new-refresh",
-				Scope:        consoleScopeAllAll,
-				ClientID:     consoleClientIDSameDevice,
+				Scope:        consoleLoginTestScope,
+				ClientID:     consoleLoginTestClientID,
 				EndpointURL:  r.Host,
 				IssuedAt:     time.Now().Add(-time.Hour).UTC().Format(time.RFC3339),
 				ExpiresIn:    1,
@@ -304,7 +319,7 @@ func TestConsoleLoginInvalidGrantReloadsDiskCache(t *testing.T) {
 				"refresh_token": "rotated-refresh",
 				"token_type":    "urn:ietf:params:oauth:token-type:access_token_sts",
 				"expires_in":    900,
-				"scope":         consoleScopeAllAll,
+				"scope":         consoleLoginTestScope,
 			})
 		default:
 			t.Fatalf("unexpected refresh_token = %q", r.Form.Get("refresh_token"))
@@ -316,8 +331,8 @@ func TestConsoleLoginInvalidGrantReloadsDiskCache(t *testing.T) {
 		LoginSession: "sess-invalid-grant",
 		AccessToken:  json.RawMessage(oldAccessToken),
 		RefreshToken: "old-refresh",
-		Scope:        consoleScopeAllAll,
-		ClientID:     consoleClientIDSameDevice,
+		Scope:        consoleLoginTestScope,
+		ClientID:     consoleLoginTestClientID,
 		EndpointURL:  server.URL,
 		IssuedAt:     time.Now().Add(-time.Hour).UTC().Format(time.RFC3339),
 		ExpiresIn:    1,

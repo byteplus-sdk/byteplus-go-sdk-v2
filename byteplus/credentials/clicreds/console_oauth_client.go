@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -13,261 +12,192 @@ import (
 )
 
 const (
-	defaultConsoleEndpoint = "https://signin.byteplus.com"
-
-	consoleAuthorizePath = "/authorize/oauth/authorize"
-	consoleTokenPath     = "/authorize/oauth/token"
-
-	consoleClientIDSameDevice  = "trn:signin:::devtools/same-device"
-	consoleClientIDCrossDevice = "trn:signin:::devtools/cross-device"
-
-	consoleScopeAllAll = "Console:All:All"
+	defaultConsoleLoginEndpoint = "https://signin.byteplus.com"
+	consoleLoginTokenPath       = "/authorize/oauth/token"
+	consoleLoginRequestTimeout  = 30 * time.Second
+	consoleLoginRetryAttempts   = 3
 )
 
-// ConsoleOAuthClientConfig configures a ConsoleOAuthClient.
-type ConsoleOAuthClientConfig struct {
-	Endpoint   string
-	HTTPClient *http.Client
-	Timeout    time.Duration
+// ConsoleLoginOAuthClientConfig configures ConsoleLoginOAuthClient.
+type ConsoleLoginOAuthClientConfig struct {
+	EndpointURL string
+	HTTPClient  *http.Client
 }
 
-// ConsoleOAuthClient talks to the BytePlus signin OAuth endpoints used by
-// console-login.
-type ConsoleOAuthClient struct {
-	endpoint   string
+// ConsoleLoginOAuthClient calls the signin OAuth token endpoint for the SDK
+// console-login refresh path. Interactive authorization is handled only by CLI.
+type ConsoleLoginOAuthClient struct {
+	tokenURL   string
 	httpClient *http.Client
 }
 
-// NewConsoleOAuthClient builds a console-login OAuth client.
-func NewConsoleOAuthClient(cfg *ConsoleOAuthClientConfig) *ConsoleOAuthClient {
-	if cfg == nil {
-		cfg = &ConsoleOAuthClientConfig{}
-	}
-	endpoint := strings.TrimRight(strings.TrimSpace(cfg.Endpoint), "/")
-	if endpoint == "" {
-		endpoint = defaultConsoleEndpoint
-	}
-	httpClient := cfg.HTTPClient
-	if httpClient == nil {
-		timeout := cfg.Timeout
-		if timeout <= 0 {
-			timeout = 30 * time.Second
-		}
-		httpClient = &http.Client{Timeout: timeout}
-	}
-	return &ConsoleOAuthClient{
-		endpoint:   endpoint,
-		httpClient: httpClient,
-	}
+// ConsoleLoginOAuthClientAPI is the refresh-only interface used by tests.
+type ConsoleLoginOAuthClientAPI interface {
+	RefreshToken(ctx context.Context, req *ConsoleLoginRefreshTokenRequest) (*ConsoleLoginTokenResponse, error)
 }
 
-// ConsoleTokenRequest is the input for /authorize/oauth/token.
-type ConsoleTokenRequest struct {
-	GrantType    string
+var _ ConsoleLoginOAuthClientAPI = (*ConsoleLoginOAuthClient)(nil)
+
+// ConsoleLoginRefreshTokenRequest is the refresh_token grant request.
+type ConsoleLoginRefreshTokenRequest struct {
 	ClientID     string
 	Scope        string
-	Code         string
-	CodeVerifier string
-	RedirectURI  string
 	RefreshToken string
 }
 
-// ConsoleTokenResponse is the response payload from /authorize/oauth/token.
-type ConsoleTokenResponse struct {
-	AccessToken      string `json:"access_token"`
-	RefreshToken     string `json:"refresh_token"`
-	IDToken          string `json:"id_token"`
-	TokenType        string `json:"token_type"`
-	ExpiresIn        int64  `json:"expires_in"`
-	RefreshExpiresIn int64  `json:"refresh_expires_in"`
-	Scope            string `json:"scope"`
+// ConsoleLoginTokenResponse mirrors fields returned by the signin token API.
+type ConsoleLoginTokenResponse struct {
+	AccessToken  string `json:"access_token"`
+	TokenType    string `json:"token_type"`
+	ExpiresIn    int    `json:"expires_in"`
+	RefreshToken string `json:"refresh_token"`
+	Scope        string `json:"scope"`
+	IDToken      string `json:"id_token"`
 }
 
-// STSCredentials contains the BytePlus STS credentials embedded in the
-// console access token JSON payload.
-type STSCredentials struct {
-	AccessKeyID     string `json:"access_key_id"`
-	SecretAccessKey string `json:"secret_access_key"`
-	SessionToken    string `json:"session_token"`
-	CurrentTime     string `json:"current_time,omitempty"`
-	ExpiredTime     string `json:"expired_time,omitempty"`
+type consoleLoginOAuthErrorBody struct {
+	Error            string `json:"error"`
+	ErrorDescription string `json:"error_description,omitempty"`
+	ErrorURI         string `json:"error_uri,omitempty"`
 }
 
-// ConsoleOAuthAPIError represents a non-2xx response from the console OAuth
-// endpoint.
-type ConsoleOAuthAPIError struct {
-	StatusCode  int
-	ErrorCode   string `json:"error"`
-	Description string `json:"error_description"`
-	RawBody     string
+// ConsoleLoginOAuthAPIError wraps non-2xx signin OAuth responses so callers can
+// detect invalid_grant and run the disk-reload fallback.
+type ConsoleLoginOAuthAPIError struct {
+	StatusCode int
+	ErrorCode  string
+	ErrorDesc  string
+	RawBody    string
+	RequestID  string
 }
 
-func (e *ConsoleOAuthAPIError) Error() string {
+func (e *ConsoleLoginOAuthAPIError) Error() string {
 	if e == nil {
 		return ""
 	}
-	if e.Description != "" {
-		return fmt.Sprintf("console oauth: %s (%s)", e.Description, e.ErrorCode)
-	}
+	var parts []string
 	if e.ErrorCode != "" {
-		return fmt.Sprintf("console oauth error: %s", e.ErrorCode)
+		parts = append(parts, e.ErrorCode)
 	}
-	return fmt.Sprintf("console oauth: unexpected status %d: %s", e.StatusCode, e.RawBody)
+	if e.ErrorDesc != "" {
+		parts = append(parts, e.ErrorDesc)
+	}
+	msg := strings.Join(parts, ": ")
+	if msg == "" {
+		if e.RawBody != "" {
+			msg = e.RawBody
+		} else {
+			msg = "unknown error"
+		}
+	}
+	suffix := fmt.Sprintf("[status %d", e.StatusCode)
+	if e.RequestID != "" {
+		suffix += ", requestId: " + e.RequestID
+	}
+	suffix += "]"
+	return fmt.Sprintf("console login oauth request failed: %s %s", msg, suffix)
 }
 
-// IsRetryable reports whether the error indicates a transient failure.
-func (e *ConsoleOAuthAPIError) IsRetryable() bool {
-	if e == nil {
-		return false
-	}
-	return isRetryableHTTPStatus(e.StatusCode)
-}
-
-// IsRefreshTokenInvalid reports whether signin rejected the refresh token.
-func (e *ConsoleOAuthAPIError) IsRefreshTokenInvalid() bool {
+// IsRefreshTokenInvalid reports whether signin rejected the refresh_token.
+func (e *ConsoleLoginOAuthAPIError) IsRefreshTokenInvalid() bool {
 	if e == nil {
 		return false
 	}
 	return e.StatusCode == http.StatusBadRequest && e.ErrorCode == "invalid_grant"
 }
 
-// BuildAuthorizeURL builds the URL used to start the OAuth authorize flow.
-func (c *ConsoleOAuthClient) BuildAuthorizeURL(clientID, redirectURI, state, codeChallenge, scope string) (string, error) {
-	if strings.TrimSpace(c.endpoint) == "" {
-		return "", fmt.Errorf("console oauth endpoint is empty")
+// NewConsoleLoginOAuthClient creates a refresh-only OAuth client.
+func NewConsoleLoginOAuthClient(cfg *ConsoleLoginOAuthClientConfig) *ConsoleLoginOAuthClient {
+	endpoint := defaultConsoleLoginEndpoint
+	if cfg != nil && strings.TrimSpace(cfg.EndpointURL) != "" {
+		endpoint = strings.TrimSpace(cfg.EndpointURL)
 	}
-	u, err := url.Parse(c.endpoint + consoleAuthorizePath)
-	if err != nil {
-		return "", fmt.Errorf("failed to parse authorize url: %w", err)
+	endpoint = strings.TrimRight(endpoint, "/")
+
+	client := &http.Client{Timeout: consoleLoginRequestTimeout}
+	if cfg != nil && cfg.HTTPClient != nil {
+		client = cfg.HTTPClient
 	}
-	q := u.Query()
-	q.Set("response_type", "code")
-	q.Set("client_id", clientID)
-	q.Set("redirect_uri", redirectURI)
-	q.Set("state", state)
-	q.Set("code_challenge", codeChallenge)
-	q.Set("code_challenge_method", "S256")
-	if strings.TrimSpace(scope) == "" {
-		scope = consoleScopeAllAll
+
+	return &ConsoleLoginOAuthClient{
+		tokenURL:   endpoint + consoleLoginTokenPath,
+		httpClient: client,
 	}
-	q.Set("scope", scope)
-	u.RawQuery = q.Encode()
-	return u.String(), nil
 }
 
-// ExchangeToken calls /authorize/oauth/token with the supplied grant.
-func (c *ConsoleOAuthClient) ExchangeToken(ctx context.Context, req *ConsoleTokenRequest) (*ConsoleTokenResponse, error) {
+// RefreshToken exchanges a refresh_token for a new access_token in memory.
+func (c *ConsoleLoginOAuthClient) RefreshToken(ctx context.Context, req *ConsoleLoginRefreshTokenRequest) (*ConsoleLoginTokenResponse, error) {
 	if req == nil {
-		return nil, fmt.Errorf("console token request is nil")
-	}
-	if strings.TrimSpace(req.GrantType) == "" {
-		return nil, fmt.Errorf("console token request: grant_type is required")
+		return nil, fmt.Errorf("request cannot be nil")
 	}
 	if strings.TrimSpace(req.ClientID) == "" {
-		return nil, fmt.Errorf("console token request: client_id is required")
+		return nil, fmt.Errorf("client_id is required")
+	}
+	if strings.TrimSpace(req.RefreshToken) == "" {
+		return nil, fmt.Errorf("refresh_token is required")
 	}
 
 	form := url.Values{}
-	form.Set("grant_type", req.GrantType)
+	form.Set("grant_type", "refresh_token")
 	form.Set("client_id", req.ClientID)
-	if req.Scope != "" {
+	form.Set("refresh_token", req.RefreshToken)
+	if strings.TrimSpace(req.Scope) != "" {
 		form.Set("scope", req.Scope)
 	}
-	if req.Code != "" {
-		form.Set("code", req.Code)
-	}
-	if req.CodeVerifier != "" {
-		form.Set("code_verifier", req.CodeVerifier)
-	}
-	if req.RedirectURI != "" {
-		form.Set("redirect_uri", req.RedirectURI)
-	}
-	if req.RefreshToken != "" {
-		form.Set("refresh_token", req.RefreshToken)
-	}
+	body := form.Encode()
 
-	var tokenResp ConsoleTokenResponse
-	err := doWithRetry(ctx, retryOptions{maxAttempts: 3}, func() error {
-		httpReq, err := http.NewRequestWithContext(ctx, http.MethodPost, c.endpoint+consoleTokenPath, strings.NewReader(form.Encode()))
+	var resp ConsoleLoginTokenResponse
+	err := doWithRetry(ctx, retryOptions{maxAttempts: consoleLoginRetryAttempts}, func() error {
+		httpReq, err := http.NewRequestWithContext(ctx, http.MethodPost, c.tokenURL, strings.NewReader(body))
 		if err != nil {
-			return fmt.Errorf("failed to build console token request: %w", err)
+			return fmt.Errorf("failed to build request: %w", err)
 		}
 		httpReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-		httpReq.Header.Set("Accept", "application/json")
 
-		resp, err := c.httpClient.Do(httpReq)
+		httpResp, err := c.httpClient.Do(httpReq)
 		if err != nil {
-			return err
+			return fmt.Errorf("request failed: %w", err)
 		}
-		defer resp.Body.Close()
+		defer httpResp.Body.Close()
 
-		body, readErr := ioutil.ReadAll(io.Reader(resp.Body))
-		if readErr != nil {
-			return fmt.Errorf("failed to read console token response: %w", readErr)
+		respBytes, err := ioutil.ReadAll(httpResp.Body)
+		if err != nil {
+			return fmt.Errorf("failed to read response: %w", err)
 		}
-		if resp.StatusCode/100 != 2 {
-			apiErr := &ConsoleOAuthAPIError{StatusCode: resp.StatusCode, RawBody: string(body)}
-			_ = json.Unmarshal(body, apiErr)
+		requestID := httpResp.Header.Get("X-Tt-Logid")
+
+		if httpResp.StatusCode/100 != 2 {
+			apiErr := &ConsoleLoginOAuthAPIError{
+				StatusCode: httpResp.StatusCode,
+				RawBody:    string(respBytes),
+				RequestID:  requestID,
+			}
+			if len(respBytes) > 0 {
+				var errBody consoleLoginOAuthErrorBody
+				if json.Unmarshal(respBytes, &errBody) == nil {
+					apiErr.ErrorCode = errBody.Error
+					apiErr.ErrorDesc = errBody.ErrorDescription
+				}
+			}
 			return apiErr
 		}
-		var parsed ConsoleTokenResponse
-		if err := json.Unmarshal(body, &parsed); err != nil {
-			return fmt.Errorf("failed to unmarshal console token response: %w", err)
+
+		if len(respBytes) > 0 {
+			if err := json.Unmarshal(respBytes, &resp); err != nil {
+				return fmt.Errorf("failed to decode token response (status %d, requestId: %s): %w", httpResp.StatusCode, requestID, err)
+			}
 		}
-		if strings.TrimSpace(parsed.AccessToken) == "" {
-			return fmt.Errorf("console token response missing access_token")
-		}
-		tokenResp = parsed
 		return nil
 	})
 	if err != nil {
 		return nil, err
 	}
-	return &tokenResp, nil
-}
 
-// ParseSTSCredentials parses the JSON payload that the console embeds in the
-// access token (the access token is a JSON-encoded STS document).
-func ParseSTSCredentials(accessToken string) (*STSCredentials, error) {
-	s := strings.TrimSpace(accessToken)
-	if s == "" {
-		return nil, fmt.Errorf("console access token is empty")
+	if strings.TrimSpace(resp.AccessToken) == "" {
+		return nil, fmt.Errorf("RefreshToken succeeded but access_token was empty")
 	}
-	var creds STSCredentials
-	if err := json.Unmarshal([]byte(s), &creds); err != nil {
-		return nil, fmt.Errorf("failed to parse console sts credentials: %w", err)
+	if resp.ExpiresIn <= 0 {
+		return nil, fmt.Errorf("RefreshToken succeeded but expires_in was missing or invalid")
 	}
-	if strings.TrimSpace(creds.AccessKeyID) == "" || strings.TrimSpace(creds.SecretAccessKey) == "" || strings.TrimSpace(creds.SessionToken) == "" {
-		var legacy struct {
-			AccessKeyID     string `json:"AccessKeyId"`
-			SecretAccessKey string `json:"SecretAccessKey"`
-			SessionToken    string `json:"SessionToken"`
-			CurrentTime     string `json:"CurrentTime"`
-			ExpiredTime     string `json:"ExpiredTime"`
-		}
-		if err := json.Unmarshal([]byte(s), &legacy); err == nil {
-			if creds.AccessKeyID == "" {
-				creds.AccessKeyID = legacy.AccessKeyID
-			}
-			if creds.SecretAccessKey == "" {
-				creds.SecretAccessKey = legacy.SecretAccessKey
-			}
-			if creds.SessionToken == "" {
-				creds.SessionToken = legacy.SessionToken
-			}
-			if creds.CurrentTime == "" {
-				creds.CurrentTime = legacy.CurrentTime
-			}
-			if creds.ExpiredTime == "" {
-				creds.ExpiredTime = legacy.ExpiredTime
-			}
-		}
-	}
-	if strings.TrimSpace(creds.AccessKeyID) == "" || strings.TrimSpace(creds.SecretAccessKey) == "" {
-		return nil, fmt.Errorf("console sts credentials missing access key or secret key")
-	}
-	if strings.TrimSpace(creds.SessionToken) == "" {
-		return nil, fmt.Errorf("console sts credentials missing session token")
-	}
-	return &creds, nil
+	return &resp, nil
 }

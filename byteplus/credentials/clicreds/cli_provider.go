@@ -18,14 +18,15 @@ import (
 
 const (
 	// CliProviderName provides a name of CLI config provider.
-	CliProviderName = "CliProvider"
-	modeSSO         = "sso"
-	modeAK          = "ak"
-	modeRamRoleArn  = "ramrolearn"
-	modeOIDC        = "oidc"
-	modeEcsRole     = "ecsrole"
-	modeConsoleLogin = "console-login"
-	defaultRegion   = "ap-southeast-1"
+	CliProviderName        = "CliProvider"
+	modeSSO                = "sso"
+	modeAK                 = "ak"
+	modeRamRoleArn         = "ramrolearn"
+	modeOIDC               = "oidc"
+	modeEcsRole            = "ecsrole"
+	modeConsoleLogin       = "console-login"
+	defaultRegion          = "ap-southeast-1"
+	loginCacheDirectoryEnv = "BYTEPLUS_LOGIN_CACHE_DIRECTORY"
 )
 
 type cliConfigure struct {
@@ -35,14 +36,14 @@ type cliConfigure struct {
 }
 
 type cliProfile struct {
-	Mode           string `json:"mode"`
-	AccessKey      string `json:"access-key"`
-	SecretKey      string `json:"secret-key"`
-	SessionToken   string `json:"session-token"`
-	StsExpiration  int64  `json:"sts-expiration"`
-	SsoSessionName string `json:"sso-session-name"`
-	AccountId      string `json:"account-id"`
-	RoleName       string `json:"role-name"`
+	Mode             string `json:"mode"`
+	AccessKey        string `json:"access-key"`
+	SecretKey        string `json:"secret-key"`
+	SessionToken     string `json:"session-token"`
+	StsExpiration    int64  `json:"sts-expiration"`
+	SsoSessionName   string `json:"sso-session-name"`
+	AccountId        string `json:"account-id"`
+	RoleName         string `json:"role-name"`
 	OIDCTokenFile    string `json:"oidc-token-file"`
 	RoleTrn          string `json:"role-trn"`
 	Region           string `json:"region"`
@@ -70,6 +71,25 @@ type SsoTokenCache struct {
 	ClientSecretExpiresAt int64  `json:"client_secret_expires_at,omitempty"`
 	RefreshToken          string `json:"refresh_token,omitempty"`
 	Region                string `json:"region"`
+}
+
+type LoginTokenCache struct {
+	LoginSession string          `json:"login_session"`
+	AccessToken  json.RawMessage `json:"access_token"`
+	IssuedAt     string          `json:"issued_at"`
+	ExpiresIn    int64           `json:"expires_in"`
+	TokenType    string          `json:"token_type"`
+	RefreshToken string          `json:"refresh_token,omitempty"`
+	IDToken      string          `json:"id_token,omitempty"`
+	ClientID     string          `json:"client_id,omitempty"`
+	Scope        string          `json:"scope,omitempty"`
+	EndpointURL  string          `json:"endpoint_url,omitempty"`
+}
+
+type consoleLoginStsCredentials struct {
+	AccessKeyID     string `json:"access_key_id"`
+	SecretAccessKey string `json:"secret_access_key"`
+	SessionToken    string `json:"session_token"`
 }
 
 // CliProvider retrieves credentials from byteplus-cli's config file
@@ -636,6 +656,29 @@ func (p *CliProvider) retrieveEcsRole(profile *cliProfile, profileName, configPa
 	return p.delegate.Retrieve()
 }
 
+func (p *CliProvider) retrieveConsoleLogin(profile *cliProfile, profileName, configPath string) (credentials.Value, error) {
+	loginSession := strings.TrimSpace(profile.LoginSession)
+	if loginSession == "" {
+		return credentials.Value{ProviderName: CliProviderName}, bytepluserr.New(
+			"CliConfigLoginSessionMissing",
+			fmt.Sprintf("cli config profile %s in %s did not contain login-session; run 'bp login' first", profileName, configPath),
+			nil,
+		)
+	}
+
+	if p.delegate == nil {
+		p.delegate = newConsoleLoginRefreshableProvider(loginSession, resolveLoginCacheDir(configPath))
+	}
+	return p.delegate.Retrieve()
+}
+
+func resolveLoginCacheDir(configPath string) string {
+	if dir := os.Getenv(loginCacheDirectoryEnv); dir != "" {
+		return dir
+	}
+	return filepath.Join(filepath.Dir(configPath), "login", "cache")
+}
+
 func loadSsoTokenCache(path string) (*SsoTokenCache, error) {
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
@@ -681,6 +724,47 @@ func isTokenExpired(expiresAt string) (bool, error) {
 		return true, err
 	}
 	return time.Now().After(exp), nil
+}
+
+func consoleLoginCacheExpiration(cache *LoginTokenCache) (time.Time, error) {
+	if cache == nil {
+		return time.Time{}, fmt.Errorf("token cache is nil")
+	}
+	issuedAt, err := parseTokenExpiration(cache.IssuedAt)
+	if err != nil {
+		return time.Time{}, err
+	}
+	if cache.ExpiresIn <= 0 {
+		return time.Time{}, fmt.Errorf("expires_in is missing or invalid")
+	}
+	return issuedAt.Add(time.Duration(cache.ExpiresIn) * time.Second), nil
+}
+
+func parseConsoleLoginAccessToken(raw json.RawMessage) (*consoleLoginStsCredentials, error) {
+	if len(raw) == 0 {
+		return nil, fmt.Errorf("access_token is empty")
+	}
+
+	tokenBytes := []byte(raw)
+	var tokenString string
+	if err := json.Unmarshal(raw, &tokenString); err == nil {
+		tokenBytes = []byte(tokenString)
+	}
+
+	var stsCreds consoleLoginStsCredentials
+	if err := json.Unmarshal(tokenBytes, &stsCreds); err != nil {
+		return nil, err
+	}
+	if strings.TrimSpace(stsCreds.AccessKeyID) == "" {
+		return nil, fmt.Errorf("parsed STS credentials missing access_key_id")
+	}
+	if strings.TrimSpace(stsCreds.SecretAccessKey) == "" {
+		return nil, fmt.Errorf("parsed STS credentials missing secret_access_key")
+	}
+	if strings.TrimSpace(stsCreds.SessionToken) == "" {
+		return nil, fmt.Errorf("parsed STS credentials missing session_token")
+	}
+	return &stsCreds, nil
 }
 
 func parseTokenExpiration(expiresAt string) (time.Time, error) {
