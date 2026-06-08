@@ -72,7 +72,7 @@ Verify: open a new command prompt and run `echo %BYTEPLUS_ACCESS_KEY%`.
 | `BYTEPLUS_CLI_CONFIG_FILE` | Config file path; defaults to `~/.byteplus/config.json` |
 | `BYTEPLUS_PROFILE` | Profile name to use |
 | `BYTEPLUS_CLI_PROFILE` | Go CLI provider fallback profile name; lower priority than `BYTEPLUS_PROFILE` |
-| `BYTEPLUS_LOGIN_CACHE_DIRECTORY` | Console-login token cache directory; defaults to `<cli-config-dir>/login/cache` |
+| `BYTEPLUS_LOGIN_CACHE_DIRECTORY` | Optional console-login cache directory; defaults to `<cli-config-dir>/login/cache` |
 
 #### Default Credential Chain
 

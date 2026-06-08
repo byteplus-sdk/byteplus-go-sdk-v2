@@ -77,6 +77,9 @@ func shouldRetryError(err error) bool {
 
 	var consoleErr *ConsoleOAuthAPIError
 	if errors.As(err, &consoleErr) {
+		if consoleErr.IsRefreshTokenInvalid() {
+			return false
+		}
 		return isRetryableHTTPStatus(consoleErr.StatusCode)
 	}
 

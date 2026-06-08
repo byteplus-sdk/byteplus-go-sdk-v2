@@ -123,6 +123,14 @@ func (e *ConsoleOAuthAPIError) IsRetryable() bool {
 	return isRetryableHTTPStatus(e.StatusCode)
 }
 
+// IsRefreshTokenInvalid reports whether signin rejected the refresh token.
+func (e *ConsoleOAuthAPIError) IsRefreshTokenInvalid() bool {
+	if e == nil {
+		return false
+	}
+	return e.StatusCode == http.StatusBadRequest && e.ErrorCode == "invalid_grant"
+}
+
 // BuildAuthorizeURL builds the URL used to start the OAuth authorize flow.
 func (c *ConsoleOAuthClient) BuildAuthorizeURL(clientID, redirectURI, state, codeChallenge, scope string) (string, error) {
 	if strings.TrimSpace(c.endpoint) == "" {

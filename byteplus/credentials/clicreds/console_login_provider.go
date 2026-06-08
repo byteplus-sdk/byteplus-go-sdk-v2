@@ -10,6 +10,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/bytepluserr"
@@ -54,37 +55,228 @@ func (p *CliProvider) retrieveConsoleLogin(profile *cliProfile, profileName, con
 		)
 	}
 
-	cachePath, err := consoleLoginCacheFilePath(loginSession, configPath)
+	cacheDir, err := getConsoleLoginCacheDir(configPath)
 	if err != nil {
 		return credentials.Value{ProviderName: CliProviderName}, err
 	}
+	if p.delegate == nil {
+		p.delegate = newConsoleLoginRefreshableProvider(loginSession, cacheDir)
+	}
+	value, err := p.delegate.Retrieve()
+	if err == nil {
+		p.retrieved = true
+	}
+	return value, err
+}
 
-	cache, err := loadConsoleLoginTokenCache(cachePath)
+type consoleLoginOAuthClientAPI interface {
+	ExchangeToken(context.Context, *ConsoleTokenRequest) (*ConsoleTokenResponse, error)
+}
+
+type ConsoleLoginRefreshableProvider struct {
+	loginSession string
+	cacheDir     string
+
+	oauthClientFactory func(endpointURL string) consoleLoginOAuthClientAPI
+
+	mu          sync.Mutex
+	cached      *LoginTokenCache
+	creds       credentials.Value
+	expiration  time.Time
+	initialized bool
+}
+
+func newConsoleLoginRefreshableProvider(loginSession, cacheDir string) *ConsoleLoginRefreshableProvider {
+	return &ConsoleLoginRefreshableProvider{
+		loginSession:       loginSession,
+		cacheDir:           cacheDir,
+		oauthClientFactory: defaultConsoleLoginOAuthFactory,
+	}
+}
+
+func defaultConsoleLoginOAuthFactory(endpointURL string) consoleLoginOAuthClientAPI {
+	return NewConsoleOAuthClient(&ConsoleOAuthClientConfig{Endpoint: endpointURL})
+}
+
+func (p *ConsoleLoginRefreshableProvider) Retrieve() (credentials.Value, error) {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+
+	if !p.initialized || p.isExpiredLocked() {
+		if err := p.refreshLocked(); err != nil {
+			return credentials.Value{ProviderName: CliProviderName}, err
+		}
+	}
+	return p.creds, nil
+}
+
+func (p *ConsoleLoginRefreshableProvider) IsExpired() bool {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+	if !p.initialized {
+		return true
+	}
+	return p.isExpiredLocked()
+}
+
+func (p *ConsoleLoginRefreshableProvider) isExpiredLocked() bool {
+	if p.expiration.IsZero() {
+		return true
+	}
+	return !time.Now().Before(p.expiration.Add(-time.Minute))
+}
+
+func (p *ConsoleLoginRefreshableProvider) refreshLocked() error {
+	if p.cached == nil {
+		cache, err := p.loadCacheFromDisk()
+		if err != nil {
+			return err
+		}
+		p.cached = cache
+	}
+
+	if exp, ok := tryParseConsoleLoginAccessTokenAndExpiration(p.cached); ok {
+		return p.applyCredentialsLocked(exp)
+	}
+
+	err := p.refreshTokenWithCachedRT(context.Background())
+	if err == nil {
+		return nil
+	}
+	if !isConsoleRefreshTokenInvalidErr(err) {
+		return err
+	}
+
+	diskCache, diskErr := p.loadCacheFromDisk()
+	if diskErr != nil {
+		return wrapConsoleLoginRefreshErr(err, diskErr)
+	}
+	if strings.TrimSpace(diskCache.RefreshToken) == "" || diskCache.RefreshToken == p.cached.RefreshToken {
+		return bytepluserr.New(
+			"CliConsoleLoginRefreshTokenExpired",
+			"console-login refresh token has been rejected by signin service; please run 'bp login' to re-authenticate",
+			err,
+		)
+	}
+
+	p.cached = diskCache
+	if exp, ok := tryParseConsoleLoginAccessTokenAndExpiration(p.cached); ok {
+		return p.applyCredentialsLocked(exp)
+	}
+	if err2 := p.refreshTokenWithCachedRT(context.Background()); err2 != nil {
+		return bytepluserr.New(
+			"CliConsoleLoginRefreshTokenExpired",
+			"console-login refresh token rejected; reloaded cache from disk but new refresh token also failed; please run 'bp login'",
+			err2,
+		)
+	}
+	return nil
+}
+
+func (p *ConsoleLoginRefreshableProvider) refreshTokenWithCachedRT(ctx context.Context) error {
+	if p.cached == nil || strings.TrimSpace(p.cached.RefreshToken) == "" {
+		return bytepluserr.New(
+			"CliConsoleLoginRefreshTokenMissing",
+			fmt.Sprintf("console-login cache for login_session %q does not contain refresh_token; please run 'bp login' first", p.loginSession),
+			nil,
+		)
+	}
+	if strings.TrimSpace(p.cached.ClientID) == "" {
+		return bytepluserr.New(
+			"CliConsoleLoginClientIDMissing",
+			fmt.Sprintf("console-login cache for login_session %q does not contain client_id; please run 'bp login' to regenerate", p.loginSession),
+			nil,
+		)
+	}
+
+	client := p.oauthClientFactory(consoleLoginCacheEndpointURL(p.cached))
+	resp, err := client.ExchangeToken(ctx, &ConsoleTokenRequest{
+		GrantType:    "refresh_token",
+		ClientID:     p.cached.ClientID,
+		Scope:        p.cached.Scope,
+		RefreshToken: p.cached.RefreshToken,
+	})
 	if err != nil {
-		return credentials.Value{ProviderName: CliProviderName}, err
+		if isConsoleRefreshTokenInvalidErr(err) {
+			return err
+		}
+		return bytepluserr.New(
+			"CliConsoleLoginRefreshFailed",
+			"failed to refresh console-login access token; please run 'bp login' to re-authenticate",
+			err,
+		)
+	}
+	if resp == nil || strings.TrimSpace(resp.AccessToken) == "" {
+		return bytepluserr.New(
+			"CliConsoleLoginRefreshEmpty",
+			"console-login refresh response did not include access_token",
+			nil,
+		)
+	}
+	if resp.ExpiresIn <= 0 {
+		return bytepluserr.New(
+			"CliConsoleLoginRefreshExpiresIn",
+			"console-login refresh response did not include valid expires_in",
+			nil,
+		)
 	}
 
-	if err := ensureValidConsoleLoginToken(cache, cachePath); err != nil {
-		return credentials.Value{ProviderName: CliProviderName}, err
+	p.cached.AccessToken = json.RawMessage(resp.AccessToken)
+	if strings.TrimSpace(resp.RefreshToken) != "" {
+		p.cached.RefreshToken = resp.RefreshToken
 	}
+	if strings.TrimSpace(resp.TokenType) != "" {
+		p.cached.TokenType = resp.TokenType
+	}
+	p.cached.IssuedAt = time.Now().UTC().Format(time.RFC3339)
+	p.cached.ExpiresIn = int(resp.ExpiresIn)
 
-	creds, err := parseConsoleSTSCredentials(cache.AccessToken, cachePath)
+	exp, ok := tryParseConsoleLoginAccessTokenAndExpiration(p.cached)
+	if !ok {
+		return bytepluserr.New(
+			"CliConsoleLoginAccessTokenInvalid",
+			"console-login refresh succeeded but the new access_token could not be parsed into STS credentials",
+			nil,
+		)
+	}
+	return p.applyCredentialsLocked(exp)
+}
+
+func (p *ConsoleLoginRefreshableProvider) applyCredentialsLocked(exp time.Time) error {
+	cachePath, _ := p.cachePath()
+	creds, err := parseConsoleSTSCredentials(p.cached.AccessToken, cachePath)
 	if err != nil {
-		return credentials.Value{ProviderName: CliProviderName}, err
+		return err
 	}
-
-	if exp, ok := consoleLoginCacheExpiration(cache); ok {
-		p.hasExpiration = true
-		p.SetExpiration(exp, time.Minute)
-	}
-
-	p.retrieved = true
-	return credentials.Value{
+	p.creds = credentials.Value{
 		AccessKeyID:     creds.AccessKeyID,
 		SecretAccessKey: creds.SecretAccessKey,
 		SessionToken:    creds.SessionToken,
 		ProviderName:    CliProviderName,
-	}, nil
+	}
+	p.expiration = exp
+	p.initialized = true
+	return nil
+}
+
+func (p *ConsoleLoginRefreshableProvider) loadCacheFromDisk() (*LoginTokenCache, error) {
+	cachePath, err := p.cachePath()
+	if err != nil {
+		return nil, err
+	}
+	return loadConsoleLoginTokenCache(cachePath)
+}
+
+func (p *ConsoleLoginRefreshableProvider) cachePath() (string, error) {
+	if strings.TrimSpace(p.cacheDir) == "" {
+		return "", bytepluserr.New(
+			"CliConsoleLoginCacheDirMissing",
+			fmt.Sprintf("console-login provider for login_session %q has no cache directory", p.loginSession),
+			nil,
+		)
+	}
+	hash := sha1.Sum([]byte(strings.TrimSpace(p.loginSession)))
+	return filepath.Join(p.cacheDir, fmt.Sprintf("%x.json", hash)), nil
 }
 
 func consoleLoginCacheFilePath(loginSession, configPath string) (string, error) {
@@ -120,7 +312,7 @@ func loadConsoleLoginTokenCache(path string) (*LoginTokenCache, error) {
 		if os.IsNotExist(err) {
 			return nil, bytepluserr.New(
 				"CliConsoleLoginCacheMissing",
-				fmt.Sprintf("console-login cache file %s does not exist; please run `byteplus configure login` first", path),
+				fmt.Sprintf("console-login cache file %s does not exist; please run 'bp login' first", path),
 				err,
 			)
 		}
@@ -148,121 +340,6 @@ func loadConsoleLoginTokenCache(path string) (*LoginTokenCache, error) {
 	return cache, nil
 }
 
-func saveConsoleLoginTokenCache(path string, cache *LoginTokenCache) error {
-	if err := os.MkdirAll(filepath.Dir(path), 0700); err != nil {
-		return bytepluserr.New(
-			"CliConsoleLoginCacheDir",
-			fmt.Sprintf("failed to create console-login cache directory for %s", path),
-			err,
-		)
-	}
-	if err := writeJSONFileAtomic(path, 0600, cache); err != nil {
-		return bytepluserr.New(
-			"CliConsoleLoginCacheWrite",
-			fmt.Sprintf("failed to write console-login cache file %s", path),
-			err,
-		)
-	}
-	return nil
-}
-
-func ensureValidConsoleLoginToken(cache *LoginTokenCache, cachePath string) error {
-	if cache == nil {
-		return bytepluserr.New(
-			"CliConsoleLoginCacheNil",
-			fmt.Sprintf("console-login cache file %s is nil", cachePath),
-			nil,
-		)
-	}
-	if len(bytes.TrimSpace(cache.AccessToken)) == 0 {
-		return bytepluserr.New(
-			"CliConsoleLoginAccessTokenMissing",
-			fmt.Sprintf("console-login cache file %s did not contain access_token", cachePath),
-			nil,
-		)
-	}
-
-	expired, err := isConsoleLoginAccessTokenExpired(cache)
-	if err != nil {
-		return bytepluserr.New(
-			"CliConsoleLoginExpiresParse",
-			fmt.Sprintf("failed to parse console-login expiration in %s", cachePath),
-			err,
-		)
-	}
-	if !expired {
-		return nil
-	}
-
-	if strings.TrimSpace(cache.RefreshToken) == "" {
-		return bytepluserr.New(
-			"CliConsoleLoginRefreshMissing",
-			fmt.Sprintf("console-login cache file %s expired and did not contain refresh_token; please re-run `byteplus configure login`", cachePath),
-			nil,
-		)
-	}
-	refreshExpired, err := isConsoleLoginRefreshTokenExpired(cache)
-	if err == nil && refreshExpired {
-		return bytepluserr.New(
-			"CliConsoleLoginRefreshExpired",
-			fmt.Sprintf("console-login refresh token in %s has expired; please re-run `byteplus configure login`", cachePath),
-			nil,
-		)
-	}
-
-	clientID := strings.TrimSpace(cache.ClientID)
-	if clientID == "" {
-		clientID = consoleClientIDSameDevice
-	}
-	endpoint := strings.TrimSpace(cache.EndpointURL)
-	if endpoint == "" {
-		endpoint = strings.TrimSpace(cache.Endpoint)
-	}
-	oauthClient := NewConsoleOAuthClient(&ConsoleOAuthClientConfig{Endpoint: endpoint})
-	tokenResp, err := oauthClient.ExchangeToken(context.Background(), &ConsoleTokenRequest{
-		GrantType:    "refresh_token",
-		ClientID:     clientID,
-		Scope:        cache.Scope,
-		RefreshToken: cache.RefreshToken,
-	})
-	if err != nil {
-		return bytepluserr.New(
-			"CliConsoleLoginRefreshFailed",
-			"failed to refresh console-login access token",
-			err,
-		)
-	}
-	if tokenResp == nil || strings.TrimSpace(tokenResp.AccessToken) == "" {
-		return bytepluserr.New(
-			"CliConsoleLoginRefreshEmpty",
-			"console-login refresh response did not include access_token",
-			nil,
-		)
-	}
-
-	cache.AccessToken = json.RawMessage(tokenResp.AccessToken)
-	if strings.TrimSpace(tokenResp.RefreshToken) != "" {
-		cache.RefreshToken = tokenResp.RefreshToken
-	}
-	if strings.TrimSpace(tokenResp.IDToken) != "" {
-		cache.IDToken = tokenResp.IDToken
-	}
-	if tokenResp.TokenType != "" {
-		cache.TokenType = tokenResp.TokenType
-	}
-	if tokenResp.ExpiresIn > 0 {
-		cache.IssuedAt = time.Now().UTC().Format(time.RFC3339)
-		cache.ExpiresIn = int(tokenResp.ExpiresIn)
-	}
-	if tokenResp.RefreshExpiresIn > 0 {
-		cache.RefreshExpiresAt = time.Now().Add(time.Duration(tokenResp.RefreshExpiresIn) * time.Second).UTC().Format(time.RFC3339)
-	}
-	if tokenResp.Scope != "" {
-		cache.Scope = tokenResp.Scope
-	}
-	return saveConsoleLoginTokenCache(cachePath, cache)
-}
-
 func parseConsoleSTSCredentials(accessToken json.RawMessage, cachePath string) (*STSCredentials, error) {
 	payload, err := consoleAccessTokenPayload(accessToken)
 	if err != nil {
@@ -281,56 +358,6 @@ func parseConsoleSTSCredentials(accessToken json.RawMessage, cachePath string) (
 		)
 	}
 	return creds, nil
-}
-
-func isConsoleLoginAccessTokenExpired(cache *LoginTokenCache) (bool, error) {
-	if cache == nil {
-		return true, fmt.Errorf("console-login cache is nil")
-	}
-	if exp, ok, err := consoleLoginIssuedExpiration(cache); err != nil {
-		return true, err
-	} else if ok {
-		return time.Now().After(exp), nil
-	}
-
-	expiresAt := strings.TrimSpace(cache.ExpiresAt)
-	if expiresAt == "" {
-		// Without an explicit expiration, fall back to the STS payload's
-		// ExpiredTime field if present.
-		if payload, err := consoleAccessTokenPayload(cache.AccessToken); err == nil {
-			creds, err := ParseSTSCredentials(payload)
-			if err != nil {
-				return false, nil
-			}
-			if strings.TrimSpace(creds.ExpiredTime) != "" {
-				exp, err := parseTokenExpiration(creds.ExpiredTime)
-				if err == nil {
-					return time.Now().After(exp), nil
-				}
-			}
-		}
-		return false, nil
-	}
-	exp, err := parseTokenExpiration(expiresAt)
-	if err != nil {
-		return true, err
-	}
-	return time.Now().After(exp), nil
-}
-
-func isConsoleLoginRefreshTokenExpired(cache *LoginTokenCache) (bool, error) {
-	if cache == nil {
-		return true, fmt.Errorf("console-login cache is nil")
-	}
-	expiresAt := strings.TrimSpace(cache.RefreshExpiresAt)
-	if expiresAt == "" {
-		return false, nil
-	}
-	exp, err := parseTokenExpiration(expiresAt)
-	if err != nil {
-		return true, err
-	}
-	return time.Now().After(exp), nil
 }
 
 func consoleLoginCacheExpiration(cache *LoginTokenCache) (time.Time, bool) {
@@ -368,6 +395,58 @@ func consoleLoginIssuedExpiration(cache *LoginTokenCache) (time.Time, bool, erro
 		return time.Time{}, true, err
 	}
 	return issuedAt.Add(time.Duration(cache.ExpiresIn) * time.Second), true, nil
+}
+
+func tryParseConsoleLoginAccessTokenAndExpiration(cache *LoginTokenCache) (time.Time, bool) {
+	if cache == nil || len(bytes.TrimSpace(cache.AccessToken)) == 0 {
+		return time.Time{}, false
+	}
+	exp, ok := consoleLoginCacheExpiration(cache)
+	if !ok || !time.Now().Before(exp.Add(-time.Minute)) {
+		return time.Time{}, false
+	}
+	if _, err := parseConsoleSTSCredentials(cache.AccessToken, "console-login cache"); err != nil {
+		return time.Time{}, false
+	}
+	return exp, true
+}
+
+func consoleLoginCacheEndpointURL(cache *LoginTokenCache) string {
+	if cache == nil {
+		return ""
+	}
+	if endpoint := strings.TrimSpace(cache.EndpointURL); endpoint != "" {
+		return endpoint
+	}
+	return strings.TrimSpace(cache.Endpoint)
+}
+
+func isConsoleRefreshTokenInvalidErr(err error) bool {
+	if err == nil {
+		return false
+	}
+	type unwrapper interface {
+		Unwrap() error
+	}
+	for cur := err; cur != nil; {
+		if apiErr, ok := cur.(*ConsoleOAuthAPIError); ok {
+			return apiErr.IsRefreshTokenInvalid()
+		}
+		uw, ok := cur.(unwrapper)
+		if !ok {
+			return false
+		}
+		cur = uw.Unwrap()
+	}
+	return false
+}
+
+func wrapConsoleLoginRefreshErr(refreshErr, diskErr error) error {
+	return bytepluserr.New(
+		"CliConsoleLoginRefreshTokenExpired",
+		fmt.Sprintf("console-login refresh token rejected (%v); failed to reload cache from disk: %v; please run 'bp login'", refreshErr, diskErr),
+		refreshErr,
+	)
 }
 
 func consoleAccessTokenPayload(accessToken json.RawMessage) (string, error) {

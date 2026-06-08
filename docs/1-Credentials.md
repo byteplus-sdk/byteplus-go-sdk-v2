@@ -388,7 +388,7 @@ Supported modes in profile (case-insensitive):
 | --- | --- |
 | `ak` / empty | Static AK/SK from profile |
 | `sso` | SSO login via OIDC Device Authorization |
-| `console-login` | Console login cache written by `bp login` |
+| `console-login` | Reads STS credentials from the CLI console-login cache (SDK refreshes via OAuth `refresh_token` in-memory, never writes the cache file) |
 | `ramrolearn` | STS AssumeRole (delegates to `StsProvider`) |
 | `oidc` | STS AssumeRoleWithOIDC (delegates to `OIDCCredentialsProvider`) |
 | `ecsrole` | ECS IMDS (delegates to `EcsRoleProvider`) |
@@ -397,9 +397,9 @@ For `console-login`, run `bp login` first. The CLI profile must contain
 `mode: "console-login"` and `login-session`. `CliProvider` reads the token cache
 from `<cli-config-dir>/login/cache/<sha1(login_session)>.json` (default
 `~/.byteplus/login/cache/`, or `BYTEPLUS_LOGIN_CACHE_DIRECTORY` when set),
-parses the embedded STS credentials from `access_token`, and refreshes the cache
-through the OAuth `refresh_token` grant when the cached token has expired. If the
-refresh token is missing or expired, run `bp login` again.
+parses the embedded STS credentials from `access_token`, and refreshes expired
+tokens in memory through the OAuth `refresh_token` grant. The SDK never writes
+the CLI cache file; `bp login` remains the only disk writer.
 
 ```go
 package main
@@ -425,6 +425,30 @@ func main() {
 	}
 }
 ```
+
+#### Runtime Refresh Behavior (console-login)
+
+For `console-login` mode the SDK owns refresh in memory and never writes any
+local file. Key invariants:
+
+- **Read-only on disk**: `config.json` and
+  `~/.byteplus/login/cache/*.json` are read on bootstrap and once more if the
+  signin service rejects the in-memory refresh token (`invalid_grant`
+  fallback). They are never written by the SDK.
+- **In-memory refresh**: when the cached `access_token` is past its expiry
+  buffer (60 seconds), the SDK exchanges the cached `refresh_token` at
+  `https://signin.byteplus.com/authorize/oauth/token` and updates its
+  in-memory state only.
+- **Invalid-grant fallback**: on HTTP 400 `invalid_grant`, the SDK re-reads
+  the cache file once. If the disk `refresh_token` differs from the in-memory
+  one (i.e. `bp login` rotated it under the SDK), the SDK retries with the disk
+  refresh token; otherwise it reports an actionable error pointing at
+  `bp login`.
+- **Refresh-token expiry**: when the SDK exhausts both the in-memory and disk
+  refresh tokens, it raises a clear error instructing the user to run
+  `bp login`.
+- **Concurrency**: a per-process lock serializes refreshes so concurrent
+  callers share a single in-flight refresh.
 
 ### ECS Role Credential Provider
 

@@ -219,6 +219,10 @@ func TestConsoleLoginRefreshesExpiredCLICache(t *testing.T) {
 		ExpiresIn:    1,
 		TokenType:    "urn:ietf:params:oauth:token-type:access_token_sts",
 	})
+	beforeData, err := os.ReadFile(cachePath)
+	if err != nil {
+		t.Fatalf("read original cache: %v", err)
+	}
 
 	provider := NewCliProvider(configPath, "default")
 	value, err := provider.Retrieve()
@@ -233,17 +237,117 @@ func TestConsoleLoginRefreshesExpiredCLICache(t *testing.T) {
 	if err != nil {
 		t.Fatalf("read refreshed cache: %v", err)
 	}
-	var refreshed LoginTokenCache
-	if err := json.Unmarshal(data, &refreshed); err != nil {
-		t.Fatalf("unmarshal refreshed cache: %v", err)
+	if string(data) != string(beforeData) {
+		t.Fatalf("SDK must not rewrite CLI console-login cache.\nbefore: %s\nafter:  %s", string(beforeData), string(data))
 	}
-	if refreshed.RefreshToken != "new-refresh" || refreshed.IDToken != "new-id-token" {
-		t.Fatalf("refresh metadata not persisted: %+v", refreshed)
+}
+
+func TestConsoleLoginInvalidGrantReloadsDiskCache(t *testing.T) {
+	dir := t.TempDir()
+	configPath := writeConsoleLoginConfig(t, dir, "default", map[string]interface{}{
+		"mode":          modeConsoleLogin,
+		"login-session": "sess-invalid-grant",
+	})
+
+	oldSTS := &STSCredentials{AccessKeyID: "OLD", SecretAccessKey: "OLD", SessionToken: "OLD"}
+	oldAccessToken, err := consoleAccessTokenString(oldSTS)
+	if err != nil {
+		t.Fatalf("build old access token: %v", err)
 	}
-	if strings.TrimSpace(refreshed.IssuedAt) == "" || refreshed.ExpiresIn != 900 {
-		t.Fatalf("CLI expiration fields not persisted: %+v", refreshed)
+	newSTS := &STSCredentials{AccessKeyID: "FALLBACKAK", SecretAccessKey: "FALLBACKSK", SessionToken: "FALLBACKTOKEN"}
+	newAccessToken, err := consoleAccessTokenString(newSTS)
+	if err != nil {
+		t.Fatalf("build refreshed access token: %v", err)
 	}
-	if strings.Contains(string(data), `"expires_at"`) {
-		t.Fatalf("refreshed cache should use CLI issued_at/expires_in fields, got %s", string(data))
+
+	var cachePath string
+	requests := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		requests++
+		if r.URL.Path != consoleTokenPath {
+			t.Fatalf("unexpected path: %s", r.URL.Path)
+		}
+		if err := r.ParseForm(); err != nil {
+			t.Fatalf("parse form: %v", err)
+		}
+		switch r.Form.Get("refresh_token") {
+		case "old-refresh":
+			replacement := &LoginTokenCache{
+				LoginSession: "sess-invalid-grant",
+				AccessToken:  json.RawMessage(oldAccessToken),
+				RefreshToken: "new-refresh",
+				Scope:        consoleScopeAllAll,
+				ClientID:     consoleClientIDSameDevice,
+				EndpointURL:  r.Host,
+				IssuedAt:     time.Now().Add(-time.Hour).UTC().Format(time.RFC3339),
+				ExpiresIn:    1,
+				TokenType:    "urn:ietf:params:oauth:token-type:access_token_sts",
+			}
+			replacement.EndpointURL = "http://" + replacement.EndpointURL
+			data, err := json.Marshal(replacement)
+			if err != nil {
+				t.Fatalf("marshal replacement cache: %v", err)
+			}
+			if err := os.WriteFile(cachePath, data, 0600); err != nil {
+				t.Fatalf("write replacement cache: %v", err)
+			}
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusBadRequest)
+			_ = json.NewEncoder(w).Encode(map[string]string{
+				"error":             "invalid_grant",
+				"error_description": "refresh token expired",
+			})
+		case "new-refresh":
+			w.Header().Set("Content-Type", "application/json")
+			_ = json.NewEncoder(w).Encode(map[string]interface{}{
+				"access_token":  newAccessToken,
+				"refresh_token": "rotated-refresh",
+				"token_type":    "urn:ietf:params:oauth:token-type:access_token_sts",
+				"expires_in":    900,
+				"scope":         consoleScopeAllAll,
+			})
+		default:
+			t.Fatalf("unexpected refresh_token = %q", r.Form.Get("refresh_token"))
+		}
+	}))
+	defer server.Close()
+
+	cachePath = writeConsoleLoginCache(t, configPath, "sess-invalid-grant", &LoginTokenCache{
+		LoginSession: "sess-invalid-grant",
+		AccessToken:  json.RawMessage(oldAccessToken),
+		RefreshToken: "old-refresh",
+		Scope:        consoleScopeAllAll,
+		ClientID:     consoleClientIDSameDevice,
+		EndpointURL:  server.URL,
+		IssuedAt:     time.Now().Add(-time.Hour).UTC().Format(time.RFC3339),
+		ExpiresIn:    1,
+		TokenType:    "urn:ietf:params:oauth:token-type:access_token_sts",
+	})
+
+	provider := NewCliProvider(configPath, "default")
+	value, err := provider.Retrieve()
+	if err != nil {
+		t.Fatalf("retrieve: %v", err)
+	}
+	if value.AccessKeyID != newSTS.AccessKeyID || value.SecretAccessKey != newSTS.SecretAccessKey || value.SessionToken != newSTS.SessionToken {
+		t.Fatalf("unexpected fallback credential value: %+v", value)
+	}
+	if requests != 2 {
+		t.Fatalf("requests = %d, want 2", requests)
+	}
+
+	data, err := os.ReadFile(cachePath)
+	if err != nil {
+		t.Fatalf("read cache after fallback: %v", err)
+	}
+	var disk LoginTokenCache
+	if err := json.Unmarshal(data, &disk); err != nil {
+		t.Fatalf("unmarshal disk cache: %v", err)
+	}
+	if disk.RefreshToken != "new-refresh" {
+		t.Fatalf("SDK must not persist rotated refresh token, got cache %+v", disk)
+	}
+	if strings.Contains(string(data), "FALLBACKAK") || strings.Contains(string(data), "rotated-refresh") {
+		t.Fatalf("SDK wrote refreshed token data to disk: %s", string(data))
 	}
 }
