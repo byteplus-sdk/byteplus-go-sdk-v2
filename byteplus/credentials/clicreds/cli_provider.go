@@ -373,7 +373,7 @@ func (p *CliProvider) resolveTokenCachePath(startURL, sessionName, profileName, 
 	if p.cacheDir == "" {
 		return "", bytepluserr.New(
 			"CliSsoCacheDirMissing",
-			fmt.Sprintf("cli config profile %s in %s did not resolve cache directory", profileName, configPath),
+			fmt.Sprintf("cli config profile %s in %s did not resolve cache directory; please run 'bp sso login' to re-authenticate", profileName, configPath),
 			nil,
 		)
 	}
@@ -383,13 +383,13 @@ func (p *CliProvider) resolveTokenCachePath(startURL, sessionName, profileName, 
 		if os.IsNotExist(err) {
 			return "", bytepluserr.New(
 				"CliSsoTokenCacheMissing",
-				fmt.Sprintf("sso token cache file %s does not exist", tokenPath),
+				fmt.Sprintf("sso token cache file %s does not exist; please run 'bp sso login' to re-authenticate", tokenPath),
 				err,
 			)
 		}
 		return "", bytepluserr.New(
 			"CliSsoTokenCacheStat",
-			fmt.Sprintf("failed to stat sso token cache file %s", tokenPath),
+			fmt.Sprintf("failed to stat sso token cache file %s; please run 'bp sso login' to re-authenticate", tokenPath),
 			err,
 		)
 	}
@@ -530,14 +530,14 @@ func loadSsoTokenCache(path string) (*SsoTokenCache, error) {
 	if err != nil {
 		return nil, bytepluserr.New(
 			"CliSsoTokenCacheLoad",
-			fmt.Sprintf("failed to load sso token cache file %s", path),
+			fmt.Sprintf("failed to load sso token cache file %s; please run 'bp sso login' to re-authenticate", path),
 			err,
 		)
 	}
 	if len(strings.TrimSpace(string(data))) == 0 {
 		return nil, bytepluserr.New(
 			"CliSsoTokenCacheEmpty",
-			fmt.Sprintf("sso token cache file %s was empty", path),
+			fmt.Sprintf("sso token cache file %s was empty; please run 'bp sso login' to re-authenticate", path),
 			nil,
 		)
 	}
@@ -546,7 +546,7 @@ func loadSsoTokenCache(path string) (*SsoTokenCache, error) {
 	if err := json.Unmarshal(data, cache); err != nil {
 		return nil, bytepluserr.New(
 			"CliSsoTokenCacheUnmarshal",
-			fmt.Sprintf("failed to unmarshal sso token cache file %s", path),
+			fmt.Sprintf("failed to unmarshal sso token cache file %s; please run 'bp sso login' to re-authenticate", path),
 			err,
 		)
 	}

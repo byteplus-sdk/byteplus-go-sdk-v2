@@ -193,3 +193,62 @@ func TestRetrieve_RamRoleArnMode_PassesSessionToken(t *testing.T) {
 		t.Errorf("expected SessionToken=STS_TOKEN, got %q", sp.SessionToken)
 	}
 }
+
+func TestResolveTokenCachePathErrorsMentionSsoLogin(t *testing.T) {
+	const want = "please run 'bp sso login' to re-authenticate"
+
+	t.Run("cache dir missing", func(t *testing.T) {
+		p := &CliProvider{}
+		_, err := p.resolveTokenCachePath("https://signin.byteplus.com/sso/start", "session", "default", "config.json")
+		assertErrorContains(t, err, want)
+	})
+
+	t.Run("token cache missing", func(t *testing.T) {
+		p := &CliProvider{cacheDir: t.TempDir()}
+		_, err := p.resolveTokenCachePath("https://signin.byteplus.com/sso/start", "session", "default", "config.json")
+		assertErrorContains(t, err, want)
+	})
+
+	t.Run("stat failed", func(t *testing.T) {
+		p := &CliProvider{cacheDir: string([]byte{0})}
+		_, err := p.resolveTokenCachePath("https://signin.byteplus.com/sso/start", "session", "default", "config.json")
+		assertErrorContains(t, err, want)
+	})
+}
+
+func TestLoadSsoTokenCacheErrorsMentionSsoLogin(t *testing.T) {
+	const want = "please run 'bp sso login' to re-authenticate"
+
+	t.Run("load failed", func(t *testing.T) {
+		_, err := loadSsoTokenCache(filepath.Join(t.TempDir(), "missing.json"))
+		assertErrorContains(t, err, want)
+	})
+
+	t.Run("empty file", func(t *testing.T) {
+		path := filepath.Join(t.TempDir(), "empty.json")
+		if err := os.WriteFile(path, []byte("  \n\t"), 0600); err != nil {
+			t.Fatalf("write empty cache: %v", err)
+		}
+		_, err := loadSsoTokenCache(path)
+		assertErrorContains(t, err, want)
+	})
+
+	t.Run("invalid json", func(t *testing.T) {
+		path := filepath.Join(t.TempDir(), "invalid.json")
+		if err := os.WriteFile(path, []byte("{"), 0600); err != nil {
+			t.Fatalf("write invalid cache: %v", err)
+		}
+		_, err := loadSsoTokenCache(path)
+		assertErrorContains(t, err, want)
+	})
+}
+
+func assertErrorContains(t *testing.T, err error, want string) {
+	t.Helper()
+	if err == nil {
+		t.Fatalf("expected error containing %q, got nil", want)
+	}
+	if !strings.Contains(err.Error(), want) {
+		t.Fatalf("expected error containing %q, got: %v", want, err)
+	}
+}
