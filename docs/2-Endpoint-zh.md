@@ -56,7 +56,7 @@ func main() {
 
 1. **是否自动寻址 Region**
 
-    内置自动寻址 Region 列表代码：[`../byteplus/byteplusutil/url.go#bootstrapRegion`](../byteplus/byteplusutil/url.go#L463)
+    内置自动寻址 Region 列表代码：[`../byteplus/byteplusutil/url.go#bootstrapRegion`](../byteplus/byteplusutil/url.go#L221)
 
     SDK 仅对部分预设区域（如 `ap-southeast-2`）或用户配置的区域执行自动寻址；其他区域默认返回 Endpoint：`open.byteplusapi.com`。
 
@@ -104,7 +104,7 @@ func main() {
 | 否 | 是 | `{Service}.{region}.byteplus-api.com` |
 | 否 | 否 | `{Service}.{region}.byteplusapi.com` |
 
-服务是否为 Global 由具体服务决定，不可修改。可以参考列表：[`../byteplus/endpoints/standard_resolver.go#ServiceInfos`](../byteplus/endpoints/standard_resolver.go#L69)。
+服务是否为 Global 由具体服务决定，不可修改。可以参考列表：[`../byteplus/endpoints/standard_resolver.go#ServiceInfos`](../byteplus/endpoints/standard_resolver.go#L70)。
 
 ##### 代码示例
 
