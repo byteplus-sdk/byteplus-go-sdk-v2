@@ -4,23 +4,24 @@
 
 ## 集成 SDK
 
-在调用接口时，推荐在项目中集成 SDK 的方式进行接入。通过使用 SDK，不仅可以简化开发流程、加快功能集成速度，还能有效降低后期的维护成本。Byteplus SDK 的集成主要包括以下三个步骤：引入 SDK、配置访问凭证，以及编写接口调用代码。
+在调用接口时，推荐在项目中集成 SDK 的方式进行接入。通过使用 SDK，不仅可以简化开发流程、加快功能集成速度，还能有效降低后期的维护成本。BytePlus SDK 的集成主要包括以下三个步骤：引入 SDK、配置访问凭据，以及编写接口调用代码。
 
 ## 环境要求
 
-1. Go环境版本>=1.14
-2. 如使用ModelArk服务(service/arkruntime)，需要使用 >=1.18
-3. 建议使用go mod的方式进行包管理
+1. Go 环境版本 >= 1.14。
+2. 如使用 ModelArk 服务（`service/arkruntime`），需要使用 Go >= 1.18。
+3. 建议使用 go mod 的方式进行包管理。
 
 ## 目录
 
 1. [访问凭据](1-Credentials-zh.md) — AK/SK、STS、AssumeRole、OIDC、SAML、ECS 角色、默认凭证链
 2. [Endpoint 配置](2-Endpoint-zh.md) — 自定义 Endpoint、RegionId、自动化寻址
-3. [Transport](3-Transport-zh.md) — HTTP 连接池、HTTPS Scheme、SSL 验证、TLS 版本、HTTP(S) 代理
-4. [超时配置](4-Timeout-zh.md) — 全局超时、单接口超时
-5. [重试策略](5-Retry-zh.md) — 重试策略
-6. [错误处理](6-ErrorHandling-zh.md) — 异常处理
-7. [调试模式](7-Debugging-zh.md) — Debug 模式、日志输出
+3. [Transport](3-Transport-zh.md) — HTTP 连接池、HTTPS Scheme、SSL 验证、TLS 版本
+4. [代理配置](4-Proxy-zh.md) — HTTP(S) 代理配置
+5. [超时配置](5-Timeout-zh.md) — 全局超时、单接口超时
+6. [重试策略](6-Retry-zh.md) — 重试策略
+7. [错误处理](7-ErrorHandling-zh.md) — 异常处理
+8. [调试模式](8-Debugging-zh.md) — Debug 模式、日志输出
 
 ---
 

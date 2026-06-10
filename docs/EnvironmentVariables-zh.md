@@ -71,10 +71,12 @@ setx BYTEPLUS_SESSION_TOKEN your-session-token /M
 |---|---|
 | `BYTEPLUS_CLI_CONFIG_FILE` | 配置文件路径，默认 `~/.byteplus/config.json` |
 | `BYTEPLUS_PROFILE` | 使用的 profile 名 |
+| `BYTEPLUS_CLI_PROFILE` | Go CLI provider 的 fallback profile 名，优先级低于 `BYTEPLUS_PROFILE` |
+| `BYTEPLUS_LOGIN_CACHE_DIRECTORY` | 可选的 console-login 缓存目录，默认 `<cli-config-dir>/login/cache` |
 
 #### 默认凭证链顺序
 
-未显式配置凭证时，四端 SDK 均按以下顺序依次尝试，首个成功的 Provider 生效：
+未显式配置凭证时，Go SDK 按以下顺序依次尝试，首个成功的 Provider 生效：
 
 1. 环境变量 Provider（`BYTEPLUS_ACCESS_KEY` / `BYTEPLUS_SECRET_KEY`[/`BYTEPLUS_SESSION_TOKEN`]）
 2. OIDC Provider（从 `BYTEPLUS_OIDC_*` 读取）
@@ -87,6 +89,7 @@ setx BYTEPLUS_SESSION_TOKEN your-session-token /M
 |---|---|
 | CLI 配置文件路径 | 构造参数 > `BYTEPLUS_CLI_CONFIG_FILE` > `~/.byteplus/config.json` |
 | Profile | 构造参数 > `BYTEPLUS_PROFILE` > `BYTEPLUS_CLI_PROFILE`（仅 Go/PHP）> 配置中的 `current` > `default` |
+| Console-login 缓存目录 | `BYTEPLUS_LOGIN_CACHE_DIRECTORY` > `<cli-config-dir>/login/cache` > `~/.byteplus/login/cache` |
 | ECS Role 名称 | 构造参数 > `BYTEPLUS_ECS_METADATA` > IMDS 自动探测 |
 
 ### 相关文档

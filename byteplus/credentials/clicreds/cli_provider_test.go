@@ -49,6 +49,54 @@ func TestRetrieve_AKMode(t *testing.T) {
 	}
 }
 
+func TestRetrieve_UsesEnvConfigFile(t *testing.T) {
+	dir := t.TempDir()
+	configPath := writeTempConfig(t, dir, map[string]interface{}{
+		"current": "env-profile",
+		"profiles": map[string]interface{}{
+			"env-profile": map[string]interface{}{
+				"mode":       "AK",
+				"access-key": "ENV_AK",
+				"secret-key": "ENV_SK",
+			},
+		},
+	})
+	t.Setenv("BYTEPLUS_CLI_CONFIG_FILE", configPath)
+
+	p := NewCliProvider("", "env-profile")
+	v, err := p.Retrieve()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if v.AccessKeyID != "ENV_AK" || v.SecretAccessKey != "ENV_SK" {
+		t.Errorf("unexpected credentials from env config: %+v", v)
+	}
+}
+
+func TestNewCliCredentials_UsesEnvConfigFile(t *testing.T) {
+	dir := t.TempDir()
+	configPath := writeTempConfig(t, dir, map[string]interface{}{
+		"current": "env-credentials",
+		"profiles": map[string]interface{}{
+			"env-credentials": map[string]interface{}{
+				"mode":       "AK",
+				"access-key": "ENV_CREDS_AK",
+				"secret-key": "ENV_CREDS_SK",
+			},
+		},
+	})
+	t.Setenv("BYTEPLUS_CLI_CONFIG_FILE", configPath)
+
+	creds := NewCliCredentials("", "env-credentials")
+	v, err := creds.Get()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if v.AccessKeyID != "ENV_CREDS_AK" || v.SecretAccessKey != "ENV_CREDS_SK" {
+		t.Errorf("unexpected credentials from env config: %+v", v)
+	}
+}
+
 func TestRetrieve_UnsupportedMode(t *testing.T) {
 	dir := t.TempDir()
 	configPath := writeTempConfig(t, dir, map[string]interface{}{

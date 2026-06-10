@@ -76,7 +76,7 @@ Verify: open a new command prompt and run `echo %BYTEPLUS_ACCESS_KEY%`.
 
 #### Default Credential Chain
 
-When no credentials are explicitly configured, all four SDKs try the following providers in order; the first one that succeeds is used:
+When no credentials are explicitly configured, the Go SDK tries the following providers in order; the first one that succeeds is used:
 
 1. Environment Variable Provider (`BYTEPLUS_ACCESS_KEY` / `BYTEPLUS_SECRET_KEY`[/`BYTEPLUS_SESSION_TOKEN`])
 2. OIDC Provider (reads `BYTEPLUS_OIDC_*`)

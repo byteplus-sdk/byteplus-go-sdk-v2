@@ -112,19 +112,10 @@ type CliProvider struct {
 // chain. Unlike NewCliCredentials, it does not wrap in a Credentials object,
 // allowing the chain to manage expiration and caching uniformly.
 func NewCliProvider(configPath, profile string) *CliProvider {
-	if configPath == "" {
-		home := shareddefaults.UserHomeDir()
-		if home != "" {
-			configPath = filepath.Join(home, ".byteplus", "config.json")
-		}
-	}
-	cacheDir := ""
-	if configPath != "" {
-		cacheDir = filepath.Join(filepath.Dir(configPath), "sso", "cache")
-	}
+	configPath = resolveCliConfigPath(configPath)
 	return &CliProvider{
 		configPath: configPath,
-		cacheDir:   cacheDir,
+		cacheDir:   resolveSsoCacheDir(configPath),
 		profile:    profile,
 		Expiry:     credentials.Expiry{},
 	}
@@ -133,22 +124,7 @@ func NewCliProvider(configPath, profile string) *CliProvider {
 // NewCliCredentials returns a pointer to a new Credentials object wrapping the
 // byteplus-cli config provider.
 func NewCliCredentials(configPath, profile string) *credentials.Credentials {
-	cacheDir := ""
-	if configPath == "" {
-		home := shareddefaults.UserHomeDir()
-		if home != "" {
-			configPath = filepath.Join(home, ".byteplus", "config.json")
-			cacheDir = filepath.Join(home, ".byteplus", "sso", "cache")
-		}
-	} else {
-		cacheDir = filepath.Join(filepath.Dir(configPath), "sso", "cache")
-	}
-	return credentials.NewExpireAbleCredentials(&CliProvider{
-		configPath: configPath,
-		cacheDir:   cacheDir,
-		profile:    profile,
-		Expiry:     credentials.Expiry{},
-	})
+	return credentials.NewExpireAbleCredentials(NewCliProvider(configPath, profile))
 }
 
 func (p *CliProvider) Retrieve() (credentials.Value, error) {
@@ -163,17 +139,12 @@ func (p *CliProvider) Retrieve() (credentials.Value, error) {
 
 	configPath := p.configPath
 	if configPath == "" {
-		if env := credentials.GetEnvWithFallback("BYTEPLUS_CLI_CONFIG_FILE"); env != "" {
-			configPath = env
-			p.configPath = configPath
-		} else {
-			home := shareddefaults.UserHomeDir()
-			if home == "" {
-				return credentials.Value{ProviderName: CliProviderName}, credentials.ErrSharedCredentialsHomeNotFound
-			}
-			configPath = filepath.Join(home, ".byteplus", "config.json")
-			p.configPath = configPath
+		configPath = resolveCliConfigPath("")
+		if configPath == "" {
+			return credentials.Value{ProviderName: CliProviderName}, credentials.ErrSharedCredentialsHomeNotFound
 		}
+		p.configPath = configPath
+		p.cacheDir = resolveSsoCacheDir(configPath)
 	}
 
 	b, err := ioutil.ReadFile(configPath)
@@ -235,6 +206,27 @@ func (p *CliProvider) Retrieve() (credentials.Value, error) {
 			nil,
 		)
 	}
+}
+
+func resolveCliConfigPath(configPath string) string {
+	if configPath != "" {
+		return configPath
+	}
+	if env := credentials.GetEnvWithFallback("BYTEPLUS_CLI_CONFIG_FILE"); env != "" {
+		return env
+	}
+	home := shareddefaults.UserHomeDir()
+	if home == "" {
+		return ""
+	}
+	return filepath.Join(home, ".byteplus", "config.json")
+}
+
+func resolveSsoCacheDir(configPath string) string {
+	if configPath == "" {
+		return ""
+	}
+	return filepath.Join(filepath.Dir(configPath), "sso", "cache")
 }
 
 func (p *CliProvider) retrieveAK(profile *cliProfile, profileName, configPath string) (credentials.Value, error) {

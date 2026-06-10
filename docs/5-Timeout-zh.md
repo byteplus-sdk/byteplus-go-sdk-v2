@@ -1,4 +1,4 @@
-[← Transport](3-Transport-zh.md) | 超时配置[(English)](4-Timeout.md) | [重试机制 →](5-Retry-zh.md)
+[← 代理配置](4-Proxy-zh.md) | 超时配置[(English)](5-Timeout.md) | [重试机制 →](6-Retry-zh.md)
 
 ---
 
@@ -8,9 +8,9 @@
 
 > **默认**
 >
-> - `ConnectTimeout` - 30s
-> - `ReadTimeout` - 不限制
-> - 备注：默认用的是 `http.DefaultClient`
+> - 默认 client：`http.DefaultClient`
+> - `ConnectTimeout`：30s（即 `net.Dialer{Timeout: 30s}`）
+> - `ReadTimeout` / 整体请求超时：不限制（`http.DefaultClient.Timeout == 0`）
 
 暂不支持直接设置 `ConnectTimeOut` 和 `ReadTimeout` 配置，可以通过自定义 HttpClient 来实现。
 
@@ -20,7 +20,7 @@ func main() {
 	transport := &http.Transport{
 		Proxy: http.ProxyFromEnvironment,
 		DialContext: (&net.Dialer{
-			Timeout:   30 * time.Second, // 设置ConnectTimeOut
+			Timeout:   30 * time.Second,
 			KeepAlive: 30 * time.Second,
 			DualStack: true,
 		}).DialContext,
@@ -32,12 +32,12 @@ func main() {
 
 	client := &http.Client{
 		Transport: transport,
-		Timeout:   60 * time.Second, // 设置ReadTimeout
+		Timeout:   60 * time.Second,
 	}
 	config := byteplus.NewConfig().
 		WithRegion(region).
 		WithHTTPClient(client).
-		WithCredentials(credentials.NewEnvCredentials()) // 环境变量配置：BYTEPLUS_ACCESS_KEY、BYTEPLUS_SECRET_KEY、BYTEPLUS_SESSION_TOKEN
+		WithCredentials(credentials.NewEnvCredentials())
 
 	sess, err := session.NewSession(config)
 	if err != nil {
@@ -56,23 +56,16 @@ func main() {
 	region := "ap-southeast-1"
 	config := byteplus.NewConfig().
 		WithRegion(region).
-		WithCredentials(credentials.NewEnvCredentials()) //环境变量配置：BYTEPLUS_ACCESS_KEY、BYTEPLUS_SECRET_KEY、BYTEPLUS_SESSION_TOKEN
+		WithCredentials(credentials.NewEnvCredentials())
 	sess, err := session.NewSession(config)
 	if err != nil {
 		panic(err)
 	}
 	svc := ecs.New(sess)
-	associateInstancesIamRoleInput := &ecs.AssociateInstancesIamRoleInput{
-		IamRoleName: byteplus.String("EcsTestRole"),
-		InstanceIds: byteplus.StringSlice([]string{"i-3tiefmkskq3vj0******"}),
-	}
 
-	// 创建带5秒超时的上下文；注意：如果已经存在上下文context，请把这里context.Background()替换为已有的上下文
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	// 防止资源泄漏
 	defer cancel()
 
-	// 调用WithContext结尾的接口
 	resp, err := svc.AssociateInstancesIamRoleWithContext(ctx, associateInstancesIamRoleInput)
 	if err != nil {
 		panic(err)
@@ -83,4 +76,4 @@ func main() {
 
 ---
 
-[← Transport](3-Transport-zh.md) | 超时配置[(English)](4-Timeout.md) | [重试机制 →](5-Retry-zh.md)
+[← 代理配置](4-Proxy-zh.md) | 超时配置[(English)](5-Timeout.md) | [重试机制 →](6-Retry-zh.md)

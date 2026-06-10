@@ -49,7 +49,7 @@ Byteplus provides a flexible endpoint resolution mechanism. The SDK automaticall
 
 1. **Whether the region is in the bootstrap list**
 
-    Built-in list implementation: [`./byteplus/byteplusutil/url.go#bootstrapRegion`](./byteplus/byteplusutil/url.go#L463).
+    Built-in list implementation: [`../byteplus/byteplusutil/url.go#bootstrapRegion`](../byteplus/byteplusutil/url.go#L463).
 
     Only predefined regions (e.g., `ap-southeast-2`) or user-configured regions are auto-resolved; others fall back to `open.byteplusapi.com`.
 
@@ -97,7 +97,7 @@ func main() {
 | No  | Yes | `{Service}.{region}.byteplus-api.com` |
 | No  | No  | `{Service}.{region}.byteplusapi.com` |
 
-Whether a service is global depends on the service itself and cannot be changed. See: [`./byteplus/endpoints/standard_resolver.go#ServiceInfos`](./byteplus/endpoints/standard_resolver.go#L69).
+Whether a service is global depends on the service itself and cannot be changed. See: [`../byteplus/endpoints/standard_resolver.go#ServiceInfos`](../byteplus/endpoints/standard_resolver.go#L69).
 
 ##### Code Example
 

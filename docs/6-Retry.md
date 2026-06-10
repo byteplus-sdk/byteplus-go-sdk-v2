@@ -1,4 +1,4 @@
-[← Timeout](4-Timeout.md) | Retry[(中文)](5-Retry-zh.md) | [Error Handling →](6-ErrorHandling.md)
+[← Timeout](5-Timeout.md) | Retry[(中文)](6-Retry-zh.md) | [Error Handling →](7-ErrorHandling.md)
 
 ---
 
@@ -16,7 +16,7 @@ Set max retries to `0` to disable.
 
 ```go
 func main() {
-	region := ""ap-southeast-1"
+	region := "ap-southeast-1"
 	config := byteplus.NewConfig().
 		WithRegion(region).
 		WithDisableSSL(true).
@@ -66,4 +66,4 @@ resp, err := svc.DescribeAvailableResourceWithContext(ctx, describeAvailableReso
 
 ---
 
-[← Timeout](4-Timeout.md) | Retry[(中文)](5-Retry-zh.md) | [Error Handling →](6-ErrorHandling.md)
+[← Timeout](5-Timeout.md) | Retry[(中文)](6-Retry-zh.md) | [Error Handling →](7-ErrorHandling.md)

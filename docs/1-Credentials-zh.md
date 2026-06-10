@@ -352,10 +352,19 @@ func main() {
 | 模式 | 说明 |
 | --- | --- |
 | `ak` / 空 | 从 profile 中读取静态 AK/SK |
-| `sso` | SSO 登录（OIDC Device Authorization） |
+| `sso` | 从 CLI sso 缓存读取 STS 凭证（SDK 在内存中刷新 access token，不写回缓存文件） |
+| `console-login` | 从 CLI console-login 缓存读取 STS 凭证（SDK 通过 OAuth `refresh_token` 在内存中刷新，不写回缓存文件） |
 | `ramrolearn` | STS AssumeRole（委托给 `StsProvider`） |
 | `oidc` | STS AssumeRoleWithOIDC（委托给 `OIDCCredentialsProvider`） |
 | `ecsrole` | ECS IMDS（委托给 `EcsRoleProvider`） |
+
+使用 `console-login` 前，请先执行 `bp login`。CLI profile 中必须包含
+`mode: "console-login"` 和 `login-session`。`CliProvider` 会从
+`<cli-config-dir>/login/cache/<sha1(login_session)>.json` 读取 token cache
+（默认 `~/.byteplus/login/cache/`，也可通过 `BYTEPLUS_LOGIN_CACHE_DIRECTORY`
+覆盖），从 `access_token` 中解析 STS 凭证，并在 token 过期后通过 OAuth
+`refresh_token` grant 在内存中刷新。SDK 永远不会写回 CLI cache 文件；
+`bp login` 仍然是磁盘 cache 的唯一写入方。
 
 ```go
 package main
@@ -381,6 +390,25 @@ func main() {
 	}
 }
 ```
+
+#### 运行时刷新行为（sso / console-login）
+
+对于 `sso` 和 `console-login` 模式，SDK 只负责进程内刷新，不写任何本地文件。关键约束如下：
+
+- **磁盘只读**：`config.json`、`~/.byteplus/sso/cache/*.json` 和
+  `~/.byteplus/login/cache/*.json` 只会在初始化时读取；当授权服务拒绝内存中的
+  refresh token（`invalid_grant` fallback）时，会再读取一次。SDK 不会写这些文件。
+- **内存刷新**：当缓存的 `access_token` 距离过期不足 60 秒时，SDK 使用缓存的
+  `refresh_token` 调 OAuth `/token` 端点，并更新内存状态。SSO 随后调用
+  CloudIdentity Portal `GetRoleCredentials` 获取 STS 三元组；console-login
+  则从刷新后的 signin access token 中解析 STS。
+- **invalid_grant fallback**：遇到 HTTP 400 `invalid_grant` 时，SDK 会重新读取一次
+  cache 文件。如果磁盘中的 `refresh_token` 与内存中的不同（例如 `bp login` /
+  `bp sso login` 在 SDK 运行期间轮换过），SDK 会用磁盘上的 refresh token 重试；
+  否则返回明确错误，提示用户运行 `bp login`（console-login）或 `bp sso login`（SSO）。
+- **refresh token 过期**：当内存和磁盘中的 refresh token 都不可用时，SDK 会返回清晰错误，
+  提示用户重新运行 `bp login` 或 `bp sso login`。
+- **并发**：进程内使用锁串行化刷新，多个并发调用共享同一次刷新结果。
 
 ### ECS 实例角色凭证提供者
 
