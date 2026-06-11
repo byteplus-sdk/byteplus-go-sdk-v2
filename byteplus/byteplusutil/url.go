@@ -141,6 +141,11 @@ var defaultEndpoint = map[string]*ServiceEndpointInfo{
 		IsGlobal:        false,
 		DefaultEndpoint: endpoint,
 	},
+	"redis": {
+		Service:         "redis",
+		IsGlobal:        false,
+		DefaultEndpoint: endpoint,
+	},
 	"vmp": {
 		Service:         "vmp",
 		IsGlobal:        false,
