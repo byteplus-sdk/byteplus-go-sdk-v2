@@ -1,0 +1,5 @@
+{
+  "description": "VMP: modified GetAlertingRule, GetWorkspace, ListWorkspaceInstanceTypes, ListWorkspaces, UpdateWorkspace, CreateWorkspace, GetAggregateWorkspace",
+  "modules": "service/vmp",
+  "type": "feature"
+}
