@@ -1,5 +1,0 @@
-{
-  "description": "BILLING: modified ListAmortizedCostBillDetail, ListBillDetail, ListSplitBillDetail",
-  "modules": "service/billing",
-  "type": "feature"
-}

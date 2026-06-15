@@ -4,7 +4,7 @@ package byteplus
 // Copy from https://github.com/aws/aws-sdk-go
 // May have been modified by Byteplus.
 
-// SDKName is the name of this byteplus SDK
+// SDKName is the name of this SDK
 const SDKName = "byteplus-go-sdk-v2"
 
 // SDKVersion is the version of this SDK
