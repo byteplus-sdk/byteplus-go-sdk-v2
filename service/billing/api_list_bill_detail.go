@@ -175,6 +175,8 @@ type ListBillDetailInput struct {
 	PayerID []*int64 `type:"list" json:",omitempty"`
 
 	Product []*string `type:"list" json:",omitempty"`
+
+	Project []*string `type:"list" json:",omitempty"`
 }
 
 // String returns the string representation
@@ -287,6 +289,12 @@ func (s *ListBillDetailInput) SetProduct(v []*string) *ListBillDetailInput {
 	return s
 }
 
+// SetProject sets the Project field's value.
+func (s *ListBillDetailInput) SetProject(v []*string) *ListBillDetailInput {
+	s.Project = v
+	return s
+}
+
 type ListBillDetailOutput struct {
 	_ struct{} `type:"structure" json:",omitempty"`
 
@@ -355,6 +363,8 @@ type ListForListBillDetailOutput struct {
 	BusiPeriod *string `type:"string" json:",omitempty"`
 
 	BusinessMode *string `type:"string" json:",omitempty"`
+
+	ChargeItemCode *string `type:"string" json:",omitempty"`
 
 	ConfigName *string `type:"string" json:",omitempty"`
 
@@ -440,6 +450,12 @@ type ListForListBillDetailOutput struct {
 
 	PayerUserName *string `type:"string" json:",omitempty"`
 
+	PickupVoucherCountUnit *string `type:"string" json:",omitempty"`
+
+	PickupVoucherDeductCount *string `type:"string" json:",omitempty"`
+
+	PickupVoucherID *string `type:"string" json:",omitempty"`
+
 	PosttaxAmount *string `type:"string" json:",omitempty"`
 
 	PreTaxPayableAmount *string `type:"string" json:",omitempty"`
@@ -451,6 +467,8 @@ type ListForListBillDetailOutput struct {
 	PretaxRealValue *string `type:"string" json:",omitempty"`
 
 	Price *string `type:"string" json:",omitempty"`
+
+	PriceFactor *string `type:"string" json:",omitempty"`
 
 	PriceInterval *string `type:"string" json:",omitempty"`
 
@@ -477,6 +495,8 @@ type ListForListBillDetailOutput struct {
 	RoundAmount *float64 `type:"double" json:",omitempty"`
 
 	SavingPlanDeductionDiscountAmount *string `type:"string" json:",omitempty"`
+
+	SavingPlanDeductionDiscountTotalAmount *string `type:"string" json:",omitempty"`
 
 	SavingPlanDeductionSpID *string `type:"string" json:",omitempty"`
 
@@ -592,6 +612,12 @@ func (s *ListForListBillDetailOutput) SetBusiPeriod(v string) *ListForListBillDe
 // SetBusinessMode sets the BusinessMode field's value.
 func (s *ListForListBillDetailOutput) SetBusinessMode(v string) *ListForListBillDetailOutput {
 	s.BusinessMode = &v
+	return s
+}
+
+// SetChargeItemCode sets the ChargeItemCode field's value.
+func (s *ListForListBillDetailOutput) SetChargeItemCode(v string) *ListForListBillDetailOutput {
+	s.ChargeItemCode = &v
 	return s
 }
 
@@ -847,6 +873,24 @@ func (s *ListForListBillDetailOutput) SetPayerUserName(v string) *ListForListBil
 	return s
 }
 
+// SetPickupVoucherCountUnit sets the PickupVoucherCountUnit field's value.
+func (s *ListForListBillDetailOutput) SetPickupVoucherCountUnit(v string) *ListForListBillDetailOutput {
+	s.PickupVoucherCountUnit = &v
+	return s
+}
+
+// SetPickupVoucherDeductCount sets the PickupVoucherDeductCount field's value.
+func (s *ListForListBillDetailOutput) SetPickupVoucherDeductCount(v string) *ListForListBillDetailOutput {
+	s.PickupVoucherDeductCount = &v
+	return s
+}
+
+// SetPickupVoucherID sets the PickupVoucherID field's value.
+func (s *ListForListBillDetailOutput) SetPickupVoucherID(v string) *ListForListBillDetailOutput {
+	s.PickupVoucherID = &v
+	return s
+}
+
 // SetPosttaxAmount sets the PosttaxAmount field's value.
 func (s *ListForListBillDetailOutput) SetPosttaxAmount(v string) *ListForListBillDetailOutput {
 	s.PosttaxAmount = &v
@@ -880,6 +924,12 @@ func (s *ListForListBillDetailOutput) SetPretaxRealValue(v string) *ListForListB
 // SetPrice sets the Price field's value.
 func (s *ListForListBillDetailOutput) SetPrice(v string) *ListForListBillDetailOutput {
 	s.Price = &v
+	return s
+}
+
+// SetPriceFactor sets the PriceFactor field's value.
+func (s *ListForListBillDetailOutput) SetPriceFactor(v string) *ListForListBillDetailOutput {
+	s.PriceFactor = &v
 	return s
 }
 
@@ -958,6 +1008,12 @@ func (s *ListForListBillDetailOutput) SetRoundAmount(v float64) *ListForListBill
 // SetSavingPlanDeductionDiscountAmount sets the SavingPlanDeductionDiscountAmount field's value.
 func (s *ListForListBillDetailOutput) SetSavingPlanDeductionDiscountAmount(v string) *ListForListBillDetailOutput {
 	s.SavingPlanDeductionDiscountAmount = &v
+	return s
+}
+
+// SetSavingPlanDeductionDiscountTotalAmount sets the SavingPlanDeductionDiscountTotalAmount field's value.
+func (s *ListForListBillDetailOutput) SetSavingPlanDeductionDiscountTotalAmount(v string) *ListForListBillDetailOutput {
+	s.SavingPlanDeductionDiscountTotalAmount = &v
 	return s
 }
 

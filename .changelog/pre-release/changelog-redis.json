@@ -1,0 +1,5 @@
+{
+  "description": "REDIS: added DescribeFatLogs, DescribeDBInstanceSlots；modified CreateBlueGreenDeployment, DeleteBlueGreenDeployment, SwitchoverBlueGreenDeployment, DescribeBackups, DescribeCrossRegionBackups, DescribeHotKeys, DescribePlannedEvents",
+  "modules": "service/Redis",
+  "type": "breaking-change"
+}

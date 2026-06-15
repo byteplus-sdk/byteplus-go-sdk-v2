@@ -143,8 +143,58 @@ func (c *VMP) ListWorkspacesWithContext(ctx byteplus.Context, input *ListWorkspa
 	return out, req.Send()
 }
 
+type ExclusiveResourceConfigForListWorkspacesOutput struct {
+	_ struct{} `type:"structure" json:",omitempty"`
+
+	CreateBy *string `type:"string" json:",omitempty"`
+
+	DenyDelete *bool `type:"boolean" json:",omitempty"`
+
+	DenyUpdate *bool `type:"boolean" json:",omitempty"`
+
+	RelatedResource *string `type:"string" json:",omitempty"`
+}
+
+// String returns the string representation
+func (s ExclusiveResourceConfigForListWorkspacesOutput) String() string {
+	return byteplusutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ExclusiveResourceConfigForListWorkspacesOutput) GoString() string {
+	return s.String()
+}
+
+// SetCreateBy sets the CreateBy field's value.
+func (s *ExclusiveResourceConfigForListWorkspacesOutput) SetCreateBy(v string) *ExclusiveResourceConfigForListWorkspacesOutput {
+	s.CreateBy = &v
+	return s
+}
+
+// SetDenyDelete sets the DenyDelete field's value.
+func (s *ExclusiveResourceConfigForListWorkspacesOutput) SetDenyDelete(v bool) *ExclusiveResourceConfigForListWorkspacesOutput {
+	s.DenyDelete = &v
+	return s
+}
+
+// SetDenyUpdate sets the DenyUpdate field's value.
+func (s *ExclusiveResourceConfigForListWorkspacesOutput) SetDenyUpdate(v bool) *ExclusiveResourceConfigForListWorkspacesOutput {
+	s.DenyUpdate = &v
+	return s
+}
+
+// SetRelatedResource sets the RelatedResource field's value.
+func (s *ExclusiveResourceConfigForListWorkspacesOutput) SetRelatedResource(v string) *ExclusiveResourceConfigForListWorkspacesOutput {
+	s.RelatedResource = &v
+	return s
+}
+
 type FiltersForListWorkspacesInput struct {
 	_ struct{} `type:"structure" json:",omitempty"`
+
+	CrossAccount *bool `type:"boolean" json:",omitempty"`
+
+	CrossRegion *bool `type:"boolean" json:",omitempty"`
 
 	Ids []*string `type:"list" json:",omitempty"`
 
@@ -163,6 +213,18 @@ func (s FiltersForListWorkspacesInput) String() string {
 // GoString returns the string representation
 func (s FiltersForListWorkspacesInput) GoString() string {
 	return s.String()
+}
+
+// SetCrossAccount sets the CrossAccount field's value.
+func (s *FiltersForListWorkspacesInput) SetCrossAccount(v bool) *FiltersForListWorkspacesInput {
+	s.CrossAccount = &v
+	return s
+}
+
+// SetCrossRegion sets the CrossRegion field's value.
+func (s *FiltersForListWorkspacesInput) SetCrossRegion(v bool) *FiltersForListWorkspacesInput {
+	s.CrossRegion = &v
+	return s
 }
 
 // SetIds sets the Ids field's value.
@@ -196,11 +258,17 @@ type ItemForListWorkspacesOutput struct {
 
 	AccountName *string `type:"string" json:",omitempty"`
 
+	ChargeType *string `type:"string" json:",omitempty"`
+
+	ChargeTypeSwitched *bool `type:"boolean" json:",omitempty"`
+
 	CreateTime *string `type:"string" json:",omitempty"`
 
 	DeleteProtectionEnabled *bool `type:"boolean" json:",omitempty"`
 
 	Description *string `type:"string" json:",omitempty"`
+
+	ExclusiveResourceConfig *ExclusiveResourceConfigForListWorkspacesOutput `type:"structure" json:",omitempty"`
 
 	Id *string `type:"string" json:",omitempty"`
 
@@ -211,6 +279,8 @@ type ItemForListWorkspacesOutput struct {
 	OverdueReclaimTime *string `type:"string" json:",omitempty"`
 
 	ProjectName *string `type:"string" json:",omitempty"`
+
+	PrometheusFederateEndpoint *string `type:"string" json:",omitempty"`
 
 	PrometheusPushEndpoint *string `type:"string" json:",omitempty"`
 
@@ -259,6 +329,18 @@ func (s *ItemForListWorkspacesOutput) SetAccountName(v string) *ItemForListWorks
 	return s
 }
 
+// SetChargeType sets the ChargeType field's value.
+func (s *ItemForListWorkspacesOutput) SetChargeType(v string) *ItemForListWorkspacesOutput {
+	s.ChargeType = &v
+	return s
+}
+
+// SetChargeTypeSwitched sets the ChargeTypeSwitched field's value.
+func (s *ItemForListWorkspacesOutput) SetChargeTypeSwitched(v bool) *ItemForListWorkspacesOutput {
+	s.ChargeTypeSwitched = &v
+	return s
+}
+
 // SetCreateTime sets the CreateTime field's value.
 func (s *ItemForListWorkspacesOutput) SetCreateTime(v string) *ItemForListWorkspacesOutput {
 	s.CreateTime = &v
@@ -274,6 +356,12 @@ func (s *ItemForListWorkspacesOutput) SetDeleteProtectionEnabled(v bool) *ItemFo
 // SetDescription sets the Description field's value.
 func (s *ItemForListWorkspacesOutput) SetDescription(v string) *ItemForListWorkspacesOutput {
 	s.Description = &v
+	return s
+}
+
+// SetExclusiveResourceConfig sets the ExclusiveResourceConfig field's value.
+func (s *ItemForListWorkspacesOutput) SetExclusiveResourceConfig(v *ExclusiveResourceConfigForListWorkspacesOutput) *ItemForListWorkspacesOutput {
+	s.ExclusiveResourceConfig = v
 	return s
 }
 
@@ -304,6 +392,12 @@ func (s *ItemForListWorkspacesOutput) SetOverdueReclaimTime(v string) *ItemForLi
 // SetProjectName sets the ProjectName field's value.
 func (s *ItemForListWorkspacesOutput) SetProjectName(v string) *ItemForListWorkspacesOutput {
 	s.ProjectName = &v
+	return s
+}
+
+// SetPrometheusFederateEndpoint sets the PrometheusFederateEndpoint field's value.
+func (s *ItemForListWorkspacesOutput) SetPrometheusFederateEndpoint(v string) *ItemForListWorkspacesOutput {
+	s.PrometheusFederateEndpoint = &v
 	return s
 }
 
@@ -394,6 +488,10 @@ type ListWorkspacesInput struct {
 
 	ShowExternalPromWorkspaces *bool `type:"boolean" json:",omitempty"`
 
+	ShowWorkspaceInstanceType *bool `type:"boolean" json:",omitempty"`
+
+	ShowWorkspaceQuota *bool `type:"boolean" json:",omitempty"`
+
 	TagFilters []*TagFilterForListWorkspacesInput `type:"list" json:",omitempty"`
 }
 
@@ -440,6 +538,18 @@ func (s *ListWorkspacesInput) SetShowAggregateQueryWorkspaces(v bool) *ListWorks
 // SetShowExternalPromWorkspaces sets the ShowExternalPromWorkspaces field's value.
 func (s *ListWorkspacesInput) SetShowExternalPromWorkspaces(v bool) *ListWorkspacesInput {
 	s.ShowExternalPromWorkspaces = &v
+	return s
+}
+
+// SetShowWorkspaceInstanceType sets the ShowWorkspaceInstanceType field's value.
+func (s *ListWorkspacesInput) SetShowWorkspaceInstanceType(v bool) *ListWorkspacesInput {
+	s.ShowWorkspaceInstanceType = &v
+	return s
+}
+
+// SetShowWorkspaceQuota sets the ShowWorkspaceQuota field's value.
+func (s *ListWorkspacesInput) SetShowWorkspaceQuota(v bool) *ListWorkspacesInput {
+	s.ShowWorkspaceQuota = &v
 	return s
 }
 

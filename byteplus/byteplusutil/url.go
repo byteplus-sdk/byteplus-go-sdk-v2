@@ -111,6 +111,11 @@ var defaultEndpoint = map[string]*ServiceEndpointInfo{
 		IsGlobal:        false,
 		DefaultEndpoint: endpoint,
 	},
+	"cpaas": {
+		Service:         "cpaas",
+		IsGlobal:        true,
+		DefaultEndpoint: endpoint,
+	},
 	"vepfs": {
 		Service:         "vepfs",
 		IsGlobal:        false,
@@ -124,6 +129,26 @@ var defaultEndpoint = map[string]*ServiceEndpointInfo{
 	"kickart": {
 		Service:         "kickart",
 		IsGlobal:        true,
+		DefaultEndpoint: endpoint,
+	},
+	"rds_mssql": {
+		Service:         "rds_mssql",
+		IsGlobal:        false,
+		DefaultEndpoint: endpoint,
+	},
+	"sts": {
+		Service:         "sts",
+		IsGlobal:        false,
+		DefaultEndpoint: endpoint,
+	},
+	"redis": {
+		Service:         "redis",
+		IsGlobal:        false,
+		DefaultEndpoint: endpoint,
+	},
+	"vmp": {
+		Service:         "vmp",
+		IsGlobal:        false,
 		DefaultEndpoint: endpoint,
 	},
 }
