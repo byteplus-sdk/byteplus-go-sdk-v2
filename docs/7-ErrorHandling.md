@@ -1,4 +1,4 @@
-[← Retry](5-Retry.md) | Error Handling[(中文)](6-ErrorHandling-zh.md) | [Debugging →](7-Debugging.md)
+[← Retry](6-Retry.md) | Error Handling[(中文)](7-ErrorHandling-zh.md) | [Debugging →](8-Debugging.md)
 
 ---
 
@@ -8,10 +8,9 @@ When calling APIs, different types of errors may be returned. You can adopt targ
 
 Error classification:
 
-
 | Error Type | Description | Returned Error Type | Common Properties | Private Properties |
 |---|---|---|---|---|
-| 1. Client error | Request did not reach the server; parameter validation failed | bytepluserr.Error or native error | Code(): error code;  <br>Message(): error description;  <br>Error(): detailed error info;  <br>OrigErr(): original error | None |
+| 1. Client error | Request did not reach the server; parameter validation failed | bytepluserr.Error or native error | Code(): error code; <br>Message(): error description; <br>Error(): detailed error info; <br>OrigErr(): original error | None |
 | 2. Server error | Request successfully reached the server; business logic error returned | bytepluserr.RequestFailure | Same as above | RequestID() to obtain the request ID for server-side troubleshooting |
 | 3. Network/timeout error | DNS resolution error or request timeout | bytepluserr.Error | Same as above | None |
 | 4. Other errors | Other errors not covered by the above categories | bytepluserr.Error or native error | Same as above | None |
@@ -26,13 +25,13 @@ import (
 	"errors"
 	"fmt"
 	"net"
-	
-	"github.com/byteplus-sdk/byteplus-go-sdk-v2/service/ecs"
+
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/bytepluserr"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/request"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/session"
-	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/bytepluserr"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/service/ecs"
 )
 
 func main() {
@@ -55,7 +54,7 @@ func main() {
 	tags := make([]*ecs.TagForCreateKeyPairInput, 0, 2)
 	tags = append(tags, &ecs.TagForCreateKeyPairInput{Key: byteplus.String("testTag")})
 	createKeyPairInput := &ecs.CreateKeyPairInput{
-		KeyPairName: byteplus.String(("testKeyPairName")),
+		KeyPairName: byteplus.String("testKeyPairName"),
 		Tags:        tags,
 	}
 
@@ -78,10 +77,10 @@ func main() {
 					if errors.As(be.OrigErr(), &dnsError) {
 						fmt.Println("3. Network/timeout error: DNS resolution error handling")
 					} else if errors.As(be.OrigErr(), &netErr) && netErr.Timeout() {
-						var oPError *net.OpError
+						var opErr *net.OpError
 						if errors.Is(be.OrigErr(), context.DeadlineExceeded) {
 							fmt.Println("3. Network/timeout error: http.Client Timeout (ReadTimeout)....", be.Code(), be.Error())
-						} else if errors.As(be.OrigErr(), &oPError) && oPError.Op == "dial" {
+						} else if errors.As(be.OrigErr(), &opErr) && opErr.Op == "dial" {
 							fmt.Println("3. Network/timeout error: http.Client Transport.Dialer Timeout (ConnectTimeout)....", be.Code(), be.Error())
 						} else {
 							fmt.Println("3. Network/timeout error: other timeout handling", be.Code(), be.Message(), be.Error())
@@ -100,4 +99,4 @@ func main() {
 
 ---
 
-[← Retry](5-Retry.md) | Error Handling[(中文)](6-ErrorHandling-zh.md) | [Debugging →](7-Debugging.md)
+[← Retry](6-Retry.md) | Error Handling[(中文)](7-ErrorHandling-zh.md) | [Debugging →](8-Debugging.md)

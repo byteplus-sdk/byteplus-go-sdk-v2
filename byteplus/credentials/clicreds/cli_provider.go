@@ -1,7 +1,6 @@
 package clicreds
 
 import (
-	"context"
 	"crypto/sha1"
 	"encoding/json"
 	"fmt"
@@ -18,13 +17,15 @@ import (
 
 const (
 	// CliProviderName provides a name of CLI config provider.
-	CliProviderName = "CliProvider"
-	modeSSO         = "sso"
-	modeAK          = "ak"
-	modeRamRoleArn  = "ramrolearn"
-	modeOIDC        = "oidc"
-	modeEcsRole     = "ecsrole"
-	defaultRegion   = "ap-southeast-1"
+	CliProviderName        = "CliProvider"
+	modeSSO                = "sso"
+	modeAK                 = "ak"
+	modeRamRoleArn         = "ramrolearn"
+	modeOIDC               = "oidc"
+	modeEcsRole            = "ecsrole"
+	modeConsoleLogin       = "console-login"
+	defaultRegion          = "ap-southeast-1"
+	loginCacheDirectoryEnv = "BYTEPLUS_LOGIN_CACHE_DIRECTORY"
 )
 
 type cliConfigure struct {
@@ -34,20 +35,21 @@ type cliConfigure struct {
 }
 
 type cliProfile struct {
-	Mode           string `json:"mode"`
-	AccessKey      string `json:"access-key"`
-	SecretKey      string `json:"secret-key"`
-	SessionToken   string `json:"session-token"`
-	StsExpiration  int64  `json:"sts-expiration"`
-	SsoSessionName string `json:"sso-session-name"`
-	AccountId      string `json:"account-id"`
-	RoleName       string `json:"role-name"`
+	Mode             string `json:"mode"`
+	AccessKey        string `json:"access-key"`
+	SecretKey        string `json:"secret-key"`
+	SessionToken     string `json:"session-token"`
+	StsExpiration    int64  `json:"sts-expiration"`
+	SsoSessionName   string `json:"sso-session-name"`
+	AccountId        string `json:"account-id"`
+	RoleName         string `json:"role-name"`
 	OIDCTokenFile    string `json:"oidc-token-file"`
 	RoleTrn          string `json:"role-trn"`
 	Region           string `json:"region"`
 	DisableSSL       bool   `json:"disable-ssl"`
 	EndpointResolver string `json:"endpoint-resolver,omitempty"`
 	UseDualStack     *bool  `json:"use-dual-stack,omitempty"`
+	LoginSession     string `json:"login-session,omitempty"`
 }
 
 type SsoSession struct {
@@ -68,6 +70,25 @@ type SsoTokenCache struct {
 	ClientSecretExpiresAt int64  `json:"client_secret_expires_at,omitempty"`
 	RefreshToken          string `json:"refresh_token,omitempty"`
 	Region                string `json:"region"`
+}
+
+type LoginTokenCache struct {
+	LoginSession string          `json:"login_session"`
+	AccessToken  json.RawMessage `json:"access_token"`
+	IssuedAt     string          `json:"issued_at"`
+	ExpiresIn    int64           `json:"expires_in"`
+	TokenType    string          `json:"token_type"`
+	RefreshToken string          `json:"refresh_token,omitempty"`
+	IDToken      string          `json:"id_token,omitempty"`
+	ClientID     string          `json:"client_id,omitempty"`
+	Scope        string          `json:"scope,omitempty"`
+	EndpointURL  string          `json:"endpoint_url,omitempty"`
+}
+
+type consoleLoginStsCredentials struct {
+	AccessKeyID     string `json:"access_key_id"`
+	SecretAccessKey string `json:"secret_access_key"`
+	SessionToken    string `json:"session_token"`
 }
 
 // CliProvider retrieves credentials from byteplus-cli's config file
@@ -91,19 +112,10 @@ type CliProvider struct {
 // chain. Unlike NewCliCredentials, it does not wrap in a Credentials object,
 // allowing the chain to manage expiration and caching uniformly.
 func NewCliProvider(configPath, profile string) *CliProvider {
-	if configPath == "" {
-		home := shareddefaults.UserHomeDir()
-		if home != "" {
-			configPath = filepath.Join(home, ".byteplus", "config.json")
-		}
-	}
-	cacheDir := ""
-	if configPath != "" {
-		cacheDir = filepath.Join(filepath.Dir(configPath), "sso", "cache")
-	}
+	configPath = resolveCliConfigPath(configPath)
 	return &CliProvider{
 		configPath: configPath,
-		cacheDir:   cacheDir,
+		cacheDir:   resolveSsoCacheDir(configPath),
 		profile:    profile,
 		Expiry:     credentials.Expiry{},
 	}
@@ -112,22 +124,7 @@ func NewCliProvider(configPath, profile string) *CliProvider {
 // NewCliCredentials returns a pointer to a new Credentials object wrapping the
 // byteplus-cli config provider.
 func NewCliCredentials(configPath, profile string) *credentials.Credentials {
-	cacheDir := ""
-	if configPath == "" {
-		home := shareddefaults.UserHomeDir()
-		if home != "" {
-			configPath = filepath.Join(home, ".byteplus", "config.json")
-			cacheDir = filepath.Join(home, ".byteplus", "sso", "cache")
-		}
-	} else {
-		cacheDir = filepath.Join(filepath.Dir(configPath), "sso", "cache")
-	}
-	return credentials.NewExpireAbleCredentials(&CliProvider{
-		configPath: configPath,
-		cacheDir:   cacheDir,
-		profile:    profile,
-		Expiry:     credentials.Expiry{},
-	})
+	return credentials.NewExpireAbleCredentials(NewCliProvider(configPath, profile))
 }
 
 func (p *CliProvider) Retrieve() (credentials.Value, error) {
@@ -142,17 +139,12 @@ func (p *CliProvider) Retrieve() (credentials.Value, error) {
 
 	configPath := p.configPath
 	if configPath == "" {
-		if env := credentials.GetEnvWithFallback("BYTEPLUS_CLI_CONFIG_FILE"); env != "" {
-			configPath = env
-			p.configPath = configPath
-		} else {
-			home := shareddefaults.UserHomeDir()
-			if home == "" {
-				return credentials.Value{ProviderName: CliProviderName}, credentials.ErrSharedCredentialsHomeNotFound
-			}
-			configPath = filepath.Join(home, ".byteplus", "config.json")
-			p.configPath = configPath
+		configPath = resolveCliConfigPath("")
+		if configPath == "" {
+			return credentials.Value{ProviderName: CliProviderName}, credentials.ErrSharedCredentialsHomeNotFound
 		}
+		p.configPath = configPath
+		p.cacheDir = resolveSsoCacheDir(configPath)
 	}
 
 	b, err := ioutil.ReadFile(configPath)
@@ -205,6 +197,8 @@ func (p *CliProvider) Retrieve() (credentials.Value, error) {
 		return p.retrieveOIDC(profile, profileName, configPath)
 	case modeEcsRole:
 		return p.retrieveEcsRole(profile, profileName, configPath)
+	case modeConsoleLogin:
+		return p.retrieveConsoleLogin(profile, profileName, configPath)
 	default:
 		return credentials.Value{ProviderName: CliProviderName}, bytepluserr.New(
 			"CliConfigModeInvalid",
@@ -212,6 +206,27 @@ func (p *CliProvider) Retrieve() (credentials.Value, error) {
 			nil,
 		)
 	}
+}
+
+func resolveCliConfigPath(configPath string) string {
+	if configPath != "" {
+		return configPath
+	}
+	if env := credentials.GetEnvWithFallback("BYTEPLUS_CLI_CONFIG_FILE"); env != "" {
+		return env
+	}
+	home := shareddefaults.UserHomeDir()
+	if home == "" {
+		return ""
+	}
+	return filepath.Join(home, ".byteplus", "config.json")
+}
+
+func resolveSsoCacheDir(configPath string) string {
+	if configPath == "" {
+		return ""
+	}
+	return filepath.Join(filepath.Dir(configPath), "sso", "cache")
 }
 
 func (p *CliProvider) retrieveAK(profile *cliProfile, profileName, configPath string) (credentials.Value, error) {
@@ -246,45 +261,18 @@ func (p *CliProvider) retrieveSSO(profile *cliProfile, profileName, configPath s
 		return value, nil
 	}
 
-	sessionName, startURL, region, err := p.resolveSsoSession(profile, profileName, configPath, cfg)
-	if err != nil {
-		return credentials.Value{ProviderName: CliProviderName}, err
+	if p.delegate == nil {
+		sessionName, startURL, region, err := p.resolveSsoSession(profile, profileName, configPath, cfg)
+		if err != nil {
+			return credentials.Value{ProviderName: CliProviderName}, err
+		}
+		tokenPath, err := p.resolveTokenCachePath(startURL, sessionName, profileName, configPath)
+		if err != nil {
+			return credentials.Value{ProviderName: CliProviderName}, err
+		}
+		p.delegate = newSsoRefreshableProvider(tokenPath, profile, profileName, configPath, region)
 	}
-	tokenPath, err := p.resolveTokenCachePath(startURL, sessionName, profileName, configPath)
-	if err != nil {
-		return credentials.Value{ProviderName: CliProviderName}, err
-	}
-
-	tokenCache, err := loadSsoTokenCache(tokenPath)
-	if err != nil {
-		return credentials.Value{ProviderName: CliProviderName}, err
-	}
-	accessToken := strings.TrimSpace(tokenCache.AccessToken)
-	if accessToken == "" {
-		return credentials.Value{ProviderName: CliProviderName}, bytepluserr.New(
-			"CliSsoTokenAccessMissing",
-			fmt.Sprintf("sso token cache file %s did not contain access token", tokenPath),
-			nil,
-		)
-	}
-	expired, err := isTokenExpired(tokenCache.ExpiresAt)
-	if err != nil {
-		return credentials.Value{ProviderName: CliProviderName}, bytepluserr.New(
-			"CliSsoTokenExpiresParse",
-			fmt.Sprintf("failed to parse access token expiration in %s", tokenPath),
-			err,
-		)
-	}
-	if !expired {
-		return p.getRoleCredentials(accessToken, profile, profileName, configPath, region)
-	}
-
-	refreshedToken, err := p.refreshAccessToken(tokenCache, tokenPath, region)
-	if err != nil {
-		return credentials.Value{ProviderName: CliProviderName}, err
-	}
-
-	return p.getRoleCredentials(refreshedToken, profile, profileName, configPath, region)
+	return p.delegate.Retrieve()
 }
 
 func (p *CliProvider) useStsCredentialsIfValid(profile *cliProfile, profileName, configPath string) (credentials.Value, bool, error) {
@@ -377,7 +365,7 @@ func (p *CliProvider) resolveTokenCachePath(startURL, sessionName, profileName, 
 	if p.cacheDir == "" {
 		return "", bytepluserr.New(
 			"CliSsoCacheDirMissing",
-			fmt.Sprintf("cli config profile %s in %s did not resolve cache directory", profileName, configPath),
+			fmt.Sprintf("cli config profile %s in %s did not resolve cache directory; please run 'bp sso login' to re-authenticate", profileName, configPath),
 			nil,
 		)
 	}
@@ -387,144 +375,18 @@ func (p *CliProvider) resolveTokenCachePath(startURL, sessionName, profileName, 
 		if os.IsNotExist(err) {
 			return "", bytepluserr.New(
 				"CliSsoTokenCacheMissing",
-				fmt.Sprintf("sso token cache file %s does not exist", tokenPath),
+				fmt.Sprintf("sso token cache file %s does not exist; please run 'bp sso login' to re-authenticate", tokenPath),
 				err,
 			)
 		}
 		return "", bytepluserr.New(
 			"CliSsoTokenCacheStat",
-			fmt.Sprintf("failed to stat sso token cache file %s", tokenPath),
+			fmt.Sprintf("failed to stat sso token cache file %s; please run 'bp sso login' to re-authenticate", tokenPath),
 			err,
 		)
 	}
 
 	return tokenPath, nil
-}
-
-func (p *CliProvider) refreshAccessToken(tokenCache *SsoTokenCache, tokenPath, region string) (string, error) {
-	if strings.TrimSpace(tokenCache.RefreshToken) == "" {
-		return "", bytepluserr.New(
-			"CliSsoTokenRefreshMissing",
-			fmt.Sprintf("sso token cache file %s did not contain refresh token", tokenPath),
-			nil,
-		)
-	}
-	refreshExpired, err := isRefreshTokenExpired(tokenCache)
-	if err != nil {
-		return "", bytepluserr.New(
-			"CliSsoTokenRefreshExpiresParse",
-			fmt.Sprintf("failed to parse refresh token expiration in %s", tokenPath),
-			err,
-		)
-	}
-	if refreshExpired {
-		return "", bytepluserr.New(
-			"CliSsoTokenRefreshExpired",
-			fmt.Sprintf("refresh token in %s has expired", tokenPath),
-			nil,
-		)
-	}
-	if strings.TrimSpace(tokenCache.ClientId) == "" || strings.TrimSpace(tokenCache.ClientSecret) == "" {
-		return "", bytepluserr.New(
-			"CliSsoTokenClientMissing",
-			fmt.Sprintf("sso token cache file %s did not contain client id/secret", tokenPath),
-			nil,
-		)
-	}
-
-	oauthClient := NewOAuthClient(&OAuthClientConfig{Region: region})
-	tokenResp, err := oauthClient.CreateToken(context.Background(), &CreateTokenRequest{
-		GrantType:    "refresh_token",
-		ClientID:     tokenCache.ClientId,
-		ClientSecret: tokenCache.ClientSecret,
-		RefreshToken: tokenCache.RefreshToken,
-	})
-	if err != nil {
-		return "", bytepluserr.New(
-			"CliSsoTokenRefreshFailed",
-			"failed to refresh access token",
-			err,
-		)
-	}
-	if tokenResp == nil || strings.TrimSpace(tokenResp.AccessToken) == "" {
-		return "", bytepluserr.New(
-			"CliSsoTokenRefreshEmpty",
-			"refresh token response did not include access token",
-			nil,
-		)
-	}
-	if tokenResp.ExpiresIn <= 0 {
-		return "", bytepluserr.New(
-			"CliSsoTokenRefreshExpiresIn",
-			"refresh token response did not include expires_in",
-			nil,
-		)
-	}
-
-	tokenCache.AccessToken = tokenResp.AccessToken
-	if strings.TrimSpace(tokenResp.RefreshToken) != "" {
-		tokenCache.RefreshToken = tokenResp.RefreshToken
-	}
-	tokenCache.ExpiresAt = time.Now().Add(time.Duration(tokenResp.ExpiresIn) * time.Second).UTC().Format(time.RFC3339)
-	if err := saveSsoTokenCache(tokenPath, tokenCache); err != nil {
-		return "", err
-	}
-
-	return tokenCache.AccessToken, nil
-}
-
-func (p *CliProvider) getRoleCredentials(accessToken string, profile *cliProfile, profileName, configPath, region string) (credentials.Value, error) {
-	accountID := strings.TrimSpace(profile.AccountId)
-	if accountID == "" {
-		return credentials.Value{ProviderName: CliProviderName}, bytepluserr.New(
-			"CliConfigAccountIDMissing",
-			fmt.Sprintf("cli config profile %s in %s did not contain account-id", profileName, configPath),
-			nil,
-		)
-	}
-	roleName := strings.TrimSpace(profile.RoleName)
-	if roleName == "" {
-		return credentials.Value{ProviderName: CliProviderName}, bytepluserr.New(
-			"CliConfigRoleNameMissing",
-			fmt.Sprintf("cli config profile %s in %s did not contain role-name", profileName, configPath),
-			nil,
-		)
-	}
-	portalClient := NewPortalClient(&PortalClientConfig{Region: region})
-	resp, err := portalClient.GetRoleCredentials(context.Background(), &GetRoleCredentialsRequest{
-		AccessToken: accessToken,
-		AccountID:   accountID,
-		RoleName:    roleName,
-	})
-	if err != nil {
-		return credentials.Value{ProviderName: CliProviderName}, bytepluserr.New(
-			"CliSsoPortalCredentials",
-			"failed to get role credentials",
-			err,
-		)
-	}
-
-	creds := resp.RoleCredentials
-	if strings.TrimSpace(creds.AccessKeyID) == "" || strings.TrimSpace(creds.SecretAccessKey) == "" {
-		return credentials.Value{ProviderName: CliProviderName}, bytepluserr.New(
-			"CliSsoPortalCredentialsEmpty",
-			"portal credentials response did not include access key or secret key",
-			nil,
-		)
-	}
-	if creds.Expiration > 0 {
-		exp := UnixTimestampToTime(creds.Expiration)
-		p.hasExpiration = true
-		p.SetExpiration(exp, time.Minute)
-	}
-
-	p.retrieved = true
-	return credentials.Value{
-		AccessKeyID:     creds.AccessKeyID,
-		SecretAccessKey: creds.SecretAccessKey,
-		SessionToken:    creds.SessionToken,
-		ProviderName:    CliProviderName,
-	}, nil
 }
 
 func (p *CliProvider) retrieveRamRoleArn(profile *cliProfile, profileName, configPath string) (credentials.Value, error) {
@@ -632,19 +494,42 @@ func (p *CliProvider) retrieveEcsRole(profile *cliProfile, profileName, configPa
 	return p.delegate.Retrieve()
 }
 
+func (p *CliProvider) retrieveConsoleLogin(profile *cliProfile, profileName, configPath string) (credentials.Value, error) {
+	loginSession := strings.TrimSpace(profile.LoginSession)
+	if loginSession == "" {
+		return credentials.Value{ProviderName: CliProviderName}, bytepluserr.New(
+			"CliConfigLoginSessionMissing",
+			fmt.Sprintf("cli config profile %s in %s did not contain login-session; run 'bp login' first", profileName, configPath),
+			nil,
+		)
+	}
+
+	if p.delegate == nil {
+		p.delegate = newConsoleLoginRefreshableProvider(loginSession, resolveLoginCacheDir(configPath))
+	}
+	return p.delegate.Retrieve()
+}
+
+func resolveLoginCacheDir(configPath string) string {
+	if dir := os.Getenv(loginCacheDirectoryEnv); dir != "" {
+		return dir
+	}
+	return filepath.Join(filepath.Dir(configPath), "login", "cache")
+}
+
 func loadSsoTokenCache(path string) (*SsoTokenCache, error) {
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
 		return nil, bytepluserr.New(
 			"CliSsoTokenCacheLoad",
-			fmt.Sprintf("failed to load sso token cache file %s", path),
+			fmt.Sprintf("failed to load sso token cache file %s; please run 'bp sso login' to re-authenticate", path),
 			err,
 		)
 	}
 	if len(strings.TrimSpace(string(data))) == 0 {
 		return nil, bytepluserr.New(
 			"CliSsoTokenCacheEmpty",
-			fmt.Sprintf("sso token cache file %s was empty", path),
+			fmt.Sprintf("sso token cache file %s was empty; please run 'bp sso login' to re-authenticate", path),
 			nil,
 		)
 	}
@@ -653,22 +538,11 @@ func loadSsoTokenCache(path string) (*SsoTokenCache, error) {
 	if err := json.Unmarshal(data, cache); err != nil {
 		return nil, bytepluserr.New(
 			"CliSsoTokenCacheUnmarshal",
-			fmt.Sprintf("failed to unmarshal sso token cache file %s", path),
+			fmt.Sprintf("failed to unmarshal sso token cache file %s; please run 'bp sso login' to re-authenticate", path),
 			err,
 		)
 	}
 	return cache, nil
-}
-
-func saveSsoTokenCache(path string, cache *SsoTokenCache) error {
-	if err := writeJSONFileAtomic(path, 0600, cache); err != nil {
-		return bytepluserr.New(
-			"CliSsoTokenCacheWrite",
-			fmt.Sprintf("failed to write sso token cache file %s", path),
-			err,
-		)
-	}
-	return nil
 }
 
 func isTokenExpired(expiresAt string) (bool, error) {
@@ -677,6 +551,47 @@ func isTokenExpired(expiresAt string) (bool, error) {
 		return true, err
 	}
 	return time.Now().After(exp), nil
+}
+
+func consoleLoginCacheExpiration(cache *LoginTokenCache) (time.Time, error) {
+	if cache == nil {
+		return time.Time{}, fmt.Errorf("token cache is nil")
+	}
+	issuedAt, err := parseTokenExpiration(cache.IssuedAt)
+	if err != nil {
+		return time.Time{}, err
+	}
+	if cache.ExpiresIn <= 0 {
+		return time.Time{}, fmt.Errorf("expires_in is missing or invalid")
+	}
+	return issuedAt.Add(time.Duration(cache.ExpiresIn) * time.Second), nil
+}
+
+func parseConsoleLoginAccessToken(raw json.RawMessage) (*consoleLoginStsCredentials, error) {
+	if len(raw) == 0 {
+		return nil, fmt.Errorf("access_token is empty")
+	}
+
+	tokenBytes := []byte(raw)
+	var tokenString string
+	if err := json.Unmarshal(raw, &tokenString); err == nil {
+		tokenBytes = []byte(tokenString)
+	}
+
+	var stsCreds consoleLoginStsCredentials
+	if err := json.Unmarshal(tokenBytes, &stsCreds); err != nil {
+		return nil, err
+	}
+	if strings.TrimSpace(stsCreds.AccessKeyID) == "" {
+		return nil, fmt.Errorf("parsed STS credentials missing access_key_id")
+	}
+	if strings.TrimSpace(stsCreds.SecretAccessKey) == "" {
+		return nil, fmt.Errorf("parsed STS credentials missing secret_access_key")
+	}
+	if strings.TrimSpace(stsCreds.SessionToken) == "" {
+		return nil, fmt.Errorf("parsed STS credentials missing session_token")
+	}
+	return &stsCreds, nil
 }
 
 func parseTokenExpiration(expiresAt string) (time.Time, error) {
@@ -765,48 +680,4 @@ func tokenCacheFileName(startURL, sessionName string) string {
 	}
 	hash := sha1.Sum(data)
 	return fmt.Sprintf("%x.json", hash)
-}
-
-func writeJSONFileAtomic(path string, perm os.FileMode, payload interface{}) (retErr error) {
-	dir := filepath.Dir(path)
-	tempFile, err := os.CreateTemp(dir, ".tmp-*")
-	if err != nil {
-		return fmt.Errorf("failed to create temp file: %w", err)
-	}
-	tempName := tempFile.Name()
-	defer func() {
-		if retErr != nil {
-			_ = tempFile.Close()
-			_ = os.Remove(tempName)
-		}
-	}()
-
-	if err := tempFile.Chmod(perm); err != nil {
-		retErr = fmt.Errorf("failed to set cache file permissions: %w", err)
-		return retErr
-	}
-
-	encoder := json.NewEncoder(tempFile)
-	if err := encoder.Encode(payload); err != nil {
-		retErr = fmt.Errorf("failed to write cache file: %w", err)
-		return retErr
-	}
-
-	if err := tempFile.Close(); err != nil {
-		retErr = fmt.Errorf("failed to close cache file: %w", err)
-		return retErr
-	}
-
-	if err := os.Rename(tempName, path); err != nil {
-		removeErr := os.Remove(path)
-		if removeErr == nil || os.IsNotExist(removeErr) {
-			if err2 := os.Rename(tempName, path); err2 == nil {
-				return nil
-			}
-		}
-		retErr = fmt.Errorf("failed to replace cache file: %w", err)
-		return retErr
-	}
-
-	return nil
 }
