@@ -151,6 +151,11 @@ var defaultEndpoint = map[string]*ServiceEndpointInfo{
 		IsGlobal:        false,
 		DefaultEndpoint: endpoint,
 	},
+	"vs": {
+		Service:         "vs",
+		IsGlobal:        true,
+		DefaultEndpoint: endpoint,
+	},
 	"resourcecenter": {
 		Service:         "resourcecenter",
 		IsGlobal:        true,
