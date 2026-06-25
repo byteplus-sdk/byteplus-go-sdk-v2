@@ -156,6 +156,21 @@ var defaultEndpoint = map[string]*ServiceEndpointInfo{
 		IsGlobal:        true,
 		DefaultEndpoint: endpoint,
 	},
+	"resourcecenter": {
+		Service:         "resourcecenter",
+		IsGlobal:        true,
+		DefaultEndpoint: endpoint,
+	},
+	"rds_mysql": {
+		Service:         "rds_mysql",
+		IsGlobal:        false,
+		DefaultEndpoint: endpoint,
+	},
+	"privatelink": {
+		Service:         "privatelink",
+		IsGlobal:        false,
+		DefaultEndpoint: endpoint,
+	},
 }
 
 func standardizeDomainServiceCode(serviceCode string) string {

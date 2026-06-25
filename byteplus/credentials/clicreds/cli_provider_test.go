@@ -49,6 +49,54 @@ func TestRetrieve_AKMode(t *testing.T) {
 	}
 }
 
+func TestRetrieve_UsesEnvConfigFile(t *testing.T) {
+	dir := t.TempDir()
+	configPath := writeTempConfig(t, dir, map[string]interface{}{
+		"current": "env-profile",
+		"profiles": map[string]interface{}{
+			"env-profile": map[string]interface{}{
+				"mode":       "AK",
+				"access-key": "ENV_AK",
+				"secret-key": "ENV_SK",
+			},
+		},
+	})
+	t.Setenv("BYTEPLUS_CLI_CONFIG_FILE", configPath)
+
+	p := NewCliProvider("", "env-profile")
+	v, err := p.Retrieve()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if v.AccessKeyID != "ENV_AK" || v.SecretAccessKey != "ENV_SK" {
+		t.Errorf("unexpected credentials from env config: %+v", v)
+	}
+}
+
+func TestNewCliCredentials_UsesEnvConfigFile(t *testing.T) {
+	dir := t.TempDir()
+	configPath := writeTempConfig(t, dir, map[string]interface{}{
+		"current": "env-credentials",
+		"profiles": map[string]interface{}{
+			"env-credentials": map[string]interface{}{
+				"mode":       "AK",
+				"access-key": "ENV_CREDS_AK",
+				"secret-key": "ENV_CREDS_SK",
+			},
+		},
+	})
+	t.Setenv("BYTEPLUS_CLI_CONFIG_FILE", configPath)
+
+	creds := NewCliCredentials("", "env-credentials")
+	v, err := creds.Get()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if v.AccessKeyID != "ENV_CREDS_AK" || v.SecretAccessKey != "ENV_CREDS_SK" {
+		t.Errorf("unexpected credentials from env config: %+v", v)
+	}
+}
+
 func TestRetrieve_UnsupportedMode(t *testing.T) {
 	dir := t.TempDir()
 	configPath := writeTempConfig(t, dir, map[string]interface{}{
@@ -191,5 +239,64 @@ func TestRetrieve_RamRoleArnMode_PassesSessionToken(t *testing.T) {
 	}
 	if sp.SessionToken != "STS_TOKEN" {
 		t.Errorf("expected SessionToken=STS_TOKEN, got %q", sp.SessionToken)
+	}
+}
+
+func TestResolveTokenCachePathErrorsMentionSsoLogin(t *testing.T) {
+	const want = "please run 'bp sso login' to re-authenticate"
+
+	t.Run("cache dir missing", func(t *testing.T) {
+		p := &CliProvider{}
+		_, err := p.resolveTokenCachePath("https://signin.byteplus.com/sso/start", "session", "default", "config.json")
+		assertErrorContains(t, err, want)
+	})
+
+	t.Run("token cache missing", func(t *testing.T) {
+		p := &CliProvider{cacheDir: t.TempDir()}
+		_, err := p.resolveTokenCachePath("https://signin.byteplus.com/sso/start", "session", "default", "config.json")
+		assertErrorContains(t, err, want)
+	})
+
+	t.Run("stat failed", func(t *testing.T) {
+		p := &CliProvider{cacheDir: string([]byte{0})}
+		_, err := p.resolveTokenCachePath("https://signin.byteplus.com/sso/start", "session", "default", "config.json")
+		assertErrorContains(t, err, want)
+	})
+}
+
+func TestLoadSsoTokenCacheErrorsMentionSsoLogin(t *testing.T) {
+	const want = "please run 'bp sso login' to re-authenticate"
+
+	t.Run("load failed", func(t *testing.T) {
+		_, err := loadSsoTokenCache(filepath.Join(t.TempDir(), "missing.json"))
+		assertErrorContains(t, err, want)
+	})
+
+	t.Run("empty file", func(t *testing.T) {
+		path := filepath.Join(t.TempDir(), "empty.json")
+		if err := os.WriteFile(path, []byte("  \n\t"), 0600); err != nil {
+			t.Fatalf("write empty cache: %v", err)
+		}
+		_, err := loadSsoTokenCache(path)
+		assertErrorContains(t, err, want)
+	})
+
+	t.Run("invalid json", func(t *testing.T) {
+		path := filepath.Join(t.TempDir(), "invalid.json")
+		if err := os.WriteFile(path, []byte("{"), 0600); err != nil {
+			t.Fatalf("write invalid cache: %v", err)
+		}
+		_, err := loadSsoTokenCache(path)
+		assertErrorContains(t, err, want)
+	})
+}
+
+func assertErrorContains(t *testing.T, err error, want string) {
+	t.Helper()
+	if err == nil {
+		t.Fatalf("expected error containing %q, got nil", want)
+	}
+	if !strings.Contains(err.Error(), want) {
+		t.Fatalf("expected error containing %q, got: %v", want, err)
 	}
 }
