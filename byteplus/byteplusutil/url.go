@@ -156,6 +156,11 @@ var defaultEndpoint = map[string]*ServiceEndpointInfo{
 		IsGlobal:        true,
 		DefaultEndpoint: endpoint,
 	},
+	"privatelink": {
+		Service:         "privatelink",
+		IsGlobal:        false,
+		DefaultEndpoint: endpoint,
+	},
 }
 
 func standardizeDomainServiceCode(serviceCode string) string {
