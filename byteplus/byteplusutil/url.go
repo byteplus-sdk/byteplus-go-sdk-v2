@@ -191,6 +191,11 @@ var defaultEndpoint = map[string]*ServiceEndpointInfo{
 		IsGlobal:        false,
 		DefaultEndpoint: endpoint,
 	},
+	"seccenter": {
+		Service:         "seccenter",
+		IsGlobal:        true,
+		DefaultEndpoint: endpoint,
+	},
 }
 
 func standardizeDomainServiceCode(serviceCode string) string {
