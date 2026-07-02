@@ -153,7 +153,7 @@ type CreateVoiceTaskInput struct {
 
 	MaxRingTime *int32 `type:"int32" json:",omitempty"`
 
-	NumberInfoList *NumberInfoListForCreateVoiceTaskInput `type:"structure" json:",omitempty"`
+	NumberInfoList []*NumberInfoListForCreateVoiceTaskInput `type:"list"`
 
 	RepeatingCount *int32 `type:"int32" json:",omitempty"`
 
@@ -224,7 +224,7 @@ func (s *CreateVoiceTaskInput) SetMaxRingTime(v int32) *CreateVoiceTaskInput {
 }
 
 // SetNumberInfoList sets the NumberInfoList field's value.
-func (s *CreateVoiceTaskInput) SetNumberInfoList(v *NumberInfoListForCreateVoiceTaskInput) *CreateVoiceTaskInput {
+func (s *CreateVoiceTaskInput) SetNumberInfoList(v []*NumberInfoListForCreateVoiceTaskInput) *CreateVoiceTaskInput {
 	s.NumberInfoList = v
 	return s
 }
