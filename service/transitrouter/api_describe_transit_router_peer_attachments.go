@@ -332,13 +332,19 @@ type TransitRouterAttachmentForDescribeTransitRouterPeerAttachmentsOutput struct
 
 	Bandwidth *int32 `type:"int32"`
 
+	BandwidthType *string `type:"string"`
+
 	CreationTime *string `type:"string"`
 
 	Description *string `type:"string"`
 
 	Ipv6Enabled *bool `type:"boolean"`
 
+	LineOperator *string `type:"string"`
+
 	PeerTransitRouterId *string `type:"string"`
+
+	PeerTransitRouterOwnerId *string `type:"string"`
 
 	PeerTransitRouterRegionId *string `type:"string"`
 
@@ -351,6 +357,8 @@ type TransitRouterAttachmentForDescribeTransitRouterPeerAttachmentsOutput struct
 	TransitRouterAttachmentName *string `type:"string"`
 
 	TransitRouterBandwidthPackageId *string `type:"string"`
+
+	TransitRouterBandwidthPackageOwnerId *string `type:"string"`
 
 	TransitRouterForwardPolicyTableId *string `type:"string"`
 
@@ -387,6 +395,12 @@ func (s *TransitRouterAttachmentForDescribeTransitRouterPeerAttachmentsOutput) S
 	return s
 }
 
+// SetBandwidthType sets the BandwidthType field's value.
+func (s *TransitRouterAttachmentForDescribeTransitRouterPeerAttachmentsOutput) SetBandwidthType(v string) *TransitRouterAttachmentForDescribeTransitRouterPeerAttachmentsOutput {
+	s.BandwidthType = &v
+	return s
+}
+
 // SetCreationTime sets the CreationTime field's value.
 func (s *TransitRouterAttachmentForDescribeTransitRouterPeerAttachmentsOutput) SetCreationTime(v string) *TransitRouterAttachmentForDescribeTransitRouterPeerAttachmentsOutput {
 	s.CreationTime = &v
@@ -405,9 +419,21 @@ func (s *TransitRouterAttachmentForDescribeTransitRouterPeerAttachmentsOutput) S
 	return s
 }
 
+// SetLineOperator sets the LineOperator field's value.
+func (s *TransitRouterAttachmentForDescribeTransitRouterPeerAttachmentsOutput) SetLineOperator(v string) *TransitRouterAttachmentForDescribeTransitRouterPeerAttachmentsOutput {
+	s.LineOperator = &v
+	return s
+}
+
 // SetPeerTransitRouterId sets the PeerTransitRouterId field's value.
 func (s *TransitRouterAttachmentForDescribeTransitRouterPeerAttachmentsOutput) SetPeerTransitRouterId(v string) *TransitRouterAttachmentForDescribeTransitRouterPeerAttachmentsOutput {
 	s.PeerTransitRouterId = &v
+	return s
+}
+
+// SetPeerTransitRouterOwnerId sets the PeerTransitRouterOwnerId field's value.
+func (s *TransitRouterAttachmentForDescribeTransitRouterPeerAttachmentsOutput) SetPeerTransitRouterOwnerId(v string) *TransitRouterAttachmentForDescribeTransitRouterPeerAttachmentsOutput {
+	s.PeerTransitRouterOwnerId = &v
 	return s
 }
 
@@ -444,6 +470,12 @@ func (s *TransitRouterAttachmentForDescribeTransitRouterPeerAttachmentsOutput) S
 // SetTransitRouterBandwidthPackageId sets the TransitRouterBandwidthPackageId field's value.
 func (s *TransitRouterAttachmentForDescribeTransitRouterPeerAttachmentsOutput) SetTransitRouterBandwidthPackageId(v string) *TransitRouterAttachmentForDescribeTransitRouterPeerAttachmentsOutput {
 	s.TransitRouterBandwidthPackageId = &v
+	return s
+}
+
+// SetTransitRouterBandwidthPackageOwnerId sets the TransitRouterBandwidthPackageOwnerId field's value.
+func (s *TransitRouterAttachmentForDescribeTransitRouterPeerAttachmentsOutput) SetTransitRouterBandwidthPackageOwnerId(v string) *TransitRouterAttachmentForDescribeTransitRouterPeerAttachmentsOutput {
+	s.TransitRouterBandwidthPackageOwnerId = &v
 	return s
 }
 

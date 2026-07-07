@@ -19,7 +19,7 @@ import (
 //    // byteplus sdk func uses an SDK service client to make a request to
 //    // TRANSITROUTER.
 //    func myFunc(svc TRANSITROUTERAPI) bool {
-//        // Make svc.AssociateTransitRouterAttachmentToRouteTable request
+//        // Make svc.AcceptSharedTransitRouter request
 //    }
 //
 //    func main() {
@@ -30,6 +30,22 @@ import (
 //    }
 //
 type TRANSITROUTERAPI interface {
+	AcceptSharedTransitRouterCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	AcceptSharedTransitRouterCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	AcceptSharedTransitRouterCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	AcceptSharedTransitRouter(*AcceptSharedTransitRouterInput) (*AcceptSharedTransitRouterOutput, error)
+	AcceptSharedTransitRouterWithContext(byteplus.Context, *AcceptSharedTransitRouterInput, ...request.Option) (*AcceptSharedTransitRouterOutput, error)
+	AcceptSharedTransitRouterRequest(*AcceptSharedTransitRouterInput) (*request.Request, *AcceptSharedTransitRouterOutput)
+
+	AcceptTransitRouterPeerAttachmentCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	AcceptTransitRouterPeerAttachmentCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	AcceptTransitRouterPeerAttachmentCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	AcceptTransitRouterPeerAttachment(*AcceptTransitRouterPeerAttachmentInput) (*AcceptTransitRouterPeerAttachmentOutput, error)
+	AcceptTransitRouterPeerAttachmentWithContext(byteplus.Context, *AcceptTransitRouterPeerAttachmentInput, ...request.Option) (*AcceptTransitRouterPeerAttachmentOutput, error)
+	AcceptTransitRouterPeerAttachmentRequest(*AcceptTransitRouterPeerAttachmentInput) (*request.Request, *AcceptTransitRouterPeerAttachmentOutput)
+
 	AssociateTransitRouterAttachmentToRouteTableCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	AssociateTransitRouterAttachmentToRouteTableCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	AssociateTransitRouterAttachmentToRouteTableCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -125,6 +141,14 @@ type TRANSITROUTERAPI interface {
 	CreateTransitRouterForwardPolicyTable(*CreateTransitRouterForwardPolicyTableInput) (*CreateTransitRouterForwardPolicyTableOutput, error)
 	CreateTransitRouterForwardPolicyTableWithContext(byteplus.Context, *CreateTransitRouterForwardPolicyTableInput, ...request.Option) (*CreateTransitRouterForwardPolicyTableOutput, error)
 	CreateTransitRouterForwardPolicyTableRequest(*CreateTransitRouterForwardPolicyTableInput) (*request.Request, *CreateTransitRouterForwardPolicyTableOutput)
+
+	CreateTransitRouterGrantRuleCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateTransitRouterGrantRuleCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateTransitRouterGrantRuleCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateTransitRouterGrantRule(*CreateTransitRouterGrantRuleInput) (*CreateTransitRouterGrantRuleOutput, error)
+	CreateTransitRouterGrantRuleWithContext(byteplus.Context, *CreateTransitRouterGrantRuleInput, ...request.Option) (*CreateTransitRouterGrantRuleOutput, error)
+	CreateTransitRouterGrantRuleRequest(*CreateTransitRouterGrantRuleInput) (*request.Request, *CreateTransitRouterGrantRuleOutput)
 
 	CreateTransitRouterMulticastDomainCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	CreateTransitRouterMulticastDomainCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -286,6 +310,14 @@ type TRANSITROUTERAPI interface {
 	DeleteTransitRouterForwardPolicyTableWithContext(byteplus.Context, *DeleteTransitRouterForwardPolicyTableInput, ...request.Option) (*DeleteTransitRouterForwardPolicyTableOutput, error)
 	DeleteTransitRouterForwardPolicyTableRequest(*DeleteTransitRouterForwardPolicyTableInput) (*request.Request, *DeleteTransitRouterForwardPolicyTableOutput)
 
+	DeleteTransitRouterGrantRuleCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteTransitRouterGrantRuleCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteTransitRouterGrantRuleCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteTransitRouterGrantRule(*DeleteTransitRouterGrantRuleInput) (*DeleteTransitRouterGrantRuleOutput, error)
+	DeleteTransitRouterGrantRuleWithContext(byteplus.Context, *DeleteTransitRouterGrantRuleInput, ...request.Option) (*DeleteTransitRouterGrantRuleOutput, error)
+	DeleteTransitRouterGrantRuleRequest(*DeleteTransitRouterGrantRuleInput) (*request.Request, *DeleteTransitRouterGrantRuleOutput)
+
 	DeleteTransitRouterMulticastDomainCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DeleteTransitRouterMulticastDomainCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	DeleteTransitRouterMulticastDomainCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -398,6 +430,14 @@ type TRANSITROUTERAPI interface {
 	DeleteTransitRouterVpnAttachmentWithContext(byteplus.Context, *DeleteTransitRouterVpnAttachmentInput, ...request.Option) (*DeleteTransitRouterVpnAttachmentOutput, error)
 	DeleteTransitRouterVpnAttachmentRequest(*DeleteTransitRouterVpnAttachmentInput) (*request.Request, *DeleteTransitRouterVpnAttachmentOutput)
 
+	Describe95TrafficCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	Describe95TrafficCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	Describe95TrafficCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	Describe95Traffic(*Describe95TrafficInput) (*Describe95TrafficOutput, error)
+	Describe95TrafficWithContext(byteplus.Context, *Describe95TrafficInput, ...request.Option) (*Describe95TrafficOutput, error)
+	Describe95TrafficRequest(*Describe95TrafficInput) (*request.Request, *Describe95TrafficOutput)
+
 	DescribeTransitRouterAttachmentsCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DescribeTransitRouterAttachmentsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	DescribeTransitRouterAttachmentsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -453,6 +493,14 @@ type TRANSITROUTERAPI interface {
 	DescribeTransitRouterForwardPolicyTables(*DescribeTransitRouterForwardPolicyTablesInput) (*DescribeTransitRouterForwardPolicyTablesOutput, error)
 	DescribeTransitRouterForwardPolicyTablesWithContext(byteplus.Context, *DescribeTransitRouterForwardPolicyTablesInput, ...request.Option) (*DescribeTransitRouterForwardPolicyTablesOutput, error)
 	DescribeTransitRouterForwardPolicyTablesRequest(*DescribeTransitRouterForwardPolicyTablesInput) (*request.Request, *DescribeTransitRouterForwardPolicyTablesOutput)
+
+	DescribeTransitRouterGrantRulesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeTransitRouterGrantRulesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeTransitRouterGrantRulesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeTransitRouterGrantRules(*DescribeTransitRouterGrantRulesInput) (*DescribeTransitRouterGrantRulesOutput, error)
+	DescribeTransitRouterGrantRulesWithContext(byteplus.Context, *DescribeTransitRouterGrantRulesInput, ...request.Option) (*DescribeTransitRouterGrantRulesOutput, error)
+	DescribeTransitRouterGrantRulesRequest(*DescribeTransitRouterGrantRulesInput) (*request.Request, *DescribeTransitRouterGrantRulesOutput)
 
 	DescribeTransitRouterMulticastDomainAssociationsCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DescribeTransitRouterMulticastDomainAssociationsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -726,6 +774,14 @@ type TRANSITROUTERAPI interface {
 	ModifyTransitRouterForwardPolicyTableAttributesWithContext(byteplus.Context, *ModifyTransitRouterForwardPolicyTableAttributesInput, ...request.Option) (*ModifyTransitRouterForwardPolicyTableAttributesOutput, error)
 	ModifyTransitRouterForwardPolicyTableAttributesRequest(*ModifyTransitRouterForwardPolicyTableAttributesInput) (*request.Request, *ModifyTransitRouterForwardPolicyTableAttributesOutput)
 
+	ModifyTransitRouterGrantRuleAttributesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyTransitRouterGrantRuleAttributesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyTransitRouterGrantRuleAttributesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyTransitRouterGrantRuleAttributes(*ModifyTransitRouterGrantRuleAttributesInput) (*ModifyTransitRouterGrantRuleAttributesOutput, error)
+	ModifyTransitRouterGrantRuleAttributesWithContext(byteplus.Context, *ModifyTransitRouterGrantRuleAttributesInput, ...request.Option) (*ModifyTransitRouterGrantRuleAttributesOutput, error)
+	ModifyTransitRouterGrantRuleAttributesRequest(*ModifyTransitRouterGrantRuleAttributesInput) (*request.Request, *ModifyTransitRouterGrantRuleAttributesOutput)
+
 	ModifyTransitRouterMulticastDomainAttributesCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ModifyTransitRouterMulticastDomainAttributesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	ModifyTransitRouterMulticastDomainAttributesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -806,6 +862,14 @@ type TRANSITROUTERAPI interface {
 	ModifyTransitRouterTrafficQosMarkingPolicyAttributesWithContext(byteplus.Context, *ModifyTransitRouterTrafficQosMarkingPolicyAttributesInput, ...request.Option) (*ModifyTransitRouterTrafficQosMarkingPolicyAttributesOutput, error)
 	ModifyTransitRouterTrafficQosMarkingPolicyAttributesRequest(*ModifyTransitRouterTrafficQosMarkingPolicyAttributesInput) (*request.Request, *ModifyTransitRouterTrafficQosMarkingPolicyAttributesOutput)
 
+	ModifyTransitRouterTrafficQosQueueEntryAttributesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyTransitRouterTrafficQosQueueEntryAttributesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyTransitRouterTrafficQosQueueEntryAttributesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyTransitRouterTrafficQosQueueEntryAttributes(*ModifyTransitRouterTrafficQosQueueEntryAttributesInput) (*ModifyTransitRouterTrafficQosQueueEntryAttributesOutput, error)
+	ModifyTransitRouterTrafficQosQueueEntryAttributesWithContext(byteplus.Context, *ModifyTransitRouterTrafficQosQueueEntryAttributesInput, ...request.Option) (*ModifyTransitRouterTrafficQosQueueEntryAttributesOutput, error)
+	ModifyTransitRouterTrafficQosQueueEntryAttributesRequest(*ModifyTransitRouterTrafficQosQueueEntryAttributesInput) (*request.Request, *ModifyTransitRouterTrafficQosQueueEntryAttributesOutput)
+
 	ModifyTransitRouterTrafficQosQueuePolicyAssociationCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ModifyTransitRouterTrafficQosQueuePolicyAssociationCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	ModifyTransitRouterTrafficQosQueuePolicyAssociationCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -837,6 +901,22 @@ type TRANSITROUTERAPI interface {
 	ModifyTransitRouterVpnAttachmentAttributes(*ModifyTransitRouterVpnAttachmentAttributesInput) (*ModifyTransitRouterVpnAttachmentAttributesOutput, error)
 	ModifyTransitRouterVpnAttachmentAttributesWithContext(byteplus.Context, *ModifyTransitRouterVpnAttachmentAttributesInput, ...request.Option) (*ModifyTransitRouterVpnAttachmentAttributesOutput, error)
 	ModifyTransitRouterVpnAttachmentAttributesRequest(*ModifyTransitRouterVpnAttachmentAttributesInput) (*request.Request, *ModifyTransitRouterVpnAttachmentAttributesOutput)
+
+	RejectSharedTransitRouterCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	RejectSharedTransitRouterCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	RejectSharedTransitRouterCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	RejectSharedTransitRouter(*RejectSharedTransitRouterInput) (*RejectSharedTransitRouterOutput, error)
+	RejectSharedTransitRouterWithContext(byteplus.Context, *RejectSharedTransitRouterInput, ...request.Option) (*RejectSharedTransitRouterOutput, error)
+	RejectSharedTransitRouterRequest(*RejectSharedTransitRouterInput) (*request.Request, *RejectSharedTransitRouterOutput)
+
+	RejectTransitRouterPeerAttachmentCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	RejectTransitRouterPeerAttachmentCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	RejectTransitRouterPeerAttachmentCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	RejectTransitRouterPeerAttachment(*RejectTransitRouterPeerAttachmentInput) (*RejectTransitRouterPeerAttachmentOutput, error)
+	RejectTransitRouterPeerAttachmentWithContext(byteplus.Context, *RejectTransitRouterPeerAttachmentInput, ...request.Option) (*RejectTransitRouterPeerAttachmentOutput, error)
+	RejectTransitRouterPeerAttachmentRequest(*RejectTransitRouterPeerAttachmentInput) (*request.Request, *RejectTransitRouterPeerAttachmentOutput)
 
 	RenewTransitRouterBandwidthPackageCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	RenewTransitRouterBandwidthPackageCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
