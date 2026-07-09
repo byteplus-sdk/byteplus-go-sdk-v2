@@ -7,6 +7,8 @@ type ContentGenerationContentItemType string
 const (
 	ContentGenerationContentItemTypeText      ContentGenerationContentItemType = "text"
 	ContentGenerationContentItemTypeImage     ContentGenerationContentItemType = "image_url"
+	ContentGenerationContentItemTypeAudio     ContentGenerationContentItemType = "audio_url"
+	ContentGenerationContentItemTypeVideo     ContentGenerationContentItemType = "video_url"
 	ContentGenerationContentItemTypeDraftTask ContentGenerationContentItemType = "draft_task"
 )
 
@@ -26,6 +28,7 @@ type CreateContentGenerationTaskRequest struct {
 	ReturnLastFrame       *bool                                 `json:"return_last_frame,omitempty"`
 	ServiceTier           *string                               `json:"service_tier,omitempty"`
 	ExecutionExpiresAfter *int64                                `json:"execution_expires_after,omitempty"`
+	Priority              *int32                                `json:"priority,omitempty"`
 	GenerateAudio         *bool                                 `json:"generate_audio,omitempty"`
 	Draft                 *bool                                 `json:"draft,omitempty"`
 	CameraFixed           *bool                                 `json:"camera_fixed,omitempty"`
@@ -92,6 +95,7 @@ type GetContentGenerationTaskResponse struct {
 	RevisedPrompt         *string                 `json:"revised_prompt,omitempty"`
 	ServiceTier           *string                 `json:"service_tier,omitempty"`
 	ExecutionExpiresAfter *int64                  `json:"execution_expires_after,omitempty"`
+	Priority              *int32                  `json:"priority,omitempty"`
 	GenerateAudio         *bool                   `json:"generate_audio,omitempty"`
 	Draft                 *bool                   `json:"draft,omitempty"`
 	DraftTaskID           *string                 `json:"draft_task_id,omitempty"`
@@ -120,6 +124,8 @@ type CreateContentGenerationContentItem struct {
 	Type      ContentGenerationContentItemType `json:"type"`
 	Text      *string                          `json:"text,omitempty"`
 	ImageURL  *ImageURL                        `json:"image_url,omitempty"`
+	AudioURL  *AudioUrl                        `json:"audio_url,omitempty"`
+	VideoURL  *VideoUrl                        `json:"video_url,omitempty"`
 	Role      *string                          `json:"role,omitempty"`
 	DraftTask *DraftTask                       `json:"draft_task,omitempty"`
 }
@@ -131,6 +137,15 @@ type DraftTask struct {
 type ImageURL struct {
 	URL string `json:"url"`
 }
+
+type AudioUrl struct {
+	Url string `json:"url"`
+}
+
+type VideoUrl struct {
+	Url string `json:"url"`
+}
+
 type Content struct {
 	VideoURL     string `json:"video_url"`
 	LastFrameURL string `json:"last_frame_url"`
@@ -165,6 +180,7 @@ type ListContentGenerationTaskItem struct {
 	RevisedPrompt         *string                 `json:"revised_prompt,omitempty"`
 	ServiceTier           *string                 `json:"service_tier,omitempty"`
 	ExecutionExpiresAfter *int64                  `json:"execution_expires_after,omitempty"`
+	Priority              *int32                  `json:"priority,omitempty"`
 	GenerateAudio         *bool                   `json:"generate_audio,omitempty"`
 	Draft                 *bool                   `json:"draft,omitempty"`
 	DraftTaskID           *string                 `json:"draft_task_id,omitempty"`
