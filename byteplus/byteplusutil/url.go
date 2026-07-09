@@ -171,6 +171,11 @@ var defaultEndpoint = map[string]*ServiceEndpointInfo{
 		IsGlobal:        false,
 		DefaultEndpoint: endpoint,
 	},
+	"transitrouter": {
+		Service:         "transitrouter",
+		IsGlobal:        false,
+		DefaultEndpoint: endpoint,
+	},
 	"cen": {
 		Service:         "cen",
 		IsGlobal:        true,
