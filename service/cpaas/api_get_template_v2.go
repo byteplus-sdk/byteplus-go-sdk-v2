@@ -190,6 +190,12 @@ type DataForGetTemplateV2Output struct {
 
 	BusinessType *string `type:"string"`
 
+	EnabledShortUrl *string `type:"string"`
+
+	GmtCreate *int64 `type:"int64"`
+
+	GmtModifier *int64 `type:"int64"`
+
 	LanguageCode *string `type:"string"`
 
 	LanguageName *string `type:"string"`
@@ -214,6 +220,24 @@ func (s DataForGetTemplateV2Output) GoString() string {
 // SetBusinessType sets the BusinessType field's value.
 func (s *DataForGetTemplateV2Output) SetBusinessType(v string) *DataForGetTemplateV2Output {
 	s.BusinessType = &v
+	return s
+}
+
+// SetEnabledShortUrl sets the EnabledShortUrl field's value.
+func (s *DataForGetTemplateV2Output) SetEnabledShortUrl(v string) *DataForGetTemplateV2Output {
+	s.EnabledShortUrl = &v
+	return s
+}
+
+// SetGmtCreate sets the GmtCreate field's value.
+func (s *DataForGetTemplateV2Output) SetGmtCreate(v int64) *DataForGetTemplateV2Output {
+	s.GmtCreate = &v
+	return s
+}
+
+// SetGmtModifier sets the GmtModifier field's value.
+func (s *DataForGetTemplateV2Output) SetGmtModifier(v int64) *DataForGetTemplateV2Output {
+	s.GmtModifier = &v
 	return s
 }
 
@@ -250,6 +274,8 @@ func (s *DataForGetTemplateV2Output) SetTemplateList(v []*TemplateListForGetTemp
 type ElementStyleForGetTemplateV2Output struct {
 	_ struct{} `type:"structure"`
 
+	Deeplink *string `type:"string"`
+
 	ElementType *string `type:"string"`
 
 	ExpiresTime *int32 `type:"int32"`
@@ -258,13 +284,49 @@ type ElementStyleForGetTemplateV2Output struct {
 
 	HasSecurity *bool `type:"boolean"`
 
+	ImageJumpType *string `type:"string"`
+
+	ImageLink *string `type:"string"`
+
+	Items []*ItemForGetTemplateV2Output `type:"list"`
+
+	PackageName *string `type:"string"`
+
+	ParamLeft *string `type:"string"`
+
+	ParamRight *string `type:"string"`
+
 	RealContent *string `type:"string"`
 
 	ResourceCode *string `type:"string"`
 
+	ResourceContentType *string `type:"string"`
+
 	ResourceName *string `type:"string"`
 
+	ResourceSize *int32 `type:"int32"`
+
+	ResourceThumbImageUrl *string `type:"string"`
+
+	ResourceType *string `type:"string"`
+
 	ResourceUrl *string `type:"string"`
+
+	SubText *string `type:"string"`
+
+	ThumbContentType *string `type:"string"`
+
+	ThumbImageFileSize *int32 `type:"int32"`
+
+	ThumbImageUrl *string `type:"string"`
+
+	ThumbnailResourceContentType *string `type:"string"`
+
+	ThumbnailResourceName *string `type:"string"`
+
+	ThumbnailResourceSize *int32 `type:"int32"`
+
+	ThumbnailUrl *string `type:"string"`
 }
 
 // String returns the string representation
@@ -275,6 +337,12 @@ func (s ElementStyleForGetTemplateV2Output) String() string {
 // GoString returns the string representation
 func (s ElementStyleForGetTemplateV2Output) GoString() string {
 	return s.String()
+}
+
+// SetDeeplink sets the Deeplink field's value.
+func (s *ElementStyleForGetTemplateV2Output) SetDeeplink(v string) *ElementStyleForGetTemplateV2Output {
+	s.Deeplink = &v
+	return s
 }
 
 // SetElementType sets the ElementType field's value.
@@ -301,6 +369,42 @@ func (s *ElementStyleForGetTemplateV2Output) SetHasSecurity(v bool) *ElementStyl
 	return s
 }
 
+// SetImageJumpType sets the ImageJumpType field's value.
+func (s *ElementStyleForGetTemplateV2Output) SetImageJumpType(v string) *ElementStyleForGetTemplateV2Output {
+	s.ImageJumpType = &v
+	return s
+}
+
+// SetImageLink sets the ImageLink field's value.
+func (s *ElementStyleForGetTemplateV2Output) SetImageLink(v string) *ElementStyleForGetTemplateV2Output {
+	s.ImageLink = &v
+	return s
+}
+
+// SetItems sets the Items field's value.
+func (s *ElementStyleForGetTemplateV2Output) SetItems(v []*ItemForGetTemplateV2Output) *ElementStyleForGetTemplateV2Output {
+	s.Items = v
+	return s
+}
+
+// SetPackageName sets the PackageName field's value.
+func (s *ElementStyleForGetTemplateV2Output) SetPackageName(v string) *ElementStyleForGetTemplateV2Output {
+	s.PackageName = &v
+	return s
+}
+
+// SetParamLeft sets the ParamLeft field's value.
+func (s *ElementStyleForGetTemplateV2Output) SetParamLeft(v string) *ElementStyleForGetTemplateV2Output {
+	s.ParamLeft = &v
+	return s
+}
+
+// SetParamRight sets the ParamRight field's value.
+func (s *ElementStyleForGetTemplateV2Output) SetParamRight(v string) *ElementStyleForGetTemplateV2Output {
+	s.ParamRight = &v
+	return s
+}
+
 // SetRealContent sets the RealContent field's value.
 func (s *ElementStyleForGetTemplateV2Output) SetRealContent(v string) *ElementStyleForGetTemplateV2Output {
 	s.RealContent = &v
@@ -313,9 +417,33 @@ func (s *ElementStyleForGetTemplateV2Output) SetResourceCode(v string) *ElementS
 	return s
 }
 
+// SetResourceContentType sets the ResourceContentType field's value.
+func (s *ElementStyleForGetTemplateV2Output) SetResourceContentType(v string) *ElementStyleForGetTemplateV2Output {
+	s.ResourceContentType = &v
+	return s
+}
+
 // SetResourceName sets the ResourceName field's value.
 func (s *ElementStyleForGetTemplateV2Output) SetResourceName(v string) *ElementStyleForGetTemplateV2Output {
 	s.ResourceName = &v
+	return s
+}
+
+// SetResourceSize sets the ResourceSize field's value.
+func (s *ElementStyleForGetTemplateV2Output) SetResourceSize(v int32) *ElementStyleForGetTemplateV2Output {
+	s.ResourceSize = &v
+	return s
+}
+
+// SetResourceThumbImageUrl sets the ResourceThumbImageUrl field's value.
+func (s *ElementStyleForGetTemplateV2Output) SetResourceThumbImageUrl(v string) *ElementStyleForGetTemplateV2Output {
+	s.ResourceThumbImageUrl = &v
+	return s
+}
+
+// SetResourceType sets the ResourceType field's value.
+func (s *ElementStyleForGetTemplateV2Output) SetResourceType(v string) *ElementStyleForGetTemplateV2Output {
+	s.ResourceType = &v
 	return s
 }
 
@@ -325,12 +453,66 @@ func (s *ElementStyleForGetTemplateV2Output) SetResourceUrl(v string) *ElementSt
 	return s
 }
 
+// SetSubText sets the SubText field's value.
+func (s *ElementStyleForGetTemplateV2Output) SetSubText(v string) *ElementStyleForGetTemplateV2Output {
+	s.SubText = &v
+	return s
+}
+
+// SetThumbContentType sets the ThumbContentType field's value.
+func (s *ElementStyleForGetTemplateV2Output) SetThumbContentType(v string) *ElementStyleForGetTemplateV2Output {
+	s.ThumbContentType = &v
+	return s
+}
+
+// SetThumbImageFileSize sets the ThumbImageFileSize field's value.
+func (s *ElementStyleForGetTemplateV2Output) SetThumbImageFileSize(v int32) *ElementStyleForGetTemplateV2Output {
+	s.ThumbImageFileSize = &v
+	return s
+}
+
+// SetThumbImageUrl sets the ThumbImageUrl field's value.
+func (s *ElementStyleForGetTemplateV2Output) SetThumbImageUrl(v string) *ElementStyleForGetTemplateV2Output {
+	s.ThumbImageUrl = &v
+	return s
+}
+
+// SetThumbnailResourceContentType sets the ThumbnailResourceContentType field's value.
+func (s *ElementStyleForGetTemplateV2Output) SetThumbnailResourceContentType(v string) *ElementStyleForGetTemplateV2Output {
+	s.ThumbnailResourceContentType = &v
+	return s
+}
+
+// SetThumbnailResourceName sets the ThumbnailResourceName field's value.
+func (s *ElementStyleForGetTemplateV2Output) SetThumbnailResourceName(v string) *ElementStyleForGetTemplateV2Output {
+	s.ThumbnailResourceName = &v
+	return s
+}
+
+// SetThumbnailResourceSize sets the ThumbnailResourceSize field's value.
+func (s *ElementStyleForGetTemplateV2Output) SetThumbnailResourceSize(v int32) *ElementStyleForGetTemplateV2Output {
+	s.ThumbnailResourceSize = &v
+	return s
+}
+
+// SetThumbnailUrl sets the ThumbnailUrl field's value.
+func (s *ElementStyleForGetTemplateV2Output) SetThumbnailUrl(v string) *ElementStyleForGetTemplateV2Output {
+	s.ThumbnailUrl = &v
+	return s
+}
+
 type ExtendAttrsForGetTemplateV2Output struct {
 	_ struct{} `type:"structure"`
 
 	CouponCode *string `type:"string"`
 
+	CreateFrom *string `type:"string"`
+
 	PhoneNumber *string `type:"string"`
+
+	PhoneType *string `type:"string"`
+
+	TerminalOpenType *string `type:"string"`
 
 	Variable *string `type:"string"`
 
@@ -355,9 +537,27 @@ func (s *ExtendAttrsForGetTemplateV2Output) SetCouponCode(v string) *ExtendAttrs
 	return s
 }
 
+// SetCreateFrom sets the CreateFrom field's value.
+func (s *ExtendAttrsForGetTemplateV2Output) SetCreateFrom(v string) *ExtendAttrsForGetTemplateV2Output {
+	s.CreateFrom = &v
+	return s
+}
+
 // SetPhoneNumber sets the PhoneNumber field's value.
 func (s *ExtendAttrsForGetTemplateV2Output) SetPhoneNumber(v string) *ExtendAttrsForGetTemplateV2Output {
 	s.PhoneNumber = &v
+	return s
+}
+
+// SetPhoneType sets the PhoneType field's value.
+func (s *ExtendAttrsForGetTemplateV2Output) SetPhoneType(v string) *ExtendAttrsForGetTemplateV2Output {
+	s.PhoneType = &v
+	return s
+}
+
+// SetTerminalOpenType sets the TerminalOpenType field's value.
+func (s *ExtendAttrsForGetTemplateV2Output) SetTerminalOpenType(v string) *ExtendAttrsForGetTemplateV2Output {
+	s.TerminalOpenType = &v
 	return s
 }
 
@@ -471,6 +671,36 @@ func (s *GetTemplateV2Output) SetTotal(v int32) *GetTemplateV2Output {
 	return s
 }
 
+type ItemForGetTemplateV2Output struct {
+	_ struct{} `type:"structure"`
+
+	ParamLeft *string `type:"string"`
+
+	ParamRight *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ItemForGetTemplateV2Output) String() string {
+	return byteplusutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ItemForGetTemplateV2Output) GoString() string {
+	return s.String()
+}
+
+// SetParamLeft sets the ParamLeft field's value.
+func (s *ItemForGetTemplateV2Output) SetParamLeft(v string) *ItemForGetTemplateV2Output {
+	s.ParamLeft = &v
+	return s
+}
+
+// SetParamRight sets the ParamRight field's value.
+func (s *ItemForGetTemplateV2Output) SetParamRight(v string) *ItemForGetTemplateV2Output {
+	s.ParamRight = &v
+	return s
+}
+
 type PageDTOListForGetTemplateV2Output struct {
 	_ struct{} `type:"structure"`
 
@@ -479,6 +709,8 @@ type PageDTOListForGetTemplateV2Output struct {
 	PageLinkList []*PageLinkListForGetTemplateV2Output `type:"list"`
 
 	PageName *string `type:"string"`
+
+	PageType *string `type:"string"`
 }
 
 // String returns the string representation
@@ -509,12 +741,20 @@ func (s *PageDTOListForGetTemplateV2Output) SetPageName(v string) *PageDTOListFo
 	return s
 }
 
+// SetPageType sets the PageType field's value.
+func (s *PageDTOListForGetTemplateV2Output) SetPageType(v string) *PageDTOListForGetTemplateV2Output {
+	s.PageType = &v
+	return s
+}
+
 type PageElementDTOListForGetTemplateV2Output struct {
 	_ struct{} `type:"structure"`
 
 	ElementStyle *ElementStyleForGetTemplateV2Output `type:"structure"`
 
 	ElementType *string `type:"string"`
+
+	OrderId *int32 `type:"int32"`
 }
 
 // String returns the string representation
@@ -536,6 +776,12 @@ func (s *PageElementDTOListForGetTemplateV2Output) SetElementStyle(v *ElementSty
 // SetElementType sets the ElementType field's value.
 func (s *PageElementDTOListForGetTemplateV2Output) SetElementType(v string) *PageElementDTOListForGetTemplateV2Output {
 	s.ElementType = &v
+	return s
+}
+
+// SetOrderId sets the OrderId field's value.
+func (s *PageElementDTOListForGetTemplateV2Output) SetOrderId(v int32) *PageElementDTOListForGetTemplateV2Output {
+	s.OrderId = &v
 	return s
 }
 
@@ -593,8 +839,66 @@ func (s *PageLinkListForGetTemplateV2Output) SetOrderId(v int32) *PageLinkListFo
 	return s
 }
 
+type TemplateButtonListForGetTemplateV2Output struct {
+	_ struct{} `type:"structure"`
+
+	Action *ActionForGetTemplateV2Output `type:"structure"`
+
+	ElementType *string `type:"string"`
+
+	LinkName *string `type:"string"`
+
+	LinkType *string `type:"string"`
+
+	OrderId *int32 `type:"int32"`
+}
+
+// String returns the string representation
+func (s TemplateButtonListForGetTemplateV2Output) String() string {
+	return byteplusutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TemplateButtonListForGetTemplateV2Output) GoString() string {
+	return s.String()
+}
+
+// SetAction sets the Action field's value.
+func (s *TemplateButtonListForGetTemplateV2Output) SetAction(v *ActionForGetTemplateV2Output) *TemplateButtonListForGetTemplateV2Output {
+	s.Action = v
+	return s
+}
+
+// SetElementType sets the ElementType field's value.
+func (s *TemplateButtonListForGetTemplateV2Output) SetElementType(v string) *TemplateButtonListForGetTemplateV2Output {
+	s.ElementType = &v
+	return s
+}
+
+// SetLinkName sets the LinkName field's value.
+func (s *TemplateButtonListForGetTemplateV2Output) SetLinkName(v string) *TemplateButtonListForGetTemplateV2Output {
+	s.LinkName = &v
+	return s
+}
+
+// SetLinkType sets the LinkType field's value.
+func (s *TemplateButtonListForGetTemplateV2Output) SetLinkType(v string) *TemplateButtonListForGetTemplateV2Output {
+	s.LinkType = &v
+	return s
+}
+
+// SetOrderId sets the OrderId field's value.
+func (s *TemplateButtonListForGetTemplateV2Output) SetOrderId(v int32) *TemplateButtonListForGetTemplateV2Output {
+	s.OrderId = &v
+	return s
+}
+
 type TemplateListForGetTemplateV2Output struct {
 	_ struct{} `type:"structure"`
+
+	AuditStatus *string `type:"string"`
+
+	Background *string `type:"string"`
 
 	CardButtonType []*string `type:"list"`
 
@@ -602,13 +906,27 @@ type TemplateListForGetTemplateV2Output struct {
 
 	CarouselBody *string `type:"string"`
 
+	FallbackLink *string `type:"string"`
+
 	Format *string `type:"string"`
+
+	OriginalText *string `type:"string"`
 
 	PageDTOList []*PageDTOListForGetTemplateV2Output `type:"list"`
 
+	ServiceNo *string `type:"string"`
+
+	SubAccountId *string `type:"string"`
+
+	TemplateButtonList []*TemplateButtonListForGetTemplateV2Output `type:"list"`
+
 	TemplateType *string `type:"string"`
 
+	Usage *string `type:"string"`
+
 	VariablesDTOList []*VariablesDTOListForGetTemplateV2Output `type:"list"`
+
+	Vendors []*string `type:"list"`
 
 	WhatsappCatagory *string `type:"string"`
 }
@@ -621,6 +939,18 @@ func (s TemplateListForGetTemplateV2Output) String() string {
 // GoString returns the string representation
 func (s TemplateListForGetTemplateV2Output) GoString() string {
 	return s.String()
+}
+
+// SetAuditStatus sets the AuditStatus field's value.
+func (s *TemplateListForGetTemplateV2Output) SetAuditStatus(v string) *TemplateListForGetTemplateV2Output {
+	s.AuditStatus = &v
+	return s
+}
+
+// SetBackground sets the Background field's value.
+func (s *TemplateListForGetTemplateV2Output) SetBackground(v string) *TemplateListForGetTemplateV2Output {
+	s.Background = &v
+	return s
 }
 
 // SetCardButtonType sets the CardButtonType field's value.
@@ -641,9 +971,21 @@ func (s *TemplateListForGetTemplateV2Output) SetCarouselBody(v string) *Template
 	return s
 }
 
+// SetFallbackLink sets the FallbackLink field's value.
+func (s *TemplateListForGetTemplateV2Output) SetFallbackLink(v string) *TemplateListForGetTemplateV2Output {
+	s.FallbackLink = &v
+	return s
+}
+
 // SetFormat sets the Format field's value.
 func (s *TemplateListForGetTemplateV2Output) SetFormat(v string) *TemplateListForGetTemplateV2Output {
 	s.Format = &v
+	return s
+}
+
+// SetOriginalText sets the OriginalText field's value.
+func (s *TemplateListForGetTemplateV2Output) SetOriginalText(v string) *TemplateListForGetTemplateV2Output {
+	s.OriginalText = &v
 	return s
 }
 
@@ -653,15 +995,45 @@ func (s *TemplateListForGetTemplateV2Output) SetPageDTOList(v []*PageDTOListForG
 	return s
 }
 
+// SetServiceNo sets the ServiceNo field's value.
+func (s *TemplateListForGetTemplateV2Output) SetServiceNo(v string) *TemplateListForGetTemplateV2Output {
+	s.ServiceNo = &v
+	return s
+}
+
+// SetSubAccountId sets the SubAccountId field's value.
+func (s *TemplateListForGetTemplateV2Output) SetSubAccountId(v string) *TemplateListForGetTemplateV2Output {
+	s.SubAccountId = &v
+	return s
+}
+
+// SetTemplateButtonList sets the TemplateButtonList field's value.
+func (s *TemplateListForGetTemplateV2Output) SetTemplateButtonList(v []*TemplateButtonListForGetTemplateV2Output) *TemplateListForGetTemplateV2Output {
+	s.TemplateButtonList = v
+	return s
+}
+
 // SetTemplateType sets the TemplateType field's value.
 func (s *TemplateListForGetTemplateV2Output) SetTemplateType(v string) *TemplateListForGetTemplateV2Output {
 	s.TemplateType = &v
 	return s
 }
 
+// SetUsage sets the Usage field's value.
+func (s *TemplateListForGetTemplateV2Output) SetUsage(v string) *TemplateListForGetTemplateV2Output {
+	s.Usage = &v
+	return s
+}
+
 // SetVariablesDTOList sets the VariablesDTOList field's value.
 func (s *TemplateListForGetTemplateV2Output) SetVariablesDTOList(v []*VariablesDTOListForGetTemplateV2Output) *TemplateListForGetTemplateV2Output {
 	s.VariablesDTOList = v
+	return s
+}
+
+// SetVendors sets the Vendors field's value.
+func (s *TemplateListForGetTemplateV2Output) SetVendors(v []*string) *TemplateListForGetTemplateV2Output {
+	s.Vendors = v
 	return s
 }
 
@@ -681,6 +1053,8 @@ type VariablesDTOListForGetTemplateV2Output struct {
 	UniqueVariableCode *string `type:"string"`
 
 	VariableCode *string `type:"string"`
+
+	VariableLength *int32 `type:"int32"`
 
 	VariableName *string `type:"string"`
 }
@@ -716,6 +1090,12 @@ func (s *VariablesDTOListForGetTemplateV2Output) SetUniqueVariableCode(v string)
 // SetVariableCode sets the VariableCode field's value.
 func (s *VariablesDTOListForGetTemplateV2Output) SetVariableCode(v string) *VariablesDTOListForGetTemplateV2Output {
 	s.VariableCode = &v
+	return s
+}
+
+// SetVariableLength sets the VariableLength field's value.
+func (s *VariablesDTOListForGetTemplateV2Output) SetVariableLength(v int32) *VariablesDTOListForGetTemplateV2Output {
+	s.VariableLength = &v
 	return s
 }
 
