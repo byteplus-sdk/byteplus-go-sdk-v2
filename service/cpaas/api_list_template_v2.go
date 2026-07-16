@@ -356,6 +356,12 @@ type TemplateStatusForListTemplateV2Output struct {
 
 	Reason *string `type:"string" json:",omitempty"`
 
+	ServiceName *string `type:"string" json:",omitempty"`
+
+	ServiceNo *string `type:"string" json:",omitempty"`
+
+	SubaccountId *string `type:"string" json:",omitempty"`
+
 	TemplateType *string `type:"string" json:",omitempty"`
 }
 
@@ -378,6 +384,24 @@ func (s *TemplateStatusForListTemplateV2Output) SetAuditStatus(v string) *Templa
 // SetReason sets the Reason field's value.
 func (s *TemplateStatusForListTemplateV2Output) SetReason(v string) *TemplateStatusForListTemplateV2Output {
 	s.Reason = &v
+	return s
+}
+
+// SetServiceName sets the ServiceName field's value.
+func (s *TemplateStatusForListTemplateV2Output) SetServiceName(v string) *TemplateStatusForListTemplateV2Output {
+	s.ServiceName = &v
+	return s
+}
+
+// SetServiceNo sets the ServiceNo field's value.
+func (s *TemplateStatusForListTemplateV2Output) SetServiceNo(v string) *TemplateStatusForListTemplateV2Output {
+	s.ServiceNo = &v
+	return s
+}
+
+// SetSubaccountId sets the SubaccountId field's value.
+func (s *TemplateStatusForListTemplateV2Output) SetSubaccountId(v string) *TemplateStatusForListTemplateV2Output {
+	s.SubaccountId = &v
 	return s
 }
 

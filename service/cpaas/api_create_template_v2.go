@@ -201,6 +201,8 @@ type CreateTemplateV2Input struct {
 	// SceneTemplateName is a required field
 	SceneTemplateName *string `type:"string" json:",omitempty" required:"true"`
 
+	SendAudit *string `type:"string" json:",omitempty"`
+
 	Signature *string `type:"string" json:",omitempty"`
 
 	SubAccountId *string `type:"string" json:",omitempty"`
@@ -254,6 +256,12 @@ func (s *CreateTemplateV2Input) SetLanguage(v string) *CreateTemplateV2Input {
 // SetSceneTemplateName sets the SceneTemplateName field's value.
 func (s *CreateTemplateV2Input) SetSceneTemplateName(v string) *CreateTemplateV2Input {
 	s.SceneTemplateName = &v
+	return s
+}
+
+// SetSendAudit sets the SendAudit field's value.
+func (s *CreateTemplateV2Input) SetSendAudit(v string) *CreateTemplateV2Input {
+	s.SendAudit = &v
 	return s
 }
 
@@ -354,6 +362,8 @@ func (s *DataForCreateTemplateV2Output) SetSceneTemplateName(v string) *DataForC
 type ElementStyleForCreateTemplateV2Input struct {
 	_ struct{} `type:"structure" json:",omitempty"`
 
+	Deeplink *string `type:"string" json:",omitempty"`
+
 	ElementType *string `type:"string" json:",omitempty"`
 
 	ExpiresTime *int32 `type:"int32" json:",omitempty"`
@@ -362,13 +372,49 @@ type ElementStyleForCreateTemplateV2Input struct {
 
 	HasSecurity *bool `type:"boolean" json:",omitempty"`
 
+	ImageJumpType *string `type:"string" json:",omitempty"`
+
+	ImageLink *string `type:"string" json:",omitempty"`
+
+	Items []*ItemForCreateTemplateV2Input `type:"list"`
+
+	PackageName *string `type:"string" json:",omitempty"`
+
+	ParamLeft *string `type:"string" json:",omitempty"`
+
+	ParamRight *string `type:"string" json:",omitempty"`
+
 	RealContent *string `type:"string" json:",omitempty"`
 
 	ResourceCode *string `type:"string" json:",omitempty"`
 
+	ResourceContentType *string `type:"string" json:",omitempty"`
+
 	ResourceName *string `type:"string" json:",omitempty"`
 
+	ResourceSize *int32 `type:"int32" json:",omitempty"`
+
+	ResourceThumbImageUrl *string `type:"string" json:",omitempty"`
+
+	ResourceType *string `type:"string" json:",omitempty"`
+
 	ResourceUrl *string `type:"string" json:",omitempty"`
+
+	SubText *string `type:"string" json:",omitempty"`
+
+	ThumbContentType *string `type:"string" json:",omitempty"`
+
+	ThumbImageFileSize *int32 `type:"int32" json:",omitempty"`
+
+	ThumbImageUrl *string `type:"string" json:",omitempty"`
+
+	ThumbnailResourceContentType *string `type:"string" json:",omitempty"`
+
+	ThumbnailResourceName *string `type:"string" json:",omitempty"`
+
+	ThumbnailResourceSize *int32 `type:"int32" json:",omitempty"`
+
+	ThumbnailUrl *string `type:"string" json:",omitempty"`
 }
 
 // String returns the string representation
@@ -379,6 +425,12 @@ func (s ElementStyleForCreateTemplateV2Input) String() string {
 // GoString returns the string representation
 func (s ElementStyleForCreateTemplateV2Input) GoString() string {
 	return s.String()
+}
+
+// SetDeeplink sets the Deeplink field's value.
+func (s *ElementStyleForCreateTemplateV2Input) SetDeeplink(v string) *ElementStyleForCreateTemplateV2Input {
+	s.Deeplink = &v
+	return s
 }
 
 // SetElementType sets the ElementType field's value.
@@ -405,6 +457,42 @@ func (s *ElementStyleForCreateTemplateV2Input) SetHasSecurity(v bool) *ElementSt
 	return s
 }
 
+// SetImageJumpType sets the ImageJumpType field's value.
+func (s *ElementStyleForCreateTemplateV2Input) SetImageJumpType(v string) *ElementStyleForCreateTemplateV2Input {
+	s.ImageJumpType = &v
+	return s
+}
+
+// SetImageLink sets the ImageLink field's value.
+func (s *ElementStyleForCreateTemplateV2Input) SetImageLink(v string) *ElementStyleForCreateTemplateV2Input {
+	s.ImageLink = &v
+	return s
+}
+
+// SetItems sets the Items field's value.
+func (s *ElementStyleForCreateTemplateV2Input) SetItems(v []*ItemForCreateTemplateV2Input) *ElementStyleForCreateTemplateV2Input {
+	s.Items = v
+	return s
+}
+
+// SetPackageName sets the PackageName field's value.
+func (s *ElementStyleForCreateTemplateV2Input) SetPackageName(v string) *ElementStyleForCreateTemplateV2Input {
+	s.PackageName = &v
+	return s
+}
+
+// SetParamLeft sets the ParamLeft field's value.
+func (s *ElementStyleForCreateTemplateV2Input) SetParamLeft(v string) *ElementStyleForCreateTemplateV2Input {
+	s.ParamLeft = &v
+	return s
+}
+
+// SetParamRight sets the ParamRight field's value.
+func (s *ElementStyleForCreateTemplateV2Input) SetParamRight(v string) *ElementStyleForCreateTemplateV2Input {
+	s.ParamRight = &v
+	return s
+}
+
 // SetRealContent sets the RealContent field's value.
 func (s *ElementStyleForCreateTemplateV2Input) SetRealContent(v string) *ElementStyleForCreateTemplateV2Input {
 	s.RealContent = &v
@@ -417,9 +505,33 @@ func (s *ElementStyleForCreateTemplateV2Input) SetResourceCode(v string) *Elemen
 	return s
 }
 
+// SetResourceContentType sets the ResourceContentType field's value.
+func (s *ElementStyleForCreateTemplateV2Input) SetResourceContentType(v string) *ElementStyleForCreateTemplateV2Input {
+	s.ResourceContentType = &v
+	return s
+}
+
 // SetResourceName sets the ResourceName field's value.
 func (s *ElementStyleForCreateTemplateV2Input) SetResourceName(v string) *ElementStyleForCreateTemplateV2Input {
 	s.ResourceName = &v
+	return s
+}
+
+// SetResourceSize sets the ResourceSize field's value.
+func (s *ElementStyleForCreateTemplateV2Input) SetResourceSize(v int32) *ElementStyleForCreateTemplateV2Input {
+	s.ResourceSize = &v
+	return s
+}
+
+// SetResourceThumbImageUrl sets the ResourceThumbImageUrl field's value.
+func (s *ElementStyleForCreateTemplateV2Input) SetResourceThumbImageUrl(v string) *ElementStyleForCreateTemplateV2Input {
+	s.ResourceThumbImageUrl = &v
+	return s
+}
+
+// SetResourceType sets the ResourceType field's value.
+func (s *ElementStyleForCreateTemplateV2Input) SetResourceType(v string) *ElementStyleForCreateTemplateV2Input {
+	s.ResourceType = &v
 	return s
 }
 
@@ -429,12 +541,66 @@ func (s *ElementStyleForCreateTemplateV2Input) SetResourceUrl(v string) *Element
 	return s
 }
 
+// SetSubText sets the SubText field's value.
+func (s *ElementStyleForCreateTemplateV2Input) SetSubText(v string) *ElementStyleForCreateTemplateV2Input {
+	s.SubText = &v
+	return s
+}
+
+// SetThumbContentType sets the ThumbContentType field's value.
+func (s *ElementStyleForCreateTemplateV2Input) SetThumbContentType(v string) *ElementStyleForCreateTemplateV2Input {
+	s.ThumbContentType = &v
+	return s
+}
+
+// SetThumbImageFileSize sets the ThumbImageFileSize field's value.
+func (s *ElementStyleForCreateTemplateV2Input) SetThumbImageFileSize(v int32) *ElementStyleForCreateTemplateV2Input {
+	s.ThumbImageFileSize = &v
+	return s
+}
+
+// SetThumbImageUrl sets the ThumbImageUrl field's value.
+func (s *ElementStyleForCreateTemplateV2Input) SetThumbImageUrl(v string) *ElementStyleForCreateTemplateV2Input {
+	s.ThumbImageUrl = &v
+	return s
+}
+
+// SetThumbnailResourceContentType sets the ThumbnailResourceContentType field's value.
+func (s *ElementStyleForCreateTemplateV2Input) SetThumbnailResourceContentType(v string) *ElementStyleForCreateTemplateV2Input {
+	s.ThumbnailResourceContentType = &v
+	return s
+}
+
+// SetThumbnailResourceName sets the ThumbnailResourceName field's value.
+func (s *ElementStyleForCreateTemplateV2Input) SetThumbnailResourceName(v string) *ElementStyleForCreateTemplateV2Input {
+	s.ThumbnailResourceName = &v
+	return s
+}
+
+// SetThumbnailResourceSize sets the ThumbnailResourceSize field's value.
+func (s *ElementStyleForCreateTemplateV2Input) SetThumbnailResourceSize(v int32) *ElementStyleForCreateTemplateV2Input {
+	s.ThumbnailResourceSize = &v
+	return s
+}
+
+// SetThumbnailUrl sets the ThumbnailUrl field's value.
+func (s *ElementStyleForCreateTemplateV2Input) SetThumbnailUrl(v string) *ElementStyleForCreateTemplateV2Input {
+	s.ThumbnailUrl = &v
+	return s
+}
+
 type ExtendAttrsForCreateTemplateV2Input struct {
 	_ struct{} `type:"structure" json:",omitempty"`
 
 	CouponCode *string `type:"string" json:",omitempty"`
 
+	CreateFrom *string `type:"string" json:",omitempty"`
+
 	PhoneNumber *string `type:"string" json:",omitempty"`
+
+	PhoneType *string `type:"string" json:",omitempty"`
+
+	TerminalOpenType *string `type:"string" json:",omitempty"`
 
 	Variable *string `type:"string" json:",omitempty"`
 
@@ -459,9 +625,27 @@ func (s *ExtendAttrsForCreateTemplateV2Input) SetCouponCode(v string) *ExtendAtt
 	return s
 }
 
+// SetCreateFrom sets the CreateFrom field's value.
+func (s *ExtendAttrsForCreateTemplateV2Input) SetCreateFrom(v string) *ExtendAttrsForCreateTemplateV2Input {
+	s.CreateFrom = &v
+	return s
+}
+
 // SetPhoneNumber sets the PhoneNumber field's value.
 func (s *ExtendAttrsForCreateTemplateV2Input) SetPhoneNumber(v string) *ExtendAttrsForCreateTemplateV2Input {
 	s.PhoneNumber = &v
+	return s
+}
+
+// SetPhoneType sets the PhoneType field's value.
+func (s *ExtendAttrsForCreateTemplateV2Input) SetPhoneType(v string) *ExtendAttrsForCreateTemplateV2Input {
+	s.PhoneType = &v
+	return s
+}
+
+// SetTerminalOpenType sets the TerminalOpenType field's value.
+func (s *ExtendAttrsForCreateTemplateV2Input) SetTerminalOpenType(v string) *ExtendAttrsForCreateTemplateV2Input {
+	s.TerminalOpenType = &v
 	return s
 }
 
@@ -483,6 +667,36 @@ func (s *ExtendAttrsForCreateTemplateV2Input) SetWebsiteUrlType(v string) *Exten
 	return s
 }
 
+type ItemForCreateTemplateV2Input struct {
+	_ struct{} `type:"structure" json:",omitempty"`
+
+	ParamLeft *string `type:"string" json:",omitempty"`
+
+	ParamRight *string `type:"string" json:",omitempty"`
+}
+
+// String returns the string representation
+func (s ItemForCreateTemplateV2Input) String() string {
+	return byteplusutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ItemForCreateTemplateV2Input) GoString() string {
+	return s.String()
+}
+
+// SetParamLeft sets the ParamLeft field's value.
+func (s *ItemForCreateTemplateV2Input) SetParamLeft(v string) *ItemForCreateTemplateV2Input {
+	s.ParamLeft = &v
+	return s
+}
+
+// SetParamRight sets the ParamRight field's value.
+func (s *ItemForCreateTemplateV2Input) SetParamRight(v string) *ItemForCreateTemplateV2Input {
+	s.ParamRight = &v
+	return s
+}
+
 type PageDTOListForCreateTemplateV2Input struct {
 	_ struct{} `type:"structure" json:",omitempty"`
 
@@ -491,6 +705,8 @@ type PageDTOListForCreateTemplateV2Input struct {
 	PageLinkList []*PageLinkListForCreateTemplateV2Input `type:"list"`
 
 	PageName *string `type:"string" json:",omitempty"`
+
+	PageType *string `type:"string" json:",omitempty"`
 }
 
 // String returns the string representation
@@ -521,12 +737,20 @@ func (s *PageDTOListForCreateTemplateV2Input) SetPageName(v string) *PageDTOList
 	return s
 }
 
+// SetPageType sets the PageType field's value.
+func (s *PageDTOListForCreateTemplateV2Input) SetPageType(v string) *PageDTOListForCreateTemplateV2Input {
+	s.PageType = &v
+	return s
+}
+
 type PageElementDTOListForCreateTemplateV2Input struct {
 	_ struct{} `type:"structure" json:",omitempty"`
 
 	ElementStyle *ElementStyleForCreateTemplateV2Input `type:"structure" json:",omitempty"`
 
 	ElementType *string `type:"string" json:",omitempty"`
+
+	OrderId *int32 `type:"int32" json:",omitempty"`
 }
 
 // String returns the string representation
@@ -548,6 +772,12 @@ func (s *PageElementDTOListForCreateTemplateV2Input) SetElementStyle(v *ElementS
 // SetElementType sets the ElementType field's value.
 func (s *PageElementDTOListForCreateTemplateV2Input) SetElementType(v string) *PageElementDTOListForCreateTemplateV2Input {
 	s.ElementType = &v
+	return s
+}
+
+// SetOrderId sets the OrderId field's value.
+func (s *PageElementDTOListForCreateTemplateV2Input) SetOrderId(v int32) *PageElementDTOListForCreateTemplateV2Input {
+	s.OrderId = &v
 	return s
 }
 
@@ -605,8 +835,66 @@ func (s *PageLinkListForCreateTemplateV2Input) SetOrderId(v int32) *PageLinkList
 	return s
 }
 
+type TemplateButtonListForCreateTemplateV2Input struct {
+	_ struct{} `type:"structure" json:",omitempty"`
+
+	Action *ActionForCreateTemplateV2Input `type:"structure" json:",omitempty"`
+
+	ElementType *string `type:"string" json:",omitempty"`
+
+	LinkName *string `type:"string" json:",omitempty"`
+
+	LinkType *string `type:"string" json:",omitempty"`
+
+	OrderId *int32 `type:"int32" json:",omitempty"`
+}
+
+// String returns the string representation
+func (s TemplateButtonListForCreateTemplateV2Input) String() string {
+	return byteplusutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TemplateButtonListForCreateTemplateV2Input) GoString() string {
+	return s.String()
+}
+
+// SetAction sets the Action field's value.
+func (s *TemplateButtonListForCreateTemplateV2Input) SetAction(v *ActionForCreateTemplateV2Input) *TemplateButtonListForCreateTemplateV2Input {
+	s.Action = v
+	return s
+}
+
+// SetElementType sets the ElementType field's value.
+func (s *TemplateButtonListForCreateTemplateV2Input) SetElementType(v string) *TemplateButtonListForCreateTemplateV2Input {
+	s.ElementType = &v
+	return s
+}
+
+// SetLinkName sets the LinkName field's value.
+func (s *TemplateButtonListForCreateTemplateV2Input) SetLinkName(v string) *TemplateButtonListForCreateTemplateV2Input {
+	s.LinkName = &v
+	return s
+}
+
+// SetLinkType sets the LinkType field's value.
+func (s *TemplateButtonListForCreateTemplateV2Input) SetLinkType(v string) *TemplateButtonListForCreateTemplateV2Input {
+	s.LinkType = &v
+	return s
+}
+
+// SetOrderId sets the OrderId field's value.
+func (s *TemplateButtonListForCreateTemplateV2Input) SetOrderId(v int32) *TemplateButtonListForCreateTemplateV2Input {
+	s.OrderId = &v
+	return s
+}
+
 type TemplateListForCreateTemplateV2Input struct {
 	_ struct{} `type:"structure" json:",omitempty"`
+
+	AuditStatus *string `type:"string" json:",omitempty"`
+
+	Background *string `type:"string" json:",omitempty"`
 
 	CardButtonType []*string `type:"list"`
 
@@ -614,13 +902,27 @@ type TemplateListForCreateTemplateV2Input struct {
 
 	CarouselBody *string `type:"string" json:",omitempty"`
 
+	FallbackLink *string `type:"string" json:",omitempty"`
+
 	Format *string `type:"string" json:",omitempty"`
+
+	OriginalText *string `type:"string" json:",omitempty"`
 
 	PageDTOList []*PageDTOListForCreateTemplateV2Input `type:"list"`
 
+	ServiceNo *string `type:"string" json:",omitempty"`
+
+	SubAccountId *string `type:"string" json:",omitempty"`
+
+	TemplateButtonList []*TemplateButtonListForCreateTemplateV2Input `type:"list"`
+
 	TemplateType *string `type:"string" json:",omitempty"`
 
+	Usage *string `type:"string" json:",omitempty"`
+
 	VariablesDTOList []*VariablesDTOListForCreateTemplateV2Input `type:"list"`
+
+	Vendors []*string `type:"list"`
 
 	WhatsappCatagory *string `type:"string" json:",omitempty"`
 }
@@ -633,6 +935,18 @@ func (s TemplateListForCreateTemplateV2Input) String() string {
 // GoString returns the string representation
 func (s TemplateListForCreateTemplateV2Input) GoString() string {
 	return s.String()
+}
+
+// SetAuditStatus sets the AuditStatus field's value.
+func (s *TemplateListForCreateTemplateV2Input) SetAuditStatus(v string) *TemplateListForCreateTemplateV2Input {
+	s.AuditStatus = &v
+	return s
+}
+
+// SetBackground sets the Background field's value.
+func (s *TemplateListForCreateTemplateV2Input) SetBackground(v string) *TemplateListForCreateTemplateV2Input {
+	s.Background = &v
+	return s
 }
 
 // SetCardButtonType sets the CardButtonType field's value.
@@ -653,9 +967,21 @@ func (s *TemplateListForCreateTemplateV2Input) SetCarouselBody(v string) *Templa
 	return s
 }
 
+// SetFallbackLink sets the FallbackLink field's value.
+func (s *TemplateListForCreateTemplateV2Input) SetFallbackLink(v string) *TemplateListForCreateTemplateV2Input {
+	s.FallbackLink = &v
+	return s
+}
+
 // SetFormat sets the Format field's value.
 func (s *TemplateListForCreateTemplateV2Input) SetFormat(v string) *TemplateListForCreateTemplateV2Input {
 	s.Format = &v
+	return s
+}
+
+// SetOriginalText sets the OriginalText field's value.
+func (s *TemplateListForCreateTemplateV2Input) SetOriginalText(v string) *TemplateListForCreateTemplateV2Input {
+	s.OriginalText = &v
 	return s
 }
 
@@ -665,15 +991,45 @@ func (s *TemplateListForCreateTemplateV2Input) SetPageDTOList(v []*PageDTOListFo
 	return s
 }
 
+// SetServiceNo sets the ServiceNo field's value.
+func (s *TemplateListForCreateTemplateV2Input) SetServiceNo(v string) *TemplateListForCreateTemplateV2Input {
+	s.ServiceNo = &v
+	return s
+}
+
+// SetSubAccountId sets the SubAccountId field's value.
+func (s *TemplateListForCreateTemplateV2Input) SetSubAccountId(v string) *TemplateListForCreateTemplateV2Input {
+	s.SubAccountId = &v
+	return s
+}
+
+// SetTemplateButtonList sets the TemplateButtonList field's value.
+func (s *TemplateListForCreateTemplateV2Input) SetTemplateButtonList(v []*TemplateButtonListForCreateTemplateV2Input) *TemplateListForCreateTemplateV2Input {
+	s.TemplateButtonList = v
+	return s
+}
+
 // SetTemplateType sets the TemplateType field's value.
 func (s *TemplateListForCreateTemplateV2Input) SetTemplateType(v string) *TemplateListForCreateTemplateV2Input {
 	s.TemplateType = &v
 	return s
 }
 
+// SetUsage sets the Usage field's value.
+func (s *TemplateListForCreateTemplateV2Input) SetUsage(v string) *TemplateListForCreateTemplateV2Input {
+	s.Usage = &v
+	return s
+}
+
 // SetVariablesDTOList sets the VariablesDTOList field's value.
 func (s *TemplateListForCreateTemplateV2Input) SetVariablesDTOList(v []*VariablesDTOListForCreateTemplateV2Input) *TemplateListForCreateTemplateV2Input {
 	s.VariablesDTOList = v
+	return s
+}
+
+// SetVendors sets the Vendors field's value.
+func (s *TemplateListForCreateTemplateV2Input) SetVendors(v []*string) *TemplateListForCreateTemplateV2Input {
+	s.Vendors = v
 	return s
 }
 
@@ -693,6 +1049,8 @@ type VariablesDTOListForCreateTemplateV2Input struct {
 	UniqueVariableCode *string `type:"string" json:",omitempty"`
 
 	VariableCode *string `type:"string" json:",omitempty"`
+
+	VariableLength *int32 `type:"int32" json:",omitempty"`
 
 	VariableName *string `type:"string" json:",omitempty"`
 }
@@ -728,6 +1086,12 @@ func (s *VariablesDTOListForCreateTemplateV2Input) SetUniqueVariableCode(v strin
 // SetVariableCode sets the VariableCode field's value.
 func (s *VariablesDTOListForCreateTemplateV2Input) SetVariableCode(v string) *VariablesDTOListForCreateTemplateV2Input {
 	s.VariableCode = &v
+	return s
+}
+
+// SetVariableLength sets the VariableLength field's value.
+func (s *VariablesDTOListForCreateTemplateV2Input) SetVariableLength(v int32) *VariablesDTOListForCreateTemplateV2Input {
+	s.VariableLength = &v
 	return s
 }
 
