@@ -670,8 +670,12 @@ func (s *Session) clientConfigWithErr(serviceName string, cfgs ...*byteplus.Conf
 			}
 			endpoint = &endpointFor.URL
 		} else {
-			endpoint = byteplusutil.GetDefaultEndpointByServiceInfo(serviceName, region, s.Config.BootstrapRegion,
+			resolved, err := byteplusutil.ResolveDefaultEndpoint(serviceName, region,
 				s.Config.UseDualStack, s.Config.Logger)
+			if err != nil {
+				return client.Config{}, err
+			}
+			endpoint = &resolved
 		}
 		if s.Config.Logger != nil {
 			s.Config.Logger.DebugByLevel(byteplus.LogDebugWithEndpoint, "[Endpoint] Using endpoint: ", *endpoint)

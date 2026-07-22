@@ -14,7 +14,13 @@ import (
 
 var _ Provider = &OIDCCredentialsProvider{}
 
-const DefaultEndpoint = "sts.ap-southeast-1.byteplusapi.com"
+// DefaultEndpoint is retained for backward compatibility. New code should let
+// the provider compute the endpoint via the standard resolver by leaving the
+// per-provider Endpoint field empty.
+//
+// Deprecated: use OIDCCredentialsProvider.Endpoint (empty for auto-resolution)
+// instead of referring to this constant.
+var DefaultEndpoint = defaultSTSHostFor(defaultSTSRegion)
 
 const (
 	defaultSessionName = "byteplus-go-sdk-oidc-session"

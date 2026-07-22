@@ -18,13 +18,15 @@ type StsProvider struct {
 
 func (s *StsProvider) Retrieve() (Value, error) {
 	ins := sts.NewInstance()
-	ins.Client.ServiceInfo.Credentials.Region = defaultSTSRegion
-	ins.SetHost(defaultSTSHost)
-	if s.Region != "" {
-		ins.Client.ServiceInfo.Credentials.Region = s.Region
+	region := s.Region
+	if region == "" {
+		region = defaultSTSRegion
 	}
+	ins.Client.ServiceInfo.Credentials.Region = region
 	if s.Host != "" {
 		ins.SetHost(s.Host)
+	} else {
+		ins.SetHost(defaultSTSHostFor(region))
 	}
 	if s.Schema != "" {
 		ins.SetSchema(s.Schema)

@@ -24,6 +24,8 @@ func main() {
 }
 ```
 
+An explicitly configured Endpoint has the highest priority and skips every subsequent resolution step (including any custom `EndpointResolver`).
+
 ### Custom RegionId
 
 ```go
@@ -41,19 +43,19 @@ func main() {
 
 ### Automatic Endpoint Resolution
 
-Byteplus provides a flexible endpoint resolution mechanism. The SDK automatically builds the endpoint based on service name and region, and supports DualStack.
+Byteplus provides a flexible endpoint resolution mechanism. The SDK automatically builds the endpoint based on the service name, region and the service's Go China flag, and supports DualStack.
 
 #### Default Endpoint Resolution
 
 ##### Resolution Logic
 
-1. **Whether the region is in the bootstrap list**
+1. **Service registration check**
 
-    Built-in list implementation: [`../byteplus/byteplusutil/url.go#bootstrapRegion`](../byteplus/byteplusutil/url.go#L221).
+    Every service in the built-in map carries an `IsGlobal` and a `GoChinaEnabled` bool. The SDK builds the endpoint following the rules below.
 
-    Only predefined regions (e.g., `ap-southeast-2`) or user-configured regions are auto-resolved; others fall back to `open.byteplusapi.com`.
+    - Service missing from the map: `ResolveDefaultEndpoint` returns `byteplusutil.ErrServiceEndpointInfoMissing`, and `session.ClientConfig`-family calls surface the error immediately. Detect it with `errors.Is(err, byteplusutil.ErrServiceEndpointInfoMissing)`. See [Error handling](#error-handling).
 
-    You can extend the list via env var `BYTEPLUS_BOOTSTRAP_REGION_LIST_CONF` or `customBootstrapRegion`.
+    Built-in service map: `defaultEndpoint` in [`../byteplus/byteplusutil/url.go`](../byteplus/byteplusutil/url.go).
 
 2. **DualStack support (IPv6)**
 
@@ -61,10 +63,35 @@ Byteplus provides a flexible endpoint resolution mechanism. The SDK automaticall
 
     When enabled, the suffix changes from `byteplusapi.com` to `byteplus-api.com`.
 
-3. **Construct endpoint based on service name and region**
+3. **Go China suffix**
 
-    - **Global services (e.g., `CDN`, `IAM`)**: `<service>.byteplusapi.com` (or `byteplus-api.com` when DualStack is enabled). Example: `cdn.byteplusapi.com`.
-    - **Regional services (e.g., `ECS`, `RDS`)**: `<service>.<region>.byteplusapi.com` is used as the default endpoint. Example: `ecs.ap-southeast-1.byteplusapi.com`.
+    When a service entry has `GoChinaEnabled=true` and the request region is in the Chinese mainland (a `cn-*` prefix but not one of the non-mainland regions such as `cn-hongkong`), the resolver appends the `.cn` suffix.
+
+    Whether Go China applies is decided by the service itself and cannot be overridden.
+
+4. **Endpoint construction**
+
+    - **Global services (e.g., `IAM`, `Billing`)**: `<service>.byteplusapi.com` (or `byteplus-api.com` when DualStack is enabled; `.cn` is appended when Go China applies).
+    - **Regional services (e.g., `ECS`, `RDS`)**: `<service>.<region>.byteplusapi.com` (DualStack / Go China rules identical to global services).
+
+##### Decision Table
+
+The table lists every effective combination. `RegionType` is derived from the service's `IsGlobal` flag; "Region is Go China" refers to the request region.
+
+| RegionType | GoChinaEnabled | Region is Go China | Endpoint | Region embedded |
+|---|---|---|---|---|
+| Global | true | yes | `{service}.byteplusapi.com.cn` | no |
+| Global | true | no | `{service}.byteplusapi.com` | no |
+| Global | false | any | `{service}.byteplusapi.com` | no |
+| Regional | true | yes | `{service}.{region}.byteplusapi.com.cn` | yes |
+| Regional | true | no | `{service}.{region}.byteplusapi.com` | yes |
+| Regional | false | any | `{service}.{region}.byteplusapi.com` | yes |
+
+When DualStack is enabled, replace every occurrence of `byteplusapi.com` in the table with `byteplus-api.com`.
+
+##### `WithBootstrapRegion` / `BYTEPLUS_BOOTSTRAP_REGION_LIST_CONF`
+
+After the endpoint auto-resolution refactor, `Config.BootstrapRegion` and the `BYTEPLUS_BOOTSTRAP_REGION_LIST_CONF` environment variable **no longer participate** in the default addressing pipeline. The fields and helpers are retained for API compatibility only and should not be used in new code.
 
 ##### Code Example
 
@@ -74,17 +101,31 @@ func main() {
 	config := byteplus.NewConfig().
 		WithCredentials(credentials.NewEnvCredentials()).
 		WithRegion(regionId).
-		WithUseDualStack(true).
-		WithBootstrapRegion(map[string]struct{}{
-			"custom_example_region1": {},
-			"custom_example_region2": {},
-		})
+		WithUseDualStack(true) // enable dual stack; also honors env BYTEPLUS_ENABLE_DUALSTACK=true
 	sess, err := session.NewSession(config)
 	if err != nil {
 		panic(err)
 	}
 }
 ```
+
+##### Error handling
+
+If the requested service is not registered in `defaultEndpoint`, the SDK returns `byteplusutil.ErrServiceEndpointInfoMissing` on the first client-config build. Detect it with:
+
+```go
+import (
+	"errors"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/byteplusutil"
+)
+
+if errors.Is(err, byteplusutil.ErrServiceEndpointInfoMissing) {
+	// The installed SDK likely does not know this service.
+	// Upgrade the dependency or set the endpoint explicitly.
+}
+```
+
+When you hit this error, first try upgrading the SDK. If the service is genuinely not carried by the SDK yet, set the endpoint explicitly via `WithEndpoint(...)` or supply a custom `EndpointResolver`.
 
 #### Standard Endpoint Resolution
 
@@ -97,7 +138,9 @@ func main() {
 | No  | Yes | `{Service}.{region}.byteplus-api.com` |
 | No  | No  | `{Service}.{region}.byteplusapi.com` |
 
-Whether a service is global depends on the service itself and cannot be changed. See: [`../byteplus/endpoints/standard_resolver.go#ServiceInfos`](../byteplus/endpoints/standard_resolver.go#L70).
+Standard resolution never appends the Go China `.cn` suffix. If you need `.cn`, use the default resolver (or set the endpoint explicitly).
+
+Whether a service is global depends on the service itself and cannot be changed. See `ServiceInfos` in [`../byteplus/endpoints/standard_resolver.go`](../byteplus/endpoints/standard_resolver.go).
 
 ##### Code Example
 
