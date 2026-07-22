@@ -7,6 +7,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net"
@@ -18,9 +19,10 @@ import (
 	"strings"
 	"time"
 
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/byteplusutil"
+
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/bytepluserr"
-	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/byteplusutil"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/client"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/corehandlers"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
@@ -634,11 +636,17 @@ func (s *Session) Copy(cfgs ...*byteplus.Config) *Session {
 // ClientConfig satisfies the client.ConfigProvider interface and is used to
 // configure the service client instances. Passing the Session to the service
 // client's constructor (New) will use this method to configure the client.
+//
+// If endpoint resolution fails (for example, the requested service is not
+// registered in the default endpoint table), this method panics so the caller
+// hits a clear, immediate failure instead of a nil-pointer dereference deeper
+// in the SDK. Callers that need to handle the error should use the
+// error-returning variant instead of the ConfigProvider interface.
 func (s *Session) ClientConfig(serviceName string, cfgs ...*byteplus.Config) client.Config {
-	// Backwards compatibility, the error will be eaten if user calls ClientConfig
-	// directly. All SDK services will use ClientconfigWithError.
-	cfg, _ := s.clientConfigWithErr(serviceName, cfgs...)
-
+	cfg, err := s.clientConfigWithErr(serviceName, cfgs...)
+	if err != nil {
+		panic(fmt.Errorf("byteplus session: resolve client config for service %q: %w", serviceName, err))
+	}
 	return cfg
 }
 
@@ -670,12 +678,12 @@ func (s *Session) clientConfigWithErr(serviceName string, cfgs ...*byteplus.Conf
 			}
 			endpoint = &endpointFor.URL
 		} else {
-			resolved, err := byteplusutil.ResolveDefaultEndpoint(serviceName, region,
+			resolvedEndpoint, err := byteplusutil.ResolveDefaultEndpoint(serviceName, region,
 				s.Config.UseDualStack, s.Config.Logger)
 			if err != nil {
 				return client.Config{}, err
 			}
-			endpoint = &resolved
+			endpoint = &resolvedEndpoint
 		}
 		if s.Config.Logger != nil {
 			s.Config.Logger.DebugByLevel(byteplus.LogDebugWithEndpoint, "[Endpoint] Using endpoint: ", *endpoint)
