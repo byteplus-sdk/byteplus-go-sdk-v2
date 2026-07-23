@@ -96,9 +96,13 @@ func main() {
 
 启用 DualStack 时，将上表中的 `byteplusapi.com` 整体替换为 `byteplus-api.com`。
 
+##### STS 凭证 Provider
+
+`StsAssumeRoleProvider` / `OIDCCredentialsProvider` / `SAMLCredentialsProvider` 共享同一份决策表。当 `Host` / `Endpoint` 字段留空时，Provider 会用 `Region`（OIDC 也支持 `BYTEPLUS_OIDC_STS_REGION` 环境变量）自动寻址，命中与主链路一致的 `defaultEndpoint["sts"]` 行 —— 无需再显式配置 STS 域名。
+
 ##### 关于 `WithBootstrapRegion` / `BYTEPLUS_BOOTSTRAP_REGION_LIST_CONF`
 
-自本次自动寻址重构起，`Config.BootstrapRegion` 字段和 `BYTEPLUS_BOOTSTRAP_REGION_LIST_CONF` 环境变量**不再参与**默认寻址链路。它们的类型和方法保留，仅为 API 兼容，新代码不建议使用。
+`Config.BootstrapRegion` 字段和 `BYTEPLUS_BOOTSTRAP_REGION_LIST_CONF` 环境变量**不再参与**默认寻址链路。它们的类型和方法保留，仅为 API 兼容，新代码不建议使用。
 
 ##### 代码示例
 

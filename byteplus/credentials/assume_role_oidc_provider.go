@@ -14,12 +14,12 @@ import (
 
 var _ Provider = &OIDCCredentialsProvider{}
 
-// DefaultEndpoint is retained for backward compatibility. New code should let
-// the provider compute the endpoint via the standard resolver by leaving the
-// per-provider Endpoint field empty.
+// DefaultEndpoint is retained for backward compatibility. It captures the
+// STS host for the default region only and does not reflect Go China or
+// dual-stack behavior.
 //
-// Deprecated: use OIDCCredentialsProvider.Endpoint (empty for auto-resolution)
-// instead of referring to this constant.
+// Deprecated: prefer OIDCCredentialsProvider.Region (or Endpoint for an
+// explicit override) over referring to this variable.
 var DefaultEndpoint = defaultSTSHostFor(defaultSTSRegion)
 
 const (
@@ -71,6 +71,7 @@ type OIDCCredentialsProvider struct {
 	// for sts endpoint
 	Schema              string
 	Endpoint            string
+	Region              string        // Region drives auto-resolved STS host when Endpoint is empty.
 	MaxRetries          *int          // Retry attempts. Nil falls back to DefaultRetryerMaxNumRetries (3); 0 disables retries.
 	RetryInterval       time.Duration // Sleep interval between retries. If zero or negative, falls back to DefaultRetryerRetryDelay (1s).
 	lastUpdateTimestamp int64
@@ -87,6 +88,7 @@ type OIDCProviderOptions struct {
 	Policy          string
 	Schema          string
 	Endpoint        string
+	Region          string
 	MaxRetries      *int
 	RetryInterval   time.Duration
 	HttpOptions     *HttpOptions
@@ -111,6 +113,7 @@ func NewOIDCCredentialsProviderWithOptions(tokenFilePath, roleTrn string, optFns
 		Policy:            opts.Policy,
 		Schema:            opts.Schema,
 		Endpoint:          opts.Endpoint,
+		Region:            opts.Region,
 		MaxRetries:        opts.MaxRetries,
 		RetryInterval:     opts.RetryInterval,
 		httpOptions:       opts.HttpOptions,
@@ -129,6 +132,7 @@ func NewOIDCCredentialsProviderFromEnv() *OIDCCredentialsProvider {
 			o.RoleSessionName = sessionName
 			o.Policy = os.Getenv("BYTEPLUS_OIDC_ROLE_POLICY")
 			o.Endpoint = os.Getenv("BYTEPLUS_OIDC_STS_ENDPOINT")
+			o.Region = os.Getenv("BYTEPLUS_OIDC_STS_REGION")
 		},
 	)
 }
@@ -161,9 +165,9 @@ func (p *OIDCCredentialsProvider) fetchOnce() (Value, error) {
 		data.Set("Policy", p.Policy)
 	}
 
-	endpoint := DefaultEndpoint
-	if p.Endpoint != "" {
-		endpoint = p.Endpoint
+	endpoint := p.Endpoint
+	if endpoint == "" {
+		endpoint = defaultSTSHostFor(p.Region)
 	}
 	scheme := "https"
 	if p.Schema != "" {

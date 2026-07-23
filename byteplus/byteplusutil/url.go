@@ -15,12 +15,7 @@ import (
 // May have been modified by Byteplus.
 
 type Endpoint struct {
-	//UseSSL bool
-	//Locate bool
-	//UseInternal                 bool
 	CustomerEndpoint string
-	//CustomerDomainIgnoreService bool
-
 }
 
 func NewEndpoint() *Endpoint {

@@ -26,6 +26,11 @@ import (
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/client"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/corehandlers"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
+
+	// Blank-import the STS wiring package so its init installs
+	// credentials.STSHostResolver. Keeping the wiring in a dedicated package
+	// avoids embedding STS-specific business logic into session.go.
+	_ "github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials/stswiring"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/defaults"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/endpoints"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/request"
@@ -387,7 +392,7 @@ func newSession(opts Options, envCfg envConfig, cfgs ...*byteplus.Config) (*Sess
 			// or session.Options.profile, shared config is not enabled, and the
 			// environment has credentials, allow the shared config file to fail to
 			// load since the user has already provided credentials, and nothing else
-			// is required to be read file. Github(byteplus/byteplus-go-sdk-v2#2455)
+			// is required to be read file.
 		} else if _, ok := err.(SharedConfigProfileNotExistsError); !ok {
 			return nil, err
 		}
@@ -610,10 +615,6 @@ func mergeConfigSrcs(cfg, userCfg *byteplus.Config,
 func initHandlers(s *Session) {
 	// Add the Validate parameter handler if it is not disabled.
 	s.Handlers.Validate.Remove(corehandlers.ValidateParametersHandler)
-	// Temporary notes by xuyaming@bytedance.com because some validate field is relation.
-	//if !byteplus.BoolValue(s.Config.DisableParamValidation) {
-	//	s.Handlers.Validate.PushBackNamed(corehandlers.ValidateParametersHandler)
-	//}
 }
 
 // Copy creates and returns a copy of the current Session, copying the config
