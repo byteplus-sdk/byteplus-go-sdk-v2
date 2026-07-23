@@ -93,25 +93,30 @@ When DualStack is enabled, replace every occurrence of `byteplusapi.com` in the 
 
 `StsAssumeRoleProvider`, `OIDCCredentialsProvider`, and `SAMLCredentialsProvider` share the same decision table. When their `Host` / `Endpoint` field is empty, the provider derives the STS host from `Region` (OIDC also honors the `BYTEPLUS_OIDC_STS_REGION` environment variable) and resolves it against the same `defaultEndpoint["sts"]` row used by the main request pipeline — no explicit STS host configuration is required.
 
-##### `WithBootstrapRegion` / `BYTEPLUS_BOOTSTRAP_REGION_LIST_CONF`
+##### `WithBootstrapRegion` / `BYTEPLUS_BOOTSTRAP_REGION_LIST_CONF` (Deprecated)
 
-`Config.BootstrapRegion` and the `BYTEPLUS_BOOTSTRAP_REGION_LIST_CONF` environment variable **no longer participate** in the default addressing pipeline. The fields and helpers are retained for API compatibility only and should not be used in new code.
+> **⚠️ Deprecated**: `Config.WithBootstrapRegion(map[string]struct{}{...})`, the `Config.BootstrapRegion` field, and the `BYTEPLUS_BOOTSTRAP_REGION_LIST_CONF` environment variable are **deprecated** and **no longer participate** in the default addressing pipeline. The related methods and fields are retained only for API/binary compatibility and are treated as no-ops at runtime. **Do not use them in new code.** Existing callers should switch to `WithRegion` + `WithUseDualStack` and let the SDK auto-resolve the endpoint, or override it explicitly via `WithEndpoint`.
 
 ##### Code Example
 
-```go
-func main() {
+> Note: the calls rendered with strikethrough (`WithBootstrapRegion` / `BYTEPLUS_BOOTSTRAP_REGION_LIST_CONF`) are **deprecated** and kept only for backward compatibility. Do not use them in new code.
+
+<pre><code class="language-go">func main() {
 	regionId := "ap-southeast-1"
 	config := byteplus.NewConfig().
 		WithCredentials(credentials.NewEnvCredentials()).
 		WithRegion(regionId).
-		WithUseDualStack(true) // enable dual stack; also honors env BYTEPLUS_ENABLE_DUALSTACK=true
+		WithUseDualStack(true). // enable dual stack; also honors env BYTEPLUS_ENABLE_DUALSTACK=true
+<s>		WithBootstrapRegion(map[string]struct{}{</s>
+<s>			"custom_example_region1": {},</s>
+<s>			"custom_example_region2": {},</s>
+<s>		}) // Deprecated: custom auto-resolve region list; also honors env BYTEPLUS_BOOTSTRAP_REGION_LIST_CONF</s>
 	sess, err := session.NewSession(config)
 	if err != nil {
 		panic(err)
 	}
 }
-```
+</code></pre>
 
 ##### Error handling
 

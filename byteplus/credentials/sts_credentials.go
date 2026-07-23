@@ -11,49 +11,20 @@ import (
 
 const defaultSTSRegion = "ap-southeast-1"
 
-// STSHostResolver, if non-nil, overrides the built-in inline STS host
-// resolution used by defaultSTSHostFor. The byteplus/credentials/stswiring
-// package installs a resolver at init time that delegates to
-// byteplusutil.ResolveDefaultEndpoint("sts", ...) so every STS entrypoint
-// shares the same defaultEndpoint decision table as the main request
-// pipeline.
-//
-// The indirection exists because credentials cannot import byteplusutil
-// directly (that would form a credentials -> byteplusutil -> byteplus ->
-// credentials import cycle). Callers that do not transitively import
-// stswiring (rare in practice — byteplus/session blank-imports it) fall back
-// to the inline decision table below.
-//
-// The variable is written exactly once, from stswiring.init(), before any
-// user code runs. Tests may swap it under t.Cleanup, but application code
-// must treat it as read-only after init.
-var STSHostResolver func(region string, useDualStack *bool) (string, error)
-
-// cnNonMainlandRegionSet mirrors the Go China detection used by
-// byteplusutil.ResolveDefaultEndpoint. Kept local as a fallback so that
-// callers that do not transitively import stswiring (which installs the
-// STSHostResolver hook) still get a correct .cn suffix decision.
+// cnNonMainlandRegionSet lists cn-prefixed regions that use the international
+// suffix (byteplusapi.com) rather than the mainland suffix (byteplusapi.com.cn).
 var cnNonMainlandRegionSet = map[string]struct{}{
 	"cn-hongkong": {},
 }
 
-// defaultSTSHostFor returns the STS host for the given region.
-//
-// If STSHostResolver is installed (byteplus/credentials/stswiring does this
-// at init time, transitively pulled in by byteplus/session), it delegates so
-// STS shares the exact same defaultEndpoint decision table as the main
-// request pipeline. Otherwise it falls back to the inline decision table
-// below, which follows the standard rules for a Regional service with
-// GoChinaEnabled=true. Empty region falls back to defaultSTSRegion.
+// defaultSTSHostFor returns the STS host for the given region. It follows the
+// standard rules for STS (Regional, Go China enabled): mainland cn-* regions
+// resolve to the .com.cn suffix, everything else to .com. Empty region falls
+// back to defaultSTSRegion.
 func defaultSTSHostFor(region string) string {
 	normalized := strings.ToLower(strings.TrimSpace(region))
 	if normalized == "" {
 		normalized = defaultSTSRegion
-	}
-	if STSHostResolver != nil {
-		if host, err := STSHostResolver(normalized, nil); err == nil && host != "" {
-			return host
-		}
 	}
 	suffix := "byteplusapi.com"
 	if strings.HasPrefix(normalized, "cn-") {

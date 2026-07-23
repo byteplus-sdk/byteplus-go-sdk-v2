@@ -14,13 +14,7 @@ import (
 
 var _ Provider = &OIDCCredentialsProvider{}
 
-// DefaultEndpoint is retained for backward compatibility. It captures the
-// STS host for the default region only and does not reflect Go China or
-// dual-stack behavior.
-//
-// Deprecated: prefer OIDCCredentialsProvider.Region (or Endpoint for an
-// explicit override) over referring to this variable.
-var DefaultEndpoint = defaultSTSHostFor(defaultSTSRegion)
+const DefaultEndpoint = "sts.ap-southeast-1.byteplusapi.com"
 
 const (
 	defaultSessionName = "byteplus-go-sdk-oidc-session"
@@ -165,9 +159,14 @@ func (p *OIDCCredentialsProvider) fetchOnce() (Value, error) {
 		data.Set("Policy", p.Policy)
 	}
 
+	// Endpoint > Region-derived host > DefaultEndpoint.
 	endpoint := p.Endpoint
 	if endpoint == "" {
-		endpoint = defaultSTSHostFor(p.Region)
+		if p.Region != "" {
+			endpoint = defaultSTSHostFor(p.Region)
+		} else {
+			endpoint = DefaultEndpoint
+		}
 	}
 	scheme := "https"
 	if p.Schema != "" {

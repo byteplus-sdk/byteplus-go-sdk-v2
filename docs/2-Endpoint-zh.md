@@ -100,25 +100,30 @@ func main() {
 
 `StsAssumeRoleProvider` / `OIDCCredentialsProvider` / `SAMLCredentialsProvider` 共享同一份决策表。当 `Host` / `Endpoint` 字段留空时，Provider 会用 `Region`（OIDC 也支持 `BYTEPLUS_OIDC_STS_REGION` 环境变量）自动寻址，命中与主链路一致的 `defaultEndpoint["sts"]` 行 —— 无需再显式配置 STS 域名。
 
-##### 关于 `WithBootstrapRegion` / `BYTEPLUS_BOOTSTRAP_REGION_LIST_CONF`
+##### `WithBootstrapRegion` / `BYTEPLUS_BOOTSTRAP_REGION_LIST_CONF`（已废弃）
 
-`Config.BootstrapRegion` 字段和 `BYTEPLUS_BOOTSTRAP_REGION_LIST_CONF` 环境变量**不再参与**默认寻址链路。它们的类型和方法保留，仅为 API 兼容，新代码不建议使用。
+> **⚠️ Deprecated**：`Config.WithBootstrapRegion(map[string]struct{}{...})`、`Config.BootstrapRegion` 字段以及 `BYTEPLUS_BOOTSTRAP_REGION_LIST_CONF` 环境变量已被标记为**废弃**，**不再参与**默认寻址链路。相关方法和字段仅为 API 二进制/源码兼容而保留，运行时视为 no-op。请**勿在新代码中使用**，已有代码建议改用 `WithRegion` + `WithUseDualStack` 让 SDK 自动寻址，或用 `WithEndpoint` 显式覆盖。
 
 ##### 代码示例
 
-```go
-func main() {
+> 注：示例中带删除线的调用 (`WithBootstrapRegion` / `BYTEPLUS_BOOTSTRAP_REGION_LIST_CONF`) 为**已废弃**用法，出于兼容性目的保留，请勿在新代码中使用。
+
+<pre><code class="language-go">func main() {
 	regionId := "ap-southeast-1"
 	config := byteplus.NewConfig().
 		WithCredentials(credentials.NewEnvCredentials()). //环境变量配置：BYTEPLUS_ACCESS_KEY、BYTEPLUS_SECRET_KEY、BYTEPLUS_SESSION_TOKEN
 		WithRegion(regionId).
-		WithUseDualStack(true) // 定义是否启用双栈网络（IPv4 + IPv6）访问地址，默认false；也可以使用环境变量BYTEPLUS_ENABLE_DUALSTACK=true
+		WithUseDualStack(true). // 定义是否启用双栈网络（IPv4 + IPv6）访问地址，默认false；也可以使用环境变量BYTEPLUS_ENABLE_DUALSTACK=true
+<s>		WithBootstrapRegion(map[string]struct{}{</s>
+<s>			"custom_example_region1": {},</s>
+<s>			"custom_example_region2": {},</s>
+<s>		}) // 已废弃：自定义自动寻址Region列表；也可以使用环境变量BYTEPLUS_BOOTSTRAP_REGION_LIST_CONF</s>
 	sess, err := session.NewSession(config)
 	if err != nil {
 		panic(err)
 	}
 }
-```
+</code></pre>
 
 ##### 错误处理
 

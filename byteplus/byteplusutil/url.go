@@ -107,16 +107,15 @@ func standardizeDomainServiceCode(serviceCode string) string {
 // preserves the original signature. Internally it delegates to
 // ResolveDefaultEndpoint and, on any resolution error, falls back to the shared
 // open endpoint so external callers that dereference the returned pointer keep
-// working. The customBootstrapRegion argument is accepted for signature
-// compatibility only and no longer participates in addressing.
+// working.
 //
-// New SDK-internal call sites should prefer ResolveDefaultEndpoint so that a
-// missing service registration surfaces as an error instead of being silently
-// swallowed.
+// Deprecated: the customBootstrapRegion parameter is retained for API
+// compatibility only and is ignored at runtime; bootstrap-region-based routing
+// no longer participates in default addressing. New SDK-internal call sites
+// should prefer ResolveDefaultEndpoint so that a missing service registration
+// surfaces as an error instead of being silently swallowed.
 func GetDefaultEndpointByServiceInfo(service string, regionCode string,
 	customBootstrapRegion map[string]struct{}, useDualStack *bool, logger byteplus.Logger) *string {
-	_ = customBootstrapRegion
-
 	resolved, err := ResolveDefaultEndpoint(service, regionCode, useDualStack, logger)
 	if err != nil {
 		debug(logger, fmt.Sprintf("resolve default endpoint failed for service %s: %v, fall back to %s",

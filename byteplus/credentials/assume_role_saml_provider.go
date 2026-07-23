@@ -118,9 +118,14 @@ func (p *SAMLCredentialsProvider) fetchOnce() (Value, error) {
 		data.Set("Policy", p.Policy)
 	}
 
+	// Endpoint > Region-derived host > DefaultEndpoint.
 	endpoint := p.Endpoint
 	if endpoint == "" {
-		endpoint = defaultSTSHostFor(p.Region)
+		if p.Region != "" {
+			endpoint = defaultSTSHostFor(p.Region)
+		} else {
+			endpoint = DefaultEndpoint
+		}
 	}
 	scheme := "https"
 	if p.Schema != "" {
