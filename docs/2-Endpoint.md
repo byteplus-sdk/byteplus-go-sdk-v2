@@ -89,10 +89,6 @@ The table lists every effective combination. `RegionType` is derived from the se
 
 When DualStack is enabled, replace every occurrence of `byteplusapi.com` in the table with `byteplus-api.com`.
 
-##### STS Credential Providers
-
-`StsAssumeRoleProvider`, `OIDCCredentialsProvider`, and `SAMLCredentialsProvider` share the same decision table. When their `Host` / `Endpoint` field is empty, the provider derives the STS host from `Region` (OIDC also honors the `BYTEPLUS_OIDC_STS_REGION` environment variable) and resolves it against the same `defaultEndpoint["sts"]` row used by the main request pipeline — no explicit STS host configuration is required.
-
 ##### `WithBootstrapRegion` / `BYTEPLUS_BOOTSTRAP_REGION_LIST_CONF` (Deprecated)
 
 > **⚠️ Deprecated**: `Config.WithBootstrapRegion(map[string]struct{}{...})`, the `Config.BootstrapRegion` field, and the `BYTEPLUS_BOOTSTRAP_REGION_LIST_CONF` environment variable are **deprecated** and **no longer participate** in the default addressing pipeline. The related methods and fields are retained only for API/binary compatibility and are treated as no-ops at runtime. **Do not use them in new code.** Existing callers should switch to `WithRegion` + `WithUseDualStack` and let the SDK auto-resolve the endpoint, or override it explicitly via `WithEndpoint`.

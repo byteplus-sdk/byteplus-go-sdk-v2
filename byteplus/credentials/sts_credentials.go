@@ -2,38 +2,16 @@ package credentials
 
 import (
 	"fmt"
-	"strings"
 	"time"
 
 	"github.com/byteplus-sdk/byteplus-sdk-golang/service/sts"
 	"github.com/google/uuid"
 )
 
-const defaultSTSRegion = "ap-southeast-1"
-
-// cnNonMainlandRegionSet lists cn-prefixed regions that use the international
-// suffix (byteplusapi.com) rather than the mainland suffix (byteplusapi.com.cn).
-var cnNonMainlandRegionSet = map[string]struct{}{
-	"cn-hongkong": {},
-}
-
-// defaultSTSHostFor returns the STS host for the given region. It follows the
-// standard rules for STS (Regional, Go China enabled): mainland cn-* regions
-// resolve to the .com.cn suffix, everything else to .com. Empty region falls
-// back to defaultSTSRegion.
-func defaultSTSHostFor(region string) string {
-	normalized := strings.ToLower(strings.TrimSpace(region))
-	if normalized == "" {
-		normalized = defaultSTSRegion
-	}
-	suffix := "byteplusapi.com"
-	if strings.HasPrefix(normalized, "cn-") {
-		if _, nonMainland := cnNonMainlandRegionSet[normalized]; !nonMainland {
-			suffix = "byteplusapi.com.cn"
-		}
-	}
-	return "sts." + normalized + "." + suffix
-}
+const (
+	defaultSTSRegion = "ap-southeast-1"
+	defaultSTSHost   = "sts.ap-southeast-1.byteplusapi.com"
+)
 
 type StsAssumeRoleProvider struct {
 	AccessKey       string
@@ -108,15 +86,13 @@ func StsAssumeRole(p *StsAssumeRoleProvider) (*Credentials, *StsAssumeRoleTime, 
 // StsAssumeRoleWithOptions.
 func stsAssumeRoleInternal(p *StsAssumeRoleProvider) (*Credentials, *StsAssumeRoleTime, error) {
 	ins := sts.NewInstance()
-	region := p.Region
-	if region == "" {
-		region = defaultSTSRegion
+	ins.Client.ServiceInfo.Credentials.Region = defaultSTSRegion
+	ins.SetHost(defaultSTSHost)
+	if p.Region != "" {
+		ins.Client.ServiceInfo.Credentials.Region = p.Region
 	}
-	ins.Client.ServiceInfo.Credentials.Region = region
 	if p.Host != "" {
 		ins.SetHost(p.Host)
-	} else {
-		ins.SetHost(defaultSTSHostFor(region))
 	}
 	if p.Schema != "" {
 		ins.SetSchema(p.Schema)

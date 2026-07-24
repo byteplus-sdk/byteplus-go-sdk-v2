@@ -34,7 +34,6 @@ type SAMLCredentialsProvider struct {
 	// for sts endpoint
 	Schema        string
 	Endpoint      string
-	Region        string        // Region drives auto-resolved STS host when Endpoint is empty.
 	MaxRetries    *int          // Retry attempts. Nil falls back to DefaultRetryerMaxNumRetries (3); 0 disables retries.
 	RetryInterval time.Duration // Sleep interval between retries. If zero or negative, falls back to DefaultRetryerRetryDelay (1s).
 
@@ -50,7 +49,6 @@ type SAMLProviderOptions struct {
 	Policy          string
 	Schema          string
 	Endpoint        string
-	Region          string
 	MaxRetries      *int
 	RetryInterval   time.Duration
 	HttpOptions     *HttpOptions
@@ -75,7 +73,6 @@ func NewSAMLCredentialsProviderWithOptions(roleTrn, samlProviderTrn, samlAsserti
 		Policy:          opts.Policy,
 		Schema:          opts.Schema,
 		Endpoint:        opts.Endpoint,
-		Region:          opts.Region,
 		MaxRetries:      opts.MaxRetries,
 		RetryInterval:   opts.RetryInterval,
 		httpOptions:     opts.HttpOptions,
@@ -118,14 +115,9 @@ func (p *SAMLCredentialsProvider) fetchOnce() (Value, error) {
 		data.Set("Policy", p.Policy)
 	}
 
-	// Endpoint > Region-derived host > DefaultEndpoint.
-	endpoint := p.Endpoint
-	if endpoint == "" {
-		if p.Region != "" {
-			endpoint = defaultSTSHostFor(p.Region)
-		} else {
-			endpoint = DefaultEndpoint
-		}
+	endpoint := DefaultEndpoint
+	if p.Endpoint != "" {
+		endpoint = p.Endpoint
 	}
 	scheme := "https"
 	if p.Schema != "" {

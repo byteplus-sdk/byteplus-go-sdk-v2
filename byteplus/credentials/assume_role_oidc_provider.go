@@ -65,7 +65,6 @@ type OIDCCredentialsProvider struct {
 	// for sts endpoint
 	Schema              string
 	Endpoint            string
-	Region              string        // Region drives auto-resolved STS host when Endpoint is empty.
 	MaxRetries          *int          // Retry attempts. Nil falls back to DefaultRetryerMaxNumRetries (3); 0 disables retries.
 	RetryInterval       time.Duration // Sleep interval between retries. If zero or negative, falls back to DefaultRetryerRetryDelay (1s).
 	lastUpdateTimestamp int64
@@ -82,7 +81,6 @@ type OIDCProviderOptions struct {
 	Policy          string
 	Schema          string
 	Endpoint        string
-	Region          string
 	MaxRetries      *int
 	RetryInterval   time.Duration
 	HttpOptions     *HttpOptions
@@ -107,7 +105,6 @@ func NewOIDCCredentialsProviderWithOptions(tokenFilePath, roleTrn string, optFns
 		Policy:            opts.Policy,
 		Schema:            opts.Schema,
 		Endpoint:          opts.Endpoint,
-		Region:            opts.Region,
 		MaxRetries:        opts.MaxRetries,
 		RetryInterval:     opts.RetryInterval,
 		httpOptions:       opts.HttpOptions,
@@ -126,7 +123,6 @@ func NewOIDCCredentialsProviderFromEnv() *OIDCCredentialsProvider {
 			o.RoleSessionName = sessionName
 			o.Policy = os.Getenv("BYTEPLUS_OIDC_ROLE_POLICY")
 			o.Endpoint = os.Getenv("BYTEPLUS_OIDC_STS_ENDPOINT")
-			o.Region = os.Getenv("BYTEPLUS_OIDC_STS_REGION")
 		},
 	)
 }
@@ -159,14 +155,9 @@ func (p *OIDCCredentialsProvider) fetchOnce() (Value, error) {
 		data.Set("Policy", p.Policy)
 	}
 
-	// Endpoint > Region-derived host > DefaultEndpoint.
-	endpoint := p.Endpoint
-	if endpoint == "" {
-		if p.Region != "" {
-			endpoint = defaultSTSHostFor(p.Region)
-		} else {
-			endpoint = DefaultEndpoint
-		}
+	endpoint := DefaultEndpoint
+	if p.Endpoint != "" {
+		endpoint = p.Endpoint
 	}
 	scheme := "https"
 	if p.Schema != "" {
