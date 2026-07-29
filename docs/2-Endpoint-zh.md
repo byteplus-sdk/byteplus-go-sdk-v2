@@ -60,7 +60,7 @@ func main() {
 
     每个服务在内置映射中都会登记 `IsGlobal` 和 `GoChinaEnabled` 两个 bool 字段，SDK 按下方"标准寻址规则"构造 Endpoint。
 
-    - 服务未在映射中登记：`ResolveDefaultEndpoint` 返回 `byteplusutil.ErrServiceEndpointInfoMissing`；调用 `session.ClientConfig` 系列方法时会立即抛出错误，可通过 `errors.Is(err, byteplusutil.ErrServiceEndpointInfoMissing)` 识别。参见 [错误处理](#错误处理)。
+    - 服务未在映射中登记：`ResolveDefaultEndpoint` 返回 `byteplusutil.ErrServiceEndpointInfoMissing`。使用 `session.ClientConfigWithError(...)` 可以在构造阶段直接拿到错误；兼容签名 `session.ClientConfig(...)` 保留原有的无 error 返回，会通过在 Config 上安装 `Validate` handler，将同一错误在首次业务调用时抛出。可通过 `errors.Is(err, byteplusutil.ErrServiceEndpointInfoMissing)` 识别。参见 [错误处理](#错误处理)。
 
     内置服务映射：[`../byteplus/byteplusutil/url.go`](../byteplus/byteplusutil/url.go) 中的 `defaultEndpoint`。
 
@@ -149,7 +149,7 @@ if errors.Is(err, byteplusutil.ErrServiceEndpointInfoMissing) {
 | 否 | 是 | `{Service}.{region}.byteplus-api.com` |
 | 否 | 否 | `{Service}.{region}.byteplusapi.com` |
 
-标准寻址不会追加 Go China 的 `.cn` 后缀，如需 `.cn` 请使用默认寻址（或显式指定 Endpoint）。
+标准寻址保留原有的 Go China 行为：当服务在 `ServiceInfos` 中登记为 Regional，且传入的 Region 为中国大陆 Region 时，会追加 `.cn` 后缀（`{Service}.{region}.byteplusapi.com.cn`）。港澳台等非大陆 Region（例如 `cn-hongkong`）仍保持 `.com`。本次默认寻址升级不改变 Standard Resolver 的语义。
 
 服务是否为 Global 由具体服务决定，不可修改。可以参考列表：[`../byteplus/endpoints/standard_resolver.go`](../byteplus/endpoints/standard_resolver.go) 中的 `ServiceInfos`。
 

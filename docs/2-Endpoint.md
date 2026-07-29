@@ -53,7 +53,7 @@ Byteplus provides a flexible endpoint resolution mechanism. The SDK automaticall
 
     Every service in the built-in map carries an `IsGlobal` and a `GoChinaEnabled` bool. The SDK builds the endpoint following the rules below.
 
-    - Service missing from the map: `ResolveDefaultEndpoint` returns `byteplusutil.ErrServiceEndpointInfoMissing`, and `session.ClientConfig`-family calls surface the error immediately. Detect it with `errors.Is(err, byteplusutil.ErrServiceEndpointInfoMissing)`. See [Error handling](#error-handling).
+    - Service missing from the map: `ResolveDefaultEndpoint` returns `byteplusutil.ErrServiceEndpointInfoMissing`. Use `session.ClientConfigWithError(...)` to receive the error at construction time; the compatible `session.ClientConfig(...)` keeps its historic no-error signature and surfaces the same error on the first API call via a `Validate` handler on the returned Config. Detect it with `errors.Is(err, byteplusutil.ErrServiceEndpointInfoMissing)`. See [Error handling](#error-handling).
 
     Built-in service map: `defaultEndpoint` in [`../byteplus/byteplusutil/url.go`](../byteplus/byteplusutil/url.go).
 
@@ -143,7 +143,7 @@ When you hit this error, first try upgrading the SDK. If the service is genuinel
 | No  | Yes | `{Service}.{region}.byteplus-api.com` |
 | No  | No  | `{Service}.{region}.byteplusapi.com` |
 
-Standard resolution never appends the Go China `.cn` suffix. If you need `.cn`, use the default resolver (or set the endpoint explicitly).
+Standard resolution keeps its historical Go China behavior: when the service is registered as regional and the region is a Chinese mainland region, the `.cn` suffix is appended (`{Service}.{region}.byteplusapi.com.cn`). Non-mainland Chinese regions (for example `cn-hongkong`) stay on `.com`. This addressing upgrade does not change Standard Resolver semantics.
 
 Whether a service is global depends on the service itself and cannot be changed. See `ServiceInfos` in [`../byteplus/endpoints/standard_resolver.go`](../byteplus/endpoints/standard_resolver.go).
 

@@ -7,6 +7,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net"
@@ -631,12 +632,58 @@ func (s *Session) Copy(cfgs ...*byteplus.Config) *Session {
 // ClientConfig satisfies the client.ConfigProvider interface and is used to
 // configure the service client instances. Passing the Session to the service
 // client's constructor (New) will use this method to configure the client.
+//
+// When endpoint resolution fails (for example the service is not registered
+// in defaultEndpoint), the error is deferred to the request Validate stage
+// via a handler installed on the returned Config. This keeps the historic
+// no-error signature intact while ensuring that callers see the real
+// business error on the first API call instead of a downstream nil-pointer
+// panic when the returned zero-value Config is dereferenced.
 func (s *Session) ClientConfig(serviceName string, cfgs ...*byteplus.Config) client.Config {
-	// Backwards compatibility, the error will be eaten if user calls ClientConfig
-	// directly. All SDK services will use ClientconfigWithError.
-	cfg, _ := s.clientConfigWithErr(serviceName, cfgs...)
-
+	cfg, err := s.clientConfigWithErr(serviceName, cfgs...)
+	if err != nil {
+		wrapped := fmt.Errorf("byteplus session: resolve client config for service %q: %w",
+			serviceName, err)
+		// PushFront so this handler runs before the built-in
+		// ValidateEndpointHandler; otherwise the generic MissingEndpoint
+		// error would overwrite the real resolution error.
+		cfg.Handlers.Validate.PushFront(func(r *request.Request) {
+			r.Error = wrapped
+		})
+	}
 	return cfg
+}
+
+// ClientConfigWithError is the error-aware variant of ClientConfig. It
+// reports endpoint resolution errors at construction time so that callers
+// can surface unknown-service or missing-region failures without waiting
+// for a request to be sent.
+//
+// The returned error is wrapped with the same prefix used by ClientConfig
+// so that both entry points produce identical error strings and both
+// support errors.Is / errors.As against the underlying sentinel error
+// (for example byteplusutil.ErrServiceEndpointInfoMissing).
+func (s *Session) ClientConfigWithError(serviceName string, cfgs ...*byteplus.Config) (client.Config, error) {
+	cfg, err := s.clientConfigWithErr(serviceName, cfgs...)
+	if err != nil {
+		err = fmt.Errorf("byteplus session: resolve client config for service %q: %w",
+			serviceName, err)
+	}
+	return cfg, err
+}
+
+// newSkeletonClientConfig returns a client.Config populated with a non-nil
+// *byteplus.Config and a fresh Handlers chain, but without a resolved
+// Endpoint. It is the return value on the error path of clientConfigWithErr
+// so that downstream service constructors (e.g. vpc.New, universal.New)
+// can safely dereference cfg.Config and register their handlers. The
+// underlying resolution error is surfaced later through the Validate
+// handler installed by ClientConfig.
+func (s *Session) newSkeletonClientConfig() client.Config {
+	return client.Config{
+		Config:   s.Config.Copy(),
+		Handlers: s.Handlers.Copy(),
+	}
 }
 
 func (s *Session) clientConfigWithErr(serviceName string, cfgs ...*byteplus.Config) (client.Config, error) {
@@ -645,7 +692,7 @@ func (s *Session) clientConfigWithErr(serviceName string, cfgs ...*byteplus.Conf
 	var resolved endpoints.ResolvedEndpoint
 
 	region := byteplus.StringValue(s.Config.Region)
-	if s.Config.Endpoint == nil {
+	if byteplus.StringValue(s.Config.Endpoint) == "" {
 		var endpoint *string
 		if s.Config.EndpointResolver != nil {
 			var opts []func(*endpoints.Options)
@@ -663,14 +710,14 @@ func (s *Session) clientConfigWithErr(serviceName string, cfgs ...*byteplus.Conf
 			}
 			endpointFor, err := s.Config.EndpointResolver.EndpointFor(serviceName, region, opts...)
 			if err != nil {
-				return client.Config{}, err
+				return s.newSkeletonClientConfig(), err
 			}
 			endpoint = &endpointFor.URL
 		} else {
 			resolvedEndpoint, err := byteplusutil.ResolveDefaultEndpoint(serviceName, region,
 				s.Config.UseDualStack, s.Config.Logger)
 			if err != nil {
-				return client.Config{}, err
+				return s.newSkeletonClientConfig(), err
 			}
 			endpoint = &resolvedEndpoint
 		}
@@ -704,7 +751,7 @@ func (s *Session) clientConfigWithErr(serviceName string, cfgs ...*byteplus.Conf
 		}
 	}
 	if err != nil {
-		return client.Config{}, err
+		return s.newSkeletonClientConfig(), err
 	}
 	if s.Config.HTTPClient.Transport == nil {
 		s.Config.HTTPClient.Transport = http.DefaultTransport.(*http.Transport).Clone()
