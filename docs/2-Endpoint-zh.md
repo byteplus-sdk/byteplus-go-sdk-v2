@@ -123,16 +123,31 @@ func main() {
 
 ##### 错误处理
 
-如果请求的服务名不在内置 `defaultEndpoint` 映射中，SDK 在第一次构造 client 配置时就会返回 `byteplusutil.ErrServiceEndpointInfoMissing`。可用如下方式识别：
+如果请求的服务名不在内置 `defaultEndpoint` 映射中，SDK 会返回 `byteplusutil.ErrServiceEndpointInfoMissing`。两条 API 路径的错误暴露时机不同：
+
+- **`session.ClientConfigWithError(serviceName, ...)`**：在**构造阶段**直接返回该错误，适合希望立即感知失败的调用方；
+- **`session.ClientConfig(serviceName, ...)`**（兼容签名）：保留无 `error` 返回值，同一错误会通过挂在返回 Config 上的 `Validate` handler，在**首次业务请求**发出时抛出，避免下游 `xxx.New(sess)` 处的 nil 指针 panic。
+
+两个入口的错误消息文本完全一致，且都可通过 `errors.Is` 识别底层 sentinel：
 
 ```go
 import (
 	"errors"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/byteplusutil"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/session"
 )
 
+// 构造阶段感知
+cfg, err := sess.ClientConfigWithError("unknown-service")
 if errors.Is(err, byteplusutil.ErrServiceEndpointInfoMissing) {
 	// SDK 版本可能不识别该服务，请升级依赖或显式指定 Endpoint。
+}
+_ = cfg
+
+// 或使用兼容签名 + 请求期感知
+svc := someservice.New(sess) // 内部走 sess.ClientConfig(...)
+if _, err := svc.DoSomething(nil); errors.Is(err, byteplusutil.ErrServiceEndpointInfoMissing) {
+	// 同样能识别到
 }
 ```
 
@@ -142,14 +157,18 @@ if errors.Is(err, byteplusutil.ErrServiceEndpointInfoMissing) {
 
 ##### 标准寻址规则
 
-| Global 服务 | 双栈 | 格式 |
-|---|---|---|
-| 是 | 是 | `{Service}.byteplus-api.com` |
-| 是 | 否 | `{Service}.byteplusapi.com` |
-| 否 | 是 | `{Service}.{region}.byteplus-api.com` |
-| 否 | 否 | `{Service}.{region}.byteplusapi.com` |
+下表中 **CN mainland** 指服务在 `ServiceInfos` 中为 Regional 且传入 Region 为中国大陆 Region（不含 `cn-hongkong` 等港澳台白名单）。
 
-标准寻址保留原有的 Go China 行为：当服务在 `ServiceInfos` 中登记为 Regional，且传入的 Region 为中国大陆 Region 时，会追加 `.cn` 后缀（`{Service}.{region}.byteplusapi.com.cn`）。港澳台等非大陆 Region（例如 `cn-hongkong`）仍保持 `.com`。本次默认寻址升级不改变 Standard Resolver 的语义。
+| Global 服务 | 双栈 | CN mainland | 格式 |
+|---|---|---|---|
+| 是 | 是 | 任意 | `{Service}.byteplus-api.com` |
+| 是 | 否 | 任意 | `{Service}.byteplusapi.com` |
+| 否 | 是 | 是 | `{Service}.{region}.byteplus-api.com.cn` |
+| 否 | 是 | 否 | `{Service}.{region}.byteplus-api.com` |
+| 否 | 否 | 是 | `{Service}.{region}.byteplusapi.com.cn` |
+| 否 | 否 | 否 | `{Service}.{region}.byteplusapi.com` |
+
+Global 服务不追加 `.cn` 后缀；`.cn` 仅在 Regional 服务命中中国大陆 Region 时追加。本次默认寻址升级不改变 Standard Resolver 的语义。
 
 服务是否为 Global 由具体服务决定，不可修改。可以参考列表：[`../byteplus/endpoints/standard_resolver.go`](../byteplus/endpoints/standard_resolver.go) 中的 `ServiceInfos`。
 

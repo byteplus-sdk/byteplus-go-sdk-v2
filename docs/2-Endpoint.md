@@ -116,17 +116,32 @@ When DualStack is enabled, replace every occurrence of `byteplusapi.com` in the 
 
 ##### Error handling
 
-If the requested service is not registered in `defaultEndpoint`, the SDK returns `byteplusutil.ErrServiceEndpointInfoMissing` on the first client-config build. Detect it with:
+If the requested service is not registered in `defaultEndpoint`, the SDK returns `byteplusutil.ErrServiceEndpointInfoMissing`. The two API entry points surface this error at different stages:
+
+- **`session.ClientConfigWithError(serviceName, ...)`** — returns the error **at construction time**, ideal for callers that want to fail fast.
+- **`session.ClientConfig(serviceName, ...)`** (compatibility signature) — keeps its historic no-error signature and surfaces the same error on the **first API call** through a `Validate` handler installed on the returned Config. This prevents nil-pointer panics in downstream `xxx.New(sess)` callers.
+
+Both paths produce the exact same error message and both can be matched with `errors.Is`:
 
 ```go
 import (
 	"errors"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/byteplusutil"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/session"
 )
 
+// Fail fast at construction time
+cfg, err := sess.ClientConfigWithError("unknown-service")
 if errors.Is(err, byteplusutil.ErrServiceEndpointInfoMissing) {
 	// The installed SDK likely does not know this service.
 	// Upgrade the dependency or set the endpoint explicitly.
+}
+_ = cfg
+
+// Or use the compatibility signature and detect on first call
+svc := someservice.New(sess) // internally calls sess.ClientConfig(...)
+if _, err := svc.DoSomething(nil); errors.Is(err, byteplusutil.ErrServiceEndpointInfoMissing) {
+	// Same error, delivered at request time
 }
 ```
 
@@ -136,14 +151,18 @@ When you hit this error, first try upgrading the SDK. If the service is genuinel
 
 ##### Resolution Rules
 
-| Global service | DualStack | Format |
-|---|---|---|
-| Yes | Yes | `{Service}.byteplus-api.com` |
-| Yes | No  | `{Service}.byteplusapi.com` |
-| No  | Yes | `{Service}.{region}.byteplus-api.com` |
-| No  | No  | `{Service}.{region}.byteplusapi.com` |
+**CN mainland** below means the service is registered as regional in `ServiceInfos` and the caller-supplied region is a Chinese mainland region (i.e. NOT one of the non-mainland whitelist regions such as `cn-hongkong`).
 
-Standard resolution keeps its historical Go China behavior: when the service is registered as regional and the region is a Chinese mainland region, the `.cn` suffix is appended (`{Service}.{region}.byteplusapi.com.cn`). Non-mainland Chinese regions (for example `cn-hongkong`) stay on `.com`. This addressing upgrade does not change Standard Resolver semantics.
+| Global service | DualStack | CN mainland | Format |
+|---|---|---|---|
+| Yes | Yes | any | `{Service}.byteplus-api.com` |
+| Yes | No  | any | `{Service}.byteplusapi.com` |
+| No  | Yes | Yes | `{Service}.{region}.byteplus-api.com.cn` |
+| No  | Yes | No  | `{Service}.{region}.byteplus-api.com` |
+| No  | No  | Yes | `{Service}.{region}.byteplusapi.com.cn` |
+| No  | No  | No  | `{Service}.{region}.byteplusapi.com` |
+
+Global services never carry the `.cn` suffix; `.cn` is only appended for regional services when the caller-supplied region is a Chinese mainland region. This addressing upgrade does not change Standard Resolver semantics.
 
 Whether a service is global depends on the service itself and cannot be changed. See `ServiceInfos` in [`../byteplus/endpoints/standard_resolver.go`](../byteplus/endpoints/standard_resolver.go).
 

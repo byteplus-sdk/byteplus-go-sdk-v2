@@ -67,6 +67,13 @@ var cnNonMainLandRegion = map[string]struct{}{
 // wrapped by the Session default addressing pipeline.
 var ErrServiceEndpointInfoMissing = errors.New("byteplusutil: service endpoint info missing")
 
+// ErrMissingRegion is returned by ResolveDefaultEndpoint when a Regional
+// service is asked to resolve an endpoint without a region. Without this
+// guard the SDK used to produce a double-dot host such as
+// "vpc..byteplusapi.com" and return err=nil, which callers could not tell
+// from a legitimate result.
+var ErrMissingRegion = errors.New("byteplusutil: missing region for regional service")
+
 type ServiceEndpointInfo struct {
 	Service        string
 	IsGlobal       bool
@@ -195,6 +202,10 @@ func ResolveDefaultEndpoint(service, regionCode string, useDualStack *bool, logg
 	if info.IsGlobal {
 		resultEndpoint = svc + suffix
 	} else {
+		if normalizedRegion == "" {
+			return "", fmt.Errorf("%w: service %q requires a non-empty region",
+				ErrMissingRegion, service)
+		}
 		resultEndpoint = svc + separator + normalizedRegion + suffix
 	}
 	debug(logger, fmt.Sprintf("resolved endpoint for service %s region %s: %s",
