@@ -3,10 +3,11 @@ package endpoints
 import (
 	"bytes"
 	"fmt"
-	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/bytepluserr"
 	"regexp"
 	"strings"
 	"text/template"
+
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/bytepluserr"
 )
 
 const (
@@ -309,10 +310,16 @@ func (r *StandardEndpointResolver) EndpointFor(service, region string,
 				"please upgrade the sdk endpoint resolver to the latest version", region), nil)
 	}
 
-	if len(r.Format) == 0 {
-		r.Format = defaultFormat
+	format := r.Format
+	if len(format) == 0 {
+		format = defaultFormat
 	}
-	r.Variables.Service = standardizeDomainServiceCode(service)
+
+	// Use a request-local copy of Variables so concurrent calls and
+	// sequential calls with different regions do not pollute each other
+	// via the shared receiver state.
+	localVars := r.Variables
+	localVars.Service = standardizeDomainServiceCode(service)
 
 	serviceInfo, ok := ServiceInfos[service]
 	if !ok {
@@ -328,35 +335,35 @@ func (r *StandardEndpointResolver) EndpointFor(service, region string,
 
 	isGlobal := serviceInfo.IsGlobal
 	if !isGlobal {
-		r.Variables.Region = "." + region
+		localVars.Region = "." + region
 	}
 
 	ipVersion := options.IPVersion
 
 	if ipVersion == IPVersionDualStack {
-		r.Variables.SiteStack = SiteStackByteplusDualStack
+		localVars.SiteStack = SiteStackByteplusDualStack
 	} else if ipVersion == IPVersionIPv4Only {
-		r.Variables.SiteStack = SiteStackByteplusIPv4
+		localVars.SiteStack = SiteStackByteplusIPv4
 	}
 
 	// Go China region
 	if !isGlobal && isGoChina(region) {
-		r.Variables.CNSuffix = cnSuffix
+		localVars.CNSuffix = cnSuffix
 	}
 
-	t, err := template.New("endpoint").Parse(r.Format)
+	t, err := template.New("endpoint").Parse(format)
 	if err != nil {
 		return resolvedEndpoint,
 			bytepluserr.New("TemplateParseError",
-				fmt.Sprintf("failed to parse endpoint template for format %s", r.Format), nil)
+				fmt.Sprintf("failed to parse endpoint template for format %s", format), nil)
 	}
 
 	buf := &bytes.Buffer{}
-	err = t.Execute(buf, &r.Variables)
+	err = t.Execute(buf, &localVars)
 	if err != nil {
 		return resolvedEndpoint,
 			bytepluserr.New("TemplateExecuteError",
-				fmt.Sprintf("failed to execute template for format %s, variable %v", r.Format, r.Variables), nil)
+				fmt.Sprintf("failed to execute template for format %s, variable %v", format, localVars), nil)
 	}
 
 	resolvedEndpoint.URL = buf.String()

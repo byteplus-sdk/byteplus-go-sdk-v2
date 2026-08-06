@@ -39,6 +39,9 @@ type Config struct {
 	// that overrides the default generated endpoint for a client. Set this
 	// to `""` to use the default generated endpoint.
 	//
+	// Both nil and empty string are treated as unset and fall back to the
+	// default endpoint resolver (or Config.EndpointResolver when set).
+	//
 	// Note: You must still provide a `Region` value when specifying an
 	// endpoint for a client.
 	Endpoint *string
@@ -75,6 +78,11 @@ type Config struct {
 	// for the service.
 	//
 	// Key: region code
+	//
+	// Deprecated: BootstrapRegion no longer participates in the default
+	// addressing pipeline. It is kept only for source-level compatibility
+	// and is treated as a runtime no-op. New callers should rely on
+	// Region + UseDualStack, or set Endpoint explicitly.
 	BootstrapRegion map[string]struct{}
 
 	// Set this to `true` to disable SSL when sending requests. Defaults
@@ -441,6 +449,10 @@ func (c *Config) WithRunningEnvironment(runningEnv string) *Config {
 }
 
 // WithBootstrapRegion sets a config BootstrapRegion value returning a Config pointer
+//
+// Deprecated: BootstrapRegion no longer participates in the default
+// addressing pipeline. This setter is retained only for source-level
+// compatibility and has no runtime effect on endpoint resolution.
 func (c *Config) WithBootstrapRegion(bootstrapRegion map[string]struct{}) *Config {
 	c.BootstrapRegion = make(map[string]struct{})
 	for region := range bootstrapRegion {

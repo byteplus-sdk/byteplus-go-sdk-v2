@@ -24,6 +24,8 @@ func main() {
 }
 ```
 
+An explicitly configured Endpoint has the highest priority and skips every subsequent resolution step (including any custom `EndpointResolver`).
+
 ### Custom RegionId
 
 ```go
@@ -41,19 +43,19 @@ func main() {
 
 ### Automatic Endpoint Resolution
 
-Byteplus provides a flexible endpoint resolution mechanism. The SDK automatically builds the endpoint based on service name and region, and supports DualStack.
+Byteplus provides a flexible endpoint resolution mechanism. The SDK automatically builds the endpoint based on the service name, region and the service's Go China flag, and supports DualStack.
 
 #### Default Endpoint Resolution
 
 ##### Resolution Logic
 
-1. **Whether the region is in the bootstrap list**
+1. **Service registration check**
 
-    Built-in list implementation: [`../byteplus/byteplusutil/url.go#bootstrapRegion`](../byteplus/byteplusutil/url.go#L221).
+    Every service in the built-in map carries an `IsGlobal` and a `GoChinaEnabled` bool. The SDK builds the endpoint following the rules below.
 
-    Only predefined regions (e.g., `ap-southeast-2`) or user-configured regions are auto-resolved; others fall back to `open.byteplusapi.com`.
+    - Service missing from the map: `ResolveDefaultEndpoint` returns `byteplusutil.ErrServiceEndpointInfoMissing`. Use `session.ClientConfigWithError(...)` to receive the error at construction time; the compatible `session.ClientConfig(...)` keeps its historic no-error signature and surfaces the same error on the first API call via a `Validate` handler on the returned Config. Detect it with `errors.Is(err, byteplusutil.ErrServiceEndpointInfoMissing)`. See [Error handling](#error-handling).
 
-    You can extend the list via env var `BYTEPLUS_BOOTSTRAP_REGION_LIST_CONF` or `customBootstrapRegion`.
+    Built-in service map: `defaultEndpoint` in [`../byteplus/byteplusutil/url.go`](../byteplus/byteplusutil/url.go).
 
 2. **DualStack support (IPv6)**
 
@@ -61,43 +63,108 @@ Byteplus provides a flexible endpoint resolution mechanism. The SDK automaticall
 
     When enabled, the suffix changes from `byteplusapi.com` to `byteplus-api.com`.
 
-3. **Construct endpoint based on service name and region**
+3. **Go China suffix**
 
-    - **Global services (e.g., `CDN`, `IAM`)**: `<service>.byteplusapi.com` (or `byteplus-api.com` when DualStack is enabled). Example: `cdn.byteplusapi.com`.
-    - **Regional services (e.g., `ECS`, `RDS`)**: `<service>.<region>.byteplusapi.com` is used as the default endpoint. Example: `ecs.ap-southeast-1.byteplusapi.com`.
+    When a service entry has `GoChinaEnabled=true` and the request region is in the Chinese mainland (a `cn-*` prefix but not one of the non-mainland regions such as `cn-hongkong`), the resolver appends the `.cn` suffix.
+
+    Whether Go China applies is decided by the service itself and cannot be overridden.
+
+4. **Endpoint construction**
+
+    - **Global services (e.g., `IAM`, `Billing`)**: `<service>.byteplusapi.com` (or `byteplus-api.com` when DualStack is enabled; `.cn` is appended when Go China applies).
+    - **Regional services (e.g., `ECS`, `RDS`)**: `<service>.<region>.byteplusapi.com` (DualStack / Go China rules identical to global services).
+
+##### Decision Table
+
+The table lists every effective combination. `RegionType` is derived from the service's `IsGlobal` flag; "Region is Go China" refers to the request region.
+
+| RegionType | GoChinaEnabled | Region is Go China | Endpoint | Region embedded |
+|---|---|---|---|---|
+| Global | true | yes | `{service}.byteplusapi.com.cn` | no |
+| Global | true | no | `{service}.byteplusapi.com` | no |
+| Global | false | any | `{service}.byteplusapi.com` | no |
+| Regional | true | yes | `{service}.{region}.byteplusapi.com.cn` | yes |
+| Regional | true | no | `{service}.{region}.byteplusapi.com` | yes |
+| Regional | false | any | `{service}.{region}.byteplusapi.com` | yes |
+
+When DualStack is enabled, replace every occurrence of `byteplusapi.com` in the table with `byteplus-api.com`.
+
+##### `WithBootstrapRegion` / `BYTEPLUS_BOOTSTRAP_REGION_LIST_CONF` (Deprecated)
+
+> **⚠️ Deprecated**: `Config.WithBootstrapRegion(map[string]struct{}{...})`, the `Config.BootstrapRegion` field, and the `BYTEPLUS_BOOTSTRAP_REGION_LIST_CONF` environment variable are **deprecated** and **no longer participate** in the default addressing pipeline. The related methods and fields are retained only for API/binary compatibility and are treated as no-ops at runtime. **Do not use them in new code.** Existing callers should switch to `WithRegion` + `WithUseDualStack` and let the SDK auto-resolve the endpoint, or override it explicitly via `WithEndpoint`.
 
 ##### Code Example
 
-```go
-func main() {
+> Note: the calls rendered with strikethrough (`WithBootstrapRegion` / `BYTEPLUS_BOOTSTRAP_REGION_LIST_CONF`) are **deprecated** and kept only for backward compatibility. Do not use them in new code.
+
+<pre><code class="language-go">func main() {
 	regionId := "ap-southeast-1"
 	config := byteplus.NewConfig().
 		WithCredentials(credentials.NewEnvCredentials()).
 		WithRegion(regionId).
-		WithUseDualStack(true).
-		WithBootstrapRegion(map[string]struct{}{
-			"custom_example_region1": {},
-			"custom_example_region2": {},
-		})
+		WithUseDualStack(true). // enable dual stack; also honors env BYTEPLUS_ENABLE_DUALSTACK=true
+<s>		WithBootstrapRegion(map[string]struct{}{</s>
+<s>			"custom_example_region1": {},</s>
+<s>			"custom_example_region2": {},</s>
+<s>		}) // Deprecated: custom auto-resolve region list; also honors env BYTEPLUS_BOOTSTRAP_REGION_LIST_CONF</s>
 	sess, err := session.NewSession(config)
 	if err != nil {
 		panic(err)
 	}
 }
+</code></pre>
+
+##### Error handling
+
+If the requested service is not registered in `defaultEndpoint`, the SDK returns `byteplusutil.ErrServiceEndpointInfoMissing`. The two API entry points surface this error at different stages:
+
+- **`session.ClientConfigWithError(serviceName, ...)`** — returns the error **at construction time**, ideal for callers that want to fail fast.
+- **`session.ClientConfig(serviceName, ...)`** (compatibility signature) — keeps its historic no-error signature and surfaces the same error on the **first API call** through a `Validate` handler installed on the returned Config. This prevents nil-pointer panics in downstream `xxx.New(sess)` callers.
+
+Both paths produce the exact same error message and both can be matched with `errors.Is`:
+
+```go
+import (
+	"errors"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/byteplusutil"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/session"
+)
+
+// Fail fast at construction time
+cfg, err := sess.ClientConfigWithError("unknown-service")
+if errors.Is(err, byteplusutil.ErrServiceEndpointInfoMissing) {
+	// The installed SDK likely does not know this service.
+	// Upgrade the dependency or set the endpoint explicitly.
+}
+_ = cfg
+
+// Or use the compatibility signature and detect on first call
+svc := someservice.New(sess) // internally calls sess.ClientConfig(...)
+if _, err := svc.DoSomething(nil); errors.Is(err, byteplusutil.ErrServiceEndpointInfoMissing) {
+	// Same error, delivered at request time
+}
 ```
+
+When you hit this error, first try upgrading the SDK. If the service is genuinely not carried by the SDK yet, set the endpoint explicitly via `WithEndpoint(...)` or supply a custom `EndpointResolver`.
 
 #### Standard Endpoint Resolution
 
 ##### Resolution Rules
 
-| Global service | DualStack | Format |
-|---|---|---|
-| Yes | Yes | `{Service}.byteplus-api.com` |
-| Yes | No  | `{Service}.byteplusapi.com` |
-| No  | Yes | `{Service}.{region}.byteplus-api.com` |
-| No  | No  | `{Service}.{region}.byteplusapi.com` |
+**CN mainland** below means the service is registered as regional in `ServiceInfos` and the caller-supplied region is a Chinese mainland region (i.e. NOT one of the non-mainland whitelist regions such as `cn-hongkong`).
 
-Whether a service is global depends on the service itself and cannot be changed. See: [`../byteplus/endpoints/standard_resolver.go#ServiceInfos`](../byteplus/endpoints/standard_resolver.go#L70).
+| Global service | DualStack | CN mainland | Format |
+|---|---|---|---|
+| Yes | Yes | any | `{Service}.byteplus-api.com` |
+| Yes | No  | any | `{Service}.byteplusapi.com` |
+| No  | Yes | Yes | `{Service}.{region}.byteplus-api.com.cn` |
+| No  | Yes | No  | `{Service}.{region}.byteplus-api.com` |
+| No  | No  | Yes | `{Service}.{region}.byteplusapi.com.cn` |
+| No  | No  | No  | `{Service}.{region}.byteplusapi.com` |
+
+Global services never carry the `.cn` suffix; `.cn` is only appended for regional services when the caller-supplied region is a Chinese mainland region. This addressing upgrade does not change Standard Resolver semantics.
+
+Whether a service is global depends on the service itself and cannot be changed. See `ServiceInfos` in [`../byteplus/endpoints/standard_resolver.go`](../byteplus/endpoints/standard_resolver.go).
 
 ##### Code Example
 

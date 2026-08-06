@@ -7,6 +7,7 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net"
@@ -18,9 +19,10 @@ import (
 	"strings"
 	"time"
 
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/byteplusutil"
+
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/bytepluserr"
-	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/byteplusutil"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/client"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/corehandlers"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
@@ -385,7 +387,7 @@ func newSession(opts Options, envCfg envConfig, cfgs ...*byteplus.Config) (*Sess
 			// or session.Options.profile, shared config is not enabled, and the
 			// environment has credentials, allow the shared config file to fail to
 			// load since the user has already provided credentials, and nothing else
-			// is required to be read file. Github(byteplus/byteplus-go-sdk-v2#2455)
+			// is required to be read file.
 		} else if _, ok := err.(SharedConfigProfileNotExistsError); !ok {
 			return nil, err
 		}
@@ -608,10 +610,6 @@ func mergeConfigSrcs(cfg, userCfg *byteplus.Config,
 func initHandlers(s *Session) {
 	// Add the Validate parameter handler if it is not disabled.
 	s.Handlers.Validate.Remove(corehandlers.ValidateParametersHandler)
-	// Temporary notes by xuyaming@bytedance.com because some validate field is relation.
-	//if !byteplus.BoolValue(s.Config.DisableParamValidation) {
-	//	s.Handlers.Validate.PushBackNamed(corehandlers.ValidateParametersHandler)
-	//}
 }
 
 // Copy creates and returns a copy of the current Session, copying the config
@@ -634,12 +632,58 @@ func (s *Session) Copy(cfgs ...*byteplus.Config) *Session {
 // ClientConfig satisfies the client.ConfigProvider interface and is used to
 // configure the service client instances. Passing the Session to the service
 // client's constructor (New) will use this method to configure the client.
+//
+// When endpoint resolution fails (for example the service is not registered
+// in defaultEndpoint), the error is deferred to the request Validate stage
+// via a handler installed on the returned Config. This keeps the historic
+// no-error signature intact while ensuring that callers see the real
+// business error on the first API call instead of a downstream nil-pointer
+// panic when the returned zero-value Config is dereferenced.
 func (s *Session) ClientConfig(serviceName string, cfgs ...*byteplus.Config) client.Config {
-	// Backwards compatibility, the error will be eaten if user calls ClientConfig
-	// directly. All SDK services will use ClientconfigWithError.
-	cfg, _ := s.clientConfigWithErr(serviceName, cfgs...)
-
+	cfg, err := s.clientConfigWithErr(serviceName, cfgs...)
+	if err != nil {
+		wrapped := fmt.Errorf("byteplus session: resolve client config for service %q: %w",
+			serviceName, err)
+		// PushFront so this handler runs before the built-in
+		// ValidateEndpointHandler; otherwise the generic MissingEndpoint
+		// error would overwrite the real resolution error.
+		cfg.Handlers.Validate.PushFront(func(r *request.Request) {
+			r.Error = wrapped
+		})
+	}
 	return cfg
+}
+
+// ClientConfigWithError is the error-aware variant of ClientConfig. It
+// reports endpoint resolution errors at construction time so that callers
+// can surface unknown-service or missing-region failures without waiting
+// for a request to be sent.
+//
+// The returned error is wrapped with the same prefix used by ClientConfig
+// so that both entry points produce identical error strings and both
+// support errors.Is / errors.As against the underlying sentinel error
+// (for example byteplusutil.ErrServiceEndpointInfoMissing).
+func (s *Session) ClientConfigWithError(serviceName string, cfgs ...*byteplus.Config) (client.Config, error) {
+	cfg, err := s.clientConfigWithErr(serviceName, cfgs...)
+	if err != nil {
+		err = fmt.Errorf("byteplus session: resolve client config for service %q: %w",
+			serviceName, err)
+	}
+	return cfg, err
+}
+
+// newSkeletonClientConfig returns a client.Config populated with a non-nil
+// *byteplus.Config and a fresh Handlers chain, but without a resolved
+// Endpoint. It is the return value on the error path of clientConfigWithErr
+// so that downstream service constructors (e.g. vpc.New, universal.New)
+// can safely dereference cfg.Config and register their handlers. The
+// underlying resolution error is surfaced later through the Validate
+// handler installed by ClientConfig.
+func (s *Session) newSkeletonClientConfig() client.Config {
+	return client.Config{
+		Config:   s.Config.Copy(),
+		Handlers: s.Handlers.Copy(),
+	}
 }
 
 func (s *Session) clientConfigWithErr(serviceName string, cfgs ...*byteplus.Config) (client.Config, error) {
@@ -648,7 +692,7 @@ func (s *Session) clientConfigWithErr(serviceName string, cfgs ...*byteplus.Conf
 	var resolved endpoints.ResolvedEndpoint
 
 	region := byteplus.StringValue(s.Config.Region)
-	if s.Config.Endpoint == nil {
+	if byteplus.StringValue(s.Config.Endpoint) == "" {
 		var endpoint *string
 		if s.Config.EndpointResolver != nil {
 			var opts []func(*endpoints.Options)
@@ -666,12 +710,16 @@ func (s *Session) clientConfigWithErr(serviceName string, cfgs ...*byteplus.Conf
 			}
 			endpointFor, err := s.Config.EndpointResolver.EndpointFor(serviceName, region, opts...)
 			if err != nil {
-				return client.Config{}, err
+				return s.newSkeletonClientConfig(), err
 			}
 			endpoint = &endpointFor.URL
 		} else {
-			endpoint = byteplusutil.GetDefaultEndpointByServiceInfo(serviceName, region, s.Config.BootstrapRegion,
+			resolvedEndpoint, err := byteplusutil.ResolveDefaultEndpoint(serviceName, region,
 				s.Config.UseDualStack, s.Config.Logger)
+			if err != nil {
+				return s.newSkeletonClientConfig(), err
+			}
+			endpoint = &resolvedEndpoint
 		}
 		if s.Config.Logger != nil {
 			s.Config.Logger.DebugByLevel(byteplus.LogDebugWithEndpoint, "[Endpoint] Using endpoint: ", *endpoint)
@@ -703,7 +751,7 @@ func (s *Session) clientConfigWithErr(serviceName string, cfgs ...*byteplus.Conf
 		}
 	}
 	if err != nil {
-		return client.Config{}, err
+		return s.newSkeletonClientConfig(), err
 	}
 	if s.Config.HTTPClient.Transport == nil {
 		s.Config.HTTPClient.Transport = http.DefaultTransport.(*http.Transport).Clone()
