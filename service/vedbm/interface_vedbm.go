@@ -70,6 +70,14 @@ type VEDBMAPI interface {
 	ChangeMasterWithContext(byteplus.Context, *ChangeMasterInput, ...request.Option) (*ChangeMasterOutput, error)
 	ChangeMasterRequest(*ChangeMasterInput) (*request.Request, *ChangeMasterOutput)
 
+	CopyParameterTemplateCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CopyParameterTemplateCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CopyParameterTemplateCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CopyParameterTemplate(*CopyParameterTemplateInput) (*CopyParameterTemplateOutput, error)
+	CopyParameterTemplateWithContext(byteplus.Context, *CopyParameterTemplateInput, ...request.Option) (*CopyParameterTemplateOutput, error)
+	CopyParameterTemplateRequest(*CopyParameterTemplateInput) (*request.Request, *CopyParameterTemplateOutput)
+
 	CreateAllowListCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	CreateAllowListCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	CreateAllowListCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -438,6 +446,14 @@ type VEDBMAPI interface {
 	ModifyBackupPolicyWithContext(byteplus.Context, *ModifyBackupPolicyInput, ...request.Option) (*ModifyBackupPolicyOutput, error)
 	ModifyBackupPolicyRequest(*ModifyBackupPolicyInput) (*request.Request, *ModifyBackupPolicyOutput)
 
+	ModifyConnectionPersistenceCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyConnectionPersistenceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyConnectionPersistenceCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyConnectionPersistence(*ModifyConnectionPersistenceInput) (*ModifyConnectionPersistenceOutput, error)
+	ModifyConnectionPersistenceWithContext(byteplus.Context, *ModifyConnectionPersistenceInput, ...request.Option) (*ModifyConnectionPersistenceOutput, error)
+	ModifyConnectionPersistenceRequest(*ModifyConnectionPersistenceInput) (*request.Request, *ModifyConnectionPersistenceOutput)
+
 	ModifyCrossRegionBackupPolicyCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ModifyCrossRegionBackupPolicyCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	ModifyCrossRegionBackupPolicyCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -526,6 +542,14 @@ type VEDBMAPI interface {
 	ModifyDBInstanceSpecWithContext(byteplus.Context, *ModifyDBInstanceSpecInput, ...request.Option) (*ModifyDBInstanceSpecOutput, error)
 	ModifyDBInstanceSpecRequest(*ModifyDBInstanceSpecInput) (*request.Request, *ModifyDBInstanceSpecOutput)
 
+	ModifyDBInstanceStorageTypeCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyDBInstanceStorageTypeCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyDBInstanceStorageTypeCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyDBInstanceStorageType(*ModifyDBInstanceStorageTypeInput) (*ModifyDBInstanceStorageTypeOutput, error)
+	ModifyDBInstanceStorageTypeWithContext(byteplus.Context, *ModifyDBInstanceStorageTypeInput, ...request.Option) (*ModifyDBInstanceStorageTypeOutput, error)
+	ModifyDBInstanceStorageTypeRequest(*ModifyDBInstanceStorageTypeInput) (*request.Request, *ModifyDBInstanceStorageTypeOutput)
+
 	ModifyDBNodeConfigCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ModifyDBNodeConfigCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	ModifyDBNodeConfigCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -541,6 +565,14 @@ type VEDBMAPI interface {
 	ModifyDatabaseDescription(*ModifyDatabaseDescriptionInput) (*ModifyDatabaseDescriptionOutput, error)
 	ModifyDatabaseDescriptionWithContext(byteplus.Context, *ModifyDatabaseDescriptionInput, ...request.Option) (*ModifyDatabaseDescriptionOutput, error)
 	ModifyDatabaseDescriptionRequest(*ModifyDatabaseDescriptionInput) (*request.Request, *ModifyDatabaseDescriptionOutput)
+
+	ModifyParameterTemplateCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyParameterTemplateCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyParameterTemplateCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyParameterTemplate(*ModifyParameterTemplateInput) (*ModifyParameterTemplateOutput, error)
+	ModifyParameterTemplateWithContext(byteplus.Context, *ModifyParameterTemplateInput, ...request.Option) (*ModifyParameterTemplateOutput, error)
+	ModifyParameterTemplateRequest(*ModifyParameterTemplateInput) (*request.Request, *ModifyParameterTemplateOutput)
 
 	ModifyScheduleEventsCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ModifyScheduleEventsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
