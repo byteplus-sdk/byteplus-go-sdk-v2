@@ -46,6 +46,14 @@ type AIDAPAPI interface {
 	ApplyPrivateDNSToPublicWithContext(byteplus.Context, *ApplyPrivateDNSToPublicInput, ...request.Option) (*ApplyPrivateDNSToPublicOutput, error)
 	ApplyPrivateDNSToPublicRequest(*ApplyPrivateDNSToPublicInput) (*request.Request, *ApplyPrivateDNSToPublicOutput)
 
+	BindPagesProjectCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	BindPagesProjectCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	BindPagesProjectCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	BindPagesProject(*BindPagesProjectInput) (*BindPagesProjectOutput, error)
+	BindPagesProjectWithContext(byteplus.Context, *BindPagesProjectInput, ...request.Option) (*BindPagesProjectOutput, error)
+	BindPagesProjectRequest(*BindPagesProjectInput) (*request.Request, *BindPagesProjectOutput)
+
 	BranchRestoreCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	BranchRestoreCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	BranchRestoreCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -118,6 +126,14 @@ type AIDAPAPI interface {
 	CreateEndpointPublicAddressWithContext(byteplus.Context, *CreateEndpointPublicAddressInput, ...request.Option) (*CreateEndpointPublicAddressOutput, error)
 	CreateEndpointPublicAddressRequest(*CreateEndpointPublicAddressInput) (*request.Request, *CreateEndpointPublicAddressOutput)
 
+	CreateSQLConcurrencyControlRuleCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	CreateSQLConcurrencyControlRuleCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	CreateSQLConcurrencyControlRuleCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	CreateSQLConcurrencyControlRule(*CreateSQLConcurrencyControlRuleInput) (*CreateSQLConcurrencyControlRuleOutput, error)
+	CreateSQLConcurrencyControlRuleWithContext(byteplus.Context, *CreateSQLConcurrencyControlRuleInput, ...request.Option) (*CreateSQLConcurrencyControlRuleOutput, error)
+	CreateSQLConcurrencyControlRuleRequest(*CreateSQLConcurrencyControlRuleInput) (*request.Request, *CreateSQLConcurrencyControlRuleOutput)
+
 	CreateSchemaDiffCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	CreateSchemaDiffCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	CreateSchemaDiffCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -181,6 +197,14 @@ type AIDAPAPI interface {
 	DeleteEndpointPublicAddress(*DeleteEndpointPublicAddressInput) (*DeleteEndpointPublicAddressOutput, error)
 	DeleteEndpointPublicAddressWithContext(byteplus.Context, *DeleteEndpointPublicAddressInput, ...request.Option) (*DeleteEndpointPublicAddressOutput, error)
 	DeleteEndpointPublicAddressRequest(*DeleteEndpointPublicAddressInput) (*request.Request, *DeleteEndpointPublicAddressOutput)
+
+	DeleteSQLConcurrencyControlRuleCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DeleteSQLConcurrencyControlRuleCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DeleteSQLConcurrencyControlRuleCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DeleteSQLConcurrencyControlRule(*DeleteSQLConcurrencyControlRuleInput) (*DeleteSQLConcurrencyControlRuleOutput, error)
+	DeleteSQLConcurrencyControlRuleWithContext(byteplus.Context, *DeleteSQLConcurrencyControlRuleInput, ...request.Option) (*DeleteSQLConcurrencyControlRuleOutput, error)
+	DeleteSQLConcurrencyControlRuleRequest(*DeleteSQLConcurrencyControlRuleInput) (*request.Request, *DeleteSQLConcurrencyControlRuleOutput)
 
 	DeleteWorkspaceCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DeleteWorkspaceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -350,6 +374,14 @@ type AIDAPAPI interface {
 	DescribeOperationsWithContext(byteplus.Context, *DescribeOperationsInput, ...request.Option) (*DescribeOperationsOutput, error)
 	DescribeOperationsRequest(*DescribeOperationsInput) (*request.Request, *DescribeOperationsOutput)
 
+	DescribePagesBindingCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribePagesBindingCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribePagesBindingCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribePagesBinding(*DescribePagesBindingInput) (*DescribePagesBindingOutput, error)
+	DescribePagesBindingWithContext(byteplus.Context, *DescribePagesBindingInput, ...request.Option) (*DescribePagesBindingOutput, error)
+	DescribePagesBindingRequest(*DescribePagesBindingInput) (*request.Request, *DescribePagesBindingOutput)
+
 	DescribeRestorableBranchesCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DescribeRestorableBranchesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	DescribeRestorableBranchesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -357,6 +389,14 @@ type AIDAPAPI interface {
 	DescribeRestorableBranches(*DescribeRestorableBranchesInput) (*DescribeRestorableBranchesOutput, error)
 	DescribeRestorableBranchesWithContext(byteplus.Context, *DescribeRestorableBranchesInput, ...request.Option) (*DescribeRestorableBranchesOutput, error)
 	DescribeRestorableBranchesRequest(*DescribeRestorableBranchesInput) (*request.Request, *DescribeRestorableBranchesOutput)
+
+	DescribeSQLConcurrencyControlRulesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeSQLConcurrencyControlRulesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeSQLConcurrencyControlRulesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeSQLConcurrencyControlRules(*DescribeSQLConcurrencyControlRulesInput) (*DescribeSQLConcurrencyControlRulesOutput, error)
+	DescribeSQLConcurrencyControlRulesWithContext(byteplus.Context, *DescribeSQLConcurrencyControlRulesInput, ...request.Option) (*DescribeSQLConcurrencyControlRulesOutput, error)
+	DescribeSQLConcurrencyControlRulesRequest(*DescribeSQLConcurrencyControlRulesInput) (*request.Request, *DescribeSQLConcurrencyControlRulesOutput)
 
 	DescribeSchemaDiffJobStatusCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DescribeSchemaDiffJobStatusCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -478,6 +518,14 @@ type AIDAPAPI interface {
 	ListDatabasesDataLakeSecretConnectionWithContext(byteplus.Context, *ListDatabasesDataLakeSecretConnectionInput, ...request.Option) (*ListDatabasesDataLakeSecretConnectionOutput, error)
 	ListDatabasesDataLakeSecretConnectionRequest(*ListDatabasesDataLakeSecretConnectionInput) (*request.Request, *ListDatabasesDataLakeSecretConnectionOutput)
 
+	ListPagesProjectCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListPagesProjectCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListPagesProjectCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListPagesProject(*ListPagesProjectInput) (*ListPagesProjectOutput, error)
+	ListPagesProjectWithContext(byteplus.Context, *ListPagesProjectInput, ...request.Option) (*ListPagesProjectOutput, error)
+	ListPagesProjectRequest(*ListPagesProjectInput) (*request.Request, *ListPagesProjectOutput)
+
 	ListWorkspaceUsageTopCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ListWorkspaceUsageTopCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	ListWorkspaceUsageTopCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -526,6 +574,14 @@ type AIDAPAPI interface {
 	ModifyComputeNameWithContext(byteplus.Context, *ModifyComputeNameInput, ...request.Option) (*ModifyComputeNameOutput, error)
 	ModifyComputeNameRequest(*ModifyComputeNameInput) (*request.Request, *ModifyComputeNameOutput)
 
+	ModifyComputeParametersCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyComputeParametersCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyComputeParametersCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyComputeParameters(*ModifyComputeParametersInput) (*ModifyComputeParametersOutput, error)
+	ModifyComputeParametersWithContext(byteplus.Context, *ModifyComputeParametersInput, ...request.Option) (*ModifyComputeParametersOutput, error)
+	ModifyComputeParametersRequest(*ModifyComputeParametersInput) (*request.Request, *ModifyComputeParametersOutput)
+
 	ModifyComputeSettingsCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ModifyComputeSettingsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	ModifyComputeSettingsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -541,6 +597,14 @@ type AIDAPAPI interface {
 	ModifyComputeSpec(*ModifyComputeSpecInput) (*ModifyComputeSpecOutput, error)
 	ModifyComputeSpecWithContext(byteplus.Context, *ModifyComputeSpecInput, ...request.Option) (*ModifyComputeSpecOutput, error)
 	ModifyComputeSpecRequest(*ModifyComputeSpecInput) (*request.Request, *ModifyComputeSpecOutput)
+
+	ModifySQLConcurrencyControlRuleCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifySQLConcurrencyControlRuleCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifySQLConcurrencyControlRuleCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifySQLConcurrencyControlRule(*ModifySQLConcurrencyControlRuleInput) (*ModifySQLConcurrencyControlRuleOutput, error)
+	ModifySQLConcurrencyControlRuleWithContext(byteplus.Context, *ModifySQLConcurrencyControlRuleInput, ...request.Option) (*ModifySQLConcurrencyControlRuleOutput, error)
+	ModifySQLConcurrencyControlRuleRequest(*ModifySQLConcurrencyControlRuleInput) (*request.Request, *ModifySQLConcurrencyControlRuleOutput)
 
 	ModifyVpcSettingsCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ModifyVpcSettingsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -645,6 +709,38 @@ type AIDAPAPI interface {
 	StopWorkspace(*StopWorkspaceInput) (*StopWorkspaceOutput, error)
 	StopWorkspaceWithContext(byteplus.Context, *StopWorkspaceInput, ...request.Option) (*StopWorkspaceOutput, error)
 	StopWorkspaceRequest(*StopWorkspaceInput) (*request.Request, *StopWorkspaceOutput)
+
+	SuspendWorkspaceCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	SuspendWorkspaceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	SuspendWorkspaceCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	SuspendWorkspace(*SuspendWorkspaceInput) (*SuspendWorkspaceOutput, error)
+	SuspendWorkspaceWithContext(byteplus.Context, *SuspendWorkspaceInput, ...request.Option) (*SuspendWorkspaceOutput, error)
+	SuspendWorkspaceRequest(*SuspendWorkspaceInput) (*request.Request, *SuspendWorkspaceOutput)
+
+	SwitchSQLConcurrencyControlRuleCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	SwitchSQLConcurrencyControlRuleCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	SwitchSQLConcurrencyControlRuleCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	SwitchSQLConcurrencyControlRule(*SwitchSQLConcurrencyControlRuleInput) (*SwitchSQLConcurrencyControlRuleOutput, error)
+	SwitchSQLConcurrencyControlRuleWithContext(byteplus.Context, *SwitchSQLConcurrencyControlRuleInput, ...request.Option) (*SwitchSQLConcurrencyControlRuleOutput, error)
+	SwitchSQLConcurrencyControlRuleRequest(*SwitchSQLConcurrencyControlRuleInput) (*request.Request, *SwitchSQLConcurrencyControlRuleOutput)
+
+	SyncPagesDeployEnvVarsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	SyncPagesDeployEnvVarsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	SyncPagesDeployEnvVarsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	SyncPagesDeployEnvVars(*SyncPagesDeployEnvVarsInput) (*SyncPagesDeployEnvVarsOutput, error)
+	SyncPagesDeployEnvVarsWithContext(byteplus.Context, *SyncPagesDeployEnvVarsInput, ...request.Option) (*SyncPagesDeployEnvVarsOutput, error)
+	SyncPagesDeployEnvVarsRequest(*SyncPagesDeployEnvVarsInput) (*request.Request, *SyncPagesDeployEnvVarsOutput)
+
+	UnbindPagesProjectCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	UnbindPagesProjectCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	UnbindPagesProjectCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	UnbindPagesProject(*UnbindPagesProjectInput) (*UnbindPagesProjectOutput, error)
+	UnbindPagesProjectWithContext(byteplus.Context, *UnbindPagesProjectInput, ...request.Option) (*UnbindPagesProjectOutput, error)
+	UnbindPagesProjectRequest(*UnbindPagesProjectInput) (*request.Request, *UnbindPagesProjectOutput)
 
 	UpdateBranchCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	UpdateBranchCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
