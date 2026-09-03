@@ -10,6 +10,13 @@ import (
 	"time"
 )
 
+const (
+	OptionProxyAddr  = "ProxyAddr"
+	OptionConnMax    = "ConnMax"
+	OptionTimeout    = "Timeout"
+	OptionRewriteUrl = "RewriteUrl"
+)
+
 // New 创建一个新的客户端实例
 func New(url string, ak string, sk string, region string, timeout time.Duration) *Client {
 	return &Client{
@@ -53,6 +60,48 @@ func NewAdvanced(url string, ak string, sk string, region string, timeout time.D
 		sk:     sk,
 		region: region,
 	}
+}
+
+// NewWithOptions creates a client with explicitly typed optional settings.
+func NewWithOptions(url string, ak string, sk string, region string, options map[string]interface{}) (*Client, error) {
+	var timeout time.Duration
+	var proxyAddr string
+	var connMax int
+	var rewriteUrl string
+
+	if options != nil {
+		timeout, _ = options[OptionTimeout].(time.Duration)
+		proxyAddr, _ = options[OptionProxyAddr].(string)
+		connMax, _ = options[OptionConnMax].(int)
+		rewriteUrl, _ = options[OptionRewriteUrl].(string)
+	}
+
+	httpClient := &http.Client{Timeout: timeout}
+	if proxyAddr != "" || connMax > 0 {
+		transport := &http.Transport{}
+		if proxyAddr != "" {
+			proxyHandler, err := purl.Parse(proxyAddr)
+			if err != nil {
+				return nil, fmt.Errorf("failed to parse proxy addr: %w", err)
+			}
+			transport.Proxy = http.ProxyURL(proxyHandler)
+		}
+		if connMax > 0 {
+			transport.MaxIdleConns = connMax
+			transport.MaxConnsPerHost = connMax
+			transport.MaxIdleConnsPerHost = connMax
+		}
+		httpClient.Transport = transport
+	}
+
+	return &Client{
+		url:        url,
+		httpClient: httpClient,
+		ak:         ak,
+		sk:         sk,
+		region:     region,
+		rewriteUrl: rewriteUrl,
+	}, nil
 }
 
 func SetServiceDev(IsDev bool) {
@@ -140,13 +189,17 @@ func (c *Client) ModerateStreamOld(request *ModerateV2Request, session *Moderate
 				Content:     request.Message.Content,
 				ContentType: request.Message.ContentType,
 			},
-			Scene:     request.Scene,
-			History:   request.History,
-			UseStream: request.UseStream,
+			Scene:                  request.Scene,
+			History:                request.History,
+			UseStream:              request.UseStream,
+			CallGenerateOnOptimize: request.CallGenerateOnOptimize,
 		}
 	} else {
 		session.Request.Message.Content += request.Message.Content
 		session.Request.UseStream = request.UseStream
+		if request.CallGenerateOnOptimize != nil {
+			session.Request.CallGenerateOnOptimize = request.CallGenerateOnOptimize
+		}
 	}
 
 	session.StreamSendLen += int64(len(request.Message.Content))
