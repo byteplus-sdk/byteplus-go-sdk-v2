@@ -14,6 +14,7 @@ type StsValue StsAssumeRoleProvider
 type StsProvider struct {
 	Expiry
 	StsValue
+	stsConfig STSConfig
 }
 
 func (s *StsProvider) Retrieve() (Value, error) {
@@ -22,9 +23,13 @@ func (s *StsProvider) Retrieve() (Value, error) {
 	ins.SetHost(defaultSTSHost)
 	if s.Region != "" {
 		ins.Client.ServiceInfo.Credentials.Region = s.Region
+	} else if s.stsConfig.Region != "" {
+		ins.Client.ServiceInfo.Credentials.Region = s.stsConfig.Region
 	}
 	if s.Host != "" {
 		ins.SetHost(s.Host)
+	} else if s.stsConfig.Host != "" {
+		ins.SetHost(s.stsConfig.Host)
 	}
 	if s.Schema != "" {
 		ins.SetSchema(s.Schema)
@@ -34,15 +39,19 @@ func (s *StsProvider) Retrieve() (Value, error) {
 	}
 	// 仅当显式配置了代理/TLS 时才覆盖传输层：ins 由 sts.NewInstance() 每次新建，
 	// 其底层 http.Client 为值类型且非全局共享，直接替换 Transport 即可，
-	// 保留连接池等其余默认设置，且不污染其他实例。
+	// 保留超时等其余默认设置，且不污染其他实例。
 	if transport, err := buildProxyTransport(ProxyConfig{
 		ProxyURL:           s.ProxyURL,
 		CAFile:             s.CAFile,
 		InsecureSkipVerify: s.InsecureSkipVerify,
+		httpProxy:          s.stsConfig.HTTPProxy,
+		httpsProxy:         s.stsConfig.HTTPSProxy,
+		base:               ins.Client.Client.Transport,
 	}); err != nil {
 		return Value{}, err
 	} else if transport != nil {
 		ins.Client.Client.Transport = transport
+		defer transport.CloseIdleConnections()
 	}
 
 	if s.DurationSeconds < 900 {
