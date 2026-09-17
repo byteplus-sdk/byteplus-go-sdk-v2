@@ -153,7 +153,7 @@ type CreateRegistryInput struct {
 
 	Project *string `type:"string" json:",omitempty"`
 
-	ResourceTags []*ResourceTagForCreateRegistryInput `type:"list" json:",omitempty"`
+	ResourceTags []*ResourceTagForCreateRegistryInput `type:"list"`
 
 	Type *string `type:"string" json:",omitempty"`
 }
@@ -215,6 +215,8 @@ type CreateRegistryOutput struct {
 	_ struct{} `type:"structure" json:",omitempty"`
 
 	Metadata *response.ResponseMetadata
+
+	Name *string `type:"string" json:",omitempty"`
 }
 
 // String returns the string representation
@@ -225,6 +227,12 @@ func (s CreateRegistryOutput) String() string {
 // GoString returns the string representation
 func (s CreateRegistryOutput) GoString() string {
 	return s.String()
+}
+
+// SetName sets the Name field's value.
+func (s *CreateRegistryOutput) SetName(v string) *CreateRegistryOutput {
+	s.Name = &v
+	return s
 }
 
 type ResourceTagForCreateRegistryInput struct {

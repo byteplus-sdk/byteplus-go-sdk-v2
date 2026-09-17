@@ -146,13 +146,15 @@ func (c *CR) ListRegistriesWithContext(ctx byteplus.Context, input *ListRegistri
 type FilterForListRegistriesInput struct {
 	_ struct{} `type:"structure" json:",omitempty"`
 
-	Names []*string `type:"list" json:",omitempty"`
+	Names []*string `type:"list"`
 
-	Projects []*string `type:"list" json:",omitempty"`
+	Projects []*string `type:"list"`
 
-	Statuses []*StatusForListRegistriesInput `type:"list" json:",omitempty"`
+	ProxyCacheEnabled *bool `type:"boolean" json:",omitempty"`
 
-	Types []*string `type:"list" json:",omitempty"`
+	Statuses []*StatusForListRegistriesInput `type:"list"`
+
+	Types []*string `type:"list"`
 }
 
 // String returns the string representation
@@ -174,6 +176,12 @@ func (s *FilterForListRegistriesInput) SetNames(v []*string) *FilterForListRegis
 // SetProjects sets the Projects field's value.
 func (s *FilterForListRegistriesInput) SetProjects(v []*string) *FilterForListRegistriesInput {
 	s.Projects = v
+	return s
+}
+
+// SetProxyCacheEnabled sets the ProxyCacheEnabled field's value.
+func (s *FilterForListRegistriesInput) SetProxyCacheEnabled(v bool) *FilterForListRegistriesInput {
+	s.ProxyCacheEnabled = &v
 	return s
 }
 
@@ -208,7 +216,7 @@ type ItemForListRegistriesOutput struct {
 
 	RenewType *string `type:"string" json:",omitempty"`
 
-	ResourceTags []*ResourceTagForListRegistriesOutput `type:"list" json:",omitempty"`
+	ResourceTags []*ResourceTagForListRegistriesOutput `type:"list"`
 
 	Status *StatusForListRegistriesOutput `type:"structure" json:",omitempty"`
 
@@ -300,7 +308,7 @@ type ListRegistriesInput struct {
 
 	PageSize *int64 `min:"1" max:"100" type:"int64" json:",omitempty"`
 
-	ResourceTagFilters []*ResourceTagFilterForListRegistriesInput `type:"list" json:",omitempty"`
+	ResourceTagFilters []*ResourceTagFilterForListRegistriesInput `type:"list"`
 }
 
 // String returns the string representation
@@ -358,7 +366,7 @@ type ListRegistriesOutput struct {
 
 	Metadata *response.ResponseMetadata
 
-	Items []*ItemForListRegistriesOutput `type:"list" json:",omitempty"`
+	Items []*ItemForListRegistriesOutput `type:"list"`
 
 	PageNumber *int64 `type:"int64" json:",omitempty"`
 
@@ -404,7 +412,13 @@ func (s *ListRegistriesOutput) SetTotalCount(v int64) *ListRegistriesOutput {
 type ProxyCacheForListRegistriesOutput struct {
 	_ struct{} `type:"structure" json:",omitempty"`
 
+	Endpoint *string `type:"string" json:",omitempty"`
+
+	SkipSSLVerify *bool `type:"boolean" json:",omitempty"`
+
 	Type *string `type:"string" json:",omitempty"`
+
+	Username *string `type:"string" json:",omitempty"`
 }
 
 // String returns the string representation
@@ -417,9 +431,27 @@ func (s ProxyCacheForListRegistriesOutput) GoString() string {
 	return s.String()
 }
 
+// SetEndpoint sets the Endpoint field's value.
+func (s *ProxyCacheForListRegistriesOutput) SetEndpoint(v string) *ProxyCacheForListRegistriesOutput {
+	s.Endpoint = &v
+	return s
+}
+
+// SetSkipSSLVerify sets the SkipSSLVerify field's value.
+func (s *ProxyCacheForListRegistriesOutput) SetSkipSSLVerify(v bool) *ProxyCacheForListRegistriesOutput {
+	s.SkipSSLVerify = &v
+	return s
+}
+
 // SetType sets the Type field's value.
 func (s *ProxyCacheForListRegistriesOutput) SetType(v string) *ProxyCacheForListRegistriesOutput {
 	s.Type = &v
+	return s
+}
+
+// SetUsername sets the Username field's value.
+func (s *ProxyCacheForListRegistriesOutput) SetUsername(v string) *ProxyCacheForListRegistriesOutput {
+	s.Username = &v
 	return s
 }
 
@@ -428,7 +460,7 @@ type ResourceTagFilterForListRegistriesInput struct {
 
 	Key *string `type:"string" json:",omitempty"`
 
-	Values []*string `type:"list" json:",omitempty"`
+	Values []*string `type:"list"`
 }
 
 // String returns the string representation
@@ -516,7 +548,7 @@ func (s *StatusForListRegistriesInput) SetPhase(v string) *StatusForListRegistri
 type StatusForListRegistriesOutput struct {
 	_ struct{} `type:"structure" json:",omitempty"`
 
-	Conditions []*string `type:"list" json:",omitempty"`
+	Conditions []*string `type:"list"`
 
 	Phase *string `type:"string" json:",omitempty"`
 }

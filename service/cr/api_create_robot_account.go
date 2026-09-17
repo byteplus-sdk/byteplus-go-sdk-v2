@@ -153,7 +153,7 @@ type CreateRobotAccountInput struct {
 
 	Password *string `type:"string" json:",omitempty"`
 
-	Permissions []*PermissionForCreateRobotAccountInput `type:"list" json:",omitempty"`
+	Permissions []*PermissionForCreateRobotAccountInput `type:"list"`
 
 	// Registry is a required field
 	Registry *string `min:"3" max:"30" type:"string" json:",omitempty" required:"true"`
@@ -268,7 +268,7 @@ func (s *CreateRobotAccountOutput) SetUsername(v string) *CreateRobotAccountOutp
 type PermissionForCreateRobotAccountInput struct {
 	_ struct{} `type:"structure" json:",omitempty"`
 
-	Actions []*string `type:"list" json:",omitempty"`
+	Actions []*string `type:"list"`
 
 	Resource *string `type:"string" json:",omitempty"`
 }

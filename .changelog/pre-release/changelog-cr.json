@@ -1,0 +1,13 @@
+{
+  "actions": [
+    "ListRegistries",
+    "UpdatePublicEndpoint",
+    "UpdateVpcEndpoint",
+    "CreateNamespace",
+    "CreateRegistry",
+    "GetAuthorizationToken"
+  ],
+  "description": "CR: modified CreateRegistry, GetAuthorizationToken, ListRegistries, UpdatePublicEndpoint, UpdateVpcEndpoint, CreateNamespace",
+  "modules": "service/cr",
+  "type": "feature"
+}

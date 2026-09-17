@@ -222,6 +222,14 @@ type CRAPI interface {
 	UpdatePublicEndpointWithContext(byteplus.Context, *UpdatePublicEndpointInput, ...request.Option) (*UpdatePublicEndpointOutput, error)
 	UpdatePublicEndpointRequest(*UpdatePublicEndpointInput) (*request.Request, *UpdatePublicEndpointOutput)
 
+	UpdateRegistryCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	UpdateRegistryCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	UpdateRegistryCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	UpdateRegistry(*UpdateRegistryInput) (*UpdateRegistryOutput, error)
+	UpdateRegistryWithContext(byteplus.Context, *UpdateRegistryInput, ...request.Option) (*UpdateRegistryOutput, error)
+	UpdateRegistryRequest(*UpdateRegistryInput) (*request.Request, *UpdateRegistryOutput)
+
 	UpdateRepositoryCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	UpdateRepositoryCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	UpdateRepositoryCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -245,6 +253,14 @@ type CRAPI interface {
 	UpdateRobotAccountPassword(*UpdateRobotAccountPasswordInput) (*UpdateRobotAccountPasswordOutput, error)
 	UpdateRobotAccountPasswordWithContext(byteplus.Context, *UpdateRobotAccountPasswordInput, ...request.Option) (*UpdateRobotAccountPasswordOutput, error)
 	UpdateRobotAccountPasswordRequest(*UpdateRobotAccountPasswordInput) (*request.Request, *UpdateRobotAccountPasswordOutput)
+
+	UpdateTagDescriptionCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	UpdateTagDescriptionCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	UpdateTagDescriptionCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	UpdateTagDescription(*UpdateTagDescriptionInput) (*UpdateTagDescriptionOutput, error)
+	UpdateTagDescriptionWithContext(byteplus.Context, *UpdateTagDescriptionInput, ...request.Option) (*UpdateTagDescriptionOutput, error)
+	UpdateTagDescriptionRequest(*UpdateTagDescriptionInput) (*request.Request, *UpdateTagDescriptionOutput)
 
 	UpdateVpcEndpointCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	UpdateVpcEndpointCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)

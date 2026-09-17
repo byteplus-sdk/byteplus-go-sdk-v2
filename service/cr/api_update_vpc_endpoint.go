@@ -151,7 +151,7 @@ type UpdateVpcEndpointInput struct {
 	// Registry is a required field
 	Registry *string `min:"3" max:"30" type:"string" json:",omitempty" required:"true"`
 
-	Vpcs []*VpcForUpdateVpcEndpointInput `type:"list" json:",omitempty"`
+	Vpcs []*VpcForUpdateVpcEndpointInput `type:"list"`
 }
 
 // String returns the string representation
@@ -228,6 +228,8 @@ type VpcForUpdateVpcEndpointInput struct {
 
 	Description *string `max:"50" type:"string" json:",omitempty"`
 
+	Region *string `type:"string" json:",omitempty"`
+
 	SubnetId *string `type:"string" json:",omitempty"`
 
 	VpcId *string `type:"string" json:",omitempty"`
@@ -265,6 +267,12 @@ func (s *VpcForUpdateVpcEndpointInput) SetAccountId(v int64) *VpcForUpdateVpcEnd
 // SetDescription sets the Description field's value.
 func (s *VpcForUpdateVpcEndpointInput) SetDescription(v string) *VpcForUpdateVpcEndpointInput {
 	s.Description = &v
+	return s
+}
+
+// SetRegion sets the Region field's value.
+func (s *VpcForUpdateVpcEndpointInput) SetRegion(v string) *VpcForUpdateVpcEndpointInput {
+	s.Region = &v
 	return s
 }
 
