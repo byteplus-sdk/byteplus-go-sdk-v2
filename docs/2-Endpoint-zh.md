@@ -29,6 +29,11 @@ func main() {
 
 显式设置的 Endpoint 优先级最高，会跳过后续所有寻址逻辑（包括自定义 `EndpointResolver`）。
 
+`WithEndpoint` 配置业务 API 地址，不会被 STS 凭证请求继承。
+AssumeRole 依次使用 Provider 显式 `Host`、独立配置的 `STSConfig.Host`、
+自身默认 STS 地址。独立 STS Host 会在 session/客户端创建及 `Session.Copy`
+后保留；OIDC 和 SAML 使用各自 Provider 的 `Endpoint`。
+
 ### 自定义 RegionId
 
 ```go

@@ -45,6 +45,11 @@ over environment `NO_PROXY`; unspecified schemes retain the original proxy rule.
 For HTTPS STS through an HTTP CONNECT proxy, use
 `WithHTTPSProxy("http://proxy:8080")`, independently of business API `DisableSSL`.
 
+Client proxy fallbacks are parsed and validated only when selected for the actual
+STS request scheme. An invalid proxy for an unused scheme does not block credential
+retrieval; an invalid selected proxy fails that request. An explicit provider
+`ProxyURL` is still validated when the transport is built.
+
 With no overrides, OIDC/SAML retain a nil `http.Client.Transport` and use the caller's
 `http.DefaultTransport`; AssumeRole retains its upstream client transport. Explicit
 overrides clone supported `*http.Transport` values, preserving unspecified TLS settings.

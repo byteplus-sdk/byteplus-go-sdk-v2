@@ -800,11 +800,11 @@ func getNoProxy(noProxy *string) []string {
 
 // Bind a private credential cache after config merging. Only explicit defaults
 // are copied: STS chooses its own scheme and the transport resolves environment
-// proxies per request, retaining NO_PROXY.
+// proxies per request, retaining NO_PROXY. The business Endpoint is not an STS
+// endpoint; STS keeps its provider-specific host or its own default.
 func bindSTSCredentials(cfg *byteplus.Config) {
 	cfg.Credentials = cfg.Credentials.WithSTSConfig(credentials.STSConfig{
 		Region:     byteplus.StringValue(cfg.Region),
-		Host:       byteplus.StringValue(cfg.Endpoint),
 		HTTPProxy:  byteplus.StringValue(cfg.HTTPProxy),
 		HTTPSProxy: byteplus.StringValue(cfg.HTTPSProxy),
 	})

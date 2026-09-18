@@ -4,7 +4,8 @@ package credentials
 // snapshotted when a session or service client is created. Explicit provider
 // settings take precedence; environment proxy values must not be stored here.
 type STSConfig struct {
-	Region     string
+	Region string
+	// Host is an independent AssumeRole endpoint, not a business API endpoint.
 	Host       string
 	HTTPProxy  string
 	HTTPSProxy string
@@ -24,6 +25,11 @@ func (c *Credentials) WithSTSConfig(cfg STSConfig) *Credentials {
 	case *StsProvider:
 		if p == nil {
 			return c
+		}
+		// Session rebinding supplies no STS Host. Preserve a separately
+		// configured host unless this call explicitly replaces it.
+		if cfg.Host == "" {
+			cfg.Host = p.stsConfig.Host
 		}
 		bound := &StsProvider{
 			StsValue:  p.StsValue,

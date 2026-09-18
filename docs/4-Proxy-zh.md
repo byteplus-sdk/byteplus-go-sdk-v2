@@ -42,6 +42,10 @@ client = ecs.New(sess)
 例如 HTTPS STS 通过 HTTP CONNECT 代理时，应配置
 `WithHTTPSProxy("http://proxy:8080")`，与业务 API 的 `DisableSSL` 无关。
 
+客户端代理兜底仅在被实际 STS 请求协议选中时解析和校验。
+未使用协议的非法代理不会阻止获取凭证；选中的非法代理会令该次请求失败。
+Provider 显式 `ProxyURL` 仍在构建传输层时校验。
+
 未设置代理/TLS 选项时，OIDC/SAML 保留 `http.Client.Transport == nil`，
 继续使用调用方的 `http.DefaultTransport`；AssumeRole 保留上游客户端传输层。
 显式覆盖会克隆支持的 `*http.Transport` 并保留未覆盖的 TLS 设置。

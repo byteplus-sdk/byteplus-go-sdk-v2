@@ -77,7 +77,7 @@ func newDefaultProxyTransport(base http.RoundTripper) (*http.Transport, error) {
 //
 // 代理优先级：
 //  1. 若 cfg.ProxyURL 非空，则使用该地址作为 HTTP/HTTPS 代理；
-//  2. 否则按实际请求 scheme 选择客户端显式代理；
+//  2. 否则按实际请求 scheme 选择并校验客户端显式代理；
 //  3. 未命中时保留原 transport.Proxy（标准默认值支持环境变量和 NO_PROXY）。
 //
 // TLS 处理：
@@ -99,26 +99,13 @@ func buildProxyTransport(cfg ProxyConfig) (*http.Transport, error) {
 		}
 		transport.Proxy = http.ProxyURL(parsed)
 	} else if cfg.httpProxy != "" || cfg.httpsProxy != "" {
-		var httpProxy, httpsProxy *url.URL
-		if cfg.httpProxy != "" {
-			httpProxy, err = parseSTSProxy(cfg.httpProxy)
-			if err != nil {
-				return nil, err
-			}
-		}
-		if cfg.httpsProxy != "" {
-			httpsProxy, err = parseSTSProxy(cfg.httpsProxy)
-			if err != nil {
-				return nil, err
-			}
-		}
 		baseProxy := transport.Proxy
 		transport.Proxy = func(req *http.Request) (*url.URL, error) {
-			if req.URL.Scheme == "http" && httpProxy != nil {
-				return httpProxy, nil
+			if req.URL.Scheme == "http" && cfg.httpProxy != "" {
+				return parseSTSProxy(cfg.httpProxy)
 			}
-			if req.URL.Scheme == "https" && httpsProxy != nil {
-				return httpsProxy, nil
+			if req.URL.Scheme == "https" && cfg.httpsProxy != "" {
+				return parseSTSProxy(cfg.httpsProxy)
 			}
 			if baseProxy != nil {
 				return baseProxy(req)

@@ -26,6 +26,12 @@ func main() {
 
 An explicitly configured Endpoint has the highest priority and skips every subsequent resolution step (including any custom `EndpointResolver`).
 
+`WithEndpoint` configures the business API endpoint; it is not inherited by
+STS credential requests. AssumeRole uses its explicit provider `Host`, then an
+independently configured `STSConfig.Host`, then its default STS endpoint.
+An independent STS host is preserved across session/client creation and
+`Session.Copy`. OIDC and SAML use their own provider `Endpoint`.
+
 ### Custom RegionId
 
 ```go
