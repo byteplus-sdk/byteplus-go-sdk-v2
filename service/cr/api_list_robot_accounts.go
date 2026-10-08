@@ -146,11 +146,11 @@ func (c *CR) ListRobotAccountsWithContext(ctx byteplus.Context, input *ListRobot
 type FilterForListRobotAccountsInput struct {
 	_ struct{} `type:"structure" json:",omitempty"`
 
-	Descriptions []*string `type:"list" json:",omitempty"`
+	Descriptions []*string `type:"list"`
 
 	Disabled *bool `type:"boolean" json:",omitempty"`
 
-	Usernames []*string `type:"list" json:",omitempty"`
+	Usernames []*string `type:"list"`
 }
 
 // String returns the string representation
@@ -192,7 +192,7 @@ type ItemForListRobotAccountsOutput struct {
 
 	ExpiresAt *int64 `type:"int64" json:",omitempty"`
 
-	Permissions []*PermissionForListRobotAccountsOutput `type:"list" json:",omitempty"`
+	Permissions []*PermissionForListRobotAccountsOutput `type:"list"`
 
 	UpdateTime *string `type:"string" json:",omitempty"`
 
@@ -328,7 +328,7 @@ type ListRobotAccountsOutput struct {
 
 	Metadata *response.ResponseMetadata
 
-	Items []*ItemForListRobotAccountsOutput `type:"list" json:",omitempty"`
+	Items []*ItemForListRobotAccountsOutput `type:"list"`
 
 	PageNumber *int64 `type:"int64" json:",omitempty"`
 
@@ -374,7 +374,7 @@ func (s *ListRobotAccountsOutput) SetTotalCount(v int64) *ListRobotAccountsOutpu
 type PermissionForListRobotAccountsOutput struct {
 	_ struct{} `type:"structure" json:",omitempty"`
 
-	Actions []*string `type:"list" json:",omitempty"`
+	Actions []*string `type:"list"`
 
 	Resource *string `type:"string" json:",omitempty"`
 }

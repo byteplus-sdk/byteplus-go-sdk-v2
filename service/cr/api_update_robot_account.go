@@ -146,7 +146,7 @@ func (c *CR) UpdateRobotAccountWithContext(ctx byteplus.Context, input *UpdateRo
 type PermissionForUpdateRobotAccountInput struct {
 	_ struct{} `type:"structure" json:",omitempty"`
 
-	Actions []*string `type:"list" json:",omitempty"`
+	Actions []*string `type:"list"`
 
 	Resource *string `type:"string" json:",omitempty"`
 }
@@ -182,7 +182,7 @@ type UpdateRobotAccountInput struct {
 
 	Duration *int64 `type:"int64" json:",omitempty"`
 
-	Permissions []*PermissionForUpdateRobotAccountInput `type:"list" json:",omitempty"`
+	Permissions []*PermissionForUpdateRobotAccountInput `type:"list"`
 
 	// Registry is a required field
 	Registry *string `min:"3" max:"30" type:"string" json:",omitempty" required:"true"`
