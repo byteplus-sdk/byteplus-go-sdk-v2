@@ -54,6 +54,14 @@ type ECOPARTNERAPI interface {
 	CreateUniqueInvitationLinkWithContext(byteplus.Context, *CreateUniqueInvitationLinkInput, ...request.Option) (*CreateUniqueInvitationLinkOutput, error)
 	CreateUniqueInvitationLinkRequest(*CreateUniqueInvitationLinkInput) (*request.Request, *CreateUniqueInvitationLinkOutput)
 
+	DownloadBillCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DownloadBillCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DownloadBillCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DownloadBill(*DownloadBillInput) (*DownloadBillOutput, error)
+	DownloadBillWithContext(byteplus.Context, *DownloadBillInput, ...request.Option) (*DownloadBillOutput, error)
+	DownloadBillRequest(*DownloadBillInput) (*request.Request, *DownloadBillOutput)
+
 	GetCustomerDetailsByTypeCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	GetCustomerDetailsByTypeCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	GetCustomerDetailsByTypeCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -77,6 +85,22 @@ type ECOPARTNERAPI interface {
 	GetQuotaInformation(*GetQuotaInformationInput) (*GetQuotaInformationOutput, error)
 	GetQuotaInformationWithContext(byteplus.Context, *GetQuotaInformationInput, ...request.Option) (*GetQuotaInformationOutput, error)
 	GetQuotaInformationRequest(*GetQuotaInformationInput) (*request.Request, *GetQuotaInformationOutput)
+
+	InitiateBillGenerationCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	InitiateBillGenerationCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	InitiateBillGenerationCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	InitiateBillGeneration(*InitiateBillGenerationInput) (*InitiateBillGenerationOutput, error)
+	InitiateBillGenerationWithContext(byteplus.Context, *InitiateBillGenerationInput, ...request.Option) (*InitiateBillGenerationOutput, error)
+	InitiateBillGenerationRequest(*InitiateBillGenerationInput) (*request.Request, *InitiateBillGenerationOutput)
+
+	ListBillingItemsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListBillingItemsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListBillingItemsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListBillingItems(*ListBillingItemsInput) (*ListBillingItemsOutput, error)
+	ListBillingItemsWithContext(byteplus.Context, *ListBillingItemsInput, ...request.Option) (*ListBillingItemsOutput, error)
+	ListBillingItemsRequest(*ListBillingItemsInput) (*request.Request, *ListBillingItemsOutput)
 
 	ModifyQuotaCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ModifyQuotaCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)

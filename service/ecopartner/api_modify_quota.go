@@ -147,7 +147,7 @@ type ModifyQuotaInput struct {
 	_ struct{} `type:"structure" json:",omitempty"`
 
 	// QuotaAmount is a required field
-	QuotaAmount *float64 `type:"float" json:",omitempty" required:"true"`
+	QuotaAmount *float32 `type:"float" json:",omitempty" required:"true"`
 
 	Remarks *string `max:"512" type:"string" json:",omitempty"`
 
@@ -185,7 +185,7 @@ func (s *ModifyQuotaInput) Validate() error {
 }
 
 // SetQuotaAmount sets the QuotaAmount field's value.
-func (s *ModifyQuotaInput) SetQuotaAmount(v float64) *ModifyQuotaInput {
+func (s *ModifyQuotaInput) SetQuotaAmount(v float32) *ModifyQuotaInput {
 	s.QuotaAmount = &v
 	return s
 }
@@ -209,13 +209,13 @@ type ModifyQuotaOutput struct {
 
 	LastUpdatedTime *string `type:"string" json:",omitempty"`
 
-	OutstandingAmount *float64 `type:"float" json:",omitempty"`
+	OutstandingAmount *float32 `type:"float" json:",omitempty"`
 
-	QuotaAllocatedAfter *float64 `type:"float" json:",omitempty"`
+	QuotaAllocatedAfter *float32 `type:"float" json:",omitempty"`
 
-	QuotaAllocatedBefore *float64 `type:"float" json:",omitempty"`
+	QuotaAllocatedBefore *float32 `type:"float" json:",omitempty"`
 
-	QuotaBalance *float64 `type:"float" json:",omitempty"`
+	QuotaBalance *float32 `type:"float" json:",omitempty"`
 
 	QuotaUnit *string `type:"string" json:",omitempty"`
 
@@ -239,25 +239,25 @@ func (s *ModifyQuotaOutput) SetLastUpdatedTime(v string) *ModifyQuotaOutput {
 }
 
 // SetOutstandingAmount sets the OutstandingAmount field's value.
-func (s *ModifyQuotaOutput) SetOutstandingAmount(v float64) *ModifyQuotaOutput {
+func (s *ModifyQuotaOutput) SetOutstandingAmount(v float32) *ModifyQuotaOutput {
 	s.OutstandingAmount = &v
 	return s
 }
 
 // SetQuotaAllocatedAfter sets the QuotaAllocatedAfter field's value.
-func (s *ModifyQuotaOutput) SetQuotaAllocatedAfter(v float64) *ModifyQuotaOutput {
+func (s *ModifyQuotaOutput) SetQuotaAllocatedAfter(v float32) *ModifyQuotaOutput {
 	s.QuotaAllocatedAfter = &v
 	return s
 }
 
 // SetQuotaAllocatedBefore sets the QuotaAllocatedBefore field's value.
-func (s *ModifyQuotaOutput) SetQuotaAllocatedBefore(v float64) *ModifyQuotaOutput {
+func (s *ModifyQuotaOutput) SetQuotaAllocatedBefore(v float32) *ModifyQuotaOutput {
 	s.QuotaAllocatedBefore = &v
 	return s
 }
 
 // SetQuotaBalance sets the QuotaBalance field's value.
-func (s *ModifyQuotaOutput) SetQuotaBalance(v float64) *ModifyQuotaOutput {
+func (s *ModifyQuotaOutput) SetQuotaBalance(v float32) *ModifyQuotaOutput {
 	s.QuotaBalance = &v
 	return s
 }

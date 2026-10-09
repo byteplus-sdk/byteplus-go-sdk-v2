@@ -198,7 +198,7 @@ type GetCustomerDetailsByUIDOutput struct {
 
 	Mobile *string `type:"string" json:",omitempty"`
 
-	OutstandingAmount *float64 `type:"float" json:",omitempty"`
+	OutstandingAmount *float32 `type:"float" json:",omitempty"`
 
 	ParentOrganizationName *string `type:"string" json:",omitempty"`
 
@@ -206,9 +206,9 @@ type GetCustomerDetailsByUIDOutput struct {
 
 	ParentPartnerUsername *string `type:"string" json:",omitempty"`
 
-	QuotaAllocated *float64 `type:"float" json:",omitempty"`
+	QuotaAllocated *float32 `type:"float" json:",omitempty"`
 
-	QuotaBalance *float64 `type:"float" json:",omitempty"`
+	QuotaBalance *float32 `type:"float" json:",omitempty"`
 
 	QuotaUnit *string `type:"string" json:",omitempty"`
 
@@ -274,7 +274,7 @@ func (s *GetCustomerDetailsByUIDOutput) SetMobile(v string) *GetCustomerDetailsB
 }
 
 // SetOutstandingAmount sets the OutstandingAmount field's value.
-func (s *GetCustomerDetailsByUIDOutput) SetOutstandingAmount(v float64) *GetCustomerDetailsByUIDOutput {
+func (s *GetCustomerDetailsByUIDOutput) SetOutstandingAmount(v float32) *GetCustomerDetailsByUIDOutput {
 	s.OutstandingAmount = &v
 	return s
 }
@@ -298,13 +298,13 @@ func (s *GetCustomerDetailsByUIDOutput) SetParentPartnerUsername(v string) *GetC
 }
 
 // SetQuotaAllocated sets the QuotaAllocated field's value.
-func (s *GetCustomerDetailsByUIDOutput) SetQuotaAllocated(v float64) *GetCustomerDetailsByUIDOutput {
+func (s *GetCustomerDetailsByUIDOutput) SetQuotaAllocated(v float32) *GetCustomerDetailsByUIDOutput {
 	s.QuotaAllocated = &v
 	return s
 }
 
 // SetQuotaBalance sets the QuotaBalance field's value.
-func (s *GetCustomerDetailsByUIDOutput) SetQuotaBalance(v float64) *GetCustomerDetailsByUIDOutput {
+func (s *GetCustomerDetailsByUIDOutput) SetQuotaBalance(v float32) *GetCustomerDetailsByUIDOutput {
 	s.QuotaBalance = &v
 	return s
 }

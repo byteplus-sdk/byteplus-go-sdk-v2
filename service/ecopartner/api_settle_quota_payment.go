@@ -149,7 +149,7 @@ type SettleQuotaPaymentInput struct {
 	Remarks *string `max:"256" type:"string" json:",omitempty"`
 
 	// RepaymentAmount is a required field
-	RepaymentAmount *float64 `type:"float" json:",omitempty" required:"true"`
+	RepaymentAmount *float32 `type:"float" json:",omitempty" required:"true"`
 
 	// Uid is a required field
 	Uid *int64 `type:"int64" json:",omitempty" required:"true"`
@@ -191,7 +191,7 @@ func (s *SettleQuotaPaymentInput) SetRemarks(v string) *SettleQuotaPaymentInput 
 }
 
 // SetRepaymentAmount sets the RepaymentAmount field's value.
-func (s *SettleQuotaPaymentInput) SetRepaymentAmount(v float64) *SettleQuotaPaymentInput {
+func (s *SettleQuotaPaymentInput) SetRepaymentAmount(v float32) *SettleQuotaPaymentInput {
 	s.RepaymentAmount = &v
 	return s
 }
@@ -209,17 +209,17 @@ type SettleQuotaPaymentOutput struct {
 
 	LastUpdatedTime *string `type:"string" json:",omitempty"`
 
-	OutstandingAmountAfter *float64 `type:"float" json:",omitempty"`
+	OutstandingAmountAfter *float32 `type:"float" json:",omitempty"`
 
-	OutstandingAmountBefore *float64 `type:"float" json:",omitempty"`
+	OutstandingAmountBefore *float32 `type:"float" json:",omitempty"`
 
-	QuotaAllocated *float64 `type:"float" json:",omitempty"`
+	QuotaAllocated *float32 `type:"float" json:",omitempty"`
 
-	QuotaBalance *float64 `type:"float" json:",omitempty"`
+	QuotaBalance *float32 `type:"float" json:",omitempty"`
 
 	QuotaUnit *string `type:"string" json:",omitempty"`
 
-	RepaymentAmount *float64 `type:"float" json:",omitempty"`
+	RepaymentAmount *float32 `type:"float" json:",omitempty"`
 
 	Success *bool `type:"boolean" json:",omitempty"`
 
@@ -243,25 +243,25 @@ func (s *SettleQuotaPaymentOutput) SetLastUpdatedTime(v string) *SettleQuotaPaym
 }
 
 // SetOutstandingAmountAfter sets the OutstandingAmountAfter field's value.
-func (s *SettleQuotaPaymentOutput) SetOutstandingAmountAfter(v float64) *SettleQuotaPaymentOutput {
+func (s *SettleQuotaPaymentOutput) SetOutstandingAmountAfter(v float32) *SettleQuotaPaymentOutput {
 	s.OutstandingAmountAfter = &v
 	return s
 }
 
 // SetOutstandingAmountBefore sets the OutstandingAmountBefore field's value.
-func (s *SettleQuotaPaymentOutput) SetOutstandingAmountBefore(v float64) *SettleQuotaPaymentOutput {
+func (s *SettleQuotaPaymentOutput) SetOutstandingAmountBefore(v float32) *SettleQuotaPaymentOutput {
 	s.OutstandingAmountBefore = &v
 	return s
 }
 
 // SetQuotaAllocated sets the QuotaAllocated field's value.
-func (s *SettleQuotaPaymentOutput) SetQuotaAllocated(v float64) *SettleQuotaPaymentOutput {
+func (s *SettleQuotaPaymentOutput) SetQuotaAllocated(v float32) *SettleQuotaPaymentOutput {
 	s.QuotaAllocated = &v
 	return s
 }
 
 // SetQuotaBalance sets the QuotaBalance field's value.
-func (s *SettleQuotaPaymentOutput) SetQuotaBalance(v float64) *SettleQuotaPaymentOutput {
+func (s *SettleQuotaPaymentOutput) SetQuotaBalance(v float32) *SettleQuotaPaymentOutput {
 	s.QuotaBalance = &v
 	return s
 }
@@ -273,7 +273,7 @@ func (s *SettleQuotaPaymentOutput) SetQuotaUnit(v string) *SettleQuotaPaymentOut
 }
 
 // SetRepaymentAmount sets the RepaymentAmount field's value.
-func (s *SettleQuotaPaymentOutput) SetRepaymentAmount(v float64) *SettleQuotaPaymentOutput {
+func (s *SettleQuotaPaymentOutput) SetRepaymentAmount(v float32) *SettleQuotaPaymentOutput {
 	s.RepaymentAmount = &v
 	return s
 }

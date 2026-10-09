@@ -160,7 +160,7 @@ type CustomerForGetCustomerDetailsByTypeOutput struct {
 
 	Mobile *string `type:"string" json:",omitempty"`
 
-	OutstandingAmount *float64 `type:"float" json:",omitempty"`
+	OutstandingAmount *float32 `type:"float" json:",omitempty"`
 
 	ParentOrganizationName *string `type:"string" json:",omitempty"`
 
@@ -168,9 +168,9 @@ type CustomerForGetCustomerDetailsByTypeOutput struct {
 
 	ParentPartnerUsername *string `type:"string" json:",omitempty"`
 
-	QuotaAllocated *float64 `type:"float" json:",omitempty"`
+	QuotaAllocated *float32 `type:"float" json:",omitempty"`
 
-	QuotaBalance *float64 `type:"float" json:",omitempty"`
+	QuotaBalance *float32 `type:"float" json:",omitempty"`
 
 	QuotaUnit *string `type:"string" json:",omitempty"`
 
@@ -236,7 +236,7 @@ func (s *CustomerForGetCustomerDetailsByTypeOutput) SetMobile(v string) *Custome
 }
 
 // SetOutstandingAmount sets the OutstandingAmount field's value.
-func (s *CustomerForGetCustomerDetailsByTypeOutput) SetOutstandingAmount(v float64) *CustomerForGetCustomerDetailsByTypeOutput {
+func (s *CustomerForGetCustomerDetailsByTypeOutput) SetOutstandingAmount(v float32) *CustomerForGetCustomerDetailsByTypeOutput {
 	s.OutstandingAmount = &v
 	return s
 }
@@ -260,13 +260,13 @@ func (s *CustomerForGetCustomerDetailsByTypeOutput) SetParentPartnerUsername(v s
 }
 
 // SetQuotaAllocated sets the QuotaAllocated field's value.
-func (s *CustomerForGetCustomerDetailsByTypeOutput) SetQuotaAllocated(v float64) *CustomerForGetCustomerDetailsByTypeOutput {
+func (s *CustomerForGetCustomerDetailsByTypeOutput) SetQuotaAllocated(v float32) *CustomerForGetCustomerDetailsByTypeOutput {
 	s.QuotaAllocated = &v
 	return s
 }
 
 // SetQuotaBalance sets the QuotaBalance field's value.
-func (s *CustomerForGetCustomerDetailsByTypeOutput) SetQuotaBalance(v float64) *CustomerForGetCustomerDetailsByTypeOutput {
+func (s *CustomerForGetCustomerDetailsByTypeOutput) SetQuotaBalance(v float32) *CustomerForGetCustomerDetailsByTypeOutput {
 	s.QuotaBalance = &v
 	return s
 }
@@ -341,7 +341,7 @@ type GetCustomerDetailsByTypeOutput struct {
 
 	Metadata *response.ResponseMetadata
 
-	Customers []*CustomerForGetCustomerDetailsByTypeOutput `type:"list" json:",omitempty"`
+	Customers []*CustomerForGetCustomerDetailsByTypeOutput `type:"list"`
 }
 
 // String returns the string representation
