@@ -14,6 +14,7 @@ type StsValue StsAssumeRoleProvider
 type StsProvider struct {
 	Expiry
 	StsValue
+	stsConfig STSConfig
 }
 
 func (s *StsProvider) Retrieve() (Value, error) {
@@ -22,9 +23,13 @@ func (s *StsProvider) Retrieve() (Value, error) {
 	ins.SetHost(defaultSTSHost)
 	if s.Region != "" {
 		ins.Client.ServiceInfo.Credentials.Region = s.Region
+	} else if s.stsConfig.Region != "" {
+		ins.Client.ServiceInfo.Credentials.Region = s.stsConfig.Region
 	}
 	if s.Host != "" {
 		ins.SetHost(s.Host)
+	} else if s.stsConfig.Host != "" {
+		ins.SetHost(s.stsConfig.Host)
 	}
 	if s.Schema != "" {
 		ins.SetSchema(s.Schema)
@@ -32,6 +37,23 @@ func (s *StsProvider) Retrieve() (Value, error) {
 	if s.Timeout > 0 {
 		ins.Client.SetTimeout(s.Timeout)
 	}
+	// 仅当显式配置了代理/TLS 时才覆盖传输层：ins 由 sts.NewInstance() 每次新建，
+	// 其底层 http.Client 为值类型且非全局共享，直接替换 Transport 即可，
+	// 保留超时等其余默认设置，且不污染其他实例。
+	if transport, err := buildProxyTransport(ProxyConfig{
+		ProxyURL:           s.ProxyURL,
+		CAFile:             s.CAFile,
+		InsecureSkipVerify: s.InsecureSkipVerify,
+		httpProxy:          s.stsConfig.HTTPProxy,
+		httpsProxy:         s.stsConfig.HTTPSProxy,
+		base:               ins.Client.Client.Transport,
+	}); err != nil {
+		return Value{}, err
+	} else if transport != nil {
+		ins.Client.Client.Transport = transport
+		defer transport.CloseIdleConnections()
+	}
+
 	if s.DurationSeconds < 900 {
 		return Value{}, fmt.Errorf("DurationSeconds must greater than 900 seconds ")
 	}
@@ -93,19 +115,22 @@ func NewStsCredentialsWithOptions(accessKey, securityKey, roleName, accountId st
 		fn(&opts)
 	}
 	cfg := StsAssumeRoleProvider{
-		AccessKey:       accessKey,
-		SecurityKey:     securityKey,
-		SessionToken:    opts.SessionToken,
-		RoleName:        roleName,
-		AccountId:       accountId,
-		Host:            opts.Host,
-		Region:          opts.Region,
-		Schema:          opts.Schema,
-		Timeout:         opts.Timeout,
-		DurationSeconds: opts.DurationSeconds,
-		Policy:          opts.Policy,
-		MaxRetries:      opts.MaxRetries,
-		RetryInterval:   opts.RetryInterval,
+		AccessKey:          accessKey,
+		SecurityKey:        securityKey,
+		SessionToken:       opts.SessionToken,
+		RoleName:           roleName,
+		AccountId:          accountId,
+		Host:               opts.Host,
+		Region:             opts.Region,
+		Schema:             opts.Schema,
+		Timeout:            opts.Timeout,
+		DurationSeconds:    opts.DurationSeconds,
+		Policy:             opts.Policy,
+		MaxRetries:         opts.MaxRetries,
+		RetryInterval:      opts.RetryInterval,
+		ProxyURL:           opts.ProxyURL,
+		CAFile:             opts.CAFile,
+		InsecureSkipVerify: opts.InsecureSkipVerify,
 	}
 	p := &StsProvider{
 		StsValue: StsValue(cfg),
