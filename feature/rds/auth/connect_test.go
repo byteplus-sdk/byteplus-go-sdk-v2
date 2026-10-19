@@ -2,11 +2,15 @@ package auth
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"strings"
 	"testing"
 
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/bytepluserr"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/endpoints"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/session"
 )
 
@@ -170,5 +174,54 @@ func TestBuildAuthToken(t *testing.T) {
 				t.Errorf("BuildAuthToken() token should contain endpoint host %s, got %s", expectedHost, token)
 			}
 		})
+	}
+}
+
+// BuildAuthToken produces a presigned token: when the endpoint is resolved
+// from the region, an invalid region must be rejected with its error code
+// before any URL is built or signed.
+func TestBuildAuthTokenRejectsInvalidRegion(t *testing.T) {
+	invalid := []string{
+		"cn-beijing@127.0.0.1", "cn-beijing:443", "cn/beijing", "cn?beijing",
+		"cn#beijing", "cn beijing", "cn\tbeijing", "cn\nbeijing", "cn\rbeijing",
+		"cn\x00beijing", "evil.com", "cn%2fbeijing", "cn\\beijing", "北京",
+		"cn-北京", "cn-beijing\n",
+		"1cn-beijing", "1", "-cn-beijing", "_ecs", "cn-beijing-", "rds_mysql_", "-", "_",
+	}
+	for _, region := range invalid {
+		sess := newTestSession(t, "ak", "sk", region, nil)
+		token, err := BuildAuthToken(context.Background(), sess, "user", "mysql-xxx", 0)
+		if token != "" {
+			t.Fatalf("region %q: expect empty token, got %q", region, token)
+		}
+		want := fmt.Sprintf("unable to resolve client config: byteplus session: resolve client config for service %q: %s",
+			defaultService, endpoints.ValidateRegion(region))
+		if err == nil || err.Error() != want {
+			t.Fatalf("region %q: expect %q, got %v", region, want, err)
+		}
+		var bpErr bytepluserr.Error
+		if !errors.As(err, &bpErr) || bpErr.Code() != endpoints.ErrCodeInvalidRegion {
+			t.Fatalf("region %q: expect code %s, got %v", region, endpoints.ErrCodeInvalidRegion, err)
+		}
+	}
+
+	// valid control: the token is built and carries the resolved host.
+	token, err := BuildAuthToken(context.Background(),
+		newTestSession(t, "ak", "sk", "ap-southeast-1", nil), "user", "mysql-xxx", 0)
+	if err != nil || !strings.Contains(token, "X-HOST=https%3A%2F%2Frds-mysql.ap-southeast-1.byteplusapi.com&") ||
+		!strings.Contains(token, "X-Signature=") {
+		t.Fatalf("valid region: unexpected token %q, %v", token, err)
+	}
+}
+
+// An explicitly configured endpoint is not built from the region, the token
+// is built as before and carries the configured host.
+func TestBuildAuthTokenExplicitEndpointUnchanged(t *testing.T) {
+	for _, region := range []string{"ap-southeast-1", "cn/beijing"} {
+		sess := newTestSession(t, "ak", "sk", region, nil, "custom.example.com")
+		token, err := BuildAuthToken(context.Background(), sess, "user", "mysql-xxx", 0)
+		if err != nil || !strings.Contains(token, "X-HOST=https%3A%2F%2Fcustom.example.com&") {
+			t.Fatalf("region %q: unexpected token %q, %v", region, token, err)
+		}
 	}
 }

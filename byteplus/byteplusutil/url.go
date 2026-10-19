@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/endpoints"
 )
 
 // Copy from https://github.com/aws/aws-sdk-go
@@ -175,9 +176,18 @@ func GetDefaultEndpointByServiceInfo(service string, regionCode string,
 // {service}[.{region}].byteplusapi.com[.cn] endpoint.
 //
 // Returns ErrServiceEndpointInfoMissing when the service is not registered in
-// defaultEndpoint.
+// defaultEndpoint, and a bytepluserr.Error with the code
+// endpoints.ErrCodeInvalidService / endpoints.ErrCodeInvalidRegion when the
+// service or region could alter the structure of the resolved host.
 func ResolveDefaultEndpoint(service, regionCode string, useDualStack *bool, logger byteplus.Logger) (string, error) {
 	debug(logger, fmt.Sprintf("ResolveDefaultEndpoint start, service: %s, region: %s", service, regionCode))
+
+	// service and region are concatenated into the host name below, reject
+	// anything that could alter the host structure before any branch
+	// (global / regional / dual stack / cn suffix) is taken.
+	if err := endpoints.ValidateServiceAndRegion(service, regionCode); err != nil {
+		return "", err
+	}
 
 	info, ok := defaultEndpoint[service]
 	if !ok {
