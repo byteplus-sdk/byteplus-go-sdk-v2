@@ -153,6 +153,81 @@ if _, err := svc.DoSomething(nil); errors.Is(err, byteplusutil.ErrServiceEndpoin
 
 When you hit this error, first try upgrading the SDK. If the service is genuinely not carried by the SDK yet, set the endpoint explicitly via `WithEndpoint(...)` or supply a custom `EndpointResolver`.
 
+##### Region and service validation
+
+The service and region are concatenated into the endpoint host name. To prevent a crafted region or service from rewriting the request host (SSRF), the SDK checks that both are a valid single host name label before resolving the endpoint:
+
+- only ASCII letters, digits, `-` and `_`;
+- starts with a letter;
+- does not end with `-` or `_`.
+
+For example `ap-southeast-1` and `rds_mysql` are valid; `ap-southeast-1@127.0.0.1`, `ap-southeast-1:443`, `evil.com`, `ap southeast-1`, `1ap-southeast-1` and `ap-southeast-1-` are not. The service is checked first, then the region. An empty value is not checked here and is handled by the existing logic (for example, a regional service without a region still returns `byteplusutil.ErrMissingRegion` in default resolution).
+
+When the check runs and what it covers:
+
+- When no endpoint is set explicitly (`Config.Endpoint` is empty), the session runs the check before any resolution; default resolution and any custom `EndpointResolver` come after it, so an invalid value is never passed to the resolver. Generated service clients (e.g. `ecs.New(sess)`) and the `universal` client are covered. The error surfaces at the same stage as described in [Error handling](#error-handling): `session.ClientConfigWithError` returns it at construction time; `session.ClientConfig` (used by service clients and the `universal` client) returns it in the request Validate stage, before signing and sending, so no network request is made.
+- `byteplusutil.ResolveDefaultEndpoint` runs the check before looking up the service registration, so an invalid service returns `InvalidService` rather than `ErrServiceEndpointInfoMissing`.
+- `EndpointFor` of the standard resolver `endpoints.NewStandardEndpointResolver()` runs the same check itself, so calling it directly also returns the error.
+- `BuildAuthToken` in `feature/rds/auth` runs the check before building the token and returns the error without building a token.
+- When an endpoint is set explicitly (`WithEndpoint`), the host is not built from the region or service and the check is skipped.
+
+The underlying error of a failed check is a `bytepluserr.Error` with the code `endpoints.ErrCodeInvalidRegion` (`"InvalidRegion"`) or `endpoints.ErrCodeInvalidService` (`"InvalidService"`), available via `Code()`. `ResolveDefaultEndpoint` returns it as is, with the following message format, where the reason is one of `illegal character at index N`, `must start with a letter` or `must not end with '-' or '_'`:
+
+```
+InvalidRegion: invalid region "ap-southeast-1@127.0.0.1": illegal character at index 14, region must start with a letter, end with a letter or digit, and contain only letters, digits, '-' and '_'
+```
+
+Errors returned through the session (`ClientConfigWithError`, service clients, the `universal` client) carry the same `byteplus session: resolve client config for service "<service>": ` prefix described above; `BuildAuthToken` additionally wraps it as `unable to resolve client config: ...`. A plain type assertion does not work on these errors, use `errors.As`:
+
+```go
+package main
+
+import (
+	"errors"
+	"fmt"
+
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/bytepluserr"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/endpoints"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/session"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/service/ecs"
+)
+
+func main() {
+	config := byteplus.NewConfig().
+		WithCredentials(credentials.NewEnvCredentials()).
+		WithRegion("ap-southeast-1@127.0.0.1") // invalid region
+	sess, err := session.NewSession(config)
+	if err != nil {
+		panic(err)
+	}
+
+	// Fail fast at construction time
+	_, err = sess.ClientConfigWithError("ecs")
+	var bpErr bytepluserr.Error
+	if errors.As(err, &bpErr) {
+		switch bpErr.Code() {
+		case endpoints.ErrCodeInvalidRegion, endpoints.ErrCodeInvalidService:
+			fmt.Println(bpErr.Code(), bpErr.Message())
+		}
+	}
+
+	// Or use the compatibility signature and detect on first call
+	svc := ecs.New(sess)
+	if _, err := svc.DescribeInstances(&ecs.DescribeInstancesInput{}); errors.As(err, &bpErr) {
+		fmt.Println(bpErr.Code())
+	}
+}
+```
+
+The exported functions `endpoints.ValidateRegion`, `endpoints.ValidateService` and `endpoints.ValidateServiceAndRegion` can be used to check values up front; they return the same errors as `ResolveDefaultEndpoint`.
+
+**Behavior change:**
+
+- A region with leading or trailing whitespace (e.g. `" ap-southeast-1 "`) is no longer trimmed: both a direct call to `byteplusutil.ResolveDefaultEndpoint` and a client request return `InvalidRegion`. Previously `ResolveDefaultEndpoint` trimmed the whitespace before building the host, while signing always used the raw value including the whitespace. Case handling is unchanged: `AP-Southeast-1` is still valid and is lowercased in the host.
+- The compatibility entry point `byteplusutil.GetDefaultEndpointByServiceInfo` delegates to `ResolveDefaultEndpoint`. For an invalid service or region it returns no error; it writes a debug log and falls back to the default endpoint `open.ap-southeast-1.byteplusapi.com`. Callers that need to detect the error should use `ResolveDefaultEndpoint` or call `endpoints.ValidateServiceAndRegion` first.
+
 #### Standard Endpoint Resolution
 
 ##### Resolution Rules
