@@ -11,6 +11,7 @@ import (
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/bytepluserr"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/endpoints"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/request"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/session"
 )
 
@@ -223,5 +224,30 @@ func TestBuildAuthTokenExplicitEndpointUnchanged(t *testing.T) {
 		if err != nil || !strings.Contains(token, "X-HOST=https%3A%2F%2Fcustom.example.com&") {
 			t.Fatalf("region %q: unexpected token %q, %v", region, token, err)
 		}
+	}
+}
+
+// BuildAuthToken must only check the config resolution error, it must not run
+// the Validate handlers registered on the session.
+func TestBuildAuthTokenDoesNotRunSessionValidateHandlers(t *testing.T) {
+	sess := newTestSession(t, "ak", "sk", "ap-southeast-1", nil)
+	calls := 0
+	sess.Handlers.Validate.PushBack(func(r *request.Request) { calls++ })
+
+	if _, err := BuildAuthToken(context.Background(), sess, "user", "mysql-xxx", 900); err != nil {
+		t.Fatalf("BuildAuthToken() unexpected error = %v", err)
+	}
+	if calls != 0 {
+		t.Errorf("session Validate handler was run %d times, want 0", calls)
+	}
+
+	// An invalid region still fails, and still without running the handlers.
+	bad := newTestSession(t, "ak", "sk", "evil.com/", nil)
+	bad.Handlers.Validate.PushBack(func(r *request.Request) { calls++ })
+	if _, err := BuildAuthToken(context.Background(), bad, "user", "mysql-xxx", 900); err == nil {
+		t.Fatal("BuildAuthToken() expected error for invalid region")
+	}
+	if calls != 0 {
+		t.Errorf("session Validate handler was run %d times, want 0", calls)
 	}
 }
