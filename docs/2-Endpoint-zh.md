@@ -231,6 +231,7 @@ func main() {
 **与旧版本不同：**
 
 - region 首尾带空白（如 `" ap-southeast-1 "`）不会被 trim：直接调用 `byteplusutil.ResolveDefaultEndpoint` 和客户端请求都返回 `InvalidRegion`。旧版本的 `ResolveDefaultEndpoint` 会先去掉首尾空白再拼接主机名，而签名使用的始终是带空白的原值。region 的大小写处理不变：`AP-Southeast-1` 仍合法，主机名中按小写拼接。
+- 上述规则只针对代码中设置的 region（如 `WithRegion`）或传给 `ResolveDefaultEndpoint` 的 region。从环境变量 `BYTEPLUS_REGION` / `BYTEPLUS_DEFAULT_REGION` 或共享配置文件读取的 region 会在读取时去掉首尾空白（包括空格、Tab、换行等，带引号的值同样处理），纯空白的环境变量视为未设置；去掉空白后的值仍按同样的规则校验。
 - 兼容入口 `byteplusutil.GetDefaultEndpointByServiceInfo` 委托给 `ResolveDefaultEndpoint`，遇到非法 service / region 时不返回错误，而是记录 debug 日志并回退到默认 Endpoint `open.ap-southeast-1.byteplusapi.com`。需要感知错误的调用方请使用 `ResolveDefaultEndpoint`，或先调用 `endpoints.ValidateServiceAndRegion`。
 
 #### Endpoint 标准寻址

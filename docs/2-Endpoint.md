@@ -226,6 +226,7 @@ The exported functions `endpoints.ValidateRegion`, `endpoints.ValidateService` a
 **Behavior change:**
 
 - A region with leading or trailing whitespace (e.g. `" ap-southeast-1 "`) is no longer trimmed: both a direct call to `byteplusutil.ResolveDefaultEndpoint` and a client request return `InvalidRegion`. Previously `ResolveDefaultEndpoint` trimmed the whitespace before building the host, while signing always used the raw value including the whitespace. Case handling is unchanged: `AP-Southeast-1` is still valid and is lowercased in the host.
+- This only applies to regions set in code (such as `WithRegion`) or passed to `ResolveDefaultEndpoint`. A region read from the `BYTEPLUS_REGION` / `BYTEPLUS_DEFAULT_REGION` environment variables or from the shared config file is trimmed when it is read (leading and trailing whitespace such as spaces, tabs and line breaks are removed, quoted values included), and a whitespace-only environment variable is treated as not set. The trimmed value is then validated like any other region.
 - The compatibility entry point `byteplusutil.GetDefaultEndpointByServiceInfo` delegates to `ResolveDefaultEndpoint`. For an invalid service or region it returns no error; it writes a debug log and falls back to the default endpoint `open.ap-southeast-1.byteplusapi.com`. Callers that need to detect the error should use `ResolveDefaultEndpoint` or call `endpoints.ValidateServiceAndRegion` first.
 
 #### Standard Endpoint Resolution

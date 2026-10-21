@@ -16,6 +16,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
@@ -56,7 +57,8 @@ func Get() Defaults {
 func Config() *byteplus.Config {
 	return byteplus.NewConfig().
 		WithCredentials(credentials.AnonymousCredentials).
-		WithRegion(os.Getenv("BYTEPLUS_REGION")).
+		// The region read from the environment is trimmed, see session.envConfigLoad.
+		WithRegion(strings.TrimSpace(os.Getenv("BYTEPLUS_REGION"))).
 		WithHTTPClient(http.DefaultClient).
 		WithMaxRetries(byteplus.UseServiceDefaultRetries).
 		WithLogger(byteplus.NewDefaultLogger()).
