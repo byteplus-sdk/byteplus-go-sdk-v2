@@ -110,14 +110,6 @@ type REDISAPI interface {
 	CreateDBInstanceWithContext(byteplus.Context, *CreateDBInstanceInput, ...request.Option) (*CreateDBInstanceOutput, error)
 	CreateDBInstanceRequest(*CreateDBInstanceInput) (*request.Request, *CreateDBInstanceOutput)
 
-	CreateEnterpriseDBInstanceCommon(*map[string]interface{}) (*map[string]interface{}, error)
-	CreateEnterpriseDBInstanceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
-	CreateEnterpriseDBInstanceCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
-
-	CreateEnterpriseDBInstance(*CreateEnterpriseDBInstanceInput) (*CreateEnterpriseDBInstanceOutput, error)
-	CreateEnterpriseDBInstanceWithContext(byteplus.Context, *CreateEnterpriseDBInstanceInput, ...request.Option) (*CreateEnterpriseDBInstanceOutput, error)
-	CreateEnterpriseDBInstanceRequest(*CreateEnterpriseDBInstanceInput) (*request.Request, *CreateEnterpriseDBInstanceOutput)
-
 	CreateKeyScanJobCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	CreateKeyScanJobCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	CreateKeyScanJobCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -469,6 +461,14 @@ type REDISAPI interface {
 	DescribePitrTimeWindow(*DescribePitrTimeWindowInput) (*DescribePitrTimeWindowOutput, error)
 	DescribePitrTimeWindowWithContext(byteplus.Context, *DescribePitrTimeWindowInput, ...request.Option) (*DescribePitrTimeWindowOutput, error)
 	DescribePitrTimeWindowRequest(*DescribePitrTimeWindowInput) (*request.Request, *DescribePitrTimeWindowOutput)
+
+	DescribePlannedEventImpactDetailCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribePlannedEventImpactDetailCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribePlannedEventImpactDetailCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribePlannedEventImpactDetail(*DescribePlannedEventImpactDetailInput) (*DescribePlannedEventImpactDetailOutput, error)
+	DescribePlannedEventImpactDetailWithContext(byteplus.Context, *DescribePlannedEventImpactDetailInput, ...request.Option) (*DescribePlannedEventImpactDetailOutput, error)
+	DescribePlannedEventImpactDetailRequest(*DescribePlannedEventImpactDetailInput) (*request.Request, *DescribePlannedEventImpactDetailOutput)
 
 	DescribePlannedEventsCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DescribePlannedEventsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
