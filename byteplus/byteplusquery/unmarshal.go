@@ -129,6 +129,9 @@ func processBodyError(r *request.Request, byteplusResponse *response.ByteplusRes
 		return true
 	}
 
+	if byteplusResponse.ResponseMetadata == nil {
+		return false
+	}
 	if byteplusResponse.ResponseMetadata.Error != nil && byteplusResponse.ResponseMetadata.Error.Code != "" {
 		r.Error = bytepluserr.NewRequestFailure(
 			bytepluserr.New(byteplusResponse.ResponseMetadata.Error.Code, byteplusResponse.ResponseMetadata.Error.Message, nil),
