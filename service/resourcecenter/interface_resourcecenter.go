@@ -78,6 +78,14 @@ type RESOURCECENTERAPI interface {
 	EnableResourceCenterWithContext(byteplus.Context, *EnableResourceCenterInput, ...request.Option) (*EnableResourceCenterOutput, error)
 	EnableResourceCenterRequest(*EnableResourceCenterInput) (*request.Request, *EnableResourceCenterOutput)
 
+	ExecuteMultiAccountSQLQueryCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ExecuteMultiAccountSQLQueryCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ExecuteMultiAccountSQLQueryCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ExecuteMultiAccountSQLQuery(*ExecuteMultiAccountSQLQueryInput) (*ExecuteMultiAccountSQLQueryOutput, error)
+	ExecuteMultiAccountSQLQueryWithContext(byteplus.Context, *ExecuteMultiAccountSQLQueryInput, ...request.Option) (*ExecuteMultiAccountSQLQueryOutput, error)
+	ExecuteMultiAccountSQLQueryRequest(*ExecuteMultiAccountSQLQueryInput) (*request.Request, *ExecuteMultiAccountSQLQueryOutput)
+
 	ExecuteSQLQueryCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ExecuteSQLQueryCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	ExecuteSQLQueryCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -110,6 +118,14 @@ type RESOURCECENTERAPI interface {
 	GetMultiAccountResourceCountsWithContext(byteplus.Context, *GetMultiAccountResourceCountsInput, ...request.Option) (*GetMultiAccountResourceCountsOutput, error)
 	GetMultiAccountResourceCountsRequest(*GetMultiAccountResourceCountsInput) (*request.Request, *GetMultiAccountResourceCountsOutput)
 
+	GetMultiAccountResourceDescriptionCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	GetMultiAccountResourceDescriptionCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	GetMultiAccountResourceDescriptionCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	GetMultiAccountResourceDescription(*GetMultiAccountResourceDescriptionInput) (*GetMultiAccountResourceDescriptionOutput, error)
+	GetMultiAccountResourceDescriptionWithContext(byteplus.Context, *GetMultiAccountResourceDescriptionInput, ...request.Option) (*GetMultiAccountResourceDescriptionOutput, error)
+	GetMultiAccountResourceDescriptionRequest(*GetMultiAccountResourceDescriptionInput) (*request.Request, *GetMultiAccountResourceDescriptionOutput)
+
 	GetQueryCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	GetQueryCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	GetQueryCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -134,6 +150,14 @@ type RESOURCECENTERAPI interface {
 	GetResourceCountsWithContext(byteplus.Context, *GetResourceCountsInput, ...request.Option) (*GetResourceCountsOutput, error)
 	GetResourceCountsRequest(*GetResourceCountsInput) (*request.Request, *GetResourceCountsOutput)
 
+	GetResourceDescriptionCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	GetResourceDescriptionCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	GetResourceDescriptionCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	GetResourceDescription(*GetResourceDescriptionInput) (*GetResourceDescriptionOutput, error)
+	GetResourceDescriptionWithContext(byteplus.Context, *GetResourceDescriptionInput, ...request.Option) (*GetResourceDescriptionOutput, error)
+	GetResourceDescriptionRequest(*GetResourceDescriptionInput) (*request.Request, *GetResourceDescriptionOutput)
+
 	ListExampleQueriesCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ListExampleQueriesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	ListExampleQueriesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -142,6 +166,14 @@ type RESOURCECENTERAPI interface {
 	ListExampleQueriesWithContext(byteplus.Context, *ListExampleQueriesInput, ...request.Option) (*ListExampleQueriesOutput, error)
 	ListExampleQueriesRequest(*ListExampleQueriesInput) (*request.Request, *ListExampleQueriesOutput)
 
+	ListMultiAccountResourceRelationshipsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListMultiAccountResourceRelationshipsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListMultiAccountResourceRelationshipsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListMultiAccountResourceRelationships(*ListMultiAccountResourceRelationshipsInput) (*ListMultiAccountResourceRelationshipsOutput, error)
+	ListMultiAccountResourceRelationshipsWithContext(byteplus.Context, *ListMultiAccountResourceRelationshipsInput, ...request.Option) (*ListMultiAccountResourceRelationshipsOutput, error)
+	ListMultiAccountResourceRelationshipsRequest(*ListMultiAccountResourceRelationshipsInput) (*request.Request, *ListMultiAccountResourceRelationshipsOutput)
+
 	ListQueriesCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ListQueriesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	ListQueriesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -149,6 +181,14 @@ type RESOURCECENTERAPI interface {
 	ListQueries(*ListQueriesInput) (*ListQueriesOutput, error)
 	ListQueriesWithContext(byteplus.Context, *ListQueriesInput, ...request.Option) (*ListQueriesOutput, error)
 	ListQueriesRequest(*ListQueriesInput) (*request.Request, *ListQueriesOutput)
+
+	ListResourceRelationshipsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListResourceRelationshipsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListResourceRelationshipsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListResourceRelationships(*ListResourceRelationshipsInput) (*ListResourceRelationshipsOutput, error)
+	ListResourceRelationshipsWithContext(byteplus.Context, *ListResourceRelationshipsInput, ...request.Option) (*ListResourceRelationshipsOutput, error)
+	ListResourceRelationshipsRequest(*ListResourceRelationshipsInput) (*request.Request, *ListResourceRelationshipsOutput)
 
 	ListResourceTypesCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ListResourceTypesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)

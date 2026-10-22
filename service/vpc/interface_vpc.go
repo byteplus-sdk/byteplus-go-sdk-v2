@@ -166,6 +166,14 @@ type VPCAPI interface {
 	AuthorizeSecurityGroupEgressWithContext(byteplus.Context, *AuthorizeSecurityGroupEgressInput, ...request.Option) (*AuthorizeSecurityGroupEgressOutput, error)
 	AuthorizeSecurityGroupEgressRequest(*AuthorizeSecurityGroupEgressInput) (*request.Request, *AuthorizeSecurityGroupEgressOutput)
 
+	AuthorizeSecurityGroupEgressBatchCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	AuthorizeSecurityGroupEgressBatchCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	AuthorizeSecurityGroupEgressBatchCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	AuthorizeSecurityGroupEgressBatch(*AuthorizeSecurityGroupEgressBatchInput) (*AuthorizeSecurityGroupEgressBatchOutput, error)
+	AuthorizeSecurityGroupEgressBatchWithContext(byteplus.Context, *AuthorizeSecurityGroupEgressBatchInput, ...request.Option) (*AuthorizeSecurityGroupEgressBatchOutput, error)
+	AuthorizeSecurityGroupEgressBatchRequest(*AuthorizeSecurityGroupEgressBatchInput) (*request.Request, *AuthorizeSecurityGroupEgressBatchOutput)
+
 	AuthorizeSecurityGroupIngressCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	AuthorizeSecurityGroupIngressCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	AuthorizeSecurityGroupIngressCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -173,6 +181,14 @@ type VPCAPI interface {
 	AuthorizeSecurityGroupIngress(*AuthorizeSecurityGroupIngressInput) (*AuthorizeSecurityGroupIngressOutput, error)
 	AuthorizeSecurityGroupIngressWithContext(byteplus.Context, *AuthorizeSecurityGroupIngressInput, ...request.Option) (*AuthorizeSecurityGroupIngressOutput, error)
 	AuthorizeSecurityGroupIngressRequest(*AuthorizeSecurityGroupIngressInput) (*request.Request, *AuthorizeSecurityGroupIngressOutput)
+
+	AuthorizeSecurityGroupIngressBatchCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	AuthorizeSecurityGroupIngressBatchCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	AuthorizeSecurityGroupIngressBatchCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	AuthorizeSecurityGroupIngressBatch(*AuthorizeSecurityGroupIngressBatchInput) (*AuthorizeSecurityGroupIngressBatchOutput, error)
+	AuthorizeSecurityGroupIngressBatchWithContext(byteplus.Context, *AuthorizeSecurityGroupIngressBatchInput, ...request.Option) (*AuthorizeSecurityGroupIngressBatchOutput, error)
+	AuthorizeSecurityGroupIngressBatchRequest(*AuthorizeSecurityGroupIngressBatchInput) (*request.Request, *AuthorizeSecurityGroupIngressBatchOutput)
 
 	CancelBandwidthPackageEipBandwidthCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	CancelBandwidthPackageEipBandwidthCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -1326,6 +1342,22 @@ type VPCAPI interface {
 	ModifySecurityGroupAttributesWithContext(byteplus.Context, *ModifySecurityGroupAttributesInput, ...request.Option) (*ModifySecurityGroupAttributesOutput, error)
 	ModifySecurityGroupAttributesRequest(*ModifySecurityGroupAttributesInput) (*request.Request, *ModifySecurityGroupAttributesOutput)
 
+	ModifySecurityGroupEgressBatchCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifySecurityGroupEgressBatchCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifySecurityGroupEgressBatchCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifySecurityGroupEgressBatch(*ModifySecurityGroupEgressBatchInput) (*ModifySecurityGroupEgressBatchOutput, error)
+	ModifySecurityGroupEgressBatchWithContext(byteplus.Context, *ModifySecurityGroupEgressBatchInput, ...request.Option) (*ModifySecurityGroupEgressBatchOutput, error)
+	ModifySecurityGroupEgressBatchRequest(*ModifySecurityGroupEgressBatchInput) (*request.Request, *ModifySecurityGroupEgressBatchOutput)
+
+	ModifySecurityGroupIngressBatchCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifySecurityGroupIngressBatchCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifySecurityGroupIngressBatchCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifySecurityGroupIngressBatch(*ModifySecurityGroupIngressBatchInput) (*ModifySecurityGroupIngressBatchOutput, error)
+	ModifySecurityGroupIngressBatchWithContext(byteplus.Context, *ModifySecurityGroupIngressBatchInput, ...request.Option) (*ModifySecurityGroupIngressBatchOutput, error)
+	ModifySecurityGroupIngressBatchRequest(*ModifySecurityGroupIngressBatchInput) (*request.Request, *ModifySecurityGroupIngressBatchOutput)
+
 	ModifySecurityGroupRuleDescriptionsEgressCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ModifySecurityGroupRuleDescriptionsEgressCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	ModifySecurityGroupRuleDescriptionsEgressCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -1438,6 +1470,14 @@ type VPCAPI interface {
 	RevokeSecurityGroupEgressWithContext(byteplus.Context, *RevokeSecurityGroupEgressInput, ...request.Option) (*RevokeSecurityGroupEgressOutput, error)
 	RevokeSecurityGroupEgressRequest(*RevokeSecurityGroupEgressInput) (*request.Request, *RevokeSecurityGroupEgressOutput)
 
+	RevokeSecurityGroupEgressBatchCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	RevokeSecurityGroupEgressBatchCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	RevokeSecurityGroupEgressBatchCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	RevokeSecurityGroupEgressBatch(*RevokeSecurityGroupEgressBatchInput) (*RevokeSecurityGroupEgressBatchOutput, error)
+	RevokeSecurityGroupEgressBatchWithContext(byteplus.Context, *RevokeSecurityGroupEgressBatchInput, ...request.Option) (*RevokeSecurityGroupEgressBatchOutput, error)
+	RevokeSecurityGroupEgressBatchRequest(*RevokeSecurityGroupEgressBatchInput) (*request.Request, *RevokeSecurityGroupEgressBatchOutput)
+
 	RevokeSecurityGroupIngressCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	RevokeSecurityGroupIngressCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	RevokeSecurityGroupIngressCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -1445,6 +1485,14 @@ type VPCAPI interface {
 	RevokeSecurityGroupIngress(*RevokeSecurityGroupIngressInput) (*RevokeSecurityGroupIngressOutput, error)
 	RevokeSecurityGroupIngressWithContext(byteplus.Context, *RevokeSecurityGroupIngressInput, ...request.Option) (*RevokeSecurityGroupIngressOutput, error)
 	RevokeSecurityGroupIngressRequest(*RevokeSecurityGroupIngressInput) (*request.Request, *RevokeSecurityGroupIngressOutput)
+
+	RevokeSecurityGroupIngressBatchCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	RevokeSecurityGroupIngressBatchCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	RevokeSecurityGroupIngressBatchCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	RevokeSecurityGroupIngressBatch(*RevokeSecurityGroupIngressBatchInput) (*RevokeSecurityGroupIngressBatchOutput, error)
+	RevokeSecurityGroupIngressBatchWithContext(byteplus.Context, *RevokeSecurityGroupIngressBatchInput, ...request.Option) (*RevokeSecurityGroupIngressBatchOutput, error)
+	RevokeSecurityGroupIngressBatchRequest(*RevokeSecurityGroupIngressBatchInput) (*request.Request, *RevokeSecurityGroupIngressBatchOutput)
 
 	TagIpamResourcesCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	TagIpamResourcesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)

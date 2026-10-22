@@ -142,12 +142,11 @@ func (c *VPC) CreateIpamWithContext(ctx byteplus.Context, input *CreateIpamInput
 type CreateIpamInput struct {
 	_ struct{} `type:"structure"`
 
-	Description *string `min:"1" max:"255" type:"string"`
+	Description *string `max:"255" type:"string"`
 
 	IpamName *string `min:"1" max:"128" type:"string"`
 
-	// OperatingRegions is a required field
-	OperatingRegions []*string `type:"list" required:"true"`
+	OperatingRegions []*string `type:"list"`
 
 	ProjectName *string `type:"string"`
 
@@ -167,9 +166,6 @@ func (s CreateIpamInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *CreateIpamInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateIpamInput"}
-	if s.Description != nil && len(*s.Description) < 1 {
-		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
-	}
 	if s.Description != nil && len(*s.Description) > 255 {
 		invalidParams.Add(request.NewErrParamMaxLen("Description", 255, *s.Description))
 	}
@@ -178,9 +174,6 @@ func (s *CreateIpamInput) Validate() error {
 	}
 	if s.IpamName != nil && len(*s.IpamName) > 128 {
 		invalidParams.Add(request.NewErrParamMaxLen("IpamName", 128, *s.IpamName))
-	}
-	if s.OperatingRegions == nil {
-		invalidParams.Add(request.NewErrParamRequired("OperatingRegions"))
 	}
 
 	if invalidParams.Len() > 0 {
