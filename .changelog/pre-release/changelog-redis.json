@@ -1,13 +1,19 @@
 {
   "actions": [
-    "CreateDBInstance",
-    "DescribeDBInstanceDetail",
-    "SyncAllowList",
-    "ApplyParameterGroup",
-    "DescribeClientSessionSnapshot",
-    "DescribeTasks"
+    "DescribePlannedEventImpactDetail",
+    "DescribeParameterGroups",
+    "DescribeTasks",
+    "DescribeBackups",
+    "DescribeBlueGreenDeployments",
+    "DescribeAllowListDetail",
+    "DescribeAllowLists",
+    "DescribeCrossRegionBackups",
+    "DescribeDBInstances",
+    "DescribeParameterGroupDetail",
+    "DescribePlannedEvents",
+    "SyncAllowList"
   ],
-  "description": "REDIS: added SyncAllowList, ApplyParameterGroup, DescribeClientSessionSnapshot, DescribeTasks；modified CreateDBInstance, DescribeDBInstanceDetail",
+  "description": "REDIS: added DescribePlannedEventImpactDetail；removed CreateEnterpriseDBInstance；modified DescribeCrossRegionBackups, DescribeDBInstances, DescribeParameterGroupDetail, DescribePlannedEvents, DescribeParameterGroups, DescribeTasks, SyncAllowList, DescribeAllowListDetail, DescribeAllowLists, DescribeBackups, DescribeBlueGreenDeployments",
   "modules": "service/Redis",
   "type": "breaking-change"
 }
