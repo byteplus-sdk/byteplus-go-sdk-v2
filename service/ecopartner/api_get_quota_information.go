@@ -186,11 +186,11 @@ type GetQuotaInformationOutput struct {
 
 	LastUpdatedTime *string `type:"string" json:",omitempty"`
 
-	OutstandingAmount *float64 `type:"float" json:",omitempty"`
+	OutstandingAmount *float32 `type:"float" json:",omitempty"`
 
-	QuotaAllocated *float64 `type:"float" json:",omitempty"`
+	QuotaAllocated *float32 `type:"float" json:",omitempty"`
 
-	QuotaBalance *float64 `type:"float" json:",omitempty"`
+	QuotaBalance *float32 `type:"float" json:",omitempty"`
 
 	QuotaUnit *string `type:"string" json:",omitempty"`
 
@@ -214,19 +214,19 @@ func (s *GetQuotaInformationOutput) SetLastUpdatedTime(v string) *GetQuotaInform
 }
 
 // SetOutstandingAmount sets the OutstandingAmount field's value.
-func (s *GetQuotaInformationOutput) SetOutstandingAmount(v float64) *GetQuotaInformationOutput {
+func (s *GetQuotaInformationOutput) SetOutstandingAmount(v float32) *GetQuotaInformationOutput {
 	s.OutstandingAmount = &v
 	return s
 }
 
 // SetQuotaAllocated sets the QuotaAllocated field's value.
-func (s *GetQuotaInformationOutput) SetQuotaAllocated(v float64) *GetQuotaInformationOutput {
+func (s *GetQuotaInformationOutput) SetQuotaAllocated(v float32) *GetQuotaInformationOutput {
 	s.QuotaAllocated = &v
 	return s
 }
 
 // SetQuotaBalance sets the QuotaBalance field's value.
-func (s *GetQuotaInformationOutput) SetQuotaBalance(v float64) *GetQuotaInformationOutput {
+func (s *GetQuotaInformationOutput) SetQuotaBalance(v float32) *GetQuotaInformationOutput {
 	s.QuotaBalance = &v
 	return s
 }

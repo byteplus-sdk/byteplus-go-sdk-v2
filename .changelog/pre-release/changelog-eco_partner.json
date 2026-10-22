@@ -1,0 +1,18 @@
+{
+  "actions": [
+    "ListBillingItems",
+    "ModifyQuota",
+    "CheckInvitationStatus",
+    "CreateInvitationLink",
+    "GetCustomerDetailsByType",
+    "GetQuotaInformation",
+    "CreateUniqueInvitationLink",
+    "SettleQuotaPayment",
+    "InitiateBillGeneration",
+    "DownloadBill",
+    "GetCustomerDetailsByUID"
+  ],
+  "description": "ECO_PARTNER: added InitiateBillGeneration, ListBillingItems, ModifyQuota, CheckInvitationStatus, CreateInvitationLink, GetCustomerDetailsByType, GetQuotaInformation, CreateUniqueInvitationLink, DownloadBill, GetCustomerDetailsByUID, SettleQuotaPayment",
+  "modules": "service/eco_partner",
+  "type": "feature"
+}
