@@ -129,8 +129,14 @@ func processBodyError(r *request.Request, byteplusResponse *response.ByteplusRes
 		return true
 	}
 
-	if byteplusResponse.ResponseMetadata == nil {
-		return false
+	// Stop malformed TOP responses before Unmarshal writes response metadata.
+	if byteplusResponse == nil || byteplusResponse.ResponseMetadata == nil {
+		r.Error = newResponseError(unmarshalErrorInfo{
+			Request:  r,
+			Response: byteplusResponse,
+			Body:     body,
+		}, "UnknownError", "non-standard response body without ResponseMetadata", nil)
+		return true
 	}
 	if byteplusResponse.ResponseMetadata.Error != nil && byteplusResponse.ResponseMetadata.Error.Code != "" {
 		r.Error = bytepluserr.NewRequestFailure(
