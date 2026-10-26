@@ -173,6 +173,10 @@ type ListAmortizedCostBillMonthlyInput struct {
 	PayerID []*int64 `type:"list" json:",omitempty"`
 
 	Product []*string `type:"list" json:",omitempty"`
+
+	TagKV []*TagKVForListAmortizedCostBillMonthlyInput `type:"list" json:",omitempty"`
+
+	TagKVFilterMode *int32 `type:"int32" json:",omitempty"`
 }
 
 // String returns the string representation
@@ -279,6 +283,18 @@ func (s *ListAmortizedCostBillMonthlyInput) SetProduct(v []*string) *ListAmortiz
 	return s
 }
 
+// SetTagKV sets the TagKV field's value.
+func (s *ListAmortizedCostBillMonthlyInput) SetTagKV(v []*TagKVForListAmortizedCostBillMonthlyInput) *ListAmortizedCostBillMonthlyInput {
+	s.TagKV = v
+	return s
+}
+
+// SetTagKVFilterMode sets the TagKVFilterMode field's value.
+func (s *ListAmortizedCostBillMonthlyInput) SetTagKVFilterMode(v int32) *ListAmortizedCostBillMonthlyInput {
+	s.TagKVFilterMode = &v
+	return s
+}
+
 type ListAmortizedCostBillMonthlyOutput struct {
 	_ struct{} `type:"structure" json:",omitempty"`
 
@@ -291,6 +307,8 @@ type ListAmortizedCostBillMonthlyOutput struct {
 	Offset *int32 `type:"int32" json:",omitempty"`
 
 	Total *int32 `type:"int32" json:",omitempty"`
+
+	Warning *string `type:"string" json:",omitempty"`
 }
 
 // String returns the string representation
@@ -327,6 +345,12 @@ func (s *ListAmortizedCostBillMonthlyOutput) SetTotal(v int32) *ListAmortizedCos
 	return s
 }
 
+// SetWarning sets the Warning field's value.
+func (s *ListAmortizedCostBillMonthlyOutput) SetWarning(v string) *ListAmortizedCostBillMonthlyOutput {
+	s.Warning = &v
+	return s
+}
+
 type ListForListAmortizedCostBillMonthlyOutput struct {
 	_ struct{} `type:"structure" json:",omitempty"`
 
@@ -345,8 +369,6 @@ type ListForListAmortizedCostBillMonthlyOutput struct {
 	BeforeAmortizedDiscountBillAmount *string `type:"string" json:",omitempty"`
 
 	BeforeAmortizedOriginalBillAmount *string `type:"string" json:",omitempty"`
-
-	BeforeAmortizedPaidAmount *string `type:"string" json:",omitempty"`
 
 	BeforeAmortizedPayableAmount *string `type:"string" json:",omitempty"`
 
@@ -422,8 +444,6 @@ type ListForListAmortizedCostBillMonthlyOutput struct {
 
 	DailyAmortizedOriginalBillAmount *string `type:"string" json:",omitempty"`
 
-	DailyAmortizedPaidAmount *string `type:"string" json:",omitempty"`
-
 	DailyAmortizedPayableAmount *string `type:"string" json:",omitempty"`
 
 	DailyAmortizedPointDeductAmount *string `type:"string" json:",omitempty"`
@@ -498,8 +518,6 @@ type ListForListAmortizedCostBillMonthlyOutput struct {
 
 	NowAmortizedOriginalBillAmount *string `type:"string" json:",omitempty"`
 
-	NowAmortizedPaidAmount *string `type:"string" json:",omitempty"`
-
 	NowAmortizedPayableAmount *string `type:"string" json:",omitempty"`
 
 	NowAmortizedPointDeductAmount *string `type:"string" json:",omitempty"`
@@ -545,8 +563,6 @@ type ListForListAmortizedCostBillMonthlyOutput struct {
 	OwnerID *string `type:"string" json:",omitempty"`
 
 	OwnerUserName *string `type:"string" json:",omitempty"`
-
-	PaidAmount *string `type:"string" json:",omitempty"`
 
 	PayableAmount *string `type:"string" json:",omitempty"`
 
@@ -631,8 +647,6 @@ type ListForListAmortizedCostBillMonthlyOutput struct {
 	UnamortizedDiscountBillAmount *string `type:"string" json:",omitempty"`
 
 	UnamortizedOriginalBillAmount *string `type:"string" json:",omitempty"`
-
-	UnamortizedPaidAmount *string `type:"string" json:",omitempty"`
 
 	UnamortizedPayableAmount *string `type:"string" json:",omitempty"`
 
@@ -732,12 +746,6 @@ func (s *ListForListAmortizedCostBillMonthlyOutput) SetBeforeAmortizedDiscountBi
 // SetBeforeAmortizedOriginalBillAmount sets the BeforeAmortizedOriginalBillAmount field's value.
 func (s *ListForListAmortizedCostBillMonthlyOutput) SetBeforeAmortizedOriginalBillAmount(v string) *ListForListAmortizedCostBillMonthlyOutput {
 	s.BeforeAmortizedOriginalBillAmount = &v
-	return s
-}
-
-// SetBeforeAmortizedPaidAmount sets the BeforeAmortizedPaidAmount field's value.
-func (s *ListForListAmortizedCostBillMonthlyOutput) SetBeforeAmortizedPaidAmount(v string) *ListForListAmortizedCostBillMonthlyOutput {
-	s.BeforeAmortizedPaidAmount = &v
 	return s
 }
 
@@ -963,12 +971,6 @@ func (s *ListForListAmortizedCostBillMonthlyOutput) SetDailyAmortizedOriginalBil
 	return s
 }
 
-// SetDailyAmortizedPaidAmount sets the DailyAmortizedPaidAmount field's value.
-func (s *ListForListAmortizedCostBillMonthlyOutput) SetDailyAmortizedPaidAmount(v string) *ListForListAmortizedCostBillMonthlyOutput {
-	s.DailyAmortizedPaidAmount = &v
-	return s
-}
-
 // SetDailyAmortizedPayableAmount sets the DailyAmortizedPayableAmount field's value.
 func (s *ListForListAmortizedCostBillMonthlyOutput) SetDailyAmortizedPayableAmount(v string) *ListForListAmortizedCostBillMonthlyOutput {
 	s.DailyAmortizedPayableAmount = &v
@@ -1191,12 +1193,6 @@ func (s *ListForListAmortizedCostBillMonthlyOutput) SetNowAmortizedOriginalBillA
 	return s
 }
 
-// SetNowAmortizedPaidAmount sets the NowAmortizedPaidAmount field's value.
-func (s *ListForListAmortizedCostBillMonthlyOutput) SetNowAmortizedPaidAmount(v string) *ListForListAmortizedCostBillMonthlyOutput {
-	s.NowAmortizedPaidAmount = &v
-	return s
-}
-
 // SetNowAmortizedPayableAmount sets the NowAmortizedPayableAmount field's value.
 func (s *ListForListAmortizedCostBillMonthlyOutput) SetNowAmortizedPayableAmount(v string) *ListForListAmortizedCostBillMonthlyOutput {
 	s.NowAmortizedPayableAmount = &v
@@ -1332,12 +1328,6 @@ func (s *ListForListAmortizedCostBillMonthlyOutput) SetOwnerID(v string) *ListFo
 // SetOwnerUserName sets the OwnerUserName field's value.
 func (s *ListForListAmortizedCostBillMonthlyOutput) SetOwnerUserName(v string) *ListForListAmortizedCostBillMonthlyOutput {
 	s.OwnerUserName = &v
-	return s
-}
-
-// SetPaidAmount sets the PaidAmount field's value.
-func (s *ListForListAmortizedCostBillMonthlyOutput) SetPaidAmount(v string) *ListForListAmortizedCostBillMonthlyOutput {
-	s.PaidAmount = &v
 	return s
 }
 
@@ -1593,12 +1583,6 @@ func (s *ListForListAmortizedCostBillMonthlyOutput) SetUnamortizedOriginalBillAm
 	return s
 }
 
-// SetUnamortizedPaidAmount sets the UnamortizedPaidAmount field's value.
-func (s *ListForListAmortizedCostBillMonthlyOutput) SetUnamortizedPaidAmount(v string) *ListForListAmortizedCostBillMonthlyOutput {
-	s.UnamortizedPaidAmount = &v
-	return s
-}
-
 // SetUnamortizedPayableAmount sets the UnamortizedPayableAmount field's value.
 func (s *ListForListAmortizedCostBillMonthlyOutput) SetUnamortizedPayableAmount(v string) *ListForListAmortizedCostBillMonthlyOutput {
 	s.UnamortizedPayableAmount = &v
@@ -1722,5 +1706,35 @@ func (s *ListForListAmortizedCostBillMonthlyOutput) SetUseDurationUnit(v string)
 // SetZone sets the Zone field's value.
 func (s *ListForListAmortizedCostBillMonthlyOutput) SetZone(v string) *ListForListAmortizedCostBillMonthlyOutput {
 	s.Zone = &v
+	return s
+}
+
+type TagKVForListAmortizedCostBillMonthlyInput struct {
+	_ struct{} `type:"structure" json:",omitempty"`
+
+	Key *string `type:"string" json:",omitempty"`
+
+	Value *string `type:"string" json:",omitempty"`
+}
+
+// String returns the string representation
+func (s TagKVForListAmortizedCostBillMonthlyInput) String() string {
+	return byteplusutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TagKVForListAmortizedCostBillMonthlyInput) GoString() string {
+	return s.String()
+}
+
+// SetKey sets the Key field's value.
+func (s *TagKVForListAmortizedCostBillMonthlyInput) SetKey(v string) *TagKVForListAmortizedCostBillMonthlyInput {
+	s.Key = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *TagKVForListAmortizedCostBillMonthlyInput) SetValue(v string) *TagKVForListAmortizedCostBillMonthlyInput {
+	s.Value = &v
 	return s
 }

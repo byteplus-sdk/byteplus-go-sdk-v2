@@ -177,6 +177,12 @@ type ListBillDetailInput struct {
 	Product []*string `type:"list" json:",omitempty"`
 
 	Project []*string `type:"list" json:",omitempty"`
+
+	SalesChannel []*string `type:"list" json:",omitempty"`
+
+	TagKV []*TagKVForListBillDetailInput `type:"list" json:",omitempty"`
+
+	TagKVFilterMode *int32 `type:"int32" json:",omitempty"`
 }
 
 // String returns the string representation
@@ -295,6 +301,24 @@ func (s *ListBillDetailInput) SetProject(v []*string) *ListBillDetailInput {
 	return s
 }
 
+// SetSalesChannel sets the SalesChannel field's value.
+func (s *ListBillDetailInput) SetSalesChannel(v []*string) *ListBillDetailInput {
+	s.SalesChannel = v
+	return s
+}
+
+// SetTagKV sets the TagKV field's value.
+func (s *ListBillDetailInput) SetTagKV(v []*TagKVForListBillDetailInput) *ListBillDetailInput {
+	s.TagKV = v
+	return s
+}
+
+// SetTagKVFilterMode sets the TagKVFilterMode field's value.
+func (s *ListBillDetailInput) SetTagKVFilterMode(v int32) *ListBillDetailInput {
+	s.TagKVFilterMode = &v
+	return s
+}
+
 type ListBillDetailOutput struct {
 	_ struct{} `type:"structure" json:",omitempty"`
 
@@ -307,6 +331,8 @@ type ListBillDetailOutput struct {
 	Offset *int32 `type:"int32" json:",omitempty"`
 
 	Total *int32 `type:"int32" json:",omitempty"`
+
+	Warning *string `type:"string" json:",omitempty"`
 }
 
 // String returns the string representation
@@ -343,6 +369,12 @@ func (s *ListBillDetailOutput) SetTotal(v int32) *ListBillDetailOutput {
 	return s
 }
 
+// SetWarning sets the Warning field's value.
+func (s *ListBillDetailOutput) SetWarning(v string) *ListBillDetailOutput {
+	s.Warning = &v
+	return s
+}
+
 type ListForListBillDetailOutput struct {
 	_ struct{} `type:"structure" json:",omitempty"`
 
@@ -375,8 +407,6 @@ type ListForListBillDetailOutput struct {
 	CountryRegion *string `type:"string" json:",omitempty"`
 
 	CouponAmount *string `type:"string" json:",omitempty"`
-
-	CreditCarriedAmount *string `type:"string" json:",omitempty"`
 
 	Currency *string `type:"string" json:",omitempty"`
 
@@ -440,8 +470,6 @@ type ListForListBillDetailOutput struct {
 
 	OwnerUserName *string `type:"string" json:",omitempty"`
 
-	PaidAmount *string `type:"string" json:",omitempty"`
-
 	PayableAmount *string `type:"string" json:",omitempty"`
 
 	PayerCustomerName *string `type:"string" json:",omitempty"`
@@ -498,6 +526,8 @@ type ListForListBillDetailOutput struct {
 
 	RoundAmount *float64 `type:"double" json:",omitempty"`
 
+	SalesChannel *string `type:"string" json:",omitempty"`
+
 	SavingPlanDeductionDiscountAmount *string `type:"string" json:",omitempty"`
 
 	SavingPlanDeductionDiscountTotalAmount *string `type:"string" json:",omitempty"`
@@ -545,8 +575,6 @@ type ListForListBillDetailOutput struct {
 	TradeTime *string `type:"string" json:",omitempty"`
 
 	Unit *string `type:"string" json:",omitempty"`
-
-	UnpaidAmount *string `type:"string" json:",omitempty"`
 
 	UseDuration *string `type:"string" json:",omitempty"`
 
@@ -654,12 +682,6 @@ func (s *ListForListBillDetailOutput) SetCountryRegion(v string) *ListForListBil
 // SetCouponAmount sets the CouponAmount field's value.
 func (s *ListForListBillDetailOutput) SetCouponAmount(v string) *ListForListBillDetailOutput {
 	s.CouponAmount = &v
-	return s
-}
-
-// SetCreditCarriedAmount sets the CreditCarriedAmount field's value.
-func (s *ListForListBillDetailOutput) SetCreditCarriedAmount(v string) *ListForListBillDetailOutput {
-	s.CreditCarriedAmount = &v
 	return s
 }
 
@@ -849,12 +871,6 @@ func (s *ListForListBillDetailOutput) SetOwnerUserName(v string) *ListForListBil
 	return s
 }
 
-// SetPaidAmount sets the PaidAmount field's value.
-func (s *ListForListBillDetailOutput) SetPaidAmount(v string) *ListForListBillDetailOutput {
-	s.PaidAmount = &v
-	return s
-}
-
 // SetPayableAmount sets the PayableAmount field's value.
 func (s *ListForListBillDetailOutput) SetPayableAmount(v string) *ListForListBillDetailOutput {
 	s.PayableAmount = &v
@@ -1023,6 +1039,12 @@ func (s *ListForListBillDetailOutput) SetRoundAmount(v float64) *ListForListBill
 	return s
 }
 
+// SetSalesChannel sets the SalesChannel field's value.
+func (s *ListForListBillDetailOutput) SetSalesChannel(v string) *ListForListBillDetailOutput {
+	s.SalesChannel = &v
+	return s
+}
+
 // SetSavingPlanDeductionDiscountAmount sets the SavingPlanDeductionDiscountAmount field's value.
 func (s *ListForListBillDetailOutput) SetSavingPlanDeductionDiscountAmount(v string) *ListForListBillDetailOutput {
 	s.SavingPlanDeductionDiscountAmount = &v
@@ -1167,12 +1189,6 @@ func (s *ListForListBillDetailOutput) SetUnit(v string) *ListForListBillDetailOu
 	return s
 }
 
-// SetUnpaidAmount sets the UnpaidAmount field's value.
-func (s *ListForListBillDetailOutput) SetUnpaidAmount(v string) *ListForListBillDetailOutput {
-	s.UnpaidAmount = &v
-	return s
-}
-
 // SetUseDuration sets the UseDuration field's value.
 func (s *ListForListBillDetailOutput) SetUseDuration(v string) *ListForListBillDetailOutput {
 	s.UseDuration = &v
@@ -1194,5 +1210,35 @@ func (s *ListForListBillDetailOutput) SetZone(v string) *ListForListBillDetailOu
 // SetZoneCode sets the ZoneCode field's value.
 func (s *ListForListBillDetailOutput) SetZoneCode(v string) *ListForListBillDetailOutput {
 	s.ZoneCode = &v
+	return s
+}
+
+type TagKVForListBillDetailInput struct {
+	_ struct{} `type:"structure" json:",omitempty"`
+
+	Key *string `type:"string" json:",omitempty"`
+
+	Value *string `type:"string" json:",omitempty"`
+}
+
+// String returns the string representation
+func (s TagKVForListBillDetailInput) String() string {
+	return byteplusutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TagKVForListBillDetailInput) GoString() string {
+	return s.String()
+}
+
+// SetKey sets the Key field's value.
+func (s *TagKVForListBillDetailInput) SetKey(v string) *TagKVForListBillDetailInput {
+	s.Key = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *TagKVForListBillDetailInput) SetValue(v string) *TagKVForListBillDetailInput {
+	s.Value = &v
 	return s
 }
