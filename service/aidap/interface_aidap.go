@@ -646,6 +646,14 @@ type AIDAPAPI interface {
 	ModifyWorkspaceSettingsWithContext(byteplus.Context, *ModifyWorkspaceSettingsInput, ...request.Option) (*ModifyWorkspaceSettingsOutput, error)
 	ModifyWorkspaceSettingsRequest(*ModifyWorkspaceSettingsInput) (*request.Request, *ModifyWorkspaceSettingsOutput)
 
+	RecoverDelayedDeleteWorkspaceCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	RecoverDelayedDeleteWorkspaceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	RecoverDelayedDeleteWorkspaceCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	RecoverDelayedDeleteWorkspace(*RecoverDelayedDeleteWorkspaceInput) (*RecoverDelayedDeleteWorkspaceOutput, error)
+	RecoverDelayedDeleteWorkspaceWithContext(byteplus.Context, *RecoverDelayedDeleteWorkspaceInput, ...request.Option) (*RecoverDelayedDeleteWorkspaceOutput, error)
+	RecoverDelayedDeleteWorkspaceRequest(*RecoverDelayedDeleteWorkspaceInput) (*request.Request, *RecoverDelayedDeleteWorkspaceOutput)
+
 	RemoveTagsFromWorkspacesCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	RemoveTagsFromWorkspacesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	RemoveTagsFromWorkspacesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
