@@ -127,7 +127,7 @@ If the requested service is not registered in `defaultEndpoint`, the SDK returns
 - **`session.ClientConfigWithError(serviceName, ...)`** — returns the error **at construction time**, ideal for callers that want to fail fast.
 - **`session.ClientConfig(serviceName, ...)`** (compatibility signature) — keeps its historic no-error signature and surfaces the same error on the **first API call** through a `Validate` handler installed on the returned Config. This prevents nil-pointer panics in downstream `xxx.New(sess)` callers.
 
-Both paths produce the exact same error message and both can be matched with `errors.Is`:
+Both paths produce the exact same error message and both can be matched with `errors.Is`. The message has the form `byteplus session: resolve client config for service "<service>": <underlying error>`; the underlying error is wrapped with `%w`, so `errors.Is` / `errors.As` still reach it:
 
 ```go
 import (
@@ -177,7 +177,7 @@ The underlying error of a failed check is a `bytepluserr.Error` with the code `e
 InvalidRegion: invalid region "ap-southeast-1@127.0.0.1": illegal character at index 14, region must start with a letter, end with a letter or digit, and contain only letters, digits, '-' and '_'
 ```
 
-Errors returned through the session (`ClientConfigWithError`, service clients, the `universal` client) carry the same `byteplus session: resolve client config for service "<service>": ` prefix described above; `BuildAuthToken` additionally wraps it as `unable to resolve client config: ...`. A plain type assertion does not work on these errors, use `errors.As`:
+Errors returned through the session (`ClientConfigWithError`, service clients, the `universal` client) carry the same `byteplus session: resolve client config for service "<service>": ` prefix described in [Error handling](#error-handling); `BuildAuthToken` additionally wraps it as `unable to resolve client config: ...`. A plain type assertion does not work on these errors, use `errors.As`:
 
 ```go
 package main
@@ -227,6 +227,8 @@ The exported functions `endpoints.ValidateRegion`, `endpoints.ValidateService` a
 
 - A region with leading or trailing whitespace (e.g. `" ap-southeast-1 "`) is no longer trimmed: both a direct call to `byteplusutil.ResolveDefaultEndpoint` and a client request return `InvalidRegion`. Previously `ResolveDefaultEndpoint` trimmed the whitespace before building the host, while signing always used the raw value including the whitespace. Case handling is unchanged: `AP-Southeast-1` is still valid and is lowercased in the host.
 - This only applies to regions set in code (such as `WithRegion`) or passed to `ResolveDefaultEndpoint`. A region read from the `BYTEPLUS_REGION` / `BYTEPLUS_DEFAULT_REGION` environment variables or from the shared config file is trimmed when it is read (leading and trailing whitespace such as spaces, tabs and line breaks are removed, quoted values included), and a whitespace-only environment variable is treated as not set. The trimmed value is then validated like any other region.
+- `BYTEPLUS_DEFAULT_REGION` and the shared config / shared credentials files are only read when `BYTEPLUS_SDK_LOAD_CONFIG=1` is set (`BYTEPLUS_REGION` is always read); without it only `BYTEPLUS_REGION` is used.
+- When the shared config file and the shared credentials file both define `region` for the profile, the later file (the shared credentials file) wins. An unquoted blank value (`region =`) is ignored, but a quoted whitespace-only value (`region = "   "`) counts as defined: it becomes empty after trimming and clears the value from the earlier file, so the region is then treated as not set.
 - The compatibility entry point `byteplusutil.GetDefaultEndpointByServiceInfo` delegates to `ResolveDefaultEndpoint`. For an invalid service or region it returns no error; it writes a debug log and falls back to the default endpoint `open.ap-southeast-1.byteplusapi.com`. Callers that need to detect the error should use `ResolveDefaultEndpoint` or call `endpoints.ValidateServiceAndRegion` first.
 
 #### Standard Endpoint Resolution

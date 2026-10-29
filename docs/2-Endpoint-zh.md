@@ -133,7 +133,7 @@ func main() {
 - **`session.ClientConfigWithError(serviceName, ...)`**：在**构造阶段**直接返回该错误，适合希望立即感知失败的调用方；
 - **`session.ClientConfig(serviceName, ...)`**（兼容签名）：保留无 `error` 返回值，同一错误会通过挂在返回 Config 上的 `Validate` handler，在**首次业务请求**发出时抛出，避免下游 `xxx.New(sess)` 处的 nil 指针 panic。
 
-两个入口的错误消息文本完全一致，且都可通过 `errors.Is` 识别底层 sentinel：
+两个入口的错误消息文本完全一致，且都可通过 `errors.Is` 识别底层 sentinel。错误消息格式为 `byteplus session: resolve client config for service "<service>": <底层错误>`，底层错误通过 `%w` 包装，因此 `errors.Is` / `errors.As` 仍能识别到它：
 
 ```go
 import (
@@ -182,7 +182,7 @@ service 和 region 会被拼接进 Endpoint 的主机名。为防止通过构造
 InvalidRegion: invalid region "ap-southeast-1@127.0.0.1": illegal character at index 14, region must start with a letter, end with a letter or digit, and contain only letters, digits, '-' and '_'
 ```
 
-通过 Session 返回的错误（`ClientConfigWithError`、服务客户端、`universal` 客户端）带有上文相同的 `byteplus session: resolve client config for service "<service>": ` 前缀；`BuildAuthToken` 再包装一层 `unable to resolve client config: ...`。这些错误都不能直接做类型断言，请使用 `errors.As`：
+通过 Session 返回的错误（`ClientConfigWithError`、服务客户端、`universal` 客户端）带有 [错误处理](#错误处理) 中描述的 `byteplus session: resolve client config for service "<service>": ` 前缀；`BuildAuthToken` 再包装一层 `unable to resolve client config: ...`。这些错误都不能直接做类型断言，请使用 `errors.As`：
 
 ```go
 package main
@@ -232,6 +232,8 @@ func main() {
 
 - region 首尾带空白（如 `" ap-southeast-1 "`）不会被 trim：直接调用 `byteplusutil.ResolveDefaultEndpoint` 和客户端请求都返回 `InvalidRegion`。旧版本的 `ResolveDefaultEndpoint` 会先去掉首尾空白再拼接主机名，而签名使用的始终是带空白的原值。region 的大小写处理不变：`AP-Southeast-1` 仍合法，主机名中按小写拼接。
 - 上述规则只针对代码中设置的 region（如 `WithRegion`）或传给 `ResolveDefaultEndpoint` 的 region。从环境变量 `BYTEPLUS_REGION` / `BYTEPLUS_DEFAULT_REGION` 或共享配置文件读取的 region 会在读取时去掉首尾空白（包括空格、Tab、换行等，带引号的值同样处理），纯空白的环境变量视为未设置；去掉空白后的值仍按同样的规则校验。
+- `BYTEPLUS_DEFAULT_REGION` 和共享配置 / 共享凭证文件只有在设置了 `BYTEPLUS_SDK_LOAD_CONFIG=1` 时才会读取（`BYTEPLUS_REGION` 始终读取）；未设置时只使用 `BYTEPLUS_REGION`。
+- 共享配置文件和共享凭证文件为同一 profile 都定义了 `region` 时，后加载的文件（共享凭证文件）生效。后一个文件里无引号的空值（`region =`）会被忽略，但带引号的纯空白值（`region = "   "`）视为已定义：去掉空白后变为空串，会清掉前一个文件里的值，此时 region 视为未设置。
 - 兼容入口 `byteplusutil.GetDefaultEndpointByServiceInfo` 委托给 `ResolveDefaultEndpoint`，遇到非法 service / region 时不返回错误，而是记录 debug 日志并回退到默认 Endpoint `open.ap-southeast-1.byteplusapi.com`。需要感知错误的调用方请使用 `ResolveDefaultEndpoint`，或先调用 `endpoints.ValidateServiceAndRegion`。
 
 #### Endpoint 标准寻址
