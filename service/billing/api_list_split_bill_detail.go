@@ -178,8 +178,6 @@ type ListForListSplitBillDetailOutput struct {
 
 	CouponDeductionAmount *string `type:"string" json:",omitempty"`
 
-	CreditCarriedAmount *string `type:"string" json:",omitempty"`
-
 	Currency *string `type:"string" json:",omitempty"`
 
 	CurrencySettlement *string `type:"string" json:",omitempty"`
@@ -236,8 +234,6 @@ type ListForListSplitBillDetailOutput struct {
 
 	OwnerUserName *string `type:"string" json:",omitempty"`
 
-	PaidAmount *string `type:"string" json:",omitempty"`
-
 	PayableAmount *string `type:"string" json:",omitempty"`
 
 	PayerCustomerName *string `type:"string" json:",omitempty"`
@@ -286,7 +282,7 @@ type ListForListSplitBillDetailOutput struct {
 
 	RoundAmount *string `type:"string" json:",omitempty"`
 
-	SavingPlanDeductionDiscountAmount *string `type:"string" json:",omitempty"`
+	SalesChannel *string `type:"string" json:",omitempty"`
 
 	SavingPlanDeductionDiscountTotalAmount *string `type:"string" json:",omitempty"`
 
@@ -343,8 +339,6 @@ type ListForListSplitBillDetailOutput struct {
 	TradeTime *string `type:"string" json:",omitempty"`
 
 	Unit *string `type:"string" json:",omitempty"`
-
-	UnpaidAmount *string `type:"string" json:",omitempty"`
 
 	UseDuration *string `type:"string" json:",omitempty"`
 
@@ -458,12 +452,6 @@ func (s *ListForListSplitBillDetailOutput) SetCountryRegion(v string) *ListForLi
 // SetCouponDeductionAmount sets the CouponDeductionAmount field's value.
 func (s *ListForListSplitBillDetailOutput) SetCouponDeductionAmount(v string) *ListForListSplitBillDetailOutput {
 	s.CouponDeductionAmount = &v
-	return s
-}
-
-// SetCreditCarriedAmount sets the CreditCarriedAmount field's value.
-func (s *ListForListSplitBillDetailOutput) SetCreditCarriedAmount(v string) *ListForListSplitBillDetailOutput {
-	s.CreditCarriedAmount = &v
 	return s
 }
 
@@ -635,12 +623,6 @@ func (s *ListForListSplitBillDetailOutput) SetOwnerUserName(v string) *ListForLi
 	return s
 }
 
-// SetPaidAmount sets the PaidAmount field's value.
-func (s *ListForListSplitBillDetailOutput) SetPaidAmount(v string) *ListForListSplitBillDetailOutput {
-	s.PaidAmount = &v
-	return s
-}
-
 // SetPayableAmount sets the PayableAmount field's value.
 func (s *ListForListSplitBillDetailOutput) SetPayableAmount(v string) *ListForListSplitBillDetailOutput {
 	s.PayableAmount = &v
@@ -785,9 +767,9 @@ func (s *ListForListSplitBillDetailOutput) SetRoundAmount(v string) *ListForList
 	return s
 }
 
-// SetSavingPlanDeductionDiscountAmount sets the SavingPlanDeductionDiscountAmount field's value.
-func (s *ListForListSplitBillDetailOutput) SetSavingPlanDeductionDiscountAmount(v string) *ListForListSplitBillDetailOutput {
-	s.SavingPlanDeductionDiscountAmount = &v
+// SetSalesChannel sets the SalesChannel field's value.
+func (s *ListForListSplitBillDetailOutput) SetSalesChannel(v string) *ListForListSplitBillDetailOutput {
+	s.SalesChannel = &v
 	return s
 }
 
@@ -959,12 +941,6 @@ func (s *ListForListSplitBillDetailOutput) SetUnit(v string) *ListForListSplitBi
 	return s
 }
 
-// SetUnpaidAmount sets the UnpaidAmount field's value.
-func (s *ListForListSplitBillDetailOutput) SetUnpaidAmount(v string) *ListForListSplitBillDetailOutput {
-	s.UnpaidAmount = &v
-	return s
-}
-
 // SetUseDuration sets the UseDuration field's value.
 func (s *ListForListSplitBillDetailOutput) SetUseDuration(v string) *ListForListSplitBillDetailOutput {
 	s.UseDuration = &v
@@ -1022,9 +998,15 @@ type ListSplitBillDetailInput struct {
 
 	Project []*string `type:"list" json:",omitempty"`
 
+	SalesChannel []*string `type:"list" json:",omitempty"`
+
 	SplitDimension *string `type:"string" json:",omitempty"`
 
 	SplitItemID *string `type:"string" json:",omitempty"`
+
+	TagKV []*TagKVForListSplitBillDetailInput `type:"list" json:",omitempty"`
+
+	TagKVFilterMode *int32 `type:"int32" json:",omitempty"`
 }
 
 // String returns the string representation
@@ -1137,6 +1119,12 @@ func (s *ListSplitBillDetailInput) SetProject(v []*string) *ListSplitBillDetailI
 	return s
 }
 
+// SetSalesChannel sets the SalesChannel field's value.
+func (s *ListSplitBillDetailInput) SetSalesChannel(v []*string) *ListSplitBillDetailInput {
+	s.SalesChannel = v
+	return s
+}
+
 // SetSplitDimension sets the SplitDimension field's value.
 func (s *ListSplitBillDetailInput) SetSplitDimension(v string) *ListSplitBillDetailInput {
 	s.SplitDimension = &v
@@ -1146,6 +1134,18 @@ func (s *ListSplitBillDetailInput) SetSplitDimension(v string) *ListSplitBillDet
 // SetSplitItemID sets the SplitItemID field's value.
 func (s *ListSplitBillDetailInput) SetSplitItemID(v string) *ListSplitBillDetailInput {
 	s.SplitItemID = &v
+	return s
+}
+
+// SetTagKV sets the TagKV field's value.
+func (s *ListSplitBillDetailInput) SetTagKV(v []*TagKVForListSplitBillDetailInput) *ListSplitBillDetailInput {
+	s.TagKV = v
+	return s
+}
+
+// SetTagKVFilterMode sets the TagKVFilterMode field's value.
+func (s *ListSplitBillDetailInput) SetTagKVFilterMode(v int32) *ListSplitBillDetailInput {
+	s.TagKVFilterMode = &v
 	return s
 }
 
@@ -1161,6 +1161,8 @@ type ListSplitBillDetailOutput struct {
 	Offset *int32 `type:"int32" json:",omitempty"`
 
 	Total *int32 `type:"int32" json:",omitempty"`
+
+	Warning *string `type:"string" json:",omitempty"`
 }
 
 // String returns the string representation
@@ -1194,5 +1196,41 @@ func (s *ListSplitBillDetailOutput) SetOffset(v int32) *ListSplitBillDetailOutpu
 // SetTotal sets the Total field's value.
 func (s *ListSplitBillDetailOutput) SetTotal(v int32) *ListSplitBillDetailOutput {
 	s.Total = &v
+	return s
+}
+
+// SetWarning sets the Warning field's value.
+func (s *ListSplitBillDetailOutput) SetWarning(v string) *ListSplitBillDetailOutput {
+	s.Warning = &v
+	return s
+}
+
+type TagKVForListSplitBillDetailInput struct {
+	_ struct{} `type:"structure" json:",omitempty"`
+
+	Key *string `type:"string" json:",omitempty"`
+
+	Value *string `type:"string" json:",omitempty"`
+}
+
+// String returns the string representation
+func (s TagKVForListSplitBillDetailInput) String() string {
+	return byteplusutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TagKVForListSplitBillDetailInput) GoString() string {
+	return s.String()
+}
+
+// SetKey sets the Key field's value.
+func (s *TagKVForListSplitBillDetailInput) SetKey(v string) *TagKVForListSplitBillDetailInput {
+	s.Key = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *TagKVForListSplitBillDetailInput) SetValue(v string) *TagKVForListSplitBillDetailInput {
+	s.Value = &v
 	return s
 }

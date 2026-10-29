@@ -222,6 +222,14 @@ type BILLINGAPI interface {
 	ListBudgetFilterBillingModeWithContext(byteplus.Context, *ListBudgetFilterBillingModeInput, ...request.Option) (*ListBudgetFilterBillingModeOutput, error)
 	ListBudgetFilterBillingModeRequest(*ListBudgetFilterBillingModeInput) (*request.Request, *ListBudgetFilterBillingModeOutput)
 
+	ListBudgetFilterConfigurationInfoCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListBudgetFilterConfigurationInfoCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListBudgetFilterConfigurationInfoCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListBudgetFilterConfigurationInfo(*ListBudgetFilterConfigurationInfoInput) (*ListBudgetFilterConfigurationInfoOutput, error)
+	ListBudgetFilterConfigurationInfoWithContext(byteplus.Context, *ListBudgetFilterConfigurationInfoInput, ...request.Option) (*ListBudgetFilterConfigurationInfoOutput, error)
+	ListBudgetFilterConfigurationInfoRequest(*ListBudgetFilterConfigurationInfoInput) (*request.Request, *ListBudgetFilterConfigurationInfoOutput)
+
 	ListBudgetFilterOwnerIDCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ListBudgetFilterOwnerIDCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	ListBudgetFilterOwnerIDCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -318,6 +326,14 @@ type BILLINGAPI interface {
 	ListCouponsWithContext(byteplus.Context, *ListCouponsInput, ...request.Option) (*ListCouponsOutput, error)
 	ListCouponsRequest(*ListCouponsInput) (*request.Request, *ListCouponsOutput)
 
+	ListElementCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListElementCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListElementCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListElement(*ListElementInput) (*ListElementOutput, error)
+	ListElementWithContext(byteplus.Context, *ListElementInput, ...request.Option) (*ListElementOutput, error)
+	ListElementRequest(*ListElementInput) (*request.Request, *ListElementOutput)
+
 	ListFinancialRelationCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ListFinancialRelationCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	ListFinancialRelationCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -357,6 +373,22 @@ type BILLINGAPI interface {
 	ListPackageUsageDetails(*ListPackageUsageDetailsInput) (*ListPackageUsageDetailsOutput, error)
 	ListPackageUsageDetailsWithContext(byteplus.Context, *ListPackageUsageDetailsInput, ...request.Option) (*ListPackageUsageDetailsOutput, error)
 	ListPackageUsageDetailsRequest(*ListPackageUsageDetailsInput) (*request.Request, *ListPackageUsageDetailsOutput)
+
+	ListProductCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListProductCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListProductCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListProduct(*ListProductInput) (*ListProductOutput, error)
+	ListProductWithContext(byteplus.Context, *ListProductInput, ...request.Option) (*ListProductOutput, error)
+	ListProductRequest(*ListProductInput) (*request.Request, *ListProductOutput)
+
+	ListProductStructureCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ListProductStructureCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ListProductStructureCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ListProductStructure(*ListProductStructureInput) (*ListProductStructureOutput, error)
+	ListProductStructureWithContext(byteplus.Context, *ListProductStructureInput, ...request.Option) (*ListProductStructureOutput, error)
+	ListProductStructureRequest(*ListProductStructureInput) (*request.Request, *ListProductStructureOutput)
 
 	ListRecipientInformationCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ListRecipientInformationCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -413,6 +445,22 @@ type BILLINGAPI interface {
 	QueryBudgetDetail(*QueryBudgetDetailInput) (*QueryBudgetDetailOutput, error)
 	QueryBudgetDetailWithContext(byteplus.Context, *QueryBudgetDetailInput, ...request.Option) (*QueryBudgetDetailOutput, error)
 	QueryBudgetDetailRequest(*QueryBudgetDetailInput) (*request.Request, *QueryBudgetDetailOutput)
+
+	QueryBudgetSplitItemIDCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	QueryBudgetSplitItemIDCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	QueryBudgetSplitItemIDCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	QueryBudgetSplitItemID(*QueryBudgetSplitItemIDInput) (*QueryBudgetSplitItemIDOutput, error)
+	QueryBudgetSplitItemIDWithContext(byteplus.Context, *QueryBudgetSplitItemIDInput, ...request.Option) (*QueryBudgetSplitItemIDOutput, error)
+	QueryBudgetSplitItemIDRequest(*QueryBudgetSplitItemIDInput) (*request.Request, *QueryBudgetSplitItemIDOutput)
+
+	QueryBudgetSplitItemNameCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	QueryBudgetSplitItemNameCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	QueryBudgetSplitItemNameCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	QueryBudgetSplitItemName(*QueryBudgetSplitItemNameInput) (*QueryBudgetSplitItemNameOutput, error)
+	QueryBudgetSplitItemNameWithContext(byteplus.Context, *QueryBudgetSplitItemNameInput, ...request.Option) (*QueryBudgetSplitItemNameOutput, error)
+	QueryBudgetSplitItemNameRequest(*QueryBudgetSplitItemNameInput) (*request.Request, *QueryBudgetSplitItemNameOutput)
 
 	QueryPriceForPayAsYouGoCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	QueryPriceForPayAsYouGoCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
