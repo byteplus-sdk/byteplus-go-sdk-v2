@@ -1,11 +1,12 @@
 {
   "actions": [
+    "SetRenewalType",
     "ListElement",
-    "QueryBalanceAcct",
     "ListProduct",
-    "ListProductStructure"
+    "ListProductStructure",
+    "QueryBalanceAcct"
   ],
-  "description": "BILLING: added ListProduct, ListProductStructure, ListElement；modified QueryBalanceAcct",
+  "description": "BILLING: added ListElement, ListProduct, ListProductStructure；modified QueryBalanceAcct, SetRenewalType",
   "modules": "service/billing",
   "type": "breaking-change"
 }
