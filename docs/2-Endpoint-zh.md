@@ -232,7 +232,7 @@ func main() {
 
 - region 首尾带空白（如 `" ap-southeast-1 "`）不会被 trim：直接调用 `byteplusutil.ResolveDefaultEndpoint` 和客户端请求都返回 `InvalidRegion`。旧版本的 `ResolveDefaultEndpoint` 会先去掉首尾空白再拼接主机名，而签名使用的始终是带空白的原值。region 的大小写处理不变：`AP-Southeast-1` 仍合法，主机名中按小写拼接。
 - 上述规则只针对代码中设置的 region（如 `WithRegion`）或传给 `ResolveDefaultEndpoint` 的 region。从环境变量 `BYTEPLUS_REGION` / `BYTEPLUS_DEFAULT_REGION` 或共享配置文件读取的 region 会在读取时去掉首尾空白（包括空格、Tab、换行等，带引号的值同样处理），纯空白的环境变量视为未设置；去掉空白后的值仍按同样的规则校验。
-- `BYTEPLUS_DEFAULT_REGION` 和共享配置 / 共享凭证文件只有在设置了 `BYTEPLUS_SDK_LOAD_CONFIG=1` 时才会读取（`BYTEPLUS_REGION` 始终读取）；未设置时只使用 `BYTEPLUS_REGION`。
+- 只有开启共享配置加载时，才会从 `BYTEPLUS_DEFAULT_REGION` 和共享配置 / 共享凭证文件中读取 region；否则 region 只取 `BYTEPLUS_REGION`。开启方式：将 `BYTEPLUS_SDK_LOAD_CONFIG` 设为 Go `strconv.ParseBool` 认可的真值（`1`、`t`、`T`、`true`、`True`、`TRUE`，`yes` 等其他值不生效），或在代码中设置 `session.Options.SharedConfigState`（优先于环境变量）。这一条只影响 region：即使未开启，共享凭证文件仍会被读取，用于获取 AK/SK。
 - 共享配置文件和共享凭证文件为同一 profile 都定义了 `region` 时，后加载的文件（共享凭证文件）生效。后一个文件里无引号的空值（`region =`）会被忽略，但带引号的纯空白值（`region = "   "`）视为已定义：去掉空白后变为空串，会清掉前一个文件里的值，此时 region 视为未设置。
 - 兼容入口 `byteplusutil.GetDefaultEndpointByServiceInfo` 委托给 `ResolveDefaultEndpoint`，遇到非法 service / region 时不返回错误，而是记录 debug 日志并回退到默认 Endpoint `open.ap-southeast-1.byteplusapi.com`。需要感知错误的调用方请使用 `ResolveDefaultEndpoint`，或先调用 `endpoints.ValidateServiceAndRegion`。
 
