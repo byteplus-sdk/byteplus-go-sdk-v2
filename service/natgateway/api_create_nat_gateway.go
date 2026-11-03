@@ -148,13 +148,19 @@ type CreateNatGatewayInput struct {
 
 	Description *string `min:"1" max:"255" type:"string"`
 
+	DirectMode *bool `type:"boolean"`
+
 	NatGatewayName *string `min:"1" max:"128" type:"string"`
+
+	NetworkType *string `type:"string"`
 
 	Period *int64 `type:"integer"`
 
 	PeriodUnit *string `type:"string"`
 
 	ProjectName *string `type:"string"`
+
+	RenewType *int64 `type:"integer"`
 
 	Spec *string `type:"string"`
 
@@ -225,9 +231,21 @@ func (s *CreateNatGatewayInput) SetDescription(v string) *CreateNatGatewayInput 
 	return s
 }
 
+// SetDirectMode sets the DirectMode field's value.
+func (s *CreateNatGatewayInput) SetDirectMode(v bool) *CreateNatGatewayInput {
+	s.DirectMode = &v
+	return s
+}
+
 // SetNatGatewayName sets the NatGatewayName field's value.
 func (s *CreateNatGatewayInput) SetNatGatewayName(v string) *CreateNatGatewayInput {
 	s.NatGatewayName = &v
+	return s
+}
+
+// SetNetworkType sets the NetworkType field's value.
+func (s *CreateNatGatewayInput) SetNetworkType(v string) *CreateNatGatewayInput {
+	s.NetworkType = &v
 	return s
 }
 
@@ -246,6 +264,12 @@ func (s *CreateNatGatewayInput) SetPeriodUnit(v string) *CreateNatGatewayInput {
 // SetProjectName sets the ProjectName field's value.
 func (s *CreateNatGatewayInput) SetProjectName(v string) *CreateNatGatewayInput {
 	s.ProjectName = &v
+	return s
+}
+
+// SetRenewType sets the RenewType field's value.
+func (s *CreateNatGatewayInput) SetRenewType(v int64) *CreateNatGatewayInput {
+	s.RenewType = &v
 	return s
 }
 
