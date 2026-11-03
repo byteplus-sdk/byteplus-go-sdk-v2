@@ -28,6 +28,8 @@ For the non-standard responses above, the request ID is resolved in order from a
 
 In addition, when an HTTP 200 response has a JSON `null` body, decoding into a struct or `*map[string]interface{}` with output data returns `RequestFailure` with `Code()` set to `UnknownError` and `StatusCode()` set to 200, preserving the request ID and raw body. This applies to both normal decoding and `ForceJsonNumberDecode`. Struct decoding also returns `UnknownError` for a body without `ResponseMetadata`, preserving the existing protection. Other malformed HTTP 200 bodies (e.g. HTML) are outside the non-2xx diagnostics described above and may still return a native JSON decoding error.
 
+When map decoding rejects JSON `null`, it preserves the original output pointer. If a custom retryer retries `UnknownError`, subsequent responses are decoded into the original output object, which remains available to `After` interceptors. Exhausted retries still return an error. The default retryer does not retry an HTTP 200 response solely because of `UnknownError`.
+
 Compatibility: JSON decoding errors for non-standard error responses are wrapped in `RequestFailure`; callers that previously relied on native error types can obtain the underlying error through `OrigErr()`. The error classification affects default retries: for example, with `MaxRetries=3`, an HTTP 400 response with an HTML body is attempted only once. HTTP 500, 502, 503, and 504 responses still retry under the existing status-code rules. `SimpleError` changes only the display of `Error()`, leaving `StatusCode()`, `RequestID()`, and `Message()` unchanged. Custom error handlers and retryers follow their own implementations.
 
 ### Code Example
