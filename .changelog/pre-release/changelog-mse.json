@@ -1,0 +1,12 @@
+{
+  "actions": [
+    "CreateNacosRegistry",
+    "DeleteNacosRegistry",
+    "GetNacosRegistry",
+    "ListNacosRegistries",
+    "UpdateNacosRegistry"
+  ],
+  "description": "MSE: added CreateNacosRegistry, DeleteNacosRegistry, GetNacosRegistry, ListNacosRegistries, UpdateNacosRegistry",
+  "modules": "service/mse",
+  "type": "feature"
+}

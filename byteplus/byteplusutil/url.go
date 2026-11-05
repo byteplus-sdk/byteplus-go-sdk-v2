@@ -136,6 +136,7 @@ var defaultEndpoint = map[string]*ServiceEndpointInfo{
 	"vs":             {Service: "vs", IsGlobal: true, GoChinaEnabled: false},
 	"autoscaling":    {Service: "autoscaling", IsGlobal: false, GoChinaEnabled: true},
 	"aidap":          {Service: "aidap", IsGlobal: false, GoChinaEnabled: false},
+	"mse":            {Service: "mse", IsGlobal: false, GoChinaEnabled: false},
 }
 
 func standardizeDomainServiceCode(serviceCode string) string {
