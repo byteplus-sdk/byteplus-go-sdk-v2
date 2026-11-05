@@ -9,6 +9,7 @@ import (
 
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/bytepluserr"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
+	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/endpoints"
 )
 
 // SsoRefreshableProvider keeps the SSO token cache in memory while refreshing.
@@ -82,6 +83,14 @@ func (p *SsoRefreshableProvider) isExpiredLocked() bool {
 }
 
 func (p *SsoRefreshableProvider) refreshLocked() error {
+	// The region is spliced into the OAuth/Portal host names. Validate it
+	// before any network call so a crafted region (e.g. "@host:port/#") cannot
+	// redirect token or credential requests to an arbitrary host (SSRF).
+	// An empty region is allowed and falls back to the default region.
+	if err := endpoints.ValidateRegion(strings.TrimSpace(p.region)); err != nil {
+		return err
+	}
+
 	if p.cached == nil {
 		cache, err := loadSsoTokenCache(p.tokenPath)
 		if err != nil {

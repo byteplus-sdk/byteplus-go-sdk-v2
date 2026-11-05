@@ -79,6 +79,13 @@ func (p partition) canResolveEndpoint(service, region string, strictMatch bool) 
 }
 
 func (p partition) EndpointFor(service, region string, opts ...func(*Options)) (resolved ResolvedEndpoint, err error) {
+	// service and region replace the {service} / {region} placeholders of the
+	// host name template, including for unknown services when
+	// ResolveUnknownService is set.
+	if err = ValidateServiceAndRegion(service, region); err != nil {
+		return resolved, err
+	}
+
 	var opt Options
 	opt.Set(opts...)
 

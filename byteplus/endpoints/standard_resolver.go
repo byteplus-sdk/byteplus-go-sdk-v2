@@ -305,6 +305,12 @@ func (r *StandardEndpointResolver) EndpointFor(service, region string,
 	var options Options
 	options.Set(opts...)
 
+	// service (including CustomServices names) and region are rendered into
+	// the host name template, reject anything that could alter its structure.
+	if err = ValidateServiceAndRegion(service, region); err != nil {
+		return resolvedEndpoint, err
+	}
+
 	if !regionMatcher.Validate(region) {
 		return resolvedEndpoint, bytepluserr.New("InvalidRegion",
 			fmt.Sprintf("invalid region %s for standard endpoint resolver, "+

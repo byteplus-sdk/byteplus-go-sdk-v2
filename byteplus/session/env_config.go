@@ -6,6 +6,7 @@ package session
 import (
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus"
 	"github.com/byteplus-sdk/byteplus-go-sdk-v2/byteplus/credentials"
@@ -261,7 +262,10 @@ func envConfigLoad(enableSharedConfig bool) envConfig {
 		profileKeys = profileKeys[:1]
 	}
 
-	setFromEnvVal(&cfg.Region, regionKeys)
+	// Environment variables are text input: surrounding white spaces of the
+	// region are trimmed and a white space only value is treated as not set.
+	// Regions set in code are not trimmed, they are validated as is.
+	setTrimmedFromEnvVal(&cfg.Region, regionKeys)
 	setFromEnvVal(&cfg.Profile, profileKeys)
 
 	// endpoint discovery is in reference to it being enabled.
@@ -293,6 +297,18 @@ func envConfigLoad(enableSharedConfig bool) envConfig {
 func setFromEnvVal(dst *string, keys []string) {
 	for _, k := range keys {
 		if v := os.Getenv(k); len(v) > 0 {
+			*dst = v
+			break
+		}
+	}
+}
+
+// setTrimmedFromEnvVal is like setFromEnvVal, except that the surrounding white
+// spaces of the value are trimmed and a white space only value is skipped, so
+// the next key is used as if the variable was not set.
+func setTrimmedFromEnvVal(dst *string, keys []string) {
+	for _, k := range keys {
+		if v := strings.TrimSpace(os.Getenv(k)); len(v) > 0 {
 			*dst = v
 			break
 		}

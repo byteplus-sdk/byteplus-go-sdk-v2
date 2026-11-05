@@ -698,6 +698,13 @@ func (s *Session) clientConfigWithErr(serviceName string, cfgs ...*byteplus.Conf
 
 	region := byteplus.StringValue(s.Config.Region)
 	if byteplus.StringValue(s.Config.Endpoint) == "" {
+		// region and service are used to build the endpoint host, make sure
+		// they can not be used to inject a different host (SSRF). This runs
+		// before any resolver, including a user supplied EndpointResolver.
+		if err := endpoints.ValidateServiceAndRegion(serviceName, region); err != nil {
+			return s.newSkeletonClientConfig(), err
+		}
+
 		var endpoint *string
 		if s.Config.EndpointResolver != nil {
 			var opts []func(*endpoints.Options)
