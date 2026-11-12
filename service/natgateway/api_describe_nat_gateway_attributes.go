@@ -190,6 +190,8 @@ type DescribeNatGatewayAttributesOutput struct {
 
 	Description *string `type:"string"`
 
+	DirectMode *bool `type:"boolean"`
+
 	DnatEntryIds []*string `type:"list"`
 
 	EipAddresses []*EipAddressForDescribeNatGatewayAttributesOutput `type:"list"`
@@ -201,6 +203,8 @@ type DescribeNatGatewayAttributesOutput struct {
 	NatGatewayId *string `type:"string"`
 
 	NatGatewayName *string `type:"string"`
+
+	NatIpAddresses []*NatIpAddressForDescribeNatGatewayAttributesOutput `type:"list"`
 
 	NetworkInterfaceId *string `type:"string"`
 
@@ -273,6 +277,12 @@ func (s *DescribeNatGatewayAttributesOutput) SetDescription(v string) *DescribeN
 	return s
 }
 
+// SetDirectMode sets the DirectMode field's value.
+func (s *DescribeNatGatewayAttributesOutput) SetDirectMode(v bool) *DescribeNatGatewayAttributesOutput {
+	s.DirectMode = &v
+	return s
+}
+
 // SetDnatEntryIds sets the DnatEntryIds field's value.
 func (s *DescribeNatGatewayAttributesOutput) SetDnatEntryIds(v []*string) *DescribeNatGatewayAttributesOutput {
 	s.DnatEntryIds = v
@@ -306,6 +316,12 @@ func (s *DescribeNatGatewayAttributesOutput) SetNatGatewayId(v string) *Describe
 // SetNatGatewayName sets the NatGatewayName field's value.
 func (s *DescribeNatGatewayAttributesOutput) SetNatGatewayName(v string) *DescribeNatGatewayAttributesOutput {
 	s.NatGatewayName = &v
+	return s
+}
+
+// SetNatIpAddresses sets the NatIpAddresses field's value.
+func (s *DescribeNatGatewayAttributesOutput) SetNatIpAddresses(v []*NatIpAddressForDescribeNatGatewayAttributesOutput) *DescribeNatGatewayAttributesOutput {
+	s.NatIpAddresses = v
 	return s
 }
 
@@ -434,6 +450,36 @@ func (s *EipAddressForDescribeNatGatewayAttributesOutput) SetEipAddress(v string
 // SetUsingStatus sets the UsingStatus field's value.
 func (s *EipAddressForDescribeNatGatewayAttributesOutput) SetUsingStatus(v string) *EipAddressForDescribeNatGatewayAttributesOutput {
 	s.UsingStatus = &v
+	return s
+}
+
+type NatIpAddressForDescribeNatGatewayAttributesOutput struct {
+	_ struct{} `type:"structure"`
+
+	NatIpAddress *string `type:"string"`
+
+	NatIpId *string `type:"string"`
+}
+
+// String returns the string representation
+func (s NatIpAddressForDescribeNatGatewayAttributesOutput) String() string {
+	return byteplusutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s NatIpAddressForDescribeNatGatewayAttributesOutput) GoString() string {
+	return s.String()
+}
+
+// SetNatIpAddress sets the NatIpAddress field's value.
+func (s *NatIpAddressForDescribeNatGatewayAttributesOutput) SetNatIpAddress(v string) *NatIpAddressForDescribeNatGatewayAttributesOutput {
+	s.NatIpAddress = &v
+	return s
+}
+
+// SetNatIpId sets the NatIpId field's value.
+func (s *NatIpAddressForDescribeNatGatewayAttributesOutput) SetNatIpId(v string) *NatIpAddressForDescribeNatGatewayAttributesOutput {
+	s.NatIpId = &v
 	return s
 }
 

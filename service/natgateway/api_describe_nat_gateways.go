@@ -148,6 +148,8 @@ type DescribeNatGatewaysInput struct {
 
 	NatGatewayName *string `type:"string"`
 
+	NetworkType *string `type:"string"`
+
 	PageNumber *int64 `type:"integer"`
 
 	PageSize *int64 `max:"100" type:"integer"`
@@ -201,6 +203,12 @@ func (s *DescribeNatGatewaysInput) SetNatGatewayIds(v []*string) *DescribeNatGat
 // SetNatGatewayName sets the NatGatewayName field's value.
 func (s *DescribeNatGatewaysInput) SetNatGatewayName(v string) *DescribeNatGatewaysInput {
 	s.NatGatewayName = &v
+	return s
+}
+
+// SetNetworkType sets the NetworkType field's value.
+func (s *DescribeNatGatewaysInput) SetNetworkType(v string) *DescribeNatGatewaysInput {
+	s.NetworkType = &v
 	return s
 }
 
@@ -369,7 +377,7 @@ type NatGatewayForDescribeNatGatewaysOutput struct {
 
 	NetworkInterfaceId *string `type:"string"`
 
-	NetworkType *string `type:"string" enum:"NetworkTypeForDescribeNatGatewaysOutput"`
+	NetworkType *string `type:"string"`
 
 	OverdueTime *string `type:"string"`
 
@@ -381,7 +389,7 @@ type NatGatewayForDescribeNatGatewaysOutput struct {
 
 	SnatEntryIds []*string `type:"list"`
 
-	Spec *string `type:"string" enum:"SpecForDescribeNatGatewaysOutput"`
+	Spec *string `type:"string"`
 
 	Status *string `type:"string"`
 
@@ -621,28 +629,3 @@ func (s *TagForDescribeNatGatewaysOutput) SetValue(v string) *TagForDescribeNatG
 	s.Value = &v
 	return s
 }
-
-const (
-	// NetworkTypeForDescribeNatGatewaysOutputInternet is a NetworkTypeForDescribeNatGatewaysOutput enum value
-	NetworkTypeForDescribeNatGatewaysOutputInternet = "internet"
-
-	// NetworkTypeForDescribeNatGatewaysOutputIntranet is a NetworkTypeForDescribeNatGatewaysOutput enum value
-	NetworkTypeForDescribeNatGatewaysOutputIntranet = "intranet"
-)
-
-const (
-	// SpecForDescribeNatGatewaysOutputSmall is a SpecForDescribeNatGatewaysOutput enum value
-	SpecForDescribeNatGatewaysOutputSmall = "Small"
-
-	// SpecForDescribeNatGatewaysOutputMedium is a SpecForDescribeNatGatewaysOutput enum value
-	SpecForDescribeNatGatewaysOutputMedium = "Medium"
-
-	// SpecForDescribeNatGatewaysOutputLarge is a SpecForDescribeNatGatewaysOutput enum value
-	SpecForDescribeNatGatewaysOutputLarge = "Large"
-
-	// SpecForDescribeNatGatewaysOutputExtraLarge1 is a SpecForDescribeNatGatewaysOutput enum value
-	SpecForDescribeNatGatewaysOutputExtraLarge1 = "Extra_Large_1"
-
-	// SpecForDescribeNatGatewaysOutputExtraLarge2 is a SpecForDescribeNatGatewaysOutput enum value
-	SpecForDescribeNatGatewaysOutputExtraLarge2 = "Extra_Large_2"
-)
