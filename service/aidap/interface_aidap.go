@@ -254,6 +254,46 @@ type AIDAPAPI interface {
 	DescribeBaasAIUserSummariesWithContext(byteplus.Context, *DescribeBaasAIUserSummariesInput, ...request.Option) (*DescribeBaasAIUserSummariesOutput, error)
 	DescribeBaasAIUserSummariesRequest(*DescribeBaasAIUserSummariesInput) (*request.Request, *DescribeBaasAIUserSummariesOutput)
 
+	DescribeBaasAccelerationConfigCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeBaasAccelerationConfigCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeBaasAccelerationConfigCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeBaasAccelerationConfig(*DescribeBaasAccelerationConfigInput) (*DescribeBaasAccelerationConfigOutput, error)
+	DescribeBaasAccelerationConfigWithContext(byteplus.Context, *DescribeBaasAccelerationConfigInput, ...request.Option) (*DescribeBaasAccelerationConfigOutput, error)
+	DescribeBaasAccelerationConfigRequest(*DescribeBaasAccelerationConfigInput) (*request.Request, *DescribeBaasAccelerationConfigOutput)
+
+	DescribeBaasSandboxGlobalQuotaCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeBaasSandboxGlobalQuotaCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeBaasSandboxGlobalQuotaCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeBaasSandboxGlobalQuota(*DescribeBaasSandboxGlobalQuotaInput) (*DescribeBaasSandboxGlobalQuotaOutput, error)
+	DescribeBaasSandboxGlobalQuotaWithContext(byteplus.Context, *DescribeBaasSandboxGlobalQuotaInput, ...request.Option) (*DescribeBaasSandboxGlobalQuotaOutput, error)
+	DescribeBaasSandboxGlobalQuotaRequest(*DescribeBaasSandboxGlobalQuotaInput) (*request.Request, *DescribeBaasSandboxGlobalQuotaOutput)
+
+	DescribeBaasSandboxTemplatesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeBaasSandboxTemplatesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeBaasSandboxTemplatesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeBaasSandboxTemplates(*DescribeBaasSandboxTemplatesInput) (*DescribeBaasSandboxTemplatesOutput, error)
+	DescribeBaasSandboxTemplatesWithContext(byteplus.Context, *DescribeBaasSandboxTemplatesInput, ...request.Option) (*DescribeBaasSandboxTemplatesOutput, error)
+	DescribeBaasSandboxTemplatesRequest(*DescribeBaasSandboxTemplatesInput) (*request.Request, *DescribeBaasSandboxTemplatesOutput)
+
+	DescribeBaasSandboxUserSummariesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeBaasSandboxUserSummariesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeBaasSandboxUserSummariesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeBaasSandboxUserSummaries(*DescribeBaasSandboxUserSummariesInput) (*DescribeBaasSandboxUserSummariesOutput, error)
+	DescribeBaasSandboxUserSummariesWithContext(byteplus.Context, *DescribeBaasSandboxUserSummariesInput, ...request.Option) (*DescribeBaasSandboxUserSummariesOutput, error)
+	DescribeBaasSandboxUserSummariesRequest(*DescribeBaasSandboxUserSummariesInput) (*request.Request, *DescribeBaasSandboxUserSummariesOutput)
+
+	DescribeBaasSandboxesCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DescribeBaasSandboxesCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DescribeBaasSandboxesCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DescribeBaasSandboxes(*DescribeBaasSandboxesInput) (*DescribeBaasSandboxesOutput, error)
+	DescribeBaasSandboxesWithContext(byteplus.Context, *DescribeBaasSandboxesInput, ...request.Option) (*DescribeBaasSandboxesOutput, error)
+	DescribeBaasSandboxesRequest(*DescribeBaasSandboxesInput) (*request.Request, *DescribeBaasSandboxesOutput)
+
 	DescribeBranchDetailCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DescribeBranchDetailCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	DescribeBranchDetailCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -486,6 +526,14 @@ type AIDAPAPI interface {
 	DescribeWorkspacesWithContext(byteplus.Context, *DescribeWorkspacesInput, ...request.Option) (*DescribeWorkspacesOutput, error)
 	DescribeWorkspacesRequest(*DescribeWorkspacesInput) (*request.Request, *DescribeWorkspacesOutput)
 
+	DownloadBaasSandboxLogsCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	DownloadBaasSandboxLogsCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	DownloadBaasSandboxLogsCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	DownloadBaasSandboxLogs(*DownloadBaasSandboxLogsInput) (*DownloadBaasSandboxLogsOutput, error)
+	DownloadBaasSandboxLogsWithContext(byteplus.Context, *DownloadBaasSandboxLogsInput, ...request.Option) (*DownloadBaasSandboxLogsOutput, error)
+	DownloadBaasSandboxLogsRequest(*DownloadBaasSandboxLogsInput) (*request.Request, *DownloadBaasSandboxLogsOutput)
+
 	DropDatabaseCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	DropDatabaseCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
 	DropDatabaseCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
@@ -557,6 +605,30 @@ type AIDAPAPI interface {
 	ModifyBaasAIUserQuotas(*ModifyBaasAIUserQuotasInput) (*ModifyBaasAIUserQuotasOutput, error)
 	ModifyBaasAIUserQuotasWithContext(byteplus.Context, *ModifyBaasAIUserQuotasInput, ...request.Option) (*ModifyBaasAIUserQuotasOutput, error)
 	ModifyBaasAIUserQuotasRequest(*ModifyBaasAIUserQuotasInput) (*request.Request, *ModifyBaasAIUserQuotasOutput)
+
+	ModifyBaasAccelerationConfigCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyBaasAccelerationConfigCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyBaasAccelerationConfigCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyBaasAccelerationConfig(*ModifyBaasAccelerationConfigInput) (*ModifyBaasAccelerationConfigOutput, error)
+	ModifyBaasAccelerationConfigWithContext(byteplus.Context, *ModifyBaasAccelerationConfigInput, ...request.Option) (*ModifyBaasAccelerationConfigOutput, error)
+	ModifyBaasAccelerationConfigRequest(*ModifyBaasAccelerationConfigInput) (*request.Request, *ModifyBaasAccelerationConfigOutput)
+
+	ModifyBaasSandboxGlobalQuotaCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyBaasSandboxGlobalQuotaCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyBaasSandboxGlobalQuotaCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyBaasSandboxGlobalQuota(*ModifyBaasSandboxGlobalQuotaInput) (*ModifyBaasSandboxGlobalQuotaOutput, error)
+	ModifyBaasSandboxGlobalQuotaWithContext(byteplus.Context, *ModifyBaasSandboxGlobalQuotaInput, ...request.Option) (*ModifyBaasSandboxGlobalQuotaOutput, error)
+	ModifyBaasSandboxGlobalQuotaRequest(*ModifyBaasSandboxGlobalQuotaInput) (*request.Request, *ModifyBaasSandboxGlobalQuotaOutput)
+
+	ModifyBaasSandboxUserQuotasCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	ModifyBaasSandboxUserQuotasCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	ModifyBaasSandboxUserQuotasCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	ModifyBaasSandboxUserQuotas(*ModifyBaasSandboxUserQuotasInput) (*ModifyBaasSandboxUserQuotasOutput, error)
+	ModifyBaasSandboxUserQuotasWithContext(byteplus.Context, *ModifyBaasSandboxUserQuotasInput, ...request.Option) (*ModifyBaasSandboxUserQuotasOutput, error)
+	ModifyBaasSandboxUserQuotasRequest(*ModifyBaasSandboxUserQuotasInput) (*request.Request, *ModifyBaasSandboxUserQuotasOutput)
 
 	ModifyComputeAnalyticPolicyCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	ModifyComputeAnalyticPolicyCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
@@ -645,6 +717,14 @@ type AIDAPAPI interface {
 	ModifyWorkspaceSettings(*ModifyWorkspaceSettingsInput) (*ModifyWorkspaceSettingsOutput, error)
 	ModifyWorkspaceSettingsWithContext(byteplus.Context, *ModifyWorkspaceSettingsInput, ...request.Option) (*ModifyWorkspaceSettingsOutput, error)
 	ModifyWorkspaceSettingsRequest(*ModifyWorkspaceSettingsInput) (*request.Request, *ModifyWorkspaceSettingsOutput)
+
+	OperateBaasSandboxCommon(*map[string]interface{}) (*map[string]interface{}, error)
+	OperateBaasSandboxCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
+	OperateBaasSandboxCommonRequest(*map[string]interface{}) (*request.Request, *map[string]interface{})
+
+	OperateBaasSandbox(*OperateBaasSandboxInput) (*OperateBaasSandboxOutput, error)
+	OperateBaasSandboxWithContext(byteplus.Context, *OperateBaasSandboxInput, ...request.Option) (*OperateBaasSandboxOutput, error)
+	OperateBaasSandboxRequest(*OperateBaasSandboxInput) (*request.Request, *OperateBaasSandboxOutput)
 
 	RecoverDelayedDeleteWorkspaceCommon(*map[string]interface{}) (*map[string]interface{}, error)
 	RecoverDelayedDeleteWorkspaceCommonWithContext(byteplus.Context, *map[string]interface{}, ...request.Option) (*map[string]interface{}, error)
