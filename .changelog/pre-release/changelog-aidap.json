@@ -1,17 +1,17 @@
 {
   "actions": [
-    "ModifyComputeSettings",
-    "DeleteWorkspace",
-    "DescribeBranchDetail",
-    "DescribeWorkspaces",
-    "ModifyWorkspaceName",
-    "RecoverDelayedDeleteWorkspace",
-    "CreateWorkspace",
-    "DescribeWorkspaceDetail",
-    "DescribeWorkspaceDetailList",
-    "ModifyWorkspaceSettings"
+    "DescribeBaasSandboxGlobalQuota",
+    "DownloadBaasSandboxLogs",
+    "DescribeBaasAccelerationConfig",
+    "DescribeBaasSandboxUserSummaries",
+    "ModifyBaasSandboxGlobalQuota",
+    "OperateBaasSandbox",
+    "DescribeBaasSandboxTemplates",
+    "DescribeBaasSandboxes",
+    "ModifyBaasAccelerationConfig",
+    "ModifyBaasSandboxUserQuotas"
   ],
-  "description": "AIDAP: added RecoverDelayedDeleteWorkspace；modified CreateWorkspace, DescribeWorkspaceDetail, DescribeWorkspaceDetailList, ModifyComputeSettings, DeleteWorkspace, DescribeBranchDetail, DescribeWorkspaces, ModifyWorkspaceName, ModifyWorkspaceSettings",
+  "description": "AIDAP: added ModifyBaasAccelerationConfig, ModifyBaasSandboxUserQuotas, DescribeBaasAccelerationConfig, DescribeBaasSandboxGlobalQuota, DescribeBaasSandboxUserSummaries, ModifyBaasSandboxGlobalQuota, OperateBaasSandbox, DescribeBaasSandboxTemplates, DescribeBaasSandboxes, DownloadBaasSandboxLogs",
   "modules": "service/aidap",
-  "type": "breaking-change"
+  "type": "feature"
 }
